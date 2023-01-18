@@ -248,6 +248,38 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
               {isOwner && (
                 <ListModal
                   trigger={
+                    <button className="btn-primary-fill w-full dark:ring-primary-900 dark:focus:ring-4 md:col-span-2">
+                      {floorAskPrice?.amount?.decimal
+                        ? 'Create New Listing'
+                        : 'List with Financing'}
+                    </button>
+                  }
+                  collectionId={contract}
+                  tokenId={tokenId}
+                  currencies={listingCurrencies}
+                  onListingComplete={() => {
+                    details && details.mutate()
+                  }}
+                  onListingError={(err: any) => {
+                    if (err?.code === 4001) {
+                      setToast({
+                        kind: 'error',
+                        message: 'You have canceled the transaction.',
+                        title: 'User canceled transaction',
+                      })
+                      return
+                    }
+                    setToast({
+                      kind: 'error',
+                      message: 'The transaction was not completed.',
+                      title: 'Could not list token',
+                    })
+                  }}
+                />
+              )}
+              {isOwner && (
+                <ListModal
+                  trigger={
                     <button className="btn-primary-fill w-full dark:ring-primary-900 dark:focus:ring-4">
                       {floorAskPrice?.amount?.decimal
                         ? 'Create New Listing'
