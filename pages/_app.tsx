@@ -95,15 +95,13 @@ function AppWrapper(props: AppProps & { baseUrl: string }) {
   const defaultTheme = DARK_MODE_ENABLED ? 'dark' : 'light'
 
   return (
-    <ChakraProvider theme={chakraTheme}>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme={defaultTheme}
-        forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
-      >
-        <App {...props} />
-      </ThemeProvider>
-    </ChakraProvider>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme={defaultTheme}
+      forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
+    >
+      <App {...props} />
+    </ThemeProvider>
   )
 }
 
@@ -192,7 +190,9 @@ const App: FC<AppProps & { baseUrl: string }> = ({
             modalSize="compact"
           >
             <AnalyticsProvider>
-              <Component {...pageProps} />
+              <ChakraProvider theme={chakraTheme}>
+                <Component {...pageProps} />
+              </ChakraProvider>
             </AnalyticsProvider>
           </RainbowKitProvider>
         </WagmiConfig>

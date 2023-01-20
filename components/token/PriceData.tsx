@@ -27,7 +27,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import useMounted from 'hooks/useMounted'
 import { useRouter } from 'next/router'
 import { getPricing } from 'lib/token/pricing'
-import ListFinancing from 'components/Test'
+import ListFinancing from '../../niftyapes/ListFinancing'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 const SOURCE_ID = process.env.NEXT_PUBLIC_SOURCE_ID
@@ -248,32 +248,7 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
             </>
           ) : (
             <>
-              {isOwner && (
-                <ListModal
-                  trigger={<ListFinancing />}
-                  collectionId={contract}
-                  tokenId={tokenId}
-                  currencies={listingCurrencies}
-                  onListingComplete={() => {
-                    details && details.mutate()
-                  }}
-                  onListingError={(err: any) => {
-                    if (err?.code === 4001) {
-                      setToast({
-                        kind: 'error',
-                        message: 'You have canceled the transaction.',
-                        title: 'User canceled transaction',
-                      })
-                      return
-                    }
-                    setToast({
-                      kind: 'error',
-                      message: 'The transaction was not completed.',
-                      title: 'Could not list token',
-                    })
-                  }}
-                />
-              )}
+              {isOwner && <ListFinancing />}
               {isOwner && (
                 <ListModal
                   trigger={

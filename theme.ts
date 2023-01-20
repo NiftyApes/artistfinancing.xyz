@@ -12,6 +12,14 @@ const theme = extendTheme({
     Button: {
       baseStyle: {
         fontWeight: 'normal',
+        cursor: 'pointer',
+      },
+    },
+    Modal: {
+      baseStyle: {
+        dialog: {
+          bg: 'gray.800',
+        },
       },
     },
   },
