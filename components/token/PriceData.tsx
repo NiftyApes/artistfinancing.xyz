@@ -27,6 +27,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import useMounted from 'hooks/useMounted'
 import { useRouter } from 'next/router'
 import { getPricing } from 'lib/token/pricing'
+import ListFinancing from 'components/Test'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 const SOURCE_ID = process.env.NEXT_PUBLIC_SOURCE_ID
@@ -240,20 +241,16 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
         </div>
         <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2">
           {account.isDisconnected ? (
-            <ConnectWalletButton className="w-full">
-              <span>Connect Wallet</span>
-            </ConnectWalletButton>
+            <>
+              <ConnectWalletButton className="w-full">
+                <span>Connect Wallet</span>
+              </ConnectWalletButton>
+            </>
           ) : (
             <>
               {isOwner && (
                 <ListModal
-                  trigger={
-                    <button className="btn-primary-fill w-full dark:ring-primary-900 dark:focus:ring-4 md:col-span-2">
-                      {floorAskPrice?.amount?.decimal
-                        ? 'Create New Listing'
-                        : 'List with Financing'}
-                    </button>
-                  }
+                  trigger={<ListFinancing />}
                   collectionId={contract}
                   tokenId={tokenId}
                   currencies={listingCurrencies}
