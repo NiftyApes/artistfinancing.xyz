@@ -248,7 +248,9 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
             </>
           ) : (
             <>
-              {isOwner && <ListFinancing token={token} />}
+              {isOwner && (
+                <ListFinancing token={token} collection={collection} />
+              )}
               {isOwner && (
                 <ListModal
                   trigger={

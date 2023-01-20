@@ -15,55 +15,64 @@ import {
   Flex,
   VStack,
 } from '@chakra-ui/react'
+import TokenStats from './components/TokenStats'
 
 // TODO: Type out props.
-export default function ListFinancing({ token }: { token: any }) {
+export default function ListFinancing({
+  token,
+  collection,
+}: {
+  token: any
+  collection: any
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  if (!token) {
+  if (!token || !collection) {
     return null
   }
 
   return (
     <>
-      <Button onClick={onOpen} as={GridItem} colSpan={2} colorScheme={'blue'}>
+      <Button onClick={onOpen} as={GridItem} colSpan={2} colorScheme="blue">
         List with Financing
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose} size={'3xl'}>
+      <Modal isOpen={isOpen} onClose={onClose} size="3xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader
-            marginBottom={4}
-            borderBottom={'1px'}
-            borderColor="gray.600"
-          >
+          <ModalHeader borderTopRadius="md" bg="gray.700">
             List with Financing
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody p="0">
             <Flex>
-              <VStack align={'left'}>
-                <Image
-                  borderRadius={'md'}
-                  boxSize={'150px'}
-                  objectFit={'cover'}
-                  src={token.token.image}
-                  alt={token.token.name}
-                ></Image>
-                <Heading size={'sm'}>{token.token.name}</Heading>
-                <Text margin={0} fontSize={'xs'} color={'whiteAlpha.800'}>
-                  {token.token.collection.name}
-                </Text>
+              <VStack w="72" borderRight="1px" borderColor="gray.600" p="6">
+                <VStack align="left" w="full">
+                  <Image
+                    m="5px 0 !important"
+                    borderRadius="md"
+                    boxSize="200px"
+                    objectFit="cover"
+                    src={token.token.image}
+                    alt={token.token.name}
+                  ></Image>
+                </VStack>
+                <VStack align="left" w="full">
+                  <Heading size="sm">{token.token.name}</Heading>
+                  <Text fontSize="xs" color="whiteAlpha.800">
+                    {token.token.collection.name}
+                  </Text>
+                </VStack>
+                <TokenStats token={token} collection={collection} />
               </VStack>
-              <VStack></VStack>
+              <VStack align="left" p="6" flexGrow="1">
+                <Heading size="md">Set your price</Heading>
+                <Button colorScheme="blue" onClick={onClose}>
+                  Next
+                </Button>
+              </VStack>
             </Flex>
           </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" onClick={onClose}>
-              Next
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
