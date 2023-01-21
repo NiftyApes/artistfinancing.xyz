@@ -16,6 +16,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import TokenStats from './components/TokenStats'
+import FinancingTermsForm from './FinancingTermsForm'
 
 // TODO: Type out props.
 export default function ListFinancing({
@@ -66,7 +67,8 @@ export default function ListFinancing({
                 <TokenStats token={token} collection={collection} />
               </VStack>
               <VStack align="left" p="6" flexGrow="1">
-                <Heading size="md">Set your price</Heading>
+                <Heading size="sm">Set Your Terms</Heading>
+                <FinancingTermsForm />
                 <Button colorScheme="blue" onClick={onClose}>
                   Next
                 </Button>
