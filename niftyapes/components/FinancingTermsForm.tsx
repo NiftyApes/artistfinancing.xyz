@@ -1,4 +1,5 @@
 import {
+  Button,
   FormControl,
   FormLabel,
   Grid,
@@ -9,6 +10,7 @@ import {
   Image,
   NumberInput,
   NumberInputField,
+  Select,
   Text,
   Tooltip,
   VStack,
@@ -29,12 +31,10 @@ export default function FinancingTermsForm({
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
 
   return (
-    <>
-      <Heading size="md" mb="4">
-        Set Your Terms
-      </Heading>
+    <VStack align={'left'} spacing={6}>
+      <Heading size="md">Set Your Terms</Heading>
 
-      <Grid templateColumns="4fr 1fr" columnGap={4} rowGap={6}>
+      <Grid templateColumns="5fr 2fr" gap={4}>
         {/* List price */}
         <GridItem>
           <FormControl>
@@ -126,7 +126,148 @@ export default function FinancingTermsForm({
             </VStack>
           </VStack>
         </GridItem>
+
+        {/* Annual interest rate */}
+        <GridItem>
+          <FormControl>
+            <FormLabel>Annual interest rate</FormLabel>
+
+            <HStack>
+              <NumberInput
+                bg="blackAlpha.500"
+                borderRadius="md"
+                defaultValue={20}
+                flexGrow={1}
+              >
+                <NumberInputField border="0" borderColor="gray.400" />
+              </NumberInput>
+              <Icon as={FaPercent} />
+            </HStack>
+          </FormControl>
+        </GridItem>
+
+        <GridItem>
+          <VStack align="start">
+            <Text fontSize="sm">Interest each period</Text>
+            <VStack align="start">
+              <HStack>
+                <Image src="/eth-dark.svg" boxSize="3" />
+                <Text fontSize="md" fontWeight="semibold">
+                  0.038
+                </Text>
+              </HStack>
+              <Text fontSize="xs" fontWeight="semibold" color="whiteAlpha.600">
+                $61.91
+              </Text>
+            </VStack>
+          </VStack>
+        </GridItem>
+
+        {/* Minimum principal per pay period */}
+        <GridItem>
+          <FormControl>
+            <FormLabel>Minimum principal per pay period</FormLabel>
+
+            <HStack>
+              <NumberInput
+                bg="blackAlpha.500"
+                borderRadius="md"
+                defaultValue={5}
+                flexGrow={1}
+              >
+                <NumberInputField border="0" borderColor="gray.400" />
+              </NumberInput>
+              <Icon as={FaPercent} />
+            </HStack>
+          </FormControl>
+        </GridItem>
+
+        <GridItem>
+          <VStack align="start">
+            <Text fontSize="sm">Minimum each period</Text>
+            <VStack align="start">
+              <HStack>
+                <Image src="/eth-dark.svg" boxSize="3" />
+                <Text fontSize="md" fontWeight="semibold">
+                  0.0095
+                </Text>
+              </HStack>
+              <Text fontSize="xs" fontWeight="semibold" color="whiteAlpha.600">
+                $15.48
+              </Text>
+            </VStack>
+          </VStack>
+        </GridItem>
+
+        {/* Pay period duration TODO: Fix bg color. */}
+        <GridItem>
+          <FormControl>
+            <FormLabel>Pay period duration</FormLabel>
+
+            <Select defaultValue={30} border="0" bg="blackAlpha.700">
+              <option value={15}>15 days</option>
+              <option value={30}>30 days</option>
+              <option value={60}>60 days</option>
+            </Select>
+          </FormControl>
+        </GridItem>
+
+        <GridItem></GridItem>
+
+        {/* Grace period duration TODO: Fix bg color. */}
+        <GridItem>
+          <FormControl>
+            <FormLabel>Grace period duration</FormLabel>
+
+            <Select defaultValue={15} border="0" bg="blackAlpha.700">
+              <option value={5}>5 days</option>
+              <option value={10}>10 days</option>
+              <option value={15}>15 days</option>
+              <option value={30}>30 days</option>
+            </Select>
+          </FormControl>
+        </GridItem>
+
+        <GridItem></GridItem>
+
+        {/* Number of late payments tolerated TODO: Fix bg color. */}
+        <GridItem>
+          <FormControl>
+            <FormLabel>Number of late payments tolerated</FormLabel>
+
+            <Select defaultValue={3} border="0" bg="blackAlpha.700">
+              <option value={0}>0</option>
+              <option value={1}>1</option>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+            </Select>
+          </FormControl>
+        </GridItem>
+
+        <GridItem></GridItem>
+
+        {/* Expiration TODO: Fix bg color. */}
+        <GridItem>
+          <FormControl>
+            <FormLabel>Expiration</FormLabel>
+
+            <Select defaultValue={5} border="0" bg="blackAlpha.700">
+              <option value={0}>1 hour</option>
+              <option value={1}>12 hours</option>
+              <option value={2}>1 day</option>
+              <option value={3}>3 days</option>
+              <option value={4}>1 week</option>
+              <option value={5}>1 month</option>
+              <option value={6}>3 months</option>
+              <option value={6}>None</option>
+            </Select>
+          </FormControl>
+        </GridItem>
+
+        <GridItem></GridItem>
       </Grid>
-    </>
+
+      <Button colorScheme={'blue'}>Next</Button>
+    </VStack>
   )
 }
