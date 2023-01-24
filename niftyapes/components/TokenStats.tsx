@@ -1,5 +1,6 @@
 import { Icon, Text, HStack, VStack, Tooltip } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
+import getAttributeFloor from 'niftyapes/util/getAttributeFloor'
 import { IoInformationCircleOutline } from 'react-icons/io5'
 
 export default function TokenStats({
@@ -9,14 +10,7 @@ export default function TokenStats({
   token: any
   collection: any
 }) {
-  const attributeFloor = token?.token?.attributes
-    ? Math.max(
-        ...token.token.attributes.map((attr: any) =>
-          Number(attr.floorAskPrice)
-        ),
-        0
-      )
-    : 0
+  const attributeFloor = getAttributeFloor(token?.token?.attributes)
 
   return (
     <VStack align={'left'} w="full">

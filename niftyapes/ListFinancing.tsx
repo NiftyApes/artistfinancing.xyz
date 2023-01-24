@@ -14,9 +14,10 @@ import {
   ModalCloseButton,
   Flex,
   VStack,
+  Box,
 } from '@chakra-ui/react'
 import TokenStats from './components/TokenStats'
-import FinancingTermsForm from './FinancingTermsForm'
+import FinancingTermsForm from './components/FinancingTermsForm'
 
 // TODO: Type out props.
 export default function ListFinancing({
@@ -38,7 +39,7 @@ export default function ListFinancing({
         List with Financing
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose} size="3xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="4xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader borderTopRadius="md" bg="gray.700">
@@ -66,13 +67,9 @@ export default function ListFinancing({
                 </VStack>
                 <TokenStats token={token} collection={collection} />
               </VStack>
-              <VStack align="left" p="6" flexGrow="1">
-                <Heading size="sm">Set Your Terms</Heading>
-                <FinancingTermsForm />
-                <Button colorScheme="blue" onClick={onClose}>
-                  Next
-                </Button>
-              </VStack>
+              <Box p="6" flexGrow="1">
+                <FinancingTermsForm token={token} collection={collection} />
+              </Box>
             </Flex>
           </ModalBody>
         </ModalContent>

@@ -20,11 +20,6 @@ const theme = extendTheme({
         margin: '0 !important',
       },
     },
-    Heading: {
-      baseStyle: {
-        margin: '0 !important',
-      },
-    },
     Button: {
       baseStyle: {
         fontWeight: 'normal',
@@ -36,6 +31,11 @@ const theme = extendTheme({
         dialog: {
           bg: 'gray.800',
         },
+      },
+    },
+    FormLabel: {
+      baseStyle: {
+        fontSize: 'sm',
       },
     },
   },
