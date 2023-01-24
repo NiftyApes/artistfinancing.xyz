@@ -53,7 +53,7 @@ function Stat({
   asNative?: boolean
 }) {
   return (
-    <HStack bg="gray.900" p="2" borderRadius="md" justify="space-between">
+    <HStack bg="gray.700" p="2" borderRadius="md" justify="space-between">
       <HStack>
         <Text fontSize="sm">{text}</Text>
         {tooltipText && (

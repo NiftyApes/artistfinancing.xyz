@@ -49,7 +49,7 @@ export default function FinancingTermsForm({
               </HStack>
               <NumberInput
                 flexGrow="1"
-                bg="blackAlpha.500"
+                bg="gray.900"
                 borderRadius="md"
                 defaultValue={
                   attributeFloor ||
@@ -98,7 +98,7 @@ export default function FinancingTermsForm({
 
             <HStack>
               <NumberInput
-                bg="blackAlpha.500"
+                bg="gray.900"
                 borderRadius="md"
                 defaultValue={20}
                 flexGrow={1}
@@ -134,7 +134,7 @@ export default function FinancingTermsForm({
 
             <HStack>
               <NumberInput
-                bg="blackAlpha.500"
+                bg="gray.900"
                 borderRadius="md"
                 defaultValue={20}
                 flexGrow={1}
@@ -170,7 +170,7 @@ export default function FinancingTermsForm({
 
             <HStack>
               <NumberInput
-                bg="blackAlpha.500"
+                bg="gray.900"
                 borderRadius="md"
                 defaultValue={5}
                 flexGrow={1}
@@ -204,7 +204,7 @@ export default function FinancingTermsForm({
           <FormControl>
             <FormLabel>Pay period duration</FormLabel>
 
-            <Select defaultValue={30} border="0" bg="blackAlpha.700">
+            <Select defaultValue={30} border="0" bg="gray.900">
               <option value={15}>15 days</option>
               <option value={30}>30 days</option>
               <option value={60}>60 days</option>
@@ -219,7 +219,7 @@ export default function FinancingTermsForm({
           <FormControl>
             <FormLabel>Grace period duration</FormLabel>
 
-            <Select defaultValue={15} border="0" bg="blackAlpha.700">
+            <Select defaultValue={15} border="0" bg="gray.900">
               <option value={5}>5 days</option>
               <option value={10}>10 days</option>
               <option value={15}>15 days</option>
@@ -235,7 +235,7 @@ export default function FinancingTermsForm({
           <FormControl>
             <FormLabel>Number of late payments tolerated</FormLabel>
 
-            <Select defaultValue={3} border="0" bg="blackAlpha.700">
+            <Select defaultValue={3} border="0" bg="gray.900">
               <option value={0}>0</option>
               <option value={1}>1</option>
               <option value={2}>2</option>
@@ -251,7 +251,7 @@ export default function FinancingTermsForm({
           <FormControl>
             <FormLabel>Expiration</FormLabel>
 
-            <Select defaultValue={5} border="0" bg="blackAlpha.700">
+            <Select defaultValue={5} border="0" bg="gray.900">
               <option value={0}>1 hour</option>
               <option value={1}>12 hours</option>
               <option value={2}>1 day</option>
