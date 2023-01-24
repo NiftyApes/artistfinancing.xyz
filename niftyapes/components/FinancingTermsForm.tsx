@@ -16,9 +16,14 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { IoInformationCircleOutline } from 'react-icons/io5'
+import useCoinConversion from 'hooks/useCoinConversion'
 import { FaPercent } from 'react-icons/fa'
 import useEnvChain from 'hooks/useEnvChain'
 import getAttributeFloor from '../util/getAttributeFloor'
+import { useState } from 'react'
+import FormatCurrency from 'components/FormatCurrency'
+import FormatNativeCrypto from 'components/FormatNativeCrypto'
+import { formatDollar } from 'lib/numbers'
 
 export default function FinancingTermsForm({
   token,
@@ -29,6 +34,16 @@ export default function FinancingTermsForm({
 }) {
   const chain = useEnvChain()
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
+  const defaultTerms = {
+    listPrice:
+      attributeFloor || collection?.floorAsk?.price?.amount?.native || 0,
+  }
+  const [terms, setTerms] = useState(defaultTerms)
+
+  const usdPrice = useCoinConversion('usd')
+  console.log(usdPrice)
+
+  console.log('terms:', terms)
 
   return (
     <VStack align={'left'} spacing={6}>
@@ -51,11 +66,10 @@ export default function FinancingTermsForm({
                 flexGrow="1"
                 bg="gray.900"
                 borderRadius="md"
-                defaultValue={
-                  attributeFloor ||
-                  collection?.floorAsk?.price?.amount?.native ||
-                  0
-                }
+                value={terms.listPrice}
+                onChange={(price) => {
+                  setTerms({ ...terms, listPrice: price })
+                }}
               >
                 <NumberInputField border="0" borderColor="gray.400" />
               </NumberInput>
@@ -78,15 +92,16 @@ export default function FinancingTermsForm({
               </Tooltip>
             </HStack>
             <VStack align="start">
-              <HStack>
-                <Image src="/eth-dark.svg" boxSize="3" />
-                <Text fontSize="md" fontWeight="semibold">
-                  0.19
+              <FormatNativeCrypto amount={terms.listPrice} />
+              {usdPrice && (
+                <Text
+                  fontSize="xs"
+                  fontWeight="semibold"
+                  color="whiteAlpha.600"
+                >
+                  {formatDollar(usdPrice * terms.listPrice)}
                 </Text>
-              </HStack>
-              <Text fontSize="xs" fontWeight="semibold" color="whiteAlpha.600">
-                $309.55
-              </Text>
+              )}
             </VStack>
           </VStack>
         </GridItem>
