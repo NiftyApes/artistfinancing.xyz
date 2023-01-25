@@ -12,6 +12,7 @@ import {
   NumberInputField,
   NumberInputProps,
   Select,
+  SelectProps,
   Text,
   Tooltip,
   VStack,
@@ -20,37 +21,39 @@ import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import useCoinConversion from 'hooks/useCoinConversion'
 import useEnvChain from 'hooks/useEnvChain'
 import { formatDollar } from 'lib/numbers'
+import expirationOptions, { Expiration } from 'niftyapes/util/expirationOptions'
 import { useState } from 'react'
 import { FaPercent } from 'react-icons/fa'
 import { IoInformationCircleOutline } from 'react-icons/io5'
 import getAttributeFloor from '../util/getAttributeFloor'
 
+// TODO: Type 'any'
 export default function FinancingTermsForm({
   token,
   collection,
+  onClose,
 }: {
   token: any
   collection: any
+  onClose: () => void
 }) {
   const chain = useEnvChain()
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
-  // TODO: Expiration
   const defaultTerms = {
     listPrice:
       attributeFloor || collection?.floorAsk?.price?.amount?.native || 0,
-    downPayment: 20,
-    interestRate: 20,
-    minPrincipal: 5,
-    payPeriod: 30,
-    gracePeriod: 15,
+    downPaymentPercent: 20,
+    interestRatePercent: 20,
+    minPrincipalPercent: 5,
+    payPeriodDays: 30,
+    gracePeriodDays: 15,
     numLatePayments: 3,
+    expiration: Expiration.OneMonth,
   }
   const [terms, setTerms] = useState(defaultTerms)
-
-  const usdPrice = useCoinConversion('usd')
-  const paidOnSale = (terms.downPayment / 100) * terms.listPrice
-  const intEachPer = (terms.interestRate / 100) * terms.listPrice
-  const minEachPer = (terms.minPrincipal / 100) * terms.listPrice
+  const paidOnSale = (terms.downPaymentPercent / 100) * terms.listPrice
+  const intEachPer = (terms.interestRatePercent / 100) * terms.listPrice
+  const minEachPer = (terms.minPrincipalPercent / 100) * terms.listPrice
 
   return (
     <VStack align={'left'} spacing={6}>
@@ -60,16 +63,14 @@ export default function FinancingTermsForm({
         {/* List price */}
         <GridItem>
           <FormControl>
-            <FormLabel>
-              <Text>List price</Text>
-            </FormLabel>
+            <FormLabel>List price</FormLabel>
             <HStack spacing="2">
               <Image src="/niftyapes/banana.png" />
               <HStack>
                 <Image src="/eth-dark.svg" boxSize="6" />
                 <Text>{chain?.nativeCurrency.symbol || 'ETH'}</Text>
               </HStack>
-              <TermNumberInput
+              <TermInputNumber
                 defaultValue={terms.listPrice}
                 onChange={(_, listPrice) => {
                   setTerms({ ...terms, listPrice })
@@ -80,35 +81,11 @@ export default function FinancingTermsForm({
         </GridItem>
 
         <GridItem>
-          <VStack align="start">
-            <HStack>
-              <Text fontSize="sm">Profit</Text>
-              <Tooltip
-                hasArrow
-                placement="right"
-                label="How much ETH you will receive after marketplace fees and creator royalties are subtracted."
-              >
-                <span>
-                  <Icon as={IoInformationCircleOutline} />
-                </span>
-              </Tooltip>
-            </HStack>
-            <VStack align="start">
-              <FormatNativeCrypto
-                amount={terms.listPrice}
-                maximumFractionDigits={4}
-              />
-              {usdPrice && (
-                <Text
-                  fontSize="xs"
-                  fontWeight="semibold"
-                  color="whiteAlpha.600"
-                >
-                  {formatDollar(usdPrice * terms.listPrice)}
-                </Text>
-              )}
-            </VStack>
-          </VStack>
+          <ExtraInfo
+            text="Profit"
+            tooltipText="How much ETH you will receive after marketplace fees and creator royalties are subtracted."
+            amount={terms.listPrice}
+          />
         </GridItem>
 
         {/* Down payment */}
@@ -116,35 +93,18 @@ export default function FinancingTermsForm({
           <FormControl>
             <FormLabel>Down payment</FormLabel>
 
-            <TermNumberInput
+            <TermInputNumber
               withPercent={true}
-              defaultValue={terms.downPayment}
-              onChange={(_, downPayment) => {
-                setTerms({ ...terms, downPayment })
+              defaultValue={terms.downPaymentPercent}
+              onChange={(_, downPaymentPercent) => {
+                setTerms({ ...terms, downPaymentPercent })
               }}
             />
           </FormControl>
         </GridItem>
 
         <GridItem>
-          <VStack align="start">
-            <Text fontSize="sm">Paid on sale</Text>
-            <VStack align="start">
-              <FormatNativeCrypto
-                amount={paidOnSale}
-                maximumFractionDigits={4}
-              />
-              {usdPrice && (
-                <Text
-                  fontSize="xs"
-                  fontWeight="semibold"
-                  color="whiteAlpha.600"
-                >
-                  {formatDollar(usdPrice * paidOnSale)}
-                </Text>
-              )}
-            </VStack>
-          </VStack>
+          <ExtraInfo text="Paid on sale" amount={paidOnSale} />
         </GridItem>
 
         {/* Annual interest rate */}
@@ -152,35 +112,18 @@ export default function FinancingTermsForm({
           <FormControl>
             <FormLabel>Annual interest rate</FormLabel>
 
-            <TermNumberInput
+            <TermInputNumber
               withPercent={true}
-              defaultValue={terms.interestRate}
-              onChange={(_, interestRate) => {
-                setTerms({ ...terms, interestRate })
+              defaultValue={terms.interestRatePercent}
+              onChange={(_, interestRatePercent) => {
+                setTerms({ ...terms, interestRatePercent })
               }}
             />
           </FormControl>
         </GridItem>
 
         <GridItem>
-          <VStack align="start">
-            <Text fontSize="sm">Interest each period</Text>
-            <VStack align="start">
-              <FormatNativeCrypto
-                amount={intEachPer}
-                maximumFractionDigits={4}
-              />
-              {usdPrice && (
-                <Text
-                  fontSize="xs"
-                  fontWeight="semibold"
-                  color="whiteAlpha.600"
-                >
-                  {formatDollar(usdPrice * intEachPer)}
-                </Text>
-              )}
-            </VStack>
-          </VStack>
+          <ExtraInfo text="Interest each period" amount={intEachPer} />
         </GridItem>
 
         {/* Minimum principal per pay period */}
@@ -188,111 +131,123 @@ export default function FinancingTermsForm({
           <FormControl>
             <FormLabel>Minimum principal per pay period</FormLabel>
 
-            <TermNumberInput
+            <TermInputNumber
               withPercent={true}
-              defaultValue={terms.minPrincipal}
-              onChange={(_, minPrincipal) => {
-                setTerms({ ...terms, minPrincipal })
+              defaultValue={terms.minPrincipalPercent}
+              onChange={(_, minPrincipalPercent) => {
+                setTerms({ ...terms, minPrincipalPercent })
               }}
             />
           </FormControl>
         </GridItem>
 
         <GridItem>
-          <VStack align="start">
-            <Text fontSize="sm">Minimum each period</Text>
-            <VStack align="start">
-              <FormatNativeCrypto
-                amount={minEachPer}
-                maximumFractionDigits={4}
-              />
-              {usdPrice && (
-                <Text
-                  fontSize="xs"
-                  fontWeight="semibold"
-                  color="whiteAlpha.600"
-                >
-                  {formatDollar(usdPrice * minEachPer)}
-                </Text>
-              )}
-            </VStack>
-          </VStack>
+          <ExtraInfo text="Minimum each period" amount={minEachPer} />
         </GridItem>
 
-        {/* Pay period duration TODO: Fix bg color. */}
+        {/* Pay period duration */}
         <GridItem>
           <FormControl>
             <FormLabel>Pay period duration</FormLabel>
 
-            <Select defaultValue={30} border="0" bg="gray.900">
-              <option value={15}>15 days</option>
-              <option value={30}>30 days</option>
-              <option value={60}>60 days</option>
-            </Select>
+            <TermInputSelect
+              options={[
+                { value: 15, label: '15 days' },
+                { value: 30, label: '30 days' },
+                { value: 60, label: '60 days' },
+              ]}
+              defaultValue={terms.payPeriodDays}
+              onChange={(event) => {
+                setTerms({
+                  ...terms,
+                  payPeriodDays: Number(event.target.value),
+                })
+              }}
+            />
           </FormControl>
         </GridItem>
 
         <GridItem></GridItem>
 
-        {/* Grace period duration TODO: Fix bg color. */}
+        {/* Grace period duration */}
         <GridItem>
           <FormControl>
             <FormLabel>Grace period duration</FormLabel>
 
-            <Select defaultValue={15} border="0" bg="gray.900">
-              <option value={5}>5 days</option>
-              <option value={10}>10 days</option>
-              <option value={15}>15 days</option>
-              <option value={30}>30 days</option>
-            </Select>
+            <TermInputSelect
+              options={[
+                { value: 5, label: '5 days' },
+                { value: 10, label: '10 days' },
+                { value: 15, label: '15 days' },
+                { value: 30, label: '30 days' },
+              ]}
+              defaultValue={terms.gracePeriodDays}
+              onChange={(event) => {
+                setTerms({
+                  ...terms,
+                  gracePeriodDays: Number(event.target.value),
+                })
+              }}
+            />
           </FormControl>
         </GridItem>
 
         <GridItem></GridItem>
 
-        {/* Number of late payments tolerated TODO: Fix bg color. */}
+        {/* Number of late payments tolerated */}
         <GridItem>
           <FormControl>
             <FormLabel>Number of late payments tolerated</FormLabel>
 
-            <Select defaultValue={3} border="0" bg="gray.900">
-              <option value={0}>0</option>
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-            </Select>
+            <TermInputSelect
+              options={[
+                { value: 0, label: '0' },
+                { value: 1, label: '1' },
+                { value: 2, label: '2' },
+                { value: 3, label: '3' },
+              ]}
+              defaultValue={terms.numLatePayments}
+              onChange={(event) => {
+                setTerms({
+                  ...terms,
+                  numLatePayments: Number(event.target.value),
+                })
+              }}
+            />
           </FormControl>
         </GridItem>
 
         <GridItem></GridItem>
 
-        {/* Expiration TODO: Fix bg color. */}
+        {/* Expiration */}
         <GridItem>
           <FormControl>
             <FormLabel>Expiration</FormLabel>
 
-            <Select defaultValue={5} border="0" bg="gray.900">
-              <option value={0}>1 hour</option>
-              <option value={1}>12 hours</option>
-              <option value={2}>1 day</option>
-              <option value={3}>3 days</option>
-              <option value={4}>1 week</option>
-              <option value={5}>1 month</option>
-              <option value={6}>3 months</option>
-              <option value={6}>None</option>
-            </Select>
+            <TermInputSelect
+              options={expirationOptions}
+              defaultValue={terms.expiration}
+              onChange={(event) => {
+                setTerms({
+                  ...terms,
+                  expiration: Number(event.target.value) as Expiration,
+                })
+              }}
+            />
           </FormControl>
         </GridItem>
 
         <GridItem></GridItem>
       </Grid>
 
-      <Button colorScheme={'blue'}>Next</Button>
+      <Button colorScheme={'blue'} onClick={onClose}>
+        Next
+      </Button>
     </VStack>
   )
 }
 
-function TermNumberInput({
+function TermInputNumber({
   defaultValue,
   onChange,
   withPercent,
@@ -316,5 +271,66 @@ function TermNumberInput({
     </HStack>
   ) : (
     numInput
+  )
+}
+
+function ExtraInfo({
+  text,
+  tooltipText,
+  amount,
+}: {
+  text: string
+  tooltipText?: string
+  amount: number
+}) {
+  const usdPrice = useCoinConversion('usd')
+
+  return (
+    <VStack align="start">
+      <HStack>
+        <Text fontSize="sm">{text}</Text>
+        {tooltipText && (
+          <Tooltip hasArrow placement="right" label={tooltipText}>
+            <span>
+              <Icon as={IoInformationCircleOutline} />
+            </span>
+          </Tooltip>
+        )}
+      </HStack>
+      <VStack align="start">
+        <FormatNativeCrypto amount={amount} maximumFractionDigits={4} />
+        {usdPrice && (
+          <Text fontSize="xs" fontWeight="semibold" color="whiteAlpha.600">
+            {formatDollar(usdPrice * amount)}
+          </Text>
+        )}
+      </VStack>
+    </VStack>
+  )
+}
+
+type Option = {
+  value: number
+  label: string
+}
+
+function TermInputSelect({
+  onChange,
+  defaultValue,
+  options,
+}: SelectProps & { options: Option[] }) {
+  return (
+    <Select
+      onChange={onChange}
+      defaultValue={defaultValue}
+      border="0"
+      bg="gray.900"
+    >
+      {options.map((option, idx) => (
+        <option key={idx} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </Select>
   )
 }

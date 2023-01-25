@@ -1,23 +1,22 @@
 import {
+  Box,
   Button,
+  Flex,
   GridItem,
-  Text,
-  Image,
   Heading,
+  Image,
   Modal,
-  ModalOverlay,
-  useDisclosure,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Flex,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
   VStack,
-  Box,
 } from '@chakra-ui/react'
-import TokenStats from './components/TokenStats'
 import FinancingTermsForm from './components/FinancingTermsForm'
+import TokenStats from './components/TokenStats'
 
 // TODO: Type out props.
 export default function ListFinancing({
@@ -68,7 +67,11 @@ export default function ListFinancing({
                 <TokenStats token={token} collection={collection} />
               </VStack>
               <Box p="6" flexGrow="1">
-                <FinancingTermsForm token={token} collection={collection} />
+                <FinancingTermsForm
+                  token={token}
+                  collection={collection}
+                  onClose={onClose}
+                />
               </Box>
             </Flex>
           </ModalBody>
