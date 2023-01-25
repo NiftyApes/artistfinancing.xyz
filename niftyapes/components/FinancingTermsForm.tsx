@@ -23,7 +23,7 @@ import getAttributeFloor from '../util/getAttributeFloor'
 import { useState } from 'react'
 import FormatCurrency from 'components/FormatCurrency'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
-import { formatDollar } from 'lib/numbers'
+import { formatBN, formatDollar } from 'lib/numbers'
 
 export default function FinancingTermsForm({
   token,
@@ -37,11 +37,18 @@ export default function FinancingTermsForm({
   const defaultTerms = {
     listPrice:
       attributeFloor || collection?.floorAsk?.price?.amount?.native || 0,
+    downPayment: 20,
   }
   const [terms, setTerms] = useState(defaultTerms)
 
   const usdPrice = useCoinConversion('usd')
+  const paidOnSale = (terms.downPayment / 100) * terms.listPrice
+
+  console.log(chain)
+  console.log(paidOnSale)
   console.log(usdPrice)
+
+  console.log(formatBN(terms.listPrice, 4, 18))
 
   console.log('terms:', terms)
 
@@ -66,9 +73,9 @@ export default function FinancingTermsForm({
                 flexGrow="1"
                 bg="gray.900"
                 borderRadius="md"
-                value={terms.listPrice}
-                onChange={(price) => {
-                  setTerms({ ...terms, listPrice: price })
+                defaultValue={terms.listPrice}
+                onChange={(_, listPrice) => {
+                  setTerms({ ...terms, listPrice })
                 }}
               >
                 <NumberInputField border="0" borderColor="gray.400" />
@@ -92,7 +99,10 @@ export default function FinancingTermsForm({
               </Tooltip>
             </HStack>
             <VStack align="start">
-              <FormatNativeCrypto amount={terms.listPrice} />
+              <FormatNativeCrypto
+                amount={terms.listPrice}
+                maximumFractionDigits={4}
+              />
               {usdPrice && (
                 <Text
                   fontSize="xs"
@@ -115,8 +125,11 @@ export default function FinancingTermsForm({
               <NumberInput
                 bg="gray.900"
                 borderRadius="md"
-                defaultValue={20}
                 flexGrow={1}
+                defaultValue={terms.downPayment}
+                onChange={(_, downPayment) => {
+                  setTerms({ ...terms, downPayment })
+                }}
               >
                 <NumberInputField border="0" borderColor="gray.400" />
               </NumberInput>
@@ -129,15 +142,19 @@ export default function FinancingTermsForm({
           <VStack align="start">
             <Text fontSize="sm">Paid on sale</Text>
             <VStack align="start">
-              <HStack>
-                <Image src="/eth-dark.svg" boxSize="3" />
-                <Text fontSize="md" fontWeight="semibold">
-                  0.038
+              <FormatNativeCrypto
+                amount={paidOnSale}
+                maximumFractionDigits={4}
+              />
+              {usdPrice && (
+                <Text
+                  fontSize="xs"
+                  fontWeight="semibold"
+                  color="whiteAlpha.600"
+                >
+                  {formatDollar(usdPrice * paidOnSale)}
                 </Text>
-              </HStack>
-              <Text fontSize="xs" fontWeight="semibold" color="whiteAlpha.600">
-                $61.91
-              </Text>
+              )}
             </VStack>
           </VStack>
         </GridItem>
