@@ -10,20 +10,20 @@ import {
   Image,
   NumberInput,
   NumberInputField,
+  NumberInputProps,
   Select,
   Text,
   Tooltip,
   VStack,
 } from '@chakra-ui/react'
-import { IoInformationCircleOutline } from 'react-icons/io5'
-import useCoinConversion from 'hooks/useCoinConversion'
-import { FaPercent } from 'react-icons/fa'
-import useEnvChain from 'hooks/useEnvChain'
-import getAttributeFloor from '../util/getAttributeFloor'
-import { useState } from 'react'
-import FormatCurrency from 'components/FormatCurrency'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
-import { formatBN, formatDollar } from 'lib/numbers'
+import useCoinConversion from 'hooks/useCoinConversion'
+import useEnvChain from 'hooks/useEnvChain'
+import { formatDollar } from 'lib/numbers'
+import { useState } from 'react'
+import { FaPercent } from 'react-icons/fa'
+import { IoInformationCircleOutline } from 'react-icons/io5'
+import getAttributeFloor from '../util/getAttributeFloor'
 
 export default function FinancingTermsForm({
   token,
@@ -34,23 +34,23 @@ export default function FinancingTermsForm({
 }) {
   const chain = useEnvChain()
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
+  // TODO: Expiration
   const defaultTerms = {
     listPrice:
       attributeFloor || collection?.floorAsk?.price?.amount?.native || 0,
     downPayment: 20,
+    interestRate: 20,
+    minPrincipal: 5,
+    payPeriod: 30,
+    gracePeriod: 15,
+    numLatePayments: 3,
   }
   const [terms, setTerms] = useState(defaultTerms)
 
   const usdPrice = useCoinConversion('usd')
   const paidOnSale = (terms.downPayment / 100) * terms.listPrice
-
-  console.log(chain)
-  console.log(paidOnSale)
-  console.log(usdPrice)
-
-  console.log(formatBN(terms.listPrice, 4, 18))
-
-  console.log('terms:', terms)
+  const intEachPer = (terms.interestRate / 100) * terms.listPrice
+  const minEachPer = (terms.minPrincipal / 100) * terms.listPrice
 
   return (
     <VStack align={'left'} spacing={6}>
@@ -69,17 +69,12 @@ export default function FinancingTermsForm({
                 <Image src="/eth-dark.svg" boxSize="6" />
                 <Text>{chain?.nativeCurrency.symbol || 'ETH'}</Text>
               </HStack>
-              <NumberInput
-                flexGrow="1"
-                bg="gray.900"
-                borderRadius="md"
+              <TermNumberInput
                 defaultValue={terms.listPrice}
                 onChange={(_, listPrice) => {
                   setTerms({ ...terms, listPrice })
                 }}
-              >
-                <NumberInputField border="0" borderColor="gray.400" />
-              </NumberInput>
+              />
             </HStack>
           </FormControl>
         </GridItem>
@@ -121,20 +116,13 @@ export default function FinancingTermsForm({
           <FormControl>
             <FormLabel>Down payment</FormLabel>
 
-            <HStack>
-              <NumberInput
-                bg="gray.900"
-                borderRadius="md"
-                flexGrow={1}
-                defaultValue={terms.downPayment}
-                onChange={(_, downPayment) => {
-                  setTerms({ ...terms, downPayment })
-                }}
-              >
-                <NumberInputField border="0" borderColor="gray.400" />
-              </NumberInput>
-              <Icon as={FaPercent} />
-            </HStack>
+            <TermNumberInput
+              withPercent={true}
+              defaultValue={terms.downPayment}
+              onChange={(_, downPayment) => {
+                setTerms({ ...terms, downPayment })
+              }}
+            />
           </FormControl>
         </GridItem>
 
@@ -164,17 +152,13 @@ export default function FinancingTermsForm({
           <FormControl>
             <FormLabel>Annual interest rate</FormLabel>
 
-            <HStack>
-              <NumberInput
-                bg="gray.900"
-                borderRadius="md"
-                defaultValue={20}
-                flexGrow={1}
-              >
-                <NumberInputField border="0" borderColor="gray.400" />
-              </NumberInput>
-              <Icon as={FaPercent} />
-            </HStack>
+            <TermNumberInput
+              withPercent={true}
+              defaultValue={terms.interestRate}
+              onChange={(_, interestRate) => {
+                setTerms({ ...terms, interestRate })
+              }}
+            />
           </FormControl>
         </GridItem>
 
@@ -182,15 +166,19 @@ export default function FinancingTermsForm({
           <VStack align="start">
             <Text fontSize="sm">Interest each period</Text>
             <VStack align="start">
-              <HStack>
-                <Image src="/eth-dark.svg" boxSize="3" />
-                <Text fontSize="md" fontWeight="semibold">
-                  0.038
+              <FormatNativeCrypto
+                amount={intEachPer}
+                maximumFractionDigits={4}
+              />
+              {usdPrice && (
+                <Text
+                  fontSize="xs"
+                  fontWeight="semibold"
+                  color="whiteAlpha.600"
+                >
+                  {formatDollar(usdPrice * intEachPer)}
                 </Text>
-              </HStack>
-              <Text fontSize="xs" fontWeight="semibold" color="whiteAlpha.600">
-                $61.91
-              </Text>
+              )}
             </VStack>
           </VStack>
         </GridItem>
@@ -200,17 +188,13 @@ export default function FinancingTermsForm({
           <FormControl>
             <FormLabel>Minimum principal per pay period</FormLabel>
 
-            <HStack>
-              <NumberInput
-                bg="gray.900"
-                borderRadius="md"
-                defaultValue={5}
-                flexGrow={1}
-              >
-                <NumberInputField border="0" borderColor="gray.400" />
-              </NumberInput>
-              <Icon as={FaPercent} />
-            </HStack>
+            <TermNumberInput
+              withPercent={true}
+              defaultValue={terms.minPrincipal}
+              onChange={(_, minPrincipal) => {
+                setTerms({ ...terms, minPrincipal })
+              }}
+            />
           </FormControl>
         </GridItem>
 
@@ -218,15 +202,19 @@ export default function FinancingTermsForm({
           <VStack align="start">
             <Text fontSize="sm">Minimum each period</Text>
             <VStack align="start">
-              <HStack>
-                <Image src="/eth-dark.svg" boxSize="3" />
-                <Text fontSize="md" fontWeight="semibold">
-                  0.0095
+              <FormatNativeCrypto
+                amount={minEachPer}
+                maximumFractionDigits={4}
+              />
+              {usdPrice && (
+                <Text
+                  fontSize="xs"
+                  fontWeight="semibold"
+                  color="whiteAlpha.600"
+                >
+                  {formatDollar(usdPrice * minEachPer)}
                 </Text>
-              </HStack>
-              <Text fontSize="xs" fontWeight="semibold" color="whiteAlpha.600">
-                $15.48
-              </Text>
+              )}
             </VStack>
           </VStack>
         </GridItem>
@@ -301,5 +289,32 @@ export default function FinancingTermsForm({
 
       <Button colorScheme={'blue'}>Next</Button>
     </VStack>
+  )
+}
+
+function TermNumberInput({
+  defaultValue,
+  onChange,
+  withPercent,
+}: NumberInputProps & { withPercent?: boolean }) {
+  const numInput = (
+    <NumberInput
+      flexGrow="1"
+      bg="gray.900"
+      borderRadius="md"
+      defaultValue={defaultValue}
+      onChange={onChange}
+    >
+      <NumberInputField border="0" borderColor="gray.400" />
+    </NumberInput>
+  )
+
+  return withPercent ? (
+    <HStack>
+      {numInput}
+      <Icon as={FaPercent} />
+    </HStack>
+  ) : (
+    numInput
   )
 }
