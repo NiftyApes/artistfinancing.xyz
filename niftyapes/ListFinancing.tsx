@@ -42,7 +42,7 @@ export default function ListFinancing({
   token: any
   collection: any
 }) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [step, setStep] = useState<Step>(Step.SetTerms)
 
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
@@ -58,6 +58,11 @@ export default function ListFinancing({
     expiration: Expiration.OneMonth,
   }
   const [terms, setTerms] = useState<FinancingTerms>(defaultTerms)
+  const onClose = () => {
+    setTerms(defaultTerms)
+    setStep(Step.SetTerms)
+    onModalClose()
+  }
 
   if (!token || !collection) {
     return null
@@ -69,15 +74,7 @@ export default function ListFinancing({
         List with Financing
       </Button>
 
-      <Modal
-        isOpen={isOpen}
-        onClose={() => {
-          setTerms(defaultTerms)
-          setStep(Step.SetTerms)
-          onClose()
-        }}
-        size="4xl"
-      >
+      <Modal isOpen={isOpen} onClose={onClose} size="4xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader borderTopRadius="md" bg="gray.700">

@@ -1,12 +1,11 @@
 import {
-  Image,
+  Button,
   Heading,
   HStack,
+  Icon,
+  Image,
   Text,
   VStack,
-  Progress,
-  Button,
-  Icon,
 } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import expirationOptions from 'niftyapes/util/expirationOptions'
@@ -58,9 +57,8 @@ export function TermsStats({ terms }: { terms: FinancingTerms }) {
       <HStack justify="space-between">
         <Text>Expires</Text>
         <Text fontWeight="semibold">
-          {expirationOptions.find((option) => {
-            option.value === terms.expiration
-          })?.label || 'None'}
+          {expirationOptions.find((option) => option.value === terms.expiration)
+            ?.label || 'None'}
         </Text>
       </HStack>
     </VStack>
@@ -76,6 +74,7 @@ export function WalletApproval({
   tokenName: string
   onApprove: () => void
 }) {
+  // TODO: Remove when wallet integration implemented.
   setTimeout(onApprove, 3000)
 
   return (
