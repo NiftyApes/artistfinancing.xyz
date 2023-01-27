@@ -22,35 +22,31 @@ import useCoinConversion from 'hooks/useCoinConversion'
 import useEnvChain from 'hooks/useEnvChain'
 import { formatDollar } from 'lib/numbers'
 import expirationOptions, { Expiration } from 'niftyapes/util/expirationOptions'
-import { useState } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { FaPercent } from 'react-icons/fa'
 import { IoInformationCircleOutline } from 'react-icons/io5'
-import getAttributeFloor from '../util/getAttributeFloor'
 
-// TODO: Type 'any'
+export type FinancingTerms = {
+  listPrice: number
+  downPaymentPercent: number
+  interestRatePercent: number
+  minPrincipalPercent: number
+  payPeriodDays: number
+  gracePeriodDays: number
+  numLatePayments: number
+  expiration: Expiration
+}
+
 export default function FinancingTermsForm({
-  token,
-  collection,
-  onClose,
+  onSubmit,
+  terms,
+  setTerms,
 }: {
-  token: any
-  collection: any
-  onClose: () => void
+  onSubmit: () => void
+  terms: FinancingTerms
+  setTerms: Dispatch<SetStateAction<FinancingTerms>>
 }) {
   const chain = useEnvChain()
-  const attributeFloor = getAttributeFloor(token?.token?.attributes)
-  const defaultTerms = {
-    listPrice:
-      attributeFloor || collection?.floorAsk?.price?.amount?.native || 0,
-    downPaymentPercent: 20,
-    interestRatePercent: 20,
-    minPrincipalPercent: 5,
-    payPeriodDays: 30,
-    gracePeriodDays: 15,
-    numLatePayments: 3,
-    expiration: Expiration.OneMonth,
-  }
-  const [terms, setTerms] = useState(defaultTerms)
   const paidOnSale = (terms.downPaymentPercent / 100) * terms.listPrice
   const intEachPer = (terms.interestRatePercent / 100) * terms.listPrice
   const minEachPer = (terms.minPrincipalPercent / 100) * terms.listPrice
@@ -240,7 +236,7 @@ export default function FinancingTermsForm({
         <GridItem></GridItem>
       </Grid>
 
-      <Button colorScheme={'blue'} onClick={onClose}>
+      <Button colorScheme={'blue'} onClick={onSubmit}>
         Next
       </Button>
     </VStack>

@@ -15,8 +15,20 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import FinancingTermsForm from './components/FinancingTermsForm'
+import { useState } from 'react'
+import FinancingTermsForm, {
+  FinancingTerms,
+} from './components/FinancingTermsForm'
 import TokenStats from './components/TokenStats'
+import { TermsStats, WalletApproval } from './components/WalletApproval'
+import { Expiration } from './util/expirationOptions'
+import getAttributeFloor from './util/getAttributeFloor'
+
+enum Step {
+  SetTerms,
+  WalletApproval,
+  Success,
+}
 
 // TODO: Type out props.
 export default function ListFinancing({
@@ -27,6 +39,21 @@ export default function ListFinancing({
   collection: any
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [step, setStep] = useState<Step>(Step.SetTerms)
+
+  const attributeFloor = getAttributeFloor(token?.token?.attributes)
+  const defaultTerms = {
+    listPrice:
+      attributeFloor || collection?.floorAsk?.price?.amount?.native || 0,
+    downPaymentPercent: 20,
+    interestRatePercent: 20,
+    minPrincipalPercent: 5,
+    payPeriodDays: 30,
+    gracePeriodDays: 15,
+    numLatePayments: 3,
+    expiration: Expiration.OneMonth,
+  }
+  const [terms, setTerms] = useState<FinancingTerms>(defaultTerms)
 
   if (!token || !collection) {
     return null
@@ -38,7 +65,15 @@ export default function ListFinancing({
         List with Financing
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose} size="4xl">
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          setTerms(defaultTerms)
+          setStep(Step.SetTerms)
+          onClose()
+        }}
+        size="4xl"
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader borderTopRadius="md" bg="gray.700">
@@ -64,14 +99,22 @@ export default function ListFinancing({
                     {token.token.collection.name}
                   </Text>
                 </VStack>
-                <TokenStats token={token} collection={collection} />
+                {step === Step.SetTerms && (
+                  <TokenStats token={token} collection={collection} />
+                )}
+                {step === Step.WalletApproval && <TermsStats />}
               </VStack>
               <Box p="6" flexGrow="1">
-                <FinancingTermsForm
-                  token={token}
-                  collection={collection}
-                  onClose={onClose}
-                />
+                {step === Step.SetTerms && (
+                  <FinancingTermsForm
+                    terms={terms}
+                    setTerms={setTerms}
+                    onSubmit={() => {
+                      setStep(Step.WalletApproval)
+                    }}
+                  />
+                )}
+                {step === Step.WalletApproval && <WalletApproval />}
               </Box>
             </Flex>
           </ModalBody>
