@@ -296,7 +296,12 @@ function ExtraInfo({
       <VStack align="start">
         <FormatNativeCrypto amount={amount} maximumFractionDigits={4} />
         {usdPrice && (
-          <Text fontSize="xs" fontWeight="semibold" color="whiteAlpha.600">
+          <Text
+            mt="0 !important"
+            fontSize="sm"
+            fontWeight="semibold"
+            color="whiteAlpha.600"
+          >
             {formatDollar(usdPrice * amount)}
           </Text>
         )}

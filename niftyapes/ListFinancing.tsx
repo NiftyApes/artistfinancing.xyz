@@ -20,7 +20,11 @@ import FinancingTermsForm, {
   FinancingTerms,
 } from './components/FinancingTermsForm'
 import TokenStats from './components/TokenStats'
-import { TermsStats, WalletApproval } from './components/WalletApproval'
+import {
+  ListingSuccess,
+  TermsStats,
+  WalletApproval,
+} from './components/WalletApproval'
 import { Expiration } from './util/expirationOptions'
 import getAttributeFloor from './util/getAttributeFloor'
 
@@ -82,7 +86,13 @@ export default function ListFinancing({
           <ModalCloseButton />
           <ModalBody p="0">
             <Flex>
-              <VStack w="72" borderRight="1px" borderColor="gray.600" p="6">
+              <VStack
+                w="72"
+                borderRight="1px"
+                borderColor="gray.600"
+                p="6"
+                flexShrink={0}
+              >
                 <VStack align="left" w="full">
                   <Image
                     m="5px 0 !important"
@@ -95,16 +105,18 @@ export default function ListFinancing({
                 </VStack>
                 <VStack align="left" w="full">
                   <Heading size="sm">{token.token.name}</Heading>
-                  <Text fontSize="xs" color="whiteAlpha.800">
+                  <Text mt="0 !important" fontSize="xs" color="whiteAlpha.800">
                     {token.token.collection.name}
                   </Text>
                 </VStack>
                 {step === Step.SetTerms && (
                   <TokenStats token={token} collection={collection} />
                 )}
-                {step === Step.WalletApproval && <TermsStats />}
+                {[Step.WalletApproval, Step.Success].includes(step) && (
+                  <TermsStats terms={terms} />
+                )}
               </VStack>
-              <Box p="6" flexGrow="1">
+              <Box p="6" w="full">
                 {step === Step.SetTerms && (
                   <FinancingTermsForm
                     terms={terms}
@@ -114,7 +126,22 @@ export default function ListFinancing({
                     }}
                   />
                 )}
-                {step === Step.WalletApproval && <WalletApproval />}
+                {step === Step.WalletApproval && (
+                  <WalletApproval
+                    imageSrc={token.token.image}
+                    tokenName={token.token.name}
+                    onApprove={() => {
+                      setStep(Step.Success)
+                    }}
+                  />
+                )}
+                {step === Step.Success && (
+                  <ListingSuccess
+                    tokenName={token.token.name}
+                    collectionName={token.token.collection.name}
+                    onClose={onClose}
+                  />
+                )}
               </Box>
             </Flex>
           </ModalBody>
