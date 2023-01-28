@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Flex,
-  GridItem,
   Heading,
   Image,
   Modal,
@@ -16,17 +15,11 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import FinancingTermsForm, {
-  FinancingTerms,
-} from './components/FinancingTermsForm'
-import TokenStats from './components/TokenStats'
-import {
-  ListingSuccess,
-  TermsStats,
-  WalletApproval,
-} from './components/WalletApproval'
-import { Expiration } from './util/expirationOptions'
-import getAttributeFloor from './util/getAttributeFloor'
+import { Expiration } from '../util/expirationOptions'
+import getAttributeFloor from '../util/getAttributeFloor'
+import FinancingTermsForm, { FinancingTerms } from './FinancingTermsForm'
+import TokenStats from './TokenStats'
+import { ListingSuccess, TermsStats, WalletApproval } from './WalletApproval'
 
 enum Step {
   SetTerms,
@@ -35,12 +28,14 @@ enum Step {
 }
 
 // TODO: Type out props.
-export default function ListFinancing({
+export default function ListFinancingModal({
   token,
   collection,
+  currListingExists,
 }: {
   token: any
   collection: any
+  currListingExists: boolean
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [step, setStep] = useState<Step>(Step.SetTerms)
@@ -70,8 +65,10 @@ export default function ListFinancing({
 
   return (
     <>
-      <Button onClick={onOpen} as={GridItem} colSpan={2} colorScheme="blue">
-        List with Financing
+      <Button w="full" onClick={onOpen} colorScheme="blue">
+        {currListingExists
+          ? 'Create new finance listing'
+          : 'Create finance listing'}
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose} size="4xl">
