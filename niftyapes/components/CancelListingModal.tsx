@@ -1,7 +1,6 @@
 import {
   Button,
   Heading,
-  HStack,
   Icon,
   Modal,
   ModalBody,
@@ -9,16 +8,19 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Spinner,
   Text,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import LoadingDots from './LoadingDots'
 
-export default function CancelListingModal() {
+export default function CancelListingModal({
+  onSuccess,
+}: {
+  onSuccess: () => void
+}) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [cancellationSuccess, setCancellationSuccess] = useState(false)
   const onClose = () => {
@@ -50,6 +52,7 @@ export default function CancelListingModal() {
               <CancellationInProgress
                 onApprove={() => {
                   setCancellationSuccess(true)
+                  onSuccess()
                 }}
                 onClose={onClose}
               />

@@ -32,10 +32,12 @@ export default function ListFinancingModal({
   token,
   collection,
   currListingExists,
+  onSuccess,
 }: {
   token: any
   collection: any
   currListingExists: boolean
+  onSuccess: () => void
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [step, setStep] = useState<Step>(Step.SetTerms)
@@ -126,6 +128,7 @@ export default function ListFinancingModal({
                     tokenName={token.token.name}
                     onApprove={() => {
                       setStep(Step.Success)
+                      onSuccess()
                     }}
                   />
                 )}

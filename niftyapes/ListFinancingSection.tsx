@@ -35,7 +35,7 @@ export default function ListFinancingSection({
     numLatePayments: 3,
     expiration: Expiration.OneMonth,
   }
-  const currListingExists = useState(true)
+  const [currListingExists, setCurrListingExists] = useState(true)
 
   return (
     <VStack w="full" align="left" spacing="8">
@@ -55,9 +55,18 @@ export default function ListFinancingSection({
         <ListFinancingModal
           token={token}
           collection={collection}
-          currListingExists
+          currListingExists={currListingExists}
+          onSuccess={() => {
+            setCurrListingExists(true)
+          }}
         />
-        {currListingExists && <CancelListingModal />}
+        {currListingExists && (
+          <CancelListingModal
+            onSuccess={() => {
+              setCurrListingExists(false)
+            }}
+          />
+        )}
       </HStack>
     </VStack>
   )
