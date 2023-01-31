@@ -1,33 +1,33 @@
+import {
+  AcceptBidModal,
+  BidModal,
+  ListModal,
+  useReservoirClient,
+  useTokens,
+} from '@reservoir0x/reservoir-kit-ui'
 import BuyNow from 'components/BuyNow'
 import CancelListing from 'components/CancelListing'
 import CancelOffer from 'components/CancelOffer'
-import {
-  ListModal,
-  BidModal,
-  useReservoirClient,
-  AcceptBidModal,
-  useTokens,
-} from '@reservoir0x/reservoir-kit-ui'
-import React, { ComponentPropsWithoutRef, FC, ReactNode, useState } from 'react'
+import ConnectWalletButton from 'components/ConnectWalletButton'
+import FormatCrypto from 'components/FormatCrypto'
+import SwapCartModal from 'components/SwapCartModal'
+import useCoinConversion from 'hooks/useCoinConversion'
+import useMounted from 'hooks/useMounted'
+import { formatDollar } from 'lib/numbers'
+import { getPricing } from 'lib/token/pricing'
+import { useRouter } from 'next/router'
+import ListFinancingSection from 'niftyapes/ListFinancingSection'
+import { ComponentPropsWithoutRef, FC, ReactNode, useState } from 'react'
+import { FaShoppingCart } from 'react-icons/fa'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { useAccount, useNetwork, useSigner } from 'wagmi'
-import { setToast } from './setToast'
 import recoilCartTokens, {
   getCartCurrency,
   getPricingPools,
   getTokensMap,
 } from 'recoil/cart'
-import FormatCrypto from 'components/FormatCrypto'
 import { Collection } from 'types/reservoir'
-import { formatDollar } from 'lib/numbers'
-import useCoinConversion from 'hooks/useCoinConversion'
-import SwapCartModal from 'components/SwapCartModal'
-import { FaShoppingCart } from 'react-icons/fa'
-import ConnectWalletButton from 'components/ConnectWalletButton'
-import useMounted from 'hooks/useMounted'
-import { useRouter } from 'next/router'
-import { getPricing } from 'lib/token/pricing'
-import ListFinancing from '../../niftyapes/ListFinancing'
+import { useAccount, useNetwork, useSigner } from 'wagmi'
+import { setToast } from './setToast'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 const SOURCE_ID = process.env.NEXT_PUBLIC_SOURCE_ID
@@ -175,99 +175,161 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
       : false
 
   return (
-    <div className="col-span-full md:col-span-4 lg:col-span-5 lg:col-start-2">
-      <article className="col-span-full rounded-2xl border border-gray-300 bg-white p-6 dark:border-neutral-600 dark:bg-black">
-        <div className="grid grid-cols-2 gap-6">
-          <Price
-            title="List Price"
-            source={
-              listSourceName && (
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={listSourceRedirect}
-                  className="reservoir-body flex items-center gap-2 dark:text-white"
-                >
-                  on {listSourceName}
-                  <img
-                    className="h-6 w-6"
-                    src={listSourceLogo}
-                    alt="Source Logo"
-                  />
-                </a>
-              )
-            }
-            price={
-              <FormatCrypto
-                amount={floorAskPrice?.amount?.decimal}
-                address={floorAskPrice?.currency?.contract}
-                decimals={floorAskPrice?.currency?.decimals}
-                logoWidth={30}
-                maximumFractionDigits={8}
-              />
-            }
-            usdPrice={floorAskUsdPrice}
-          />
-          <Price
-            title="Top Offer"
-            source={
-              offerSourceName && (
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={offerSourceRedirect}
-                  className="reservoir-body flex items-center gap-2 dark:text-white"
-                >
-                  on {offerSourceName}
-                  <img
-                    className="h-6 w-6"
-                    src={offerSourceLogo}
-                    alt="Source Logo"
-                  />
-                </a>
-              )
-            }
-            price={
-              <FormatCrypto
-                amount={token?.market?.topBid?.price?.amount?.decimal}
-                address={token?.market?.topBid?.price?.currency?.contract}
-                decimals={token?.market?.topBid?.price?.currency?.decimals}
-                logoWidth={30}
-                maximumFractionDigits={8}
-              />
-            }
-            usdPrice={topBidUsdPrice}
-          />
+    <>
+      {isOwner && (
+        <div className="col-span-full md:col-span-4 lg:col-span-5 lg:col-start-2">
+          <article className="col-span-full rounded-2xl border border-gray-300 bg-white p-6 dark:border-neutral-600 dark:bg-black">
+            <ListFinancingSection token={token} collection={collection} />
+          </article>
         </div>
-        <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2">
-          {account.isDisconnected ? (
-            <>
-              <ConnectWalletButton className="w-full">
-                <span>Connect Wallet</span>
-              </ConnectWalletButton>
-            </>
-          ) : (
-            <>
-              {isOwner && (
-                <ListFinancing token={token} collection={collection} />
-              )}
-              {isOwner && (
-                <ListModal
+      )}
+      <div className="col-span-full md:col-span-4 lg:col-span-5 lg:col-start-2">
+        <article className="col-span-full rounded-2xl border border-gray-300 bg-white p-6 dark:border-neutral-600 dark:bg-black">
+          <div className="grid grid-cols-2 gap-6">
+            <Price
+              title="List Price"
+              source={
+                listSourceName && (
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={listSourceRedirect}
+                    className="reservoir-body flex items-center gap-2 dark:text-white"
+                  >
+                    on {listSourceName}
+                    <img
+                      className="h-6 w-6"
+                      src={listSourceLogo}
+                      alt="Source Logo"
+                    />
+                  </a>
+                )
+              }
+              price={
+                <FormatCrypto
+                  amount={floorAskPrice?.amount?.decimal}
+                  address={floorAskPrice?.currency?.contract}
+                  decimals={floorAskPrice?.currency?.decimals}
+                  logoWidth={30}
+                  maximumFractionDigits={8}
+                />
+              }
+              usdPrice={floorAskUsdPrice}
+            />
+            <Price
+              title="Top Offer"
+              source={
+                offerSourceName && (
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={offerSourceRedirect}
+                    className="reservoir-body flex items-center gap-2 dark:text-white"
+                  >
+                    on {offerSourceName}
+                    <img
+                      className="h-6 w-6"
+                      src={offerSourceLogo}
+                      alt="Source Logo"
+                    />
+                  </a>
+                )
+              }
+              price={
+                <FormatCrypto
+                  amount={token?.market?.topBid?.price?.amount?.decimal}
+                  address={token?.market?.topBid?.price?.currency?.contract}
+                  decimals={token?.market?.topBid?.price?.currency?.decimals}
+                  logoWidth={30}
+                  maximumFractionDigits={8}
+                />
+              }
+              usdPrice={topBidUsdPrice}
+            />
+          </div>
+          <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2">
+            {account.isDisconnected ? (
+              <>
+                <ConnectWalletButton className="w-full">
+                  <span>Connect Wallet</span>
+                </ConnectWalletButton>
+              </>
+            ) : (
+              <>
+                {isOwner && (
+                  <ListModal
+                    trigger={
+                      <button className="btn-primary-fill w-full dark:ring-primary-900 dark:focus:ring-4">
+                        {floorAskPrice?.amount?.decimal
+                          ? 'Create New Listing'
+                          : 'List for Sale'}
+                      </button>
+                    }
+                    collectionId={contract}
+                    tokenId={tokenId}
+                    currencies={listingCurrencies}
+                    onListingComplete={() => {
+                      details && details.mutate()
+                    }}
+                    onListingError={(err: any) => {
+                      if (err?.code === 4001) {
+                        setToast({
+                          kind: 'error',
+                          message: 'You have canceled the transaction.',
+                          title: 'User canceled transaction',
+                        })
+                        return
+                      }
+                      setToast({
+                        kind: 'error',
+                        message: 'The transaction was not completed.',
+                        title: 'Could not list token',
+                      })
+                    }}
+                  />
+                )}
+                {!isOwner && (
+                  <BuyNow
+                    buttonClassName="btn-primary-fill col-span-1"
+                    data={{
+                      details: details,
+                    }}
+                    signer={signer}
+                    isInTheWrongNetwork={isInTheWrongNetwork}
+                    mutate={details.mutate}
+                  />
+                )}
+                <AcceptBidModal
                   trigger={
-                    <button className="btn-primary-fill w-full dark:ring-primary-900 dark:focus:ring-4">
-                      {floorAskPrice?.amount?.decimal
-                        ? 'Create New Listing'
-                        : 'List for Sale'}
-                    </button>
+                    showAcceptOffer ? (
+                      <button
+                        disabled={isInTheWrongNetwork}
+                        className="btn-primary-outline w-full dark:text-white"
+                      >
+                        Accept Offer
+                      </button>
+                    ) : null
                   }
-                  collectionId={contract}
-                  tokenId={tokenId}
-                  currencies={listingCurrencies}
-                  onListingComplete={() => {
-                    details && details.mutate()
-                  }}
-                  onListingError={(err: any) => {
-                    if (err?.code === 4001) {
+                  openState={
+                    isOwner && (queryBidId || deeplinkToAcceptBid)
+                      ? bidOpenState
+                      : undefined
+                  }
+                  bidId={queryBidId}
+                  collectionId={collection?.id}
+                  tokenId={token?.token?.tokenId}
+                  onClose={() => details && details.mutate()}
+                  onBidAcceptError={(error: any) => {
+                    if (error?.type === 'price mismatch') {
+                      setToast({
+                        kind: 'error',
+                        message: 'Offer was lower than expected.',
+                        title: 'Could not accept offer',
+                      })
+                      return
+                    }
+                    // Handle user rejection
+                    if (error?.code === 4001) {
                       setToast({
                         kind: 'error',
                         message: 'You have canceled the transaction.',
@@ -278,176 +340,120 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
                     setToast({
                       kind: 'error',
                       message: 'The transaction was not completed.',
-                      title: 'Could not list token',
-                    })
-                  }}
-                />
-              )}
-              {!isOwner && (
-                <BuyNow
-                  buttonClassName="btn-primary-fill col-span-1"
-                  data={{
-                    details: details,
-                  }}
-                  signer={signer}
-                  isInTheWrongNetwork={isInTheWrongNetwork}
-                  mutate={details.mutate}
-                />
-              )}
-              <AcceptBidModal
-                trigger={
-                  showAcceptOffer ? (
-                    <button
-                      disabled={isInTheWrongNetwork}
-                      className="btn-primary-outline w-full dark:text-white"
-                    >
-                      Accept Offer
-                    </button>
-                  ) : null
-                }
-                openState={
-                  isOwner && (queryBidId || deeplinkToAcceptBid)
-                    ? bidOpenState
-                    : undefined
-                }
-                bidId={queryBidId}
-                collectionId={collection?.id}
-                tokenId={token?.token?.tokenId}
-                onClose={() => details && details.mutate()}
-                onBidAcceptError={(error: any) => {
-                  if (error?.type === 'price mismatch') {
-                    setToast({
-                      kind: 'error',
-                      message: 'Offer was lower than expected.',
                       title: 'Could not accept offer',
                     })
-                    return
-                  }
-                  // Handle user rejection
-                  if (error?.code === 4001) {
-                    setToast({
-                      kind: 'error',
-                      message: 'You have canceled the transaction.',
-                      title: 'User canceled transaction',
-                    })
-                    return
-                  }
-                  setToast({
-                    kind: 'error',
-                    message: 'The transaction was not completed.',
-                    title: 'Could not accept offer',
-                  })
-                }}
-              />
-
-              {!isOwner && (
-                <BidModal
-                  collectionId={collection?.id}
-                  tokenId={token?.token?.tokenId}
-                  trigger={
-                    <button
-                      disabled={isInTheWrongNetwork}
-                      className="btn-primary-outline w-full dark:border-neutral-600 dark:text-white dark:ring-primary-900 dark:focus:ring-4"
-                    >
-                      Make Offer
-                    </button>
-                  }
-                  onBidComplete={() => {
-                    details && details.mutate()
                   }}
                 />
-              )}
 
-              <CancelOffer
-                data={{
-                  details,
-                }}
-                signer={signer}
-                show={isTopBidder}
-                isInTheWrongNetwork={isInTheWrongNetwork}
-                setToast={setToast}
-              />
-              <CancelListing
-                data={{
-                  details,
-                }}
-                signer={signer}
-                show={isOwner && isListed}
-                isInTheWrongNetwork={isInTheWrongNetwork}
-                setToast={setToast}
-              />
-            </>
+                {!isOwner && (
+                  <BidModal
+                    collectionId={collection?.id}
+                    tokenId={token?.token?.tokenId}
+                    trigger={
+                      <button
+                        disabled={isInTheWrongNetwork}
+                        className="btn-primary-outline w-full dark:border-neutral-600 dark:text-white dark:ring-primary-900 dark:focus:ring-4"
+                      >
+                        Make Offer
+                      </button>
+                    }
+                    onBidComplete={() => {
+                      details && details.mutate()
+                    }}
+                  />
+                )}
+
+                <CancelOffer
+                  data={{
+                    details,
+                  }}
+                  signer={signer}
+                  show={isTopBidder}
+                  isInTheWrongNetwork={isInTheWrongNetwork}
+                  setToast={setToast}
+                />
+                <CancelListing
+                  data={{
+                    details,
+                  }}
+                  signer={signer}
+                  show={isOwner && isListed}
+                  isInTheWrongNetwork={isInTheWrongNetwork}
+                  setToast={setToast}
+                />
+              </>
+            )}
+          </div>
+          {isInCart && !isOwner && (
+            <button
+              onClick={() => {
+                const newCartTokens = [...cartTokens]
+                const index = newCartTokens.findIndex(
+                  (cartToken) =>
+                    cartToken?.token?.contract === contract &&
+                    cartToken?.token?.tokenId === tokenId
+                )
+                newCartTokens.splice(index, 1)
+                setCartTokens(newCartTokens)
+              }}
+              className="mt-4 w-fit text-left outline-none disabled:cursor-not-allowed  dark:border-neutral-600 dark:focus:ring-4  dark:focus:ring-primary-900"
+            >
+              <span>You can also</span>{' '}
+              <span className="text-[#FF3B3B] dark:text-[#FF9A9A]">
+                remove from cart
+              </span>
+            </button>
           )}
-        </div>
-        {isInCart && !isOwner && (
-          <button
-            onClick={() => {
-              const newCartTokens = [...cartTokens]
-              const index = newCartTokens.findIndex(
-                (cartToken) =>
-                  cartToken?.token?.contract === contract &&
-                  cartToken?.token?.tokenId === tokenId
-              )
-              newCartTokens.splice(index, 1)
-              setCartTokens(newCartTokens)
-            }}
-            className="mt-4 w-fit text-left outline-none disabled:cursor-not-allowed  dark:border-neutral-600 dark:focus:ring-4  dark:focus:ring-primary-900"
-          >
-            <span>You can also</span>{' '}
-            <span className="text-[#FF3B3B] dark:text-[#FF9A9A]">
-              remove from cart
-            </span>
-          </button>
-        )}
 
-        {!isInCart && !isOwner && isListed && canAddToCart && (
-          <button
-            disabled={!floorAskPrice}
-            onClick={() => {
-              if (token?.token && token.market) {
-                if (
-                  !cartCurrency ||
-                  floorAskPrice?.currency?.contract === cartCurrency?.contract
-                ) {
-                  setCartTokens([
-                    ...cartTokens,
-                    {
-                      token: token.token,
-                      market: token.market,
-                    },
-                  ])
-                } else {
-                  setCartToSwap([
-                    {
-                      token: token.token,
-                      market: token.market,
-                    },
-                  ])
-                  setClearCartOpen(true)
+          {!isInCart && !isOwner && isListed && canAddToCart && (
+            <button
+              disabled={!floorAskPrice}
+              onClick={() => {
+                if (token?.token && token.market) {
+                  if (
+                    !cartCurrency ||
+                    floorAskPrice?.currency?.contract === cartCurrency?.contract
+                  ) {
+                    setCartTokens([
+                      ...cartTokens,
+                      {
+                        token: token.token,
+                        market: token.market,
+                      },
+                    ])
+                  } else {
+                    setCartToSwap([
+                      {
+                        token: token.token,
+                        market: token.market,
+                      },
+                    ])
+                    setClearCartOpen(true)
+                  }
                 }
-              }
-            }}
-            className="mt-4 w-fit outline-none dark:focus:ring-4 dark:focus:ring-primary-900"
-          >
-            <div className="flex items-center dark:text-white">
-              <div>
-                <span>You can also</span>{' '}
-                <span className="text-primary-700 dark:text-primary-100">
-                  add to cart
-                </span>
-              </div>
+              }}
+              className="mt-4 w-fit outline-none dark:focus:ring-4 dark:focus:ring-primary-900"
+            >
+              <div className="flex items-center dark:text-white">
+                <div>
+                  <span>You can also</span>{' '}
+                  <span className="text-primary-700 dark:text-primary-100">
+                    add to cart
+                  </span>
+                </div>
 
-              <FaShoppingCart className="ml-[10px] h-[18px] w-[18px] text-primary-700 dark:text-primary-100" />
-            </div>
-          </button>
-        )}
-      </article>
-      <SwapCartModal
-        open={clearCartOpen}
-        setOpen={setClearCartOpen}
-        cart={cartToSwap}
-      />
-    </div>
+                <FaShoppingCart className="ml-[10px] h-[18px] w-[18px] text-primary-700 dark:text-primary-100" />
+              </div>
+            </button>
+          )}
+        </article>
+        <SwapCartModal
+          open={clearCartOpen}
+          setOpen={setClearCartOpen}
+          cart={cartToSwap}
+        />
+      </div>
+    </>
   )
 }
 
