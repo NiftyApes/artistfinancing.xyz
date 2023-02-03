@@ -1,28 +1,26 @@
-import Link from 'next/link'
-import { optimizeImage } from 'lib/optmizeImage'
-import Image from 'next/legacy/image'
-import { FaShoppingCart } from 'react-icons/fa'
-import React, {
-  ComponentPropsWithoutRef,
-  Dispatch,
-  FC,
-  SetStateAction,
-} from 'react'
-import FormatCrypto from 'components/FormatCrypto'
-import BuyNow from 'components/BuyNow'
-import useTokens from 'hooks/useTokens'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { getCartCurrency, getTokensMap } from 'recoil/cart'
-import { useAccount, useNetwork, useSigner } from 'wagmi'
-import recoilCartTokens, { getPricingPools } from 'recoil/cart'
-import { ListModal, useReservoirClient } from '@reservoir0x/reservoir-kit-ui'
-import { setToast } from './token/setToast'
-import { MutatorCallback } from 'swr'
 import { useMediaQuery } from '@react-hookz/web'
-import RarityTooltip from './RarityTooltip'
-import { Collection } from 'types/reservoir'
+import { ListModal, useReservoirClient } from '@reservoir0x/reservoir-kit-ui'
+import BuyNow from 'components/BuyNow'
+import FormatCrypto from 'components/FormatCrypto'
+import useTokens from 'hooks/useTokens'
+import { optimizeImage } from 'lib/optmizeImage'
 import { getPricing } from 'lib/token/pricing'
+import Image from 'next/legacy/image'
+import Link from 'next/link'
 import NiftyApesTokenCardSection from 'niftyapes/components/TokenCardSection'
+import { ComponentPropsWithoutRef, Dispatch, FC, SetStateAction } from 'react'
+import { FaShoppingCart } from 'react-icons/fa'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import recoilCartTokens, {
+  getCartCurrency,
+  getPricingPools,
+  getTokensMap,
+} from 'recoil/cart'
+import { MutatorCallback } from 'swr'
+import { Collection } from 'types/reservoir'
+import { useAccount, useNetwork, useSigner } from 'wagmi'
+import RarityTooltip from './RarityTooltip'
+import { setToast } from './token/setToast'
 
 const SOURCE_ICON = process.env.NEXT_PUBLIC_SOURCE_ICON
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
@@ -146,9 +144,9 @@ const TokenCard: FC<Props> = ({
         </a>
       </Link>
       <div
-        className={`absolute bottom-[0px] w-full bg-white transition-all  dark:bg-neutral-800 md:-bottom-[41px] ${
-          !isOwner && !price ? '' : 'group-hover:bottom-[0px]'
-        }`}
+        className={`absolute bottom-[0px] w-full bg-white transition-all  dark:bg-neutral-800 ${
+          !hasFinanceListing ? 'md:-bottom-[41px]' : 'md:-bottom-[8px]'
+        } ${!isOwner && !price ? '' : 'group-hover:bottom-[0px]'}`}
       >
         <div className="flex items-center justify-between">
           <div
