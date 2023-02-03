@@ -144,9 +144,9 @@ const TokenCard: FC<Props> = ({
         </a>
       </Link>
       <div
-        className={`absolute bottom-[0px] w-full bg-white transition-all  dark:bg-neutral-800 ${
-          !hasFinanceListing ? 'md:-bottom-[41px]' : 'md:-bottom-[8px]'
-        } ${!isOwner && !price ? '' : 'group-hover:bottom-[0px]'}`}
+        className={`absolute bottom-[0px] w-full bg-white transition-all dark:bg-neutral-800 md:-bottom-[41px] ${
+          !isOwner && !price ? '' : 'group-hover:bottom-[0px]'
+        }`}
       >
         <div className="flex items-center justify-between">
           <div
@@ -168,7 +168,7 @@ const TokenCard: FC<Props> = ({
             )}
         </div>
         {hasFinanceListing ? (
-          <NiftyApesTokenCardSection />
+          <NiftyApesTokenCardSection token={token} isOwner={isOwner} />
         ) : (
           <>
             <div className="flex items-center justify-between px-4 pb-4 lg:pb-3">

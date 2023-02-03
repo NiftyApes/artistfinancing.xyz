@@ -1,19 +1,18 @@
-import {
-  Image,
-  Grid,
-  GridItem,
-  HStack,
-  Icon,
-  Text,
-  Box,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, HStack, Icon, Image, Text, VStack } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
+import useTokens from 'hooks/useTokens'
 import expirationOptions, { Expiration } from 'niftyapes/util/expirationOptions'
-import { GoArrowDown } from 'react-icons/go'
 import { FiClock } from 'react-icons/fi'
+import { GoArrowDown } from 'react-icons/go'
+import BuyNowPayLaterModal from './BuyNowPayLaterModal'
 
-export default function TokenCardSection() {
+export default function TokenCardSection({
+  token,
+  isOwner,
+}: {
+  token: ReturnType<typeof useTokens>['tokens']['data'][0]
+  isOwner: boolean
+}) {
   // TODO: Remove mock data.
   const terms = {
     listPrice: 1.2,
@@ -23,8 +22,8 @@ export default function TokenCardSection() {
   }
 
   return (
-    <Box px="4" pb="4">
-      <VStack>
+    <Box>
+      <VStack px="4" pb="4">
         <HStack w="full" justify={'space-between'}>
           <FormatNativeCrypto amount={terms.listPrice} />
           <HStack>
@@ -49,6 +48,7 @@ export default function TokenCardSection() {
           </HStack>
         </HStack>
       </VStack>
+      {!isOwner && <BuyNowPayLaterModal token={token} />}
     </Box>
   )
 }
