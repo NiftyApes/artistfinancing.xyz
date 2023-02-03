@@ -93,7 +93,9 @@ const TokensGrid: FC<Props> = ({
           ? Array(20)
               .fill(null)
               .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
-          : sortedTokens?.map((token) => {
+          : sortedTokens?.map((token, idx) => {
+              const hasFinanceListing = idx < 3 ? true : false
+
               return (
                 <TokenCard
                   token={token}
@@ -104,6 +106,7 @@ const TokensGrid: FC<Props> = ({
                   setClearCartOpen={setClearCartOpen}
                   setCartToSwap={setCartToSwap}
                   key={`${token?.token?.contract}:${token?.token?.tokenId}`}
+                  hasFinanceListing={hasFinanceListing}
                 />
               )
             })}
