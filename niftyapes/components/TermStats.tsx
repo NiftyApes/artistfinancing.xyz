@@ -54,13 +54,16 @@ export default function TermsStats({ terms }: { terms: Terms }) {
         <Text>Late payments</Text>
         <Text fontWeight="semibold">{terms.numLatePayments}</Text>
       </HStack>
-      <HStack justify="space-between">
-        <Text>Expires</Text>
-        <Text fontWeight="semibold">
-          {expirationOptions.find((option) => option.value === terms.expiration)
-            ?.label || 'None'}
-        </Text>
-      </HStack>
+      {terms.expiration && (
+        <HStack justify="space-between">
+          <Text>Expires</Text>
+          <Text fontWeight="semibold">
+            {expirationOptions.find(
+              (option) => option.value === terms.expiration
+            )?.label || 'None'}
+          </Text>
+        </HStack>
+      )}
     </VStack>
   )
 }

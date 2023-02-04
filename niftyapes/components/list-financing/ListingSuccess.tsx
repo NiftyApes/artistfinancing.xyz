@@ -26,7 +26,7 @@ export default function ListingSuccess({
             <Text as="span" color="blue.600">
               {collectionName}
             </Text>{' '}
-            has been listed for sale with financing
+            has been listed for sale with financing.
           </Text>
         </VStack>
         <VStack>
