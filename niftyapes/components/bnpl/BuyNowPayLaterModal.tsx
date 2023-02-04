@@ -37,7 +37,6 @@ export default function BuyNowPayLaterModal({
   token,
 }: {
   token?: ReturnType<typeof useTokens>['tokens']['data'][0]
-  collection: any
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [step, setStep] = useState<Step>(Step.Checkout)
