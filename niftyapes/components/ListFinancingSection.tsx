@@ -10,12 +10,12 @@ import {
 } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { useState } from 'react'
-import BuyNowPayLaterModal from './components/BuyNowPayLaterModal'
-import CancelListingModal from './components/CancelListingModal'
-import { FinancingTerms } from './components/FinancingTermsForm'
-import ListFinancingModal from './components/ListFinancingModal'
-import expirationOptions, { Expiration } from './util/expirationOptions'
-import getAttributeFloor from './util/getAttributeFloor'
+import BuyNowPayLaterModal from './bnpl/BuyNowPayLaterModal'
+import CancelListingModal from './cancel-listing/CancelListingModal'
+import { FinancingTerms } from './list-financing/FinancingTermsForm'
+import ListFinancingModal from './list-financing/ListFinancingModal'
+import expirationOptions, { Expiration } from '../util/expirationOptions'
+import getAttributeFloor from '../util/getAttributeFloor'
 
 export default function ListFinancingSection({
   token,
@@ -77,7 +77,7 @@ export default function ListFinancingSection({
         </HStack>
       ) : (
         <Box borderRadius="md" overflow="hidden">
-          <BuyNowPayLaterModal token={token} />
+          <BuyNowPayLaterModal token={token} collection={collection} />
         </Box>
       )}
     </VStack>

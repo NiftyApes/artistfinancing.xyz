@@ -15,11 +15,13 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { Expiration } from '../util/expirationOptions'
-import getAttributeFloor from '../util/getAttributeFloor'
+import { Expiration } from '../../util/expirationOptions'
+import getAttributeFloor from '../../util/getAttributeFloor'
 import FinancingTermsForm, { FinancingTerms } from './FinancingTermsForm'
 import TokenStats from './TokenStats'
-import { ListingSuccess, TermsStats, WalletApproval } from './WalletApproval'
+import ListingSuccess from './ListingSuccess'
+import TermsStats from '../TermStats'
+import WalletApproval from './WalletApproval'
 
 enum Step {
   SetTerms,

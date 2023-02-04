@@ -4,7 +4,7 @@ import useTokens from 'hooks/useTokens'
 import expirationOptions, { Expiration } from 'niftyapes/util/expirationOptions'
 import { FiClock } from 'react-icons/fi'
 import { GoArrowDown } from 'react-icons/go'
-import BuyNowPayLaterModal from './BuyNowPayLaterModal'
+import BuyNowPayLaterModal from './bnpl/BuyNowPayLaterModal'
 
 export default function TokenCardSection({
   token,

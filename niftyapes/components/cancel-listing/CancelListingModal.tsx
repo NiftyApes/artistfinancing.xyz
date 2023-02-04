@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { IoCheckmarkCircle } from 'react-icons/io5'
-import LoadingDots from './LoadingDots'
+import LoadingDots from '../LoadingDots'
 
 export default function CancelListingModal({
   onSuccess,
