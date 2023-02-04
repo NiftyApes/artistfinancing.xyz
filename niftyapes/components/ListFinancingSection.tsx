@@ -77,7 +77,7 @@ export default function ListFinancingSection({
         </HStack>
       ) : (
         <Box borderRadius="md" overflow="hidden">
-          <BuyNowPayLaterModal token={token} collection={collection} />
+          <BuyNowPayLaterModal token={token} />
         </Box>
       )}
     </VStack>
