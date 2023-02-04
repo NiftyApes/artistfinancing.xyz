@@ -88,17 +88,16 @@ export default function ListFinancingModal({
                 borderColor="gray.600"
                 p="6"
                 flexShrink={0}
+                align="left"
               >
-                <VStack align="left" w="full">
-                  <Image
-                    m="5px 0 !important"
-                    borderRadius="md"
-                    boxSize="200px"
-                    objectFit="cover"
-                    src={token.token.image}
-                    alt={token.token.name}
-                  ></Image>
-                </VStack>
+                <Image
+                  m="5px 0 !important"
+                  borderRadius="md"
+                  boxSize="200px"
+                  objectFit="cover"
+                  src={token.token.image}
+                  alt={token.token.name}
+                ></Image>
                 <VStack align="left" w="full">
                   <Heading size="sm">{token.token.name}</Heading>
                   <Text mt="0 !important" fontSize="xs" color="whiteAlpha.800">

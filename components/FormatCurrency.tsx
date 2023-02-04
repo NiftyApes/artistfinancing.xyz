@@ -7,6 +7,7 @@ type Props = {
   maximumFractionDigits?: number
   children?: React.ReactNode
   decimals?: number
+  fontSize?: number
 }
 
 const FormatCurrency: FC<Props> = ({
@@ -14,13 +15,17 @@ const FormatCurrency: FC<Props> = ({
   maximumFractionDigits = 2,
   children,
   decimals,
+  fontSize,
 }) => {
   const value = formatBN(amount, maximumFractionDigits, decimals)
 
   return (
     <div className="inline-flex flex-none items-center gap-1">
       {value !== '-' ? children : null}
-      <span className="flex-grow whitespace-nowrap font-semibold">
+      <span
+        className="flex-grow whitespace-nowrap font-semibold"
+        style={{ fontSize: `${fontSize}px` }}
+      >
         {value as any}
       </span>
     </div>
