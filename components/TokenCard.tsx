@@ -45,7 +45,7 @@ type Props = {
   mutate: MutatorCallback
   setClearCartOpen?: Dispatch<SetStateAction<boolean>>
   setCartToSwap?: Dispatch<SetStateAction<any | undefined>>
-  hasFinanceListing: boolean
+  hasFinanceListing?: boolean
 }
 
 const TokenCard: FC<Props> = ({
