@@ -15,8 +15,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { Expiration } from '../../util/expirationOptions'
-import getAttributeFloor from '../../util/getAttributeFloor'
+import { Expiration } from 'lib/niftyapes/expirationOptions'
+import getAttributeFloor from 'lib/niftyapes/getAttributeFloor'
 import FinancingTermsForm, { FinancingTerms } from './FinancingTermsForm'
 import TokenStats from './TokenStats'
 import ListingSuccess from './ListingSuccess'

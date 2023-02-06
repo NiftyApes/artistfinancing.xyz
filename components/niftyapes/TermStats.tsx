@@ -1,6 +1,6 @@
 import { Text, HStack, VStack } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
-import expirationOptions, { Expiration } from 'niftyapes/util/expirationOptions'
+import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
 
 type Terms = {
   listPrice: number

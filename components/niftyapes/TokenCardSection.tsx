@@ -1,7 +1,7 @@
 import { Box, HStack, Icon, Image, Text, VStack } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import useTokens from 'hooks/useTokens'
-import expirationOptions, { Expiration } from 'niftyapes/util/expirationOptions'
+import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
 import { FiClock } from 'react-icons/fi'
 import { GoArrowDown } from 'react-icons/go'
 import BuyNowPayLaterModal from './bnpl/BuyNowPayLaterModal'

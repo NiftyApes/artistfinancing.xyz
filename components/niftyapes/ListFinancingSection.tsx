@@ -14,8 +14,8 @@ import BuyNowPayLaterModal from './bnpl/BuyNowPayLaterModal'
 import CancelListingModal from './cancel-listing/CancelListingModal'
 import { FinancingTerms } from './list-financing/FinancingTermsForm'
 import ListFinancingModal from './list-financing/ListFinancingModal'
-import expirationOptions, { Expiration } from '../util/expirationOptions'
-import getAttributeFloor from '../util/getAttributeFloor'
+import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
+import getAttributeFloor from 'lib/niftyapes/getAttributeFloor'
 
 export default function ListFinancingSection({
   token,
