@@ -1,6 +1,6 @@
 import { Icon, Text, HStack, VStack, Tooltip } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
-import getAttributeFloor from 'niftyapes/util/getAttributeFloor'
+import getAttributeFloor from 'lib/niftyapes/getAttributeFloor'
 import { IoInformationCircleOutline } from 'react-icons/io5'
 
 export default function TokenStats({

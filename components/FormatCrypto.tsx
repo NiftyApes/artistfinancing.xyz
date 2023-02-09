@@ -4,6 +4,7 @@ import { FC, ComponentProps } from 'react'
 type FormatCryptoProps = {
   address?: string
   logoWidth?: number
+  fontSize?: number
 }
 
 const API_BASE =
@@ -15,6 +16,7 @@ const FormatCrypto: FC<Props> = ({
   amount,
   maximumFractionDigits,
   address,
+  fontSize,
   logoWidth = 16,
 }) => {
   const logoUrl = `${API_BASE}/redirect/currency/${address}/icon/v1`
@@ -23,6 +25,7 @@ const FormatCrypto: FC<Props> = ({
     <FormatCurrency
       amount={amount}
       maximumFractionDigits={maximumFractionDigits}
+      fontSize={fontSize}
     >
       {address && (
         <img

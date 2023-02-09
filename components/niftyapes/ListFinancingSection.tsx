@@ -1,4 +1,5 @@
 import {
+  Box,
   Grid,
   GridItem,
   Heading,
@@ -9,18 +10,21 @@ import {
 } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { useState } from 'react'
-import CancelListingModal from './components/CancelListingModal'
-import { FinancingTerms } from './components/FinancingTermsForm'
-import ListFinancingModal from './components/ListFinancingModal'
-import expirationOptions, { Expiration } from './util/expirationOptions'
-import getAttributeFloor from './util/getAttributeFloor'
+import BuyNowPayLaterModal from './bnpl/BuyNowPayLaterModal'
+import CancelListingModal from './cancel-listing/CancelListingModal'
+import { FinancingTerms } from './list-financing/FinancingTermsForm'
+import ListFinancingModal from './list-financing/ListFinancingModal'
+import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
+import getAttributeFloor from 'lib/niftyapes/getAttributeFloor'
 
 export default function ListFinancingSection({
   token,
   collection,
+  isOwner,
 }: {
   token: any
   collection: any
+  isOwner: boolean
 }) {
   // TODO: Replace with terms from loaded data.
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
@@ -50,34 +54,50 @@ export default function ListFinancingSection({
           />
         </HStack>
       </VStack>
-      {currListingExists && <CurrentListing terms={defaultTerms} />}
-      <HStack>
-        <ListFinancingModal
-          token={token}
-          collection={collection}
-          currListingExists={currListingExists}
-          onSuccess={() => {
-            setCurrListingExists(true)
-          }}
-        />
-        {currListingExists && (
-          <CancelListingModal
+      {currListingExists && (
+        <CurrentListing terms={defaultTerms} isOwner={isOwner} />
+      )}
+      {isOwner ? (
+        <HStack>
+          <ListFinancingModal
+            token={token}
+            collection={collection}
+            currListingExists={currListingExists}
             onSuccess={() => {
-              setCurrListingExists(false)
+              setCurrListingExists(true)
             }}
           />
-        )}
-      </HStack>
+          {currListingExists && (
+            <CancelListingModal
+              onSuccess={() => {
+                setCurrListingExists(false)
+              }}
+            />
+          )}
+        </HStack>
+      ) : (
+        <Box borderRadius="md" overflow="hidden">
+          <BuyNowPayLaterModal token={token} />
+        </Box>
+      )}
     </VStack>
   )
 }
 
-function CurrentListing({ terms }: { terms: FinancingTerms }) {
+function CurrentListing({
+  terms,
+  isOwner,
+}: {
+  terms: FinancingTerms
+  isOwner: boolean
+}) {
   const paidOnSale = (terms.downPaymentPercent / 100) * terms.listPrice
 
   return (
     <VStack w="full" align="left" spacing="4">
-      <Heading size="sm">Your current listing</Heading>
+      <Heading size="sm">
+        {isOwner ? 'Your current listing' : 'Current listing'}
+      </Heading>
       <Grid rowGap="2" columnGap="12" templateColumns={'1fr 1fr'}>
         <GridItem>
           <HStack justify="space-between">

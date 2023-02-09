@@ -16,7 +16,7 @@ import useMounted from 'hooks/useMounted'
 import { formatDollar } from 'lib/numbers'
 import { getPricing } from 'lib/token/pricing'
 import { useRouter } from 'next/router'
-import ListFinancingSection from 'niftyapes/ListFinancingSection'
+import ListFinancingSection from 'components/niftyapes/ListFinancingSection'
 import { ComponentPropsWithoutRef, FC, ReactNode, useState } from 'react'
 import { FaShoppingCart } from 'react-icons/fa'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -174,12 +174,19 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
       ? true
       : false
 
+  // TODO: Remove mock data
+  const hasFinanceListing = true
+
   return (
     <>
-      {isOwner && (
+      {hasFinanceListing && (
         <div className="col-span-full md:col-span-4 lg:col-span-5 lg:col-start-2">
           <article className="col-span-full rounded-2xl border border-gray-300 bg-white p-6 dark:border-neutral-600 dark:bg-black">
-            <ListFinancingSection token={token} collection={collection} />
+            <ListFinancingSection
+              token={token}
+              collection={collection}
+              isOwner={isOwner}
+            />
           </article>
         </div>
       )}

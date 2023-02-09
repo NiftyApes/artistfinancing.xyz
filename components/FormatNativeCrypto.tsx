@@ -8,12 +8,14 @@ const FormatNativeCrypto: FC<Props> = ({
   amount,
   maximumFractionDigits,
   logoWidth,
+  fontSize,
 }) => {
   const address = constants.AddressZero
   const decimals = 18
 
   return (
     <FormatCrypto
+      fontSize={fontSize}
       logoWidth={logoWidth}
       amount={amount}
       address={address}

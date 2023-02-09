@@ -15,11 +15,13 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { Expiration } from '../util/expirationOptions'
-import getAttributeFloor from '../util/getAttributeFloor'
+import { Expiration } from 'lib/niftyapes/expirationOptions'
+import getAttributeFloor from 'lib/niftyapes/getAttributeFloor'
 import FinancingTermsForm, { FinancingTerms } from './FinancingTermsForm'
 import TokenStats from './TokenStats'
-import { ListingSuccess, TermsStats, WalletApproval } from './WalletApproval'
+import ListingSuccess from './ListingSuccess'
+import TermsStats from '../TermStats'
+import WalletApproval from './WalletApproval'
 
 enum Step {
   SetTerms,
@@ -88,17 +90,16 @@ export default function ListFinancingModal({
                 borderColor="gray.600"
                 p="6"
                 flexShrink={0}
+                align="left"
               >
-                <VStack align="left" w="full">
-                  <Image
-                    m="5px 0 !important"
-                    borderRadius="md"
-                    boxSize="200px"
-                    objectFit="cover"
-                    src={token.token.image}
-                    alt={token.token.name}
-                  ></Image>
-                </VStack>
+                <Image
+                  m="5px 0 !important"
+                  borderRadius="md"
+                  boxSize="200px"
+                  objectFit="cover"
+                  src={token.token.image}
+                  alt={token.token.name}
+                ></Image>
                 <VStack align="left" w="full">
                   <Heading size="sm">{token.token.name}</Heading>
                   <Text mt="0 !important" fontSize="xs" color="whiteAlpha.800">

@@ -1,27 +1,26 @@
-import Link from 'next/link'
-import { optimizeImage } from 'lib/optmizeImage'
-import Image from 'next/legacy/image'
-import { FaShoppingCart } from 'react-icons/fa'
-import React, {
-  ComponentPropsWithoutRef,
-  Dispatch,
-  FC,
-  SetStateAction,
-} from 'react'
-import FormatCrypto from 'components/FormatCrypto'
-import BuyNow from 'components/BuyNow'
-import useTokens from 'hooks/useTokens'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { getCartCurrency, getTokensMap } from 'recoil/cart'
-import { useAccount, useNetwork, useSigner } from 'wagmi'
-import recoilCartTokens, { getPricingPools } from 'recoil/cart'
-import { ListModal, useReservoirClient } from '@reservoir0x/reservoir-kit-ui'
-import { setToast } from './token/setToast'
-import { MutatorCallback } from 'swr'
 import { useMediaQuery } from '@react-hookz/web'
-import RarityTooltip from './RarityTooltip'
-import { Collection } from 'types/reservoir'
+import { ListModal, useReservoirClient } from '@reservoir0x/reservoir-kit-ui'
+import BuyNow from 'components/BuyNow'
+import FormatCrypto from 'components/FormatCrypto'
+import useTokens from 'hooks/useTokens'
+import { optimizeImage } from 'lib/optmizeImage'
 import { getPricing } from 'lib/token/pricing'
+import Image from 'next/legacy/image'
+import Link from 'next/link'
+import NiftyApesTokenCardSection from 'components/niftyapes/TokenCardSection'
+import { ComponentPropsWithoutRef, Dispatch, FC, SetStateAction } from 'react'
+import { FaShoppingCart } from 'react-icons/fa'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import recoilCartTokens, {
+  getCartCurrency,
+  getPricingPools,
+  getTokensMap,
+} from 'recoil/cart'
+import { MutatorCallback } from 'swr'
+import { Collection } from 'types/reservoir'
+import { useAccount, useNetwork, useSigner } from 'wagmi'
+import RarityTooltip from './RarityTooltip'
+import { setToast } from './token/setToast'
 
 const SOURCE_ICON = process.env.NEXT_PUBLIC_SOURCE_ICON
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
@@ -46,6 +45,7 @@ type Props = {
   mutate: MutatorCallback
   setClearCartOpen?: Dispatch<SetStateAction<boolean>>
   setCartToSwap?: Dispatch<SetStateAction<any | undefined>>
+  hasFinanceListing?: boolean
 }
 
 const TokenCard: FC<Props> = ({
@@ -56,6 +56,7 @@ const TokenCard: FC<Props> = ({
   mutate,
   setClearCartOpen,
   setCartToSwap,
+  hasFinanceListing,
 }) => {
   const account = useAccount()
   const { data: signer } = useSigner()
@@ -143,7 +144,7 @@ const TokenCard: FC<Props> = ({
         </a>
       </Link>
       <div
-        className={`absolute bottom-[0px] w-full bg-white transition-all  dark:bg-neutral-800 md:-bottom-[41px] ${
+        className={`absolute bottom-[0px] w-full bg-white transition-all dark:bg-neutral-800 md:-bottom-[41px] ${
           !isOwner && !price ? '' : 'group-hover:bottom-[0px]'
         }`}
       >
@@ -166,145 +167,151 @@ const TokenCard: FC<Props> = ({
               />
             )}
         </div>
-        <div className="flex items-center justify-between px-4 pb-4 lg:pb-3">
-          {price?.amount?.decimal != null &&
-          price?.amount?.decimal != undefined ? (
-            <>
-              <div className="reservoir-h6">
-                <FormatCrypto
-                  amount={price?.amount?.decimal}
-                  address={price?.currency?.contract}
-                  decimals={price?.currency?.decimals}
-                  maximumFractionDigits={4}
-                />
-              </div>
-              <div className="text-right">
-                {token?.market?.floorAsk?.source && (
-                  <img
-                    className="h-6 w-6"
-                    src={
-                      reservoirClient?.source &&
-                      reservoirClient.source ===
-                        token.market.floorAsk.source.domain &&
-                      SOURCE_ICON
-                        ? SOURCE_ICON
-                        : `${API_BASE}/redirect/sources/${token?.market.floorAsk.source.domain}/logo/v2`
-                    }
-                    alt=""
-                  />
-                )}
-              </div>
-            </>
-          ) : !isOwner ? (
-            <div className="h-[64px]"></div>
-          ) : (
-            <div className="h-6"></div>
-          )}
-        </div>
-        {isOwner && (
-          <div className="grid">
-            <ListModal
-              trigger={
-                <button className="btn-primary-fill reservoir-subtitle flex h-[40px] items-center justify-center whitespace-nowrap rounded-none text-white focus:ring-0">
-                  {price?.amount?.decimal
-                    ? 'Create New Listing'
-                    : 'List for Sale'}
-                </button>
-              }
-              collectionId={token.token?.contract}
-              tokenId={token.token?.tokenId}
-              currencies={listingCurrencies}
-              onListingComplete={() => {
-                mutate()
-              }}
-              onListingError={(err: any) => {
-                if (err?.code === 4001) {
-                  setToast({
-                    kind: 'error',
-                    message: 'You have canceled the transaction.',
-                    title: 'User canceled transaction',
-                  })
-                  return
-                }
-                setToast({
-                  kind: 'error',
-                  message: 'The transaction was not completed.',
-                  title: 'Could not list token',
-                })
-              }}
-            />
-          </div>
-        )}
-        {price?.amount?.decimal != null &&
-          price?.amount?.decimal != undefined &&
-          !isOwner && (
-            <div
-              className={`grid ${
-                isInCart || canAddToCart ? 'grid-cols-2' : ''
-              }`}
-            >
-              <BuyNow
-                data={{
-                  token,
-                }}
-                mutate={mutate}
-                signer={signer}
-                isInTheWrongNetwork={isInTheWrongNetwork}
-                buttonClassName="btn-primary-fill reservoir-subtitle flex h-[40px] items-center justify-center whitespace-nowrap rounded-none text-white focus:ring-0"
-              />
-              {isInCart && (
-                <button
-                  onClick={() => {
-                    const newCartTokens = [...cartTokens]
-                    const index = newCartTokens.findIndex(
-                      (newCartToken) =>
-                        newCartToken.token.contract ===
-                          token?.token?.contract &&
-                        newCartToken.token.tokenId === token?.token?.tokenId
-                    )
-                    newCartTokens.splice(index, 1)
-                    setCartTokens(newCartTokens)
-                  }}
-                  className="reservoir-subtitle flex h-[40px] items-center justify-center border-t border-neutral-300 text-[#FF3B3B] disabled:cursor-not-allowed dark:border-neutral-600 dark:text-red-300"
-                >
-                  Remove
-                </button>
-              )}
-              {!isInCart && canAddToCart && (
-                <button
-                  disabled={isInTheWrongNetwork}
-                  onClick={() => {
-                    if (token && token.token && token.market) {
-                      if (
-                        !cartCurrency ||
-                        price?.currency?.contract === cartCurrency?.contract
-                      ) {
-                        setCartTokens([
-                          ...cartTokens,
-                          {
-                            token: token.token,
-                            market: token.market,
-                          },
-                        ])
-                      } else {
-                        setCartToSwap &&
-                          setCartToSwap([
-                            {
-                              token: token.token,
-                              market: token.market,
-                            },
-                          ])
-                        setClearCartOpen && setClearCartOpen(true)
-                      }
-                    }
-                  }}
-                  className="reservoir-subtitle flex h-[40px] items-center justify-center border-t border-neutral-300 disabled:cursor-not-allowed dark:border-neutral-600"
-                >
-                  Add to Cart
-                </button>
+        {hasFinanceListing ? (
+          <NiftyApesTokenCardSection token={token} isOwner={isOwner} />
+        ) : (
+          <>
+            <div className="flex items-center justify-between px-4 pb-4 lg:pb-3">
+              {price?.amount?.decimal != null &&
+              price?.amount?.decimal != undefined ? (
+                <>
+                  <div className="reservoir-h6">
+                    <FormatCrypto
+                      amount={price?.amount?.decimal}
+                      address={price?.currency?.contract}
+                      decimals={price?.currency?.decimals}
+                      maximumFractionDigits={4}
+                    />
+                  </div>
+                  <div className="text-right">
+                    {token?.market?.floorAsk?.source && (
+                      <img
+                        className="h-6 w-6"
+                        src={
+                          reservoirClient?.source &&
+                          reservoirClient.source ===
+                            token.market.floorAsk.source.domain &&
+                          SOURCE_ICON
+                            ? SOURCE_ICON
+                            : `${API_BASE}/redirect/sources/${token?.market.floorAsk.source.domain}/logo/v2`
+                        }
+                        alt=""
+                      />
+                    )}
+                  </div>
+                </>
+              ) : !isOwner ? (
+                <div className="h-[64px]"></div>
+              ) : (
+                <div className="h-6"></div>
               )}
             </div>
-          )}
+            {isOwner && (
+              <div className="grid">
+                <ListModal
+                  trigger={
+                    <button className="btn-primary-fill reservoir-subtitle flex h-[40px] items-center justify-center whitespace-nowrap rounded-none text-white focus:ring-0">
+                      {price?.amount?.decimal
+                        ? 'Create New Listing'
+                        : 'List for Sale'}
+                    </button>
+                  }
+                  collectionId={token.token?.contract}
+                  tokenId={token.token?.tokenId}
+                  currencies={listingCurrencies}
+                  onListingComplete={() => {
+                    mutate()
+                  }}
+                  onListingError={(err: any) => {
+                    if (err?.code === 4001) {
+                      setToast({
+                        kind: 'error',
+                        message: 'You have canceled the transaction.',
+                        title: 'User canceled transaction',
+                      })
+                      return
+                    }
+                    setToast({
+                      kind: 'error',
+                      message: 'The transaction was not completed.',
+                      title: 'Could not list token',
+                    })
+                  }}
+                />
+              </div>
+            )}
+            {price?.amount?.decimal != null &&
+              price?.amount?.decimal != undefined &&
+              !isOwner && (
+                <div
+                  className={`grid ${
+                    isInCart || canAddToCart ? 'grid-cols-2' : ''
+                  }`}
+                >
+                  <BuyNow
+                    data={{
+                      token,
+                    }}
+                    mutate={mutate}
+                    signer={signer}
+                    isInTheWrongNetwork={isInTheWrongNetwork}
+                    buttonClassName="btn-primary-fill reservoir-subtitle flex h-[40px] items-center justify-center whitespace-nowrap rounded-none text-white focus:ring-0"
+                  />
+                  {isInCart && (
+                    <button
+                      onClick={() => {
+                        const newCartTokens = [...cartTokens]
+                        const index = newCartTokens.findIndex(
+                          (newCartToken) =>
+                            newCartToken.token.contract ===
+                              token?.token?.contract &&
+                            newCartToken.token.tokenId === token?.token?.tokenId
+                        )
+                        newCartTokens.splice(index, 1)
+                        setCartTokens(newCartTokens)
+                      }}
+                      className="reservoir-subtitle flex h-[40px] items-center justify-center border-t border-neutral-300 text-[#FF3B3B] disabled:cursor-not-allowed dark:border-neutral-600 dark:text-red-300"
+                    >
+                      Remove
+                    </button>
+                  )}
+                  {!isInCart && canAddToCart && (
+                    <button
+                      disabled={isInTheWrongNetwork}
+                      onClick={() => {
+                        if (token && token.token && token.market) {
+                          if (
+                            !cartCurrency ||
+                            price?.currency?.contract === cartCurrency?.contract
+                          ) {
+                            setCartTokens([
+                              ...cartTokens,
+                              {
+                                token: token.token,
+                                market: token.market,
+                              },
+                            ])
+                          } else {
+                            setCartToSwap &&
+                              setCartToSwap([
+                                {
+                                  token: token.token,
+                                  market: token.market,
+                                },
+                              ])
+                            setClearCartOpen && setClearCartOpen(true)
+                          }
+                        }
+                      }}
+                      className="reservoir-subtitle flex h-[40px] items-center justify-center border-t border-neutral-300 disabled:cursor-not-allowed dark:border-neutral-600"
+                    >
+                      Add to Cart
+                    </button>
+                  )}
+                </div>
+              )}
+          </>
+        )}
       </div>
     </div>
   )
