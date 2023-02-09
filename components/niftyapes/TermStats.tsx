@@ -8,8 +8,6 @@ type Terms = {
   interestRatePercent: number
   minPrincipalPercent: number
   payPeriodDays: number
-  gracePeriodDays: number
-  numLatePayments: number
   expiration?: Expiration
 }
 
@@ -45,14 +43,6 @@ export default function TermsStats({ terms }: { terms: Terms }) {
       <HStack justify="space-between">
         <Text>Pay period</Text>
         <Text fontWeight="semibold">{`${terms.payPeriodDays} days`}</Text>
-      </HStack>
-      <HStack justify="space-between">
-        <Text>Grace period</Text>
-        <Text fontWeight="semibold">{`${terms.gracePeriodDays} days`}</Text>
-      </HStack>
-      <HStack justify="space-between">
-        <Text>Late payments</Text>
-        <Text fontWeight="semibold">{terms.numLatePayments}</Text>
       </HStack>
       {terms.expiration && (
         <HStack justify="space-between">

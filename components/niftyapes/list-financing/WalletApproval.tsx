@@ -10,9 +10,6 @@ export default function WalletApproval({
   tokenName: string
   onApprove: () => void
 }) {
-  // TODO: Remove when wallet integration implemented.
-  setTimeout(onApprove, 3000)
-
   return (
     <VStack h="full" justify="space-between">
       <VStack justify="center" spacing="10" flexGrow={1}>

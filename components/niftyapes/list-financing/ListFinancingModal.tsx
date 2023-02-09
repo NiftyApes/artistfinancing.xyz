@@ -22,6 +22,7 @@ import TokenStats from './TokenStats'
 import ListingSuccess from './ListingSuccess'
 import TermsStats from '../TermStats'
 import WalletApproval from './WalletApproval'
+import useCreateListing from 'hooks/niftyapes/useCreateListing'
 
 enum Step {
   SetTerms,
@@ -30,6 +31,7 @@ enum Step {
 }
 
 // TODO: Type out props.
+// TODO: Load token and collection in modal.
 export default function ListFinancingModal({
   token,
   collection,
@@ -43,6 +45,7 @@ export default function ListFinancingModal({
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [step, setStep] = useState<Step>(Step.SetTerms)
+  const { createListing } = useCreateListing()
 
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
   const defaultTerms = {
@@ -52,8 +55,6 @@ export default function ListFinancingModal({
     interestRatePercent: 20,
     minPrincipalPercent: 5,
     payPeriodDays: 30,
-    gracePeriodDays: 15,
-    numLatePayments: 3,
     expiration: Expiration.OneMonth,
   }
   const [terms, setTerms] = useState<FinancingTerms>(defaultTerms)
@@ -61,6 +62,10 @@ export default function ListFinancingModal({
     setTerms(defaultTerms)
     setStep(Step.SetTerms)
     onModalClose()
+  }
+  const onSubmit = () => {
+    setStep(Step.WalletApproval)
+    createListing(terms)
   }
 
   if (!token || !collection) {
@@ -118,9 +123,7 @@ export default function ListFinancingModal({
                   <FinancingTermsForm
                     terms={terms}
                     setTerms={setTerms}
-                    onSubmit={() => {
-                      setStep(Step.WalletApproval)
-                    }}
+                    onSubmit={onSubmit}
                   />
                 )}
                 {step === Step.WalletApproval && (
