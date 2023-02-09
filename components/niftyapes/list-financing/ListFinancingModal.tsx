@@ -63,9 +63,10 @@ export default function ListFinancingModal({
     setStep(Step.SetTerms)
     onModalClose()
   }
+  // TODO: onError, setToast
   const onSubmit = () => {
     setStep(Step.WalletApproval)
-    createListing(terms)
+    createListing({ terms })
   }
 
   if (!token || !collection) {
