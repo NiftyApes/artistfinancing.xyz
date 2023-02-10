@@ -35,8 +35,6 @@ export default function ListFinancingSection({
     apr: 20,
     minPrincipalPercent: 5,
     payPeriodDays: 30,
-    gracePeriodDays: 15,
-    numLatePayments: 3,
     expiration: Expiration.OneMonth,
   }
   const [currListingExists, setCurrListingExists] = useState(true)
@@ -127,18 +125,6 @@ function CurrentListing({
           <HStack justify="space-between">
             <Text>Pay period</Text>
             <Text fontWeight="semibold">{`${terms.payPeriodDays} days`}</Text>
-          </HStack>
-        </GridItem>
-        <GridItem>
-          <HStack justify="space-between">
-            <Text>Grace period</Text>
-            <Text fontWeight="semibold">{`${terms.gracePeriodDays} days`}</Text>
-          </HStack>
-        </GridItem>
-        <GridItem>
-          <HStack justify="space-between">
-            <Text>Late payments</Text>
-            <Text fontWeight="semibold">{terms.numLatePayments}</Text>
           </HStack>
         </GridItem>
         <GridItem>
