@@ -52,7 +52,7 @@ export default function ListFinancingModal({
     listPrice:
       attributeFloor || collection?.floorAsk?.price?.amount?.native || 0,
     downPaymentPercent: 20,
-    interestRatePercent: 20,
+    apr: 20,
     minPrincipalPercent: 5,
     payPeriodDays: 30,
     expiration: Expiration.OneMonth,
@@ -63,10 +63,10 @@ export default function ListFinancingModal({
     setStep(Step.SetTerms)
     onModalClose()
   }
-  // TODO: onError and modal error state.
+  // TODO: onError, modal error state, and error toast.
   const onSubmit = () => {
     setStep(Step.WalletApproval)
-    createListing({ terms })
+    createListing({ terms, token })
   }
 
   if (!token || !collection) {

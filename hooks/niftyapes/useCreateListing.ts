@@ -1,24 +1,30 @@
-import { FinancingTerms } from 'components/niftyapes/list-financing/FinancingTermsForm'
-import { Address, useAccount, useSignTypedData } from 'wagmi'
 import { signTypedData } from '@wagmi/core'
+import { FinancingTerms } from 'components/niftyapes/list-financing/FinancingTermsForm'
+import { parseUnits } from 'ethers/lib/utils'
 import useEnvChain from 'hooks/useEnvChain'
+import { Address, useAccount } from 'wagmi'
+import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
+import { DateTime } from 'luxon'
 
 export default function useCreateListing() {
-  const { address } = useAccount()
+  const { address: creator } = useAccount()
   const chain = useEnvChain()
 
   return {
     createListing: async function ({
+      token,
       terms,
       onError,
     }: {
+      token?: any
       terms: FinancingTerms
       onError?: (err: Error) => void
     }) {
       try {
-        if (!address) {
-          throw Error('Missing address')
+        if (!creator) {
+          throw Error('Missing creator address')
         }
+
         if (!chain) {
           throw Error('Missing chainId')
         }
@@ -34,24 +40,66 @@ export default function useCreateListing() {
 
         const types = {
           Offer: [
-            // { name: 'price', type: 'uint128' },
-            // { name: 'downPaymentAmount', type: 'uint128' },
-            // { name: 'minimumPrincipalPerPeriod', type: 'uint128' },
-            // { name: 'nftId', type: 'uint256' },
-            // { name: 'nftContractAddress', type: 'address' },
+            { name: 'price', type: 'uint128' },
+            { name: 'downPaymentAmount', type: 'uint128' },
+            { name: 'minimumPrincipalPerPeriod', type: 'uint128' },
+            { name: 'nftId', type: 'uint256' },
+            { name: 'nftContractAddress', type: 'address' },
             { name: 'creator', type: 'address' },
-            // { name: 'periodInterestRateBps', type: 'uint32' },
-            // { name: 'periodDuration', type: 'uint32' },
-            // { name: 'expiration', type: 'uint32' },
+            { name: 'periodInterestRateBps', type: 'uint32' },
+            { name: 'periodDuration', type: 'uint32' },
+            { name: 'expiration', type: 'uint32' },
           ],
         }
 
+        // Calculate amounts in wei
+        const price = parseUnits(String(terms.listPrice), 'ether')
+        const downPaymentAmount = price.mul(terms.downPaymentPercent).div(100)
+        const remainingPrincipal = price.sub(downPaymentAmount)
+        const minimumPrincipalPerPeriod = remainingPrincipal
+          .mul(terms.minPrincipalPercent)
+          .div(100)
+
+        // Calculate periodInterestRate basis points
+        const periodDuration = terms.payPeriodDays * 86400 // in seconds
+        const interestRatePerSecond = terms.apr / (365 * 86400)
+        const periodInterestRateBps = Math.round(
+          interestRatePerSecond * periodDuration * 100
+        )
+
+        // Calculate expiration in seconds
+        const expirationOption = expirationOptions.find(
+          (option) => option.value === terms.expiration
+        )
+
+        if (!expirationOption) {
+          throw Error('Missing expiration')
+        }
+
+        const expiration = Math.round(
+          DateTime.now()
+            .plus({
+              [expirationOption.relativeTimeUnit as string]:
+                expirationOption.relativeTime,
+            })
+            .toSeconds()
+        )
+
         const value = {
-          creator: address,
+          price,
+          downPaymentAmount,
+          minimumPrincipalPerPeriod,
+          nftId: token.token.tokenId,
+          nftContractAddress: token.token.contract,
+          creator,
+          periodInterestRateBps,
+          periodDuration,
+          expiration,
         }
 
         const signature = await signTypedData({ domain, types, value })
 
+        // TODO: Store signature and terms in dynamodb
         console.log(signature)
       } catch (err) {
         if (onError && err instanceof Error) {

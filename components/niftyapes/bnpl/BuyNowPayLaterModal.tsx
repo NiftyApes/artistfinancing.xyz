@@ -43,7 +43,7 @@ export default function BuyNowPayLaterModal({
   const terms = {
     listPrice: 1.2,
     downPaymentPercent: 20,
-    interestRatePercent: 20,
+    apr: 20,
     minPrincipalPercent: 5,
     payPeriodDays: 30,
     gracePeriodDays: 15,
@@ -131,7 +131,7 @@ export default function BuyNowPayLaterModal({
                         <GridItem>
                           <HStack justify="space-between">
                             <Text>APR</Text>
-                            <Text fontWeight="semibold">{`${terms.interestRatePercent}%`}</Text>
+                            <Text fontWeight="semibold">{`${terms.apr}%`}</Text>
                           </HStack>
                         </GridItem>
                         <GridItem>

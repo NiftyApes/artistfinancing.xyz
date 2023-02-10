@@ -5,7 +5,7 @@ import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
 type Terms = {
   listPrice: number
   downPaymentPercent: number
-  interestRatePercent: number
+  apr: number
   minPrincipalPercent: number
   payPeriodDays: number
   expiration?: Expiration
@@ -34,7 +34,7 @@ export default function TermsStats({ terms }: { terms: Terms }) {
       </HStack>
       <HStack justify="space-between">
         <Text>APR</Text>
-        <Text fontWeight="semibold">{`${terms.interestRatePercent}%`}</Text>
+        <Text fontWeight="semibold">{`${terms.apr}%`}</Text>
       </HStack>
       <HStack justify="space-between">
         <Text>Minimum payment</Text>

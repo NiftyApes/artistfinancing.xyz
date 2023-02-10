@@ -32,7 +32,7 @@ export default function ListFinancingSection({
     listPrice:
       attributeFloor || collection?.floorAsk?.price?.amount?.native || 0,
     downPaymentPercent: 20,
-    interestRatePercent: 20,
+    apr: 20,
     minPrincipalPercent: 5,
     payPeriodDays: 30,
     gracePeriodDays: 15,
@@ -114,7 +114,7 @@ function CurrentListing({
         <GridItem>
           <HStack justify="space-between">
             <Text>APR</Text>
-            <Text fontWeight="semibold">{`${terms.interestRatePercent}%`}</Text>
+            <Text fontWeight="semibold">{`${terms.apr}%`}</Text>
           </HStack>
         </GridItem>
         <GridItem>

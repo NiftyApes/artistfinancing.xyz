@@ -29,7 +29,7 @@ import { IoInformationCircleOutline } from 'react-icons/io5'
 export type FinancingTerms = {
   listPrice: number
   downPaymentPercent: number
-  interestRatePercent: number
+  apr: number
   minPrincipalPercent: number
   payPeriodDays: number
   expiration: Expiration
@@ -46,8 +46,9 @@ export default function FinancingTermsForm({
 }) {
   const chain = useEnvChain()
   const paidOnSale = (terms.downPaymentPercent / 100) * terms.listPrice
-  const intEachPer = (terms.interestRatePercent / 100) * terms.listPrice
-  const minEachPer = (terms.minPrincipalPercent / 100) * terms.listPrice
+  const intEachPer = (terms.apr / 100) * terms.listPrice
+  const remainingPrincipal = terms.listPrice - paidOnSale
+  const minEachPer = (terms.minPrincipalPercent / 100) * remainingPrincipal
 
   return (
     <VStack align={'left'} spacing={6}>
@@ -108,9 +109,9 @@ export default function FinancingTermsForm({
 
             <TermInputNumber
               withPercent={true}
-              defaultValue={terms.interestRatePercent}
-              onChange={(_, interestRatePercent) => {
-                setTerms({ ...terms, interestRatePercent })
+              defaultValue={terms.apr}
+              onChange={(_, apr) => {
+                setTerms({ ...terms, apr })
               }}
             />
           </FormControl>
