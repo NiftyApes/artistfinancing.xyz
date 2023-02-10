@@ -14,10 +14,14 @@ export default function WalletApproval({
   imageSrc,
   tokenName,
   isError,
+  backToEdit,
+  retry,
 }: {
-  imageSrc: string
-  tokenName: string
+  imageSrc?: string
+  tokenName?: string
   isError: boolean
+  backToEdit: () => void
+  retry: () => void
 }) {
   return (
     <VStack h="full" justify="space-between">
@@ -51,12 +55,28 @@ export default function WalletApproval({
           transaction
         </Text>
       </VStack>
-      <Button
-        isLoading
-        loadingText="Waiting for Approval"
-        colorScheme="blue"
-        w="full"
-      ></Button>
+      {isError ? (
+        <HStack w="full">
+          <Button
+            w="50%"
+            bg="gray.700"
+            _hover={{ bg: 'gray.600' }}
+            onClick={backToEdit}
+          >
+            Edit listing
+          </Button>
+          <Button w="50%" colorScheme={'blue'} onClick={retry}>
+            Retry
+          </Button>
+        </HStack>
+      ) : (
+        <Button
+          isLoading
+          loadingText="Waiting for Approval"
+          colorScheme="blue"
+          w="full"
+        ></Button>
+      )}
     </VStack>
   )
 }

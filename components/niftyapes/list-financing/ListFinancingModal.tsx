@@ -32,7 +32,6 @@ enum Step {
 }
 
 // TODO: Type out props.
-// TODO: Load token and collection in modal.
 export default function ListFinancingModal({
   token,
   collection,
@@ -67,6 +66,7 @@ export default function ListFinancingModal({
     onModalClose()
   }
   const onSubmit = () => {
+    setListingErr(false)
     setStep(Step.WalletApproval)
     createListing({
       terms,
@@ -79,8 +79,8 @@ export default function ListFinancingModal({
         setListingErr(true)
         setToast({
           kind: 'error',
-          message: 'The transaction was not completed',
-          title: 'Error listing token',
+          message: 'The transaction was not completed.',
+          title: 'Failed to list token',
         })
       },
     })
@@ -92,7 +92,14 @@ export default function ListFinancingModal({
 
   return (
     <>
-      <Button w="full" onClick={onOpen} colorScheme="blue">
+      <Button
+        w="full"
+        onClick={() => {
+          onOpen()
+          setTerms(defaultTerms)
+        }}
+        colorScheme="blue"
+      >
         {currListingExists
           ? 'Create new finance listing'
           : 'Create finance listing'}
@@ -148,7 +155,12 @@ export default function ListFinancingModal({
                   <WalletApproval
                     imageSrc={token.token.image}
                     tokenName={token.token.name}
-                    isError={listingErr instanceof Error}
+                    isError={listingErr}
+                    backToEdit={() => {
+                      setListingErr(false)
+                      setStep(Step.SetTerms)
+                    }}
+                    retry={onSubmit}
                   />
                 )}
                 {step === Step.Success && (

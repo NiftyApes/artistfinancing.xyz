@@ -6,8 +6,8 @@ export default function ListingSuccess({
   collectionName,
   onClose,
 }: {
-  tokenName: string
-  collectionName: string
+  tokenName?: string
+  collectionName?: string
   onClose: () => void
 }) {
   return (
