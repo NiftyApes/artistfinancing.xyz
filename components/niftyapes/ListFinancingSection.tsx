@@ -63,7 +63,7 @@ export default function ListFinancingSection({
             token={token}
             collection={collection}
             currListingExists={currListingExists}
-            onSuccess={() => {
+            showListing={() => {
               setCurrListingExists(true)
             }}
           />

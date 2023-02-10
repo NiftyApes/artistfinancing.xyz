@@ -1,17 +1,32 @@
-import { Button, Heading, HStack, Image, Text, VStack } from '@chakra-ui/react'
+import {
+  Alert,
+  AlertIcon,
+  Button,
+  Heading,
+  HStack,
+  Image,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import LoadingDots from '../LoadingDots'
 
 export default function WalletApproval({
   imageSrc,
   tokenName,
-  onApprove,
+  isError,
 }: {
   imageSrc: string
   tokenName: string
-  onApprove: () => void
+  isError: boolean
 }) {
   return (
     <VStack h="full" justify="space-between">
+      {isError && (
+        <Alert bg="red.900" rounded="md" status="error">
+          <AlertIcon />
+          There was an error listing your item
+        </Alert>
+      )}
       <VStack justify="center" spacing="10" flexGrow={1}>
         <Heading
           size={'md'}

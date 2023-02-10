@@ -23,6 +23,7 @@ import ListingSuccess from './ListingSuccess'
 import TermsStats from '../TermStats'
 import WalletApproval from './WalletApproval'
 import useCreateListing from 'hooks/niftyapes/useCreateListing'
+import { setToast } from 'components/token/setToast'
 
 enum Step {
   SetTerms,
@@ -36,12 +37,12 @@ export default function ListFinancingModal({
   token,
   collection,
   currListingExists,
-  onSuccess,
+  showListing,
 }: {
   token: any
   collection: any
   currListingExists: boolean
-  onSuccess: () => void
+  showListing: () => void
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [step, setStep] = useState<Step>(Step.SetTerms)
@@ -58,15 +59,31 @@ export default function ListFinancingModal({
     expiration: Expiration.OneMonth,
   }
   const [terms, setTerms] = useState<FinancingTerms>(defaultTerms)
+  const [listingErr, setListingErr] = useState(false)
   const onClose = () => {
     setTerms(defaultTerms)
     setStep(Step.SetTerms)
+    setListingErr(false)
     onModalClose()
   }
-  // TODO: onError, modal error state, and error toast.
   const onSubmit = () => {
     setStep(Step.WalletApproval)
-    createListing({ terms, token })
+    createListing({
+      terms,
+      token,
+      onSuccess: () => {
+        setStep(Step.Success)
+        showListing()
+      },
+      onError: () => {
+        setListingErr(true)
+        setToast({
+          kind: 'error',
+          message: 'The transaction was not completed',
+          title: 'Error listing token',
+        })
+      },
+    })
   }
 
   if (!token || !collection) {
@@ -131,10 +148,7 @@ export default function ListFinancingModal({
                   <WalletApproval
                     imageSrc={token.token.image}
                     tokenName={token.token.name}
-                    onApprove={() => {
-                      setStep(Step.Success)
-                      onSuccess()
-                    }}
+                    isError={listingErr instanceof Error}
                   />
                 )}
                 {step === Step.Success && (

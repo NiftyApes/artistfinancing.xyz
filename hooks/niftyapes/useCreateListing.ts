@@ -2,9 +2,9 @@ import { signTypedData } from '@wagmi/core'
 import { FinancingTerms } from 'components/niftyapes/list-financing/FinancingTermsForm'
 import { parseUnits } from 'ethers/lib/utils'
 import useEnvChain from 'hooks/useEnvChain'
-import { Address, useAccount } from 'wagmi'
-import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
+import expirationOptions from 'lib/niftyapes/expirationOptions'
 import { DateTime } from 'luxon'
+import { Address, useAccount } from 'wagmi'
 
 export default function useCreateListing() {
   const { address: creator } = useAccount()
@@ -14,11 +14,13 @@ export default function useCreateListing() {
     createListing: async function ({
       token,
       terms,
+      onSuccess,
       onError,
     }: {
       token?: any
       terms: FinancingTerms
-      onError?: (err: Error) => void
+      onError: () => void
+      onSuccess: () => void
     }) {
       try {
         if (!creator) {
@@ -101,12 +103,10 @@ export default function useCreateListing() {
 
         // TODO: Store signature and terms in dynamodb
         console.log(signature)
+        onSuccess()
       } catch (err) {
-        if (onError && err instanceof Error) {
-          onError(err)
-        } else {
-          console.error('Failed to create listing', err)
-        }
+        console.error('Failed to create listing', err)
+        onError()
       }
     },
   }
