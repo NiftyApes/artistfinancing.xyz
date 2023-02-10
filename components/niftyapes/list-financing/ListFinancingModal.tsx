@@ -63,7 +63,7 @@ export default function ListFinancingModal({
     setStep(Step.SetTerms)
     onModalClose()
   }
-  // TODO: onError, setToast
+  // TODO: onError and modal error state.
   const onSubmit = () => {
     setStep(Step.WalletApproval)
     createListing({ terms })

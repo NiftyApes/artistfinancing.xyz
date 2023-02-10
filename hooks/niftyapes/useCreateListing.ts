@@ -1,53 +1,65 @@
 import { FinancingTerms } from 'components/niftyapes/list-financing/FinancingTermsForm'
-import { useAccount, useSignTypedData } from 'wagmi'
+import { Address, useAccount, useSignTypedData } from 'wagmi'
+import { signTypedData } from '@wagmi/core'
+import useEnvChain from 'hooks/useEnvChain'
 
 export default function useCreateListing() {
   const { address } = useAccount()
-  const { signTypedData } = useSignTypedData({
-    onError(error) {
-      console.error('GOTZ AN ERROR!!!')
-    },
-  })
+  const chain = useEnvChain()
 
   return {
-    createListing: async function ({ terms }: { terms: FinancingTerms }) {
-      // if (!signer) throw Error('Missing signer')
-      if (!address) throw Error('Missing address')
+    createListing: async function ({
+      terms,
+      onError,
+    }: {
+      terms: FinancingTerms
+      onError?: (err: Error) => void
+    }) {
+      try {
+        if (!address) {
+          throw Error('Missing address')
+        }
+        if (!chain) {
+          throw Error('Missing chainId')
+        }
 
-      const domain = {
-        name: 'NiftyApes_SellerFinancing',
-        version: '0.0.1',
+        const domain = {
+          name: 'NiftyApes_SellerFinancing',
+          version: '0.0.1',
+          chainId: chain.id,
+          // TODO: Add actual sellerFinancing contract address
+          verifyingContract:
+            '0x5e739684A36C47EE17A004a76d3094E3795177fd' as Address,
+        }
+
+        const types = {
+          Offer: [
+            // { name: 'price', type: 'uint128' },
+            // { name: 'downPaymentAmount', type: 'uint128' },
+            // { name: 'minimumPrincipalPerPeriod', type: 'uint128' },
+            // { name: 'nftId', type: 'uint256' },
+            // { name: 'nftContractAddress', type: 'address' },
+            { name: 'creator', type: 'address' },
+            // { name: 'periodInterestRateBps', type: 'uint32' },
+            // { name: 'periodDuration', type: 'uint32' },
+            // { name: 'expiration', type: 'uint32' },
+          ],
+        }
+
+        const value = {
+          creator: address,
+        }
+
+        const signature = await signTypedData({ domain, types, value })
+
+        console.log(signature)
+      } catch (err) {
+        if (onError && err instanceof Error) {
+          onError(err)
+        } else {
+          console.error('Failed to create listing', err)
+        }
       }
-
-      const types = {
-        Offer: [
-          { name: 'creator', type: 'address' },
-          // { name: 'downPaymentBps', type: 'uint32' },
-          // { name: 'minimumPrincipalPerPeriod', type: 'uint32' },
-          // { name: 'periodInterestRateBps', type: 'uint32' },
-          // { name: 'periodDuration', type: 'uint32' },
-          // { name: 'nftContractAddress', type: 'address' },
-          // { name: 'nftId', type: 'uint256' },
-          // { name: 'expiration', type: 'uint32' },
-        ],
-      }
-
-      const value = {
-        creator: address,
-      }
-
-      signTypedData({ domain, types, value })
-
-      // Ledger was ending signatures with '00' or '01' for some reason
-      // So below we're replacing those with '1b' and '1c' respectively
-      // In order to avoid ECDSA error
-      // if (result.slice(-2) === '00') {
-      //   result = result.slice(0, -2) + '1b'
-      // }
-
-      // if (result.slice(-2) === '01') {
-      //   result = result.slice(0, -2) + '1c'
-      // }
     },
   }
 }
