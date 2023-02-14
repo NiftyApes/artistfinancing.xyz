@@ -104,6 +104,9 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
   if (isOwner) {
     tabs = [
       { name: 'Tokens', id: 'portfolio' },
+      { name: 'Upcoming Payments', id: 'upcoming_payments' },
+      { name: 'Financing Offers', id: 'financing_offers' },
+      { name: 'Active Loans', id: 'active_loans' },
       { name: 'Offers Made', id: 'buying' },
       { name: 'Active Listings', id: 'listings' },
       { name: 'Inactive Listings', id: 'listings_inactive' },
@@ -155,6 +158,21 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
                 <UserTokensGrid fallback={fallback} owner={address || ''} />
               </div>
             </Tabs.Content>
+            {isOwner && (
+              <Tabs.Content value="upcoming_payments" className="col-span-full">
+                TBD
+              </Tabs.Content>
+            )}
+            {isOwner && (
+              <Tabs.Content value="financing_offers" className="col-span-full">
+                TBD
+              </Tabs.Content>
+            )}
+            {isOwner && (
+              <Tabs.Content value="active_loans" className="col-span-full">
+                TBD
+              </Tabs.Content>
+            )}
             {isOwner && (
               <>
                 <Tabs.Content value="buying">
