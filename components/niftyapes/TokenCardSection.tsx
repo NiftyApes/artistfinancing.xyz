@@ -17,7 +17,7 @@ export default function TokenCardSection({
   const terms = {
     listPrice: 1.2,
     downPaymentPercent: 20,
-    interestRatePercent: 20,
+    apr: 20,
     expiration: Expiration.OneMonth,
   }
 
@@ -37,7 +37,7 @@ export default function TokenCardSection({
           />
         </HStack>
         <HStack w="full" spacing="4">
-          <Text fontWeight="semibold">{`${terms.interestRatePercent}% APR`}</Text>
+          <Text fontWeight="semibold">{`${terms.apr}% APR`}</Text>
           <HStack spacing="1">
             <Icon as={FiClock} />
             <Text fontWeight="semibold">

@@ -29,11 +29,9 @@ import { IoInformationCircleOutline } from 'react-icons/io5'
 export type FinancingTerms = {
   listPrice: number
   downPaymentPercent: number
-  interestRatePercent: number
+  apr: number
   minPrincipalPercent: number
   payPeriodDays: number
-  gracePeriodDays: number
-  numLatePayments: number
   expiration: Expiration
 }
 
@@ -48,8 +46,9 @@ export default function FinancingTermsForm({
 }) {
   const chain = useEnvChain()
   const paidOnSale = (terms.downPaymentPercent / 100) * terms.listPrice
-  const intEachPer = (terms.interestRatePercent / 100) * terms.listPrice
-  const minEachPer = (terms.minPrincipalPercent / 100) * terms.listPrice
+  const intEachPer = (terms.apr / 100) * terms.listPrice
+  const remainingPrincipal = terms.listPrice - paidOnSale
+  const minEachPer = (terms.minPrincipalPercent / 100) * remainingPrincipal
 
   return (
     <VStack align={'left'} spacing={6}>
@@ -110,9 +109,9 @@ export default function FinancingTermsForm({
 
             <TermInputNumber
               withPercent={true}
-              defaultValue={terms.interestRatePercent}
-              onChange={(_, interestRatePercent) => {
-                setTerms({ ...terms, interestRatePercent })
+              defaultValue={terms.apr}
+              onChange={(_, apr) => {
+                setTerms({ ...terms, apr })
               }}
             />
           </FormControl>
@@ -157,56 +156,6 @@ export default function FinancingTermsForm({
                 setTerms({
                   ...terms,
                   payPeriodDays: Number(event.target.value),
-                })
-              }}
-            />
-          </FormControl>
-        </GridItem>
-
-        <GridItem></GridItem>
-
-        {/* Grace period duration */}
-        <GridItem>
-          <FormControl>
-            <FormLabel>Grace period duration</FormLabel>
-
-            <TermInputSelect
-              options={[
-                { value: 5, label: '5 days' },
-                { value: 10, label: '10 days' },
-                { value: 15, label: '15 days' },
-                { value: 30, label: '30 days' },
-              ]}
-              defaultValue={terms.gracePeriodDays}
-              onChange={(event) => {
-                setTerms({
-                  ...terms,
-                  gracePeriodDays: Number(event.target.value),
-                })
-              }}
-            />
-          </FormControl>
-        </GridItem>
-
-        <GridItem></GridItem>
-
-        {/* Number of late payments tolerated */}
-        <GridItem>
-          <FormControl>
-            <FormLabel>Number of late payments tolerated</FormLabel>
-
-            <TermInputSelect
-              options={[
-                { value: 0, label: '0' },
-                { value: 1, label: '1' },
-                { value: 2, label: '2' },
-                { value: 3, label: '3' },
-              ]}
-              defaultValue={terms.numLatePayments}
-              onChange={(event) => {
-                setTerms({
-                  ...terms,
-                  numLatePayments: Number(event.target.value),
                 })
               }}
             />

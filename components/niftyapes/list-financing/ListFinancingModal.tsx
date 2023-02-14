@@ -22,6 +22,8 @@ import TokenStats from './TokenStats'
 import ListingSuccess from './ListingSuccess'
 import TermsStats from '../TermStats'
 import WalletApproval from './WalletApproval'
+import useCreateListing from 'hooks/niftyapes/useCreateListing'
+import { setToast } from 'components/token/setToast'
 
 enum Step {
   SetTerms,
@@ -34,33 +36,54 @@ export default function ListFinancingModal({
   token,
   collection,
   currListingExists,
-  onSuccess,
+  showListing,
 }: {
   token: any
   collection: any
   currListingExists: boolean
-  onSuccess: () => void
+  showListing: () => void
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [step, setStep] = useState<Step>(Step.SetTerms)
+  const { createListing } = useCreateListing()
 
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
   const defaultTerms = {
     listPrice:
       attributeFloor || collection?.floorAsk?.price?.amount?.native || 0,
     downPaymentPercent: 20,
-    interestRatePercent: 20,
+    apr: 20,
     minPrincipalPercent: 5,
     payPeriodDays: 30,
-    gracePeriodDays: 15,
-    numLatePayments: 3,
     expiration: Expiration.OneMonth,
   }
   const [terms, setTerms] = useState<FinancingTerms>(defaultTerms)
+  const [listingErr, setListingErr] = useState(false)
   const onClose = () => {
     setTerms(defaultTerms)
     setStep(Step.SetTerms)
+    setListingErr(false)
     onModalClose()
+  }
+  const onSubmit = () => {
+    setListingErr(false)
+    setStep(Step.WalletApproval)
+    createListing({
+      terms,
+      token,
+      onSuccess: () => {
+        setStep(Step.Success)
+        showListing()
+      },
+      onError: () => {
+        setListingErr(true)
+        setToast({
+          kind: 'error',
+          message: 'The transaction was not completed.',
+          title: 'Failed to list token',
+        })
+      },
+    })
   }
 
   if (!token || !collection) {
@@ -69,7 +92,14 @@ export default function ListFinancingModal({
 
   return (
     <>
-      <Button w="full" onClick={onOpen} colorScheme="blue">
+      <Button
+        w="full"
+        onClick={() => {
+          onOpen()
+          setTerms(defaultTerms)
+        }}
+        colorScheme="blue"
+      >
         {currListingExists
           ? 'Create new finance listing'
           : 'Create finance listing'}
@@ -118,19 +148,19 @@ export default function ListFinancingModal({
                   <FinancingTermsForm
                     terms={terms}
                     setTerms={setTerms}
-                    onSubmit={() => {
-                      setStep(Step.WalletApproval)
-                    }}
+                    onSubmit={onSubmit}
                   />
                 )}
                 {step === Step.WalletApproval && (
                   <WalletApproval
                     imageSrc={token.token.image}
                     tokenName={token.token.name}
-                    onApprove={() => {
-                      setStep(Step.Success)
-                      onSuccess()
+                    isError={listingErr}
+                    backToEdit={() => {
+                      setListingErr(false)
+                      setStep(Step.SetTerms)
                     }}
+                    retry={onSubmit}
                   />
                 )}
                 {step === Step.Success && (

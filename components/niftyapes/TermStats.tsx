@@ -5,11 +5,9 @@ import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
 type Terms = {
   listPrice: number
   downPaymentPercent: number
-  interestRatePercent: number
+  apr: number
   minPrincipalPercent: number
   payPeriodDays: number
-  gracePeriodDays: number
-  numLatePayments: number
   expiration?: Expiration
 }
 
@@ -36,7 +34,7 @@ export default function TermsStats({ terms }: { terms: Terms }) {
       </HStack>
       <HStack justify="space-between">
         <Text>APR</Text>
-        <Text fontWeight="semibold">{`${terms.interestRatePercent}%`}</Text>
+        <Text fontWeight="semibold">{`${terms.apr}%`}</Text>
       </HStack>
       <HStack justify="space-between">
         <Text>Minimum payment</Text>
@@ -45,14 +43,6 @@ export default function TermsStats({ terms }: { terms: Terms }) {
       <HStack justify="space-between">
         <Text>Pay period</Text>
         <Text fontWeight="semibold">{`${terms.payPeriodDays} days`}</Text>
-      </HStack>
-      <HStack justify="space-between">
-        <Text>Grace period</Text>
-        <Text fontWeight="semibold">{`${terms.gracePeriodDays} days`}</Text>
-      </HStack>
-      <HStack justify="space-between">
-        <Text>Late payments</Text>
-        <Text fontWeight="semibold">{terms.numLatePayments}</Text>
       </HStack>
       {terms.expiration && (
         <HStack justify="space-between">
