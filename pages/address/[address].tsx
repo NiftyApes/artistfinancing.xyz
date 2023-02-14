@@ -28,6 +28,9 @@ import { truncateAddress } from 'lib/truncateText'
 import { paths, setParams } from '@reservoir0x/reservoir-sdk'
 import UserActivityTab from 'components/tables/UserActivityTab'
 import useMounted from 'hooks/useMounted'
+import UserUpcomingPaymentsTable from 'components/tables/UserUpcomingPaymentsTable'
+import UserFinancingOffersTab from 'components/tables/UserFinancingOffersTab'
+import UserActiveLoansTab from 'components/tables/UserActiveLoansTab'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
@@ -160,41 +163,17 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
             </Tabs.Content>
             {isOwner && (
               <Tabs.Content value="upcoming_payments" className="col-span-full">
-                <div className="reservoir-body mt-14 grid justify-center dark:text-white">
-                  <div className="text-center mb-6">
-                    Table
-                  </div>
-                  <div className="flex flex-row justify-center space-x-4">
-                    <button
-                      className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
-                    >
-                      Make Payment
-                    </button>
-                    <button
-                      className="btn-primary-outline gap-2 dark:ring-primary-900 dark:focus:ring-4"
-                    >
-                      Sell Loan
-                    </button>
-                  </div>
-                </div>
+                <UserUpcomingPaymentsTable />
               </Tabs.Content>
             )}
             {isOwner && (
               <Tabs.Content value="financing_offers" className="col-span-full">
-                <div className="reservoir-body mt-14 grid justify-center dark:text-white">
-                  <button
-                    className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
-                  >
-                    Cancel Listing
-                  </button>
-                </div>
+                <UserFinancingOffersTab />
               </Tabs.Content>
             )}
             {isOwner && (
               <Tabs.Content value="active_loans" className="col-span-full">
-                <div className="reservoir-body mt-14 grid justify-center dark:text-white">
-                  Loan Terms TBD
-                </div>
+                <UserActiveLoansTab />
               </Tabs.Content>
             )}
             {isOwner && (
