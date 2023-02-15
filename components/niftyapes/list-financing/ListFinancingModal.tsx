@@ -24,10 +24,12 @@ import TermsStats from '../TermStats'
 import WalletApproval from './WalletApproval'
 import useCreateListing from 'hooks/niftyapes/useCreateListing'
 import { setToast } from 'components/token/setToast'
+import useERC721Approval from 'hooks/niftyapes/useERC721Approval'
 
 enum Step {
   SetTerms,
-  WalletApproval,
+  ApproveContract,
+  SignOffer,
   Success,
 }
 
@@ -46,6 +48,7 @@ export default function ListFinancingModal({
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [step, setStep] = useState<Step>(Step.SetTerms)
   const { createListing } = useCreateListing()
+  const { approvalRequired, grantApproval } = useERC721Approval()
 
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
   const defaultTerms = {
@@ -65,9 +68,7 @@ export default function ListFinancingModal({
     setListingErr(false)
     onModalClose()
   }
-  const onSubmit = () => {
-    setListingErr(false)
-    setStep(Step.WalletApproval)
+  const onContractApproved = () => {
     createListing({
       terms,
       token,
@@ -84,6 +85,14 @@ export default function ListFinancingModal({
         })
       },
     })
+  }
+  const onSubmit = () => {
+    setListingErr(false)
+    if (approvalRequired) {
+      setStep(Step.ApproveContract)
+      // TODO: Add onContractApproved
+      grantApproval({})
+    }
   }
 
   if (!token || !collection) {
@@ -139,9 +148,9 @@ export default function ListFinancingModal({
                 {step === Step.SetTerms && (
                   <TokenStats token={token} collection={collection} />
                 )}
-                {[Step.WalletApproval, Step.Success].includes(step) && (
-                  <TermsStats terms={terms} />
-                )}
+                {[Step.ApproveContract, Step.SignOffer, Step.Success].includes(
+                  step
+                ) && <TermsStats terms={terms} />}
               </VStack>
               <Box p="6" w="full">
                 {step === Step.SetTerms && (
@@ -151,7 +160,7 @@ export default function ListFinancingModal({
                     onSubmit={onSubmit}
                   />
                 )}
-                {step === Step.WalletApproval && (
+                {[Step.ApproveContract, Step.SignOffer].includes(step) && (
                   <WalletApproval
                     imageSrc={token.token.image}
                     tokenName={token.token.name}
@@ -161,6 +170,7 @@ export default function ListFinancingModal({
                       setStep(Step.SetTerms)
                     }}
                     retry={onSubmit}
+                    contractApprovalRequired={approvalRequired}
                   />
                 )}
                 {step === Step.Success && (

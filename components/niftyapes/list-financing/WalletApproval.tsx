@@ -16,12 +16,14 @@ export default function WalletApproval({
   isError,
   backToEdit,
   retry,
+  contractApprovalRequired,
 }: {
   imageSrc?: string
   tokenName?: string
   isError: boolean
   backToEdit: () => void
   retry: () => void
+  contractApprovalRequired: boolean
 }) {
   return (
     <VStack h="full" justify="space-between">
@@ -51,8 +53,7 @@ export default function WalletApproval({
           />
         </HStack>
         <Text align="center">
-          Each NFT collection you want to trade requires a one-time approval
-          transaction
+          Each NFT you want to trade requires a one-time approval transaction
         </Text>
       </VStack>
       {isError ? (
