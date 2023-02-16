@@ -1,5 +1,8 @@
+import { prepareWriteContract, readContract, writeContract } from '@wagmi/core'
+import { BigNumber } from 'ethers'
+import { getAddress } from 'ethers/lib/utils.js'
 import { useEffect, useState } from 'react'
-import { Address, useAccount, useContract, useProvider } from 'wagmi'
+import { Address } from 'wagmi'
 import { useSellerFinancingContractAddress } from './useContracts'
 
 export default function useERC721Approval({
@@ -9,57 +12,43 @@ export default function useERC721Approval({
   contractAddress: Address
   tokenId: string
 }) {
-  const owner = useAccount()
-  const provider = useProvider()
   const operator = useSellerFinancingContractAddress()
 
   const [hasApproval, setHasApproval] = useState(false)
   const [hasCheckedApproval, setHasCheckedApproval] = useState(false)
 
-  const minimumAbi = [
-    {
-      inputs: [
-        { internalType: 'address', name: 'to', type: 'address' },
-        { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
-      ],
-      name: 'approve',
-      outputs: [],
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
-      name: 'getApproved',
-      outputs: [{ internalType: 'address', name: '', type: 'address' }],
-      stateMutability: 'view',
-      type: 'function',
-    },
-  ]
-
-  const contract = useContract({
-    abi: minimumAbi,
-    address: contractAddress,
-    signerOrProvider: provider,
-  })
-
   useEffect(() => {
     async function checkWhetherHasApproval() {
-      if (!contract || !tokenId || hasCheckedApproval) {
+      if (!tokenId || !operator || hasCheckedApproval) {
         return
       }
 
-      const result = await contract.getApproved(tokenId)
+      const data = await readContract({
+        address: contractAddress,
+        abi: [
+          {
+            inputs: [
+              { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+            ],
+            name: 'getApproved',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+          },
+        ],
+        functionName: 'getApproved',
+        args: [BigNumber.from(tokenId)],
+      })
 
-      setHasApproval(result === operator)
+      setHasApproval(getAddress(data) === getAddress(operator))
       setHasCheckedApproval(true)
     }
 
     checkWhetherHasApproval()
-  }, [owner, contract, tokenId, hasCheckedApproval])
+  }, [tokenId, operator, hasCheckedApproval])
 
   return {
-    hasApproval,
-    hasCheckedApproval,
+    approvalRequired: hasCheckedApproval && !hasApproval,
 
     grantApproval: async ({
       onSuccess,
@@ -69,7 +58,28 @@ export default function useERC721Approval({
       onError: () => void
     }) => {
       try {
-        const tx = await contract?.approve(operator, tokenId)
+        if (!operator) {
+          throw Error('Missing operator')
+        }
+
+        const config = await prepareWriteContract({
+          address: contractAddress,
+          abi: [
+            {
+              inputs: [
+                { internalType: 'address', name: 'to', type: 'address' },
+                { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+              ],
+              name: 'approve',
+              outputs: [],
+              stateMutability: 'nonpayable',
+              type: 'function',
+            },
+          ],
+          functionName: 'approve',
+          args: [operator, BigNumber.from(tokenId)],
+        })
+        const tx = await writeContract(config)
         const receipt = await tx.wait()
 
         if (receipt.status !== 1) {
@@ -77,11 +87,11 @@ export default function useERC721Approval({
         }
 
         onSuccess && onSuccess()
+        setHasCheckedApproval(false)
       } catch (err) {
         console.error(err)
         onError()
       }
-      setHasCheckedApproval(false)
     },
   }
 }

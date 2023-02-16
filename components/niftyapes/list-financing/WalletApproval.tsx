@@ -5,6 +5,7 @@ import {
   Heading,
   HStack,
   Image,
+  Progress,
   Text,
   VStack,
 } from '@chakra-ui/react'
@@ -34,10 +35,11 @@ export default function WalletApproval({
         </Alert>
       )}
       <VStack justify="center" spacing="10" flexGrow={1}>
-        <Heading
-          size={'md'}
-          textAlign="center"
-        >{`Approve ${window.location.hostname} (on NiftyApes) to access item in your wallet`}</Heading>
+        <Heading size={'md'} textAlign="center">
+          {contractApprovalRequired
+            ? `Approve ${window.location.hostname} (on NiftyApes) to access item in your wallet`
+            : `Confirm finance listing on ${window.location.hostname} (on NiftyApes) in your wallet`}
+        </Heading>
         <HStack spacing="6">
           <Image
             borderRadius="md"
@@ -53,7 +55,9 @@ export default function WalletApproval({
           />
         </HStack>
         <Text align="center">
-          Each NFT you want to trade requires a one-time approval transaction
+          {contractApprovalRequired
+            ? 'Each NFT you want to trade requires a one-time approval transaction'
+            : 'A free off-chain signature to create the finance listing'}
         </Text>
       </VStack>
       {isError ? (
