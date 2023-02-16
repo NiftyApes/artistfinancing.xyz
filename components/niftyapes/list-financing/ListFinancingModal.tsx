@@ -10,6 +10,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Progress,
   Text,
   useDisclosure,
   VStack,
@@ -24,10 +25,12 @@ import TermsStats from '../TermStats'
 import WalletApproval from './WalletApproval'
 import useCreateListing from 'hooks/niftyapes/useCreateListing'
 import { setToast } from 'components/token/setToast'
+import useERC721Approval from 'hooks/niftyapes/useERC721Approval'
 
 enum Step {
   SetTerms,
-  WalletApproval,
+  ApproveContract,
+  SignOffer,
   Success,
 }
 
@@ -46,6 +49,10 @@ export default function ListFinancingModal({
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [step, setStep] = useState<Step>(Step.SetTerms)
   const { createListing } = useCreateListing()
+  const { approvalRequired, grantApproval } = useERC721Approval({
+    tokenId: token?.token?.tokenId as string,
+    contractAddress: token?.token?.contract,
+  })
 
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
   const defaultTerms = {
@@ -59,15 +66,22 @@ export default function ListFinancingModal({
   }
   const [terms, setTerms] = useState<FinancingTerms>(defaultTerms)
   const [listingErr, setListingErr] = useState(false)
+  const onError = () => {
+    setListingErr(true)
+    setToast({
+      kind: 'error',
+      message: 'The transaction was not completed.',
+      title: 'Failed to list token',
+    })
+  }
   const onClose = () => {
     setTerms(defaultTerms)
     setStep(Step.SetTerms)
     setListingErr(false)
     onModalClose()
   }
-  const onSubmit = () => {
-    setListingErr(false)
-    setStep(Step.WalletApproval)
+  const onContractApproved = () => {
+    setStep(Step.SignOffer)
     createListing({
       terms,
       token,
@@ -75,15 +89,35 @@ export default function ListFinancingModal({
         setStep(Step.Success)
         showListing()
       },
-      onError: () => {
-        setListingErr(true)
-        setToast({
-          kind: 'error',
-          message: 'The transaction was not completed.',
-          title: 'Failed to list token',
-        })
-      },
+      onError,
     })
+  }
+  const onSubmit = () => {
+    // reset error
+    setListingErr(false)
+
+    if (approvalRequired) {
+      setStep(Step.ApproveContract)
+      grantApproval({
+        onSuccess: onContractApproved,
+        onError,
+      })
+    } else {
+      onContractApproved()
+    }
+  }
+
+  let progressValue = 0
+  switch (step) {
+    case Step.Success:
+      progressValue = 100
+      break
+    case Step.SignOffer:
+      progressValue = 50
+      break
+    case Step.ApproveContract:
+    default:
+      progressValue = 0
   }
 
   if (!token || !collection) {
@@ -139,11 +173,21 @@ export default function ListFinancingModal({
                 {step === Step.SetTerms && (
                   <TokenStats token={token} collection={collection} />
                 )}
-                {[Step.WalletApproval, Step.Success].includes(step) && (
-                  <TermsStats terms={terms} />
-                )}
+                {[Step.ApproveContract, Step.SignOffer, Step.Success].includes(
+                  step
+                ) && <TermsStats terms={terms} />}
               </VStack>
-              <Box p="6" w="full">
+              <VStack p="6" w="full">
+                {[Step.ApproveContract, Step.SignOffer, Step.Success].includes(
+                  step
+                ) && (
+                  <Progress
+                    rounded="md"
+                    w="full"
+                    colorScheme="blue"
+                    value={progressValue}
+                  />
+                )}
                 {step === Step.SetTerms && (
                   <FinancingTermsForm
                     terms={terms}
@@ -151,7 +195,7 @@ export default function ListFinancingModal({
                     onSubmit={onSubmit}
                   />
                 )}
-                {step === Step.WalletApproval && (
+                {[Step.ApproveContract, Step.SignOffer].includes(step) && (
                   <WalletApproval
                     imageSrc={token.token.image}
                     tokenName={token.token.name}
@@ -161,6 +205,7 @@ export default function ListFinancingModal({
                       setStep(Step.SetTerms)
                     }}
                     retry={onSubmit}
+                    contractApprovalRequired={approvalRequired}
                   />
                 )}
                 {step === Step.Success && (
@@ -170,7 +215,7 @@ export default function ListFinancingModal({
                     onClose={onClose}
                   />
                 )}
-              </Box>
+              </VStack>
             </Flex>
           </ModalBody>
         </ModalContent>

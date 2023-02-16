@@ -1,4 +1,4 @@
-import { Text, Image, Heading, Icon, VStack, Button } from '@chakra-ui/react'
+import { Button, Heading, Icon, Image, Text, VStack } from '@chakra-ui/react'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 
 export default function ListingSuccess({
