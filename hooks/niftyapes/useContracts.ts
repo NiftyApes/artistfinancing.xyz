@@ -16,7 +16,7 @@ export const useSellerFinancingContractAddress = (): Address | undefined => {
 
   if (provider && isGoerli(chain?.id)) {
     // TODO: Change this when stable.
-    return '0x8353bd84bb346c4c0c236d6a7caf92dea7b9df86'
+    return '0xbc8f74e0812973e0f454d103b29547fbc37eb14a'
   }
 
   if (provider && isMainnet(chain?.id)) {
