@@ -3,12 +3,15 @@ import { FinancingTerms } from 'components/niftyapes/list-financing/FinancingTer
 import { parseUnits } from 'ethers/lib/utils'
 import useEnvChain from 'hooks/useEnvChain'
 import expirationOptions from 'lib/niftyapes/expirationOptions'
+import { saveSignatureOfferInDb } from 'lib/niftyapes/saveSignatureOfferInDb'
 import { DateTime } from 'luxon'
 import { Address, useAccount } from 'wagmi'
+import { useSellerFinancingContractAddress } from './useContracts'
 
 export default function useCreateListing() {
   const { address: creator } = useAccount()
   const chain = useEnvChain()
+  const verifyingContract = useSellerFinancingContractAddress()
 
   return {
     createListing: async function ({
@@ -35,9 +38,7 @@ export default function useCreateListing() {
           name: 'NiftyApes_SellerFinancing',
           version: '0.0.1',
           chainId: chain.id,
-          // TODO: Add actual sellerFinancing contract address
-          verifyingContract:
-            '0x5e739684A36C47EE17A004a76d3094E3795177fd' as Address,
+          verifyingContract,
         }
 
         const types = {
@@ -87,12 +88,15 @@ export default function useCreateListing() {
             .toSeconds()
         )
 
+        const nftId = token.token.tokenId
+        const nftContractAddress = token.token.contract
+
         const value = {
           price,
           downPaymentAmount,
           minimumPrincipalPerPeriod,
-          nftId: token.token.tokenId,
-          nftContractAddress: token.token.contract,
+          nftId,
+          nftContractAddress,
           creator,
           periodInterestRateBps,
           periodDuration,
@@ -100,9 +104,21 @@ export default function useCreateListing() {
         }
 
         const signature = await signTypedData({ domain, types, value })
+        console.log('signature', signature)
 
-        // TODO: Store signature and terms in dynamodb
-        console.log(signature)
+        await saveSignatureOfferInDb({
+          chainId: chain.id,
+          price: price.toString(),
+          downPaymentAmount: downPaymentAmount.toString(),
+          minimumPrincipalPerPeriod: minimumPrincipalPerPeriod.toString(),
+          nftId,
+          nftContractAddress,
+          creator,
+          periodInterestRateBps,
+          periodDuration,
+          expiration,
+          signature,
+        })
         onSuccess()
       } catch (err) {
         console.error('Failed to create listing', err)
