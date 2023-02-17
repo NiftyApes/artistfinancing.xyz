@@ -28,7 +28,7 @@ import { truncateAddress } from 'lib/truncateText'
 import { paths, setParams } from '@reservoir0x/reservoir-sdk'
 import UserActivityTab from 'components/tables/UserActivityTab'
 import useMounted from 'hooks/useMounted'
-import UserUpcomingPaymentsTable from 'components/tables/UserUpcomingPaymentsTable'
+import UserUpcomingPaymentsTab from 'components/tables/UserUpcomingPaymentsTab'
 import UserFinancingOffersTab from 'components/tables/UserFinancingOffersTab'
 import UserActiveLoansTab from 'components/tables/UserActiveLoansTab'
 
@@ -163,7 +163,7 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
             </Tabs.Content>
             {isOwner && (
               <Tabs.Content value="upcoming_payments" className="col-span-full">
-                <UserUpcomingPaymentsTable />
+                <UserUpcomingPaymentsTab />
               </Tabs.Content>
             )}
             {isOwner && (

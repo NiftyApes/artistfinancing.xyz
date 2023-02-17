@@ -36,7 +36,7 @@ type Props = {
   showActive?: boolean
 }
 
-const UserUpcomingPaymentsTable: FC<Props> = ({
+const UserFinancingOffersTable: FC<Props> = ({
   modal,
   collectionIds,
   showActive,
@@ -115,7 +115,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
       )}
       {isMobile
         ? listings.map((listing, index, arr) => (
-            <UserUpcomingPaymentsTableMobileRow
+            <UserFinancingOffersTableMobileRow
               key={`${listing?.id}-${index}`}
               ref={index === arr.length - 5 ? ref : null}
               listing={listing}
@@ -128,7 +128,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
             <table className="min-w-full table-auto dark:divide-neutral-600">
               <thead className="bg-white dark:bg-black">
                 <tr>
-                  {['Item', 'Contract Address', 'Price', 'APR', 'Next Payment Due', 'Next Minimum Payment', 'Principal Remaining'].map(
+                  {['Item', 'Contract Address', 'Offer Amount', 'APR', 'Duration', 'Expires'].map(
                     (item) => (
                       <th
                         key={item}
@@ -249,7 +249,7 @@ const UserListingsTableRow = ({
         </a>
       </td>
 
-      {/* PRICE */}
+      {/* OFFER AMOUNT */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         <FormatCrypto
           amount={price?.amount?.decimal}
@@ -269,64 +269,30 @@ const UserListingsTableRow = ({
         20%
       </td>
 
-      {/* NEXT PAYMENT DUE */}
+      {/* DURATION */}
       <td className="whitespace-nowrap px-6 py-4">
         10 days
       </td>
 
-      {/* NEXT MINIMUM PAYMENT */}
-      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <FormatCrypto
-            amount={price?.amount?.decimal}
-            address={price?.currency?.contract}
-            decimals={price?.currency?.decimals}
-            maximumFractionDigits={8}
-          />
-          {usdPrice && (
-            <div className="text-xs text-neutral-600 dark:text-neutral-300">
-              {formatDollar(usdPrice)}
-            </div>
-          )}
+      {/* EXPIRES */}
+      <td className="whitespace-nowrap px-6 py-4">
+        10 days
       </td>
 
-      {/* PRINCIPAL REMAINING */}
-      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <FormatCrypto
-            amount={price?.amount?.decimal}
-            address={price?.currency?.contract}
-            decimals={price?.currency?.decimals}
-            maximumFractionDigits={8}
-          />
-          {usdPrice && (
-            <div className="text-xs text-neutral-600 dark:text-neutral-300">
-              {formatDollar(usdPrice)}
-            </div>
-          )}
-      </td>
 
-      {/* MAKE PAYMENT */}
+      {/* CANCEL LOAN */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         <button
           className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
         >
-          Make Payment
-        </button>
-        
-      </td>
-
-      {/* CANCEL OFFER */}
-      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <button
-          className="btn-primary-outline gap-2 dark:ring-primary-900 dark:focus:ring-4"
-        >
-          Cancel Offer
+          Cancel Loan
         </button>
       </td>
     </tr>
   )
 }
 
-const UserUpcomingPaymentsTableMobileRow = ({
+const UserFinancingOffersTableMobileRow = ({
   isOwner,
   listing,
   modal,
@@ -441,7 +407,7 @@ const UserUpcomingPaymentsTableMobileRow = ({
   )
 }
 
-export default UserUpcomingPaymentsTable
+export default UserFinancingOffersTable
 
 function processListing(listing: ReturnType<typeof useListings>['data'][0]) {
   const tokenId = listing?.tokenSetId?.split(':')[2]
