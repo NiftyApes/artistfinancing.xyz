@@ -19,6 +19,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
+import useExecuteBuy from 'hooks/niftyapes/useExecuteBuy'
 import useCoinConversion from 'hooks/useCoinConversion'
 import useTokens from 'hooks/useTokens'
 import { formatDollar } from 'lib/numbers'
@@ -39,6 +40,7 @@ export default function BuyNowPayLaterModal({
   token?: ReturnType<typeof useTokens>['tokens']['data'][0]
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
+  const { executeBuy } = useExecuteBuy()
   const [step, setStep] = useState<Step>(Step.Checkout)
   const terms = {
     listPrice: 1.2,
@@ -55,6 +57,11 @@ export default function BuyNowPayLaterModal({
   const onClose = () => {
     setStep(Step.Checkout)
     onModalClose()
+  }
+
+  const onCheckout = () => {
+    setStep(Step.WalletApproval)
+    executeBuy()
   }
 
   return (
@@ -183,19 +190,12 @@ export default function BuyNowPayLaterModal({
                       </VStack>
                     </HStack>
 
-                    <Button
-                      colorScheme={'blue'}
-                      onClick={() => {
-                        setStep(Step.WalletApproval)
-                        setTimeout(() => {
-                          setStep(Step.Success)
-                        }, 3000)
-                      }}
-                    >
+                    <Button colorScheme={'blue'} onClick={onCheckout}>
                       Checkout
                     </Button>
                   </VStack>
                 )}
+
                 {step === Step.WalletApproval && (
                   <VStack w="full" h="full" justify="space-between">
                     <VStack justify="center" spacing="10" flexGrow={1}>
@@ -221,6 +221,7 @@ export default function BuyNowPayLaterModal({
                     ></Button>
                   </VStack>
                 )}
+
                 {step === Step.Success && (
                   <VStack w="full" h="full" justify="space-between">
                     <VStack justify="center" spacing="8" flexGrow={1}>
