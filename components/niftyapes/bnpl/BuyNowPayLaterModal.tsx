@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Flex,
@@ -42,6 +44,9 @@ export default function BuyNowPayLaterModal({
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const { executeBuy } = useExecuteBuy()
   const [step, setStep] = useState<Step>(Step.Checkout)
+  const [isError, setIsError] = useState(false)
+
+  // TODO: Use terms loaded from API.
   const terms = {
     listPrice: 1.2,
     downPaymentPercent: 20,
@@ -55,13 +60,37 @@ export default function BuyNowPayLaterModal({
   const usdPrice = useCoinConversion('usd')
 
   const onClose = () => {
+    setIsError(false) // reset error
     setStep(Step.Checkout)
     onModalClose()
   }
 
   const onCheckout = () => {
+    setIsError(false) // reset error
     setStep(Step.WalletApproval)
-    executeBuy()
+    // TODO: Replace this with actual data from signature offer for this token.
+    executeBuy({
+      offer: {
+        creator: '0x5e739684A36C47EE17A004a76d3094E3795177fd',
+        downPaymentAmount: '10000000000000000',
+        expiration: 1679004772,
+        minimumPrincipalPerPeriod: '2000000000000000',
+        nftId: '260',
+        nftContractAddress: '0xACeC411DD36946bb5bEC9900eF28Bb58be7AcBD4',
+        periodDuration: 2592000,
+        periodInterestRateBps: 164,
+        price: '50000000000000000',
+      },
+      signature:
+        '0xc06e2426b4aa86e4c11a124d7a0321862a9f20c4ff5ee4cc3d9197c88ebb7f3742a90e87596207add505552f6c2e0c70ced87368ca7f90db124e941c5d2e5e8c1b',
+      onSuccess() {
+        setStep(Step.Success)
+      },
+      onError() {
+        setIsError(true)
+        setStep(Step.Checkout)
+      },
+    })
   }
 
   return (
@@ -113,6 +142,13 @@ export default function BuyNowPayLaterModal({
               <Box p="6" w="full">
                 {step === Step.Checkout && (
                   <VStack spacing="8" align="left">
+                    {isError && (
+                      <Alert bg="red.900" rounded="md" status="error">
+                        <AlertIcon />
+                        There was an error completing your purchase. Please try
+                        again.
+                      </Alert>
+                    )}
                     <VStack spacing="4" align="left">
                       <Heading size="md">Financing Terms</Heading>
                       <Grid
@@ -232,7 +268,7 @@ export default function BuyNowPayLaterModal({
                       />
                       <VStack>
                         <Heading size={'md'} textAlign="center">
-                          Congrats! Your NFT has been purchased!
+                          Congrats! Your NFT has been purchased with financing!
                         </Heading>
                         <Text align="center">
                           <Text as="span" color="blue.600">
