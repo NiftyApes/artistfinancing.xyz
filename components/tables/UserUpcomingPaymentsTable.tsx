@@ -3,6 +3,7 @@ import {
   Dispatch,
   FC,
   SetStateAction,
+  useCallback,
   useEffect,
   useState,
 } from 'react'
@@ -22,6 +23,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import LoadingIcon from 'components/LoadingIcon'
 import { useMediaQuery } from '@react-hookz/web'
 import { FiAlertCircle } from 'react-icons/fi'
+import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
 
 const API_BASE =
   process.env.NEXT_PUBLIC_RESERVOIR_API_BASE || 'https://api.reservoir.tools'
@@ -128,7 +130,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
             <table className="min-w-full table-auto dark:divide-neutral-600">
               <thead className="bg-white dark:bg-black">
                 <tr>
-                  {['Item', 'Contract Address', 'Price', 'APR', 'Next Payment Due', 'Next Minimum Payment', 'Principal Remaining'].map(
+                  {['Item', 'Price', 'APR', 'Next Payment Due', 'Next Minimum Payment', 'Principal Remaining'].map(
                     (item) => (
                       <th
                         key={item}
@@ -235,20 +237,6 @@ const UserListingsTableRow = ({
         </Link>
       </td>
 
-      {/* Contract Address */}
-      <td className="whitespace-nowrap px-6 py-4">
-        <a
-          href={source.link || '#'}
-          target="_blank"
-          rel="noreferrer"
-          className="flex gap-1 font-light text-primary-700 dark:text-primary-300"
-        >
-          <span className="max-w-[200px] overflow-hidden text-ellipsis">
-            0x0000000
-          </span>
-        </a>
-      </td>
-
       {/* PRICE */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         <FormatCrypto
@@ -306,12 +294,7 @@ const UserListingsTableRow = ({
 
       {/* MAKE PAYMENT */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <button
-          className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
-        >
-          Make Payment
-        </button>
-        
+        <MakePaymentModal data={{ ...listing, image, name, collectionName }} />
       </td>
 
       {/* CANCEL OFFER */}
