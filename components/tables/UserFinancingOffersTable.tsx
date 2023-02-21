@@ -128,7 +128,7 @@ const UserFinancingOffersTable: FC<Props> = ({
             <table className="min-w-full table-auto dark:divide-neutral-600">
               <thead className="bg-white dark:bg-black">
                 <tr>
-                  {['Item', 'Contract Address', 'Offer Amount', 'APR', 'Duration', 'Expires'].map(
+                  {['Item', 'Price', 'Down payment', 'Min. payment', 'Pay period', 'APR', 'Duration', 'Expires'].map(
                     (item) => (
                       <th
                         key={item}
@@ -235,21 +235,7 @@ const UserListingsTableRow = ({
         </Link>
       </td>
 
-      {/* Contract Address */}
-      <td className="whitespace-nowrap px-6 py-4">
-        <a
-          href={source.link || '#'}
-          target="_blank"
-          rel="noreferrer"
-          className="flex gap-1 font-light text-primary-700 dark:text-primary-300"
-        >
-          <span className="max-w-[200px] overflow-hidden text-ellipsis">
-            0x0000000
-          </span>
-        </a>
-      </td>
-
-      {/* OFFER AMOUNT */}
+      {/* PRICE */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         <FormatCrypto
           amount={price?.amount?.decimal}
@@ -262,6 +248,41 @@ const UserListingsTableRow = ({
             {formatDollar(usdPrice)}
           </div>
         )}
+      </td>
+
+      {/* DOWN PAYMENT */}
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+        <FormatCrypto
+          amount={price?.amount?.decimal}
+          address={price?.currency?.contract}
+          decimals={price?.currency?.decimals}
+          maximumFractionDigits={8}
+        />
+        {usdPrice && (
+          <div className="text-xs text-neutral-600 dark:text-neutral-300">
+            {formatDollar(usdPrice)}
+          </div>
+        )}
+      </td>
+
+      {/* MIN. PAYMENT */}
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+        <FormatCrypto
+          amount={price?.amount?.decimal}
+          address={price?.currency?.contract}
+          decimals={price?.currency?.decimals}
+          maximumFractionDigits={8}
+        />
+        {usdPrice && (
+          <div className="text-xs text-neutral-600 dark:text-neutral-300">
+            {formatDollar(usdPrice)}
+          </div>
+        )}
+      </td>
+
+      {/* PAY PERIOD */}
+      <td className="whitespace-nowrap px-6 py-4">
+        10 days
       </td>
 
       {/* APR */}
