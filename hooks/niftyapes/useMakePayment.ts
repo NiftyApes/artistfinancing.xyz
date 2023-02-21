@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useNiftyApesContract } from './useNiftyApesContract'
 import { Address, useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
 import { BigNumber} from 'ethers'
@@ -8,7 +9,6 @@ interface IMakePaymentHookProps {
   nftContractAddress: Address;
   nftId: BigNumber;
 }
-
 export const useMakePayment = (props: IMakePaymentHookProps) => {
 
   const { paymentAmount, nftContractAddress, nftId } = props
@@ -35,5 +35,4 @@ export const useMakePayment = (props: IMakePaymentHookProps) => {
   })
 
   return { data, isLoading, isSuccess, makePayment }
-
 }

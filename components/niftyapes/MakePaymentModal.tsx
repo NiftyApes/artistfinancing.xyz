@@ -19,7 +19,7 @@ import { AiOutlineArrowRight } from 'react-icons/ai'
 import { SiEthereum } from 'react-icons/si'
 import PaymentModalTermStats from './PaymentModalTermStats'
 import { ethers, BigNumber } from 'ethers'
-import { useMakePayment } from '../../hooks/niftyapes/useMakePayment'
+import { useMakePayment } from '../../hooks/niftyapes/useMakePayment';
 
 enum Step {
   Checkout,
@@ -35,7 +35,7 @@ export default function MakePaymentModal({
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [step, setStep] = useState<Step>(Step.Success)
   const terms = {
-    remainingPrincipal: '0.001',
+    remainingPrincipal: 20,
     apr: 20,
     minPrincipalPercent: 5,
     payPeriodDays: 30,
@@ -49,7 +49,7 @@ export default function MakePaymentModal({
 
   const { data: paymentTransaction, isLoading, isSuccess, makePayment } = useMakePayment({
     nftContractAddress: data.contract,
-    paymentAmount: ethers.utils.parseEther(terms.remainingPrincipal),
+    paymentAmount: ethers.utils.parseEther('0.0123'),
     nftId: BigNumber.from(data.tokenId)
   })
 
