@@ -3,8 +3,6 @@ export function getBaseApiUrl(chainId: number) {
     process.env.API_BASE_URI ||
     `https://api.niftyapes.money/${getChainName(chainId)}`
 
-    console.log({ apiBaseUri, chainId })
-
   return `${apiBaseUri}/v1`;
 }
 
