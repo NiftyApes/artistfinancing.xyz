@@ -1,14 +1,14 @@
-export function getBaseApiUrl(chainId: string) {
+export function getBaseApiUrl(chainId: number) {
   const apiBaseUri =
     process.env.API_BASE_URI ||
-    `https://api.niftyapes.money/${getChainName(parseInt(chainId, 10))}`
+    `https://api.niftyapes.money/${getChainName(chainId)}`
 
     console.log({ apiBaseUri, chainId })
 
   return `${apiBaseUri}/v1`;
 }
 
-export function getApiUrl(chainId: string, path: string) {
+export function getApiUrl(chainId: number, path: string) {
 
   return `${getBaseApiUrl(chainId)}/v1/${path}`;
 }
