@@ -31,7 +31,6 @@ import useMounted from 'hooks/useMounted'
 import UserUpcomingPaymentsTab from 'components/tables/UserUpcomingPaymentsTab'
 import UserFinancingOffersTab from 'components/tables/UserFinancingOffersTab'
 import UserActiveLoansTab from 'components/tables/UserActiveLoansTab'
-import useOffers from 'hooks/niftyapes/useOffers'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
@@ -50,12 +49,6 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
   const isMounted = useMounted()
   const router = useRouter()
   const accountData = useAccount()
-
-  const { data: offers } = useOffers({
-    collection: '0xACeC411DD36946bb5bEC9900eF28Bb58be7AcBD4',
-  });
-
-  console.log({ offers })
 
   if (!address) {
     throw 'No address set'
