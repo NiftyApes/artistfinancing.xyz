@@ -3,6 +3,7 @@ import {
   Dispatch,
   FC,
   SetStateAction,
+  useCallback,
   useEffect,
   useState,
 } from 'react'
@@ -22,6 +23,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import LoadingIcon from 'components/LoadingIcon'
 import { useMediaQuery } from '@react-hookz/web'
 import { FiAlertCircle } from 'react-icons/fi'
+import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
 
 const API_BASE =
   process.env.NEXT_PUBLIC_RESERVOIR_API_BASE || 'https://api.reservoir.tools'
@@ -306,12 +308,7 @@ const UserListingsTableRow = ({
 
       {/* MAKE PAYMENT */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <button
-          className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
-        >
-          Make Payment
-        </button>
-        
+        <MakePaymentModal data={{ ...listing, image, name, collectionName }} />
       </td>
 
       {/* CANCEL OFFER */}
