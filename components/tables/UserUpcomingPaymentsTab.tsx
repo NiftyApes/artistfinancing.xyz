@@ -4,8 +4,6 @@ import { useNetwork } from 'wagmi';
 import Toast from 'components/Toast';
 import UserUpcomingPaymentsTable from './UserUpcomingPaymentsTable';
 import useSearchCommunity from 'hooks/useSearchCommunity';
-import { Button } from '@chakra-ui/react'
-import { useMakePayment } from '../../hooks/niftyapes/useMakePayment'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID || ''
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
@@ -14,10 +12,6 @@ const COLLECTION_SET_ID = process.env.NEXT_PUBLIC_COLLECTION_SET_ID
 
 const UserUpcomingPaymentsTab: React.FC = () => {
   const { chain: activeChain } = useNetwork();
-  const {data, isLoading, isSuccess, makePayment} = useMakePayment();
-
-  console.log(data, isLoading, isSuccess);
-
   const isInTheWrongNetwork = activeChain?.id !== +CHAIN_ID;
 
   const setToast: (data: ComponentProps<typeof Toast>['data']) => any = (
@@ -41,7 +35,6 @@ const UserUpcomingPaymentsTab: React.FC = () => {
   return (
     <div className="mt-14 justify-center dark:text-white">
       <div className="text-center mb-6">
-        <Button onClick={()=> makePayment?.()}>Hello</Button>
         <UserUpcomingPaymentsTable
           collectionIds={collectionIds} 
           isOwner 
