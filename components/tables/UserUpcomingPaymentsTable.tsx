@@ -307,7 +307,6 @@ const UserListingsTableRow = ({
       </td>
 
       {/* MAKE PAYMENT */}
-      {console.log({ listing })}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         <MakePaymentModal data={{ ...listing, image, name, collectionName }} />
       </td>
