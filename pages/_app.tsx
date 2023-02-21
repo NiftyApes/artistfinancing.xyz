@@ -41,6 +41,9 @@ import {
 } from '@rainbow-me/rainbowkit'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
+import { QueryClientProvider, QueryClient } from 'react-query';
+
+const queryClient = new QueryClient();
 
 // Select a custom ether.js interface for connecting to a network
 // Reference = https://wagmi-xyz.vercel.app/docs/provider#provider-optional
@@ -95,15 +98,17 @@ function AppWrapper(props: AppProps & { baseUrl: string }) {
   const defaultTheme = DARK_MODE_ENABLED ? 'dark' : 'light'
 
   return (
-    <ChakraProvider theme={chakraTheme}>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme={defaultTheme}
-        forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
-      >
-        <App {...props} />
-      </ThemeProvider>
-    </ChakraProvider>
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider theme={chakraTheme}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme={defaultTheme}
+          forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
+        >
+          <App {...props} />
+        </ThemeProvider>
+      </ChakraProvider>
+    </QueryClientProvider>
   )
 }
 
