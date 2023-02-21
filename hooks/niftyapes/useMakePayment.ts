@@ -1,26 +1,34 @@
 import { useNiftyApesContract } from './useNiftyApesContract'
-import { useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
+import { Address, useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
+import { BigNumber} from 'ethers'
+import _ from 'lodash'
 
-import { GoerliAbi } from '../../contracts/niftyapes/goerli.abi'
-import { ethers, BigNumber } from 'ethers'
+interface IMakePaymentHookProps {
+  paymentAmount: BigNumber;
+  nftContractAddress: Address;
+  nftId: BigNumber;
+}
 
-export const useMakePayment = () => {
+export const useMakePayment = (props: IMakePaymentHookProps) => {
 
-  const { address: goerliAddress } = useNiftyApesContract()
+  const { paymentAmount, nftContractAddress, nftId } = props
+  const { address: niftyApesContractAddress, abi } = useNiftyApesContract()
   const { address: walletAddress } = useAccount()
 
   const { config } = usePrepareContractWrite({
-    abi: GoerliAbi,
-    address: goerliAddress,
-    args: ['0x5c20670e19e557930fcc76908c500ff870967087', BigNumber.from('11')],
+    abi: abi,
+    address: niftyApesContractAddress,
+    args: [nftContractAddress, nftId],
+    enabled: !_.isUndefined(walletAddress),
+    functionName: 'makePayment',
     overrides: {
       from: walletAddress,
-      value: ethers.utils.parseEther('0.01')
+      value: paymentAmount,
     },
-    functionName: 'makePayment',
   })
 
-  const { data, write:makePayment } = useContractWrite(config)
+
+  const { data, write: makePayment } = useContractWrite(config)
 
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash
