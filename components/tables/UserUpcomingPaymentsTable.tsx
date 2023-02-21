@@ -130,7 +130,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
             <table className="min-w-full table-auto dark:divide-neutral-600">
               <thead className="bg-white dark:bg-black">
                 <tr>
-                  {['Item', 'Contract Address', 'Price', 'APR', 'Next Payment Due', 'Next Minimum Payment', 'Principal Remaining'].map(
+                  {['Item', 'Price', 'APR', 'Next Payment Due', 'Next Minimum Payment', 'Principal Remaining'].map(
                     (item) => (
                       <th
                         key={item}
@@ -235,20 +235,6 @@ const UserListingsTableRow = ({
             </span>
           </a>
         </Link>
-      </td>
-
-      {/* Contract Address */}
-      <td className="whitespace-nowrap px-6 py-4">
-        <a
-          href={source.link || '#'}
-          target="_blank"
-          rel="noreferrer"
-          className="flex gap-1 font-light text-primary-700 dark:text-primary-300"
-        >
-          <span className="max-w-[200px] overflow-hidden text-ellipsis">
-            0x0000000
-          </span>
-        </a>
       </td>
 
       {/* PRICE */}
