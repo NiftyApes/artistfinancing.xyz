@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import useSWR from 'nifty-swr';
 import qs from 'query-string';
 
 import instance from 'lib/niftyapes/AxiosInstance';
