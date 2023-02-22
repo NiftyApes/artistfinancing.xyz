@@ -1,16 +1,21 @@
-import { useQuery } from 'react-query';
-import qs from 'query-string';
+import { useQuery } from 'react-query'
+import qs from 'query-string'
 
-import instance from 'lib/niftyapes/AxiosInstance';
+import instance from 'lib/niftyapes/AxiosInstance'
 
 type OffersParams = {
-  collection?: string,
-  creator?: string,
-  includeExpired?: boolean,
-  nftId?: string,
+  collection?: string
+  creator?: string
+  includeExpired?: boolean
+  nftId?: string
 }
 
-const useOffers = ({ collection, creator, nftId, includeExpired }: OffersParams) => {
+const useOffers = ({
+  collection,
+  creator,
+  nftId,
+  includeExpired,
+}: OffersParams) => {
   const url = qs.stringifyUrl({
     url: '/offers',
     query: {
@@ -19,22 +24,28 @@ const useOffers = ({ collection, creator, nftId, includeExpired }: OffersParams)
       includeExpired,
       nftId,
     },
-  });
+  })
 
-  const getOffers = () =>  instance.get(url);
+  const getOffers = () => instance.get(url)
 
-  const { data, error, isLoading } = useQuery(['offers', { 
-    collection,
-    creator,
-    includeExpired,
-    nftId,
-   }], getOffers);
+  const { data, error, isLoading } = useQuery(
+    [
+      'offers',
+      {
+        collection,
+        creator,
+        includeExpired,
+        nftId,
+      },
+    ],
+    getOffers
+  )
 
   return {
     data,
     error,
     isLoading,
-  };
-};
+  }
+}
 
-export default useOffers;
+export default useOffers

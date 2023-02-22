@@ -130,17 +130,22 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
             <table className="min-w-full table-auto dark:divide-neutral-600">
               <thead className="bg-white dark:bg-black">
                 <tr>
-                  {['Item', 'Price', 'APR', 'Next Payment Due', 'Next Minimum Payment', 'Principal Remaining'].map(
-                    (item) => (
-                      <th
-                        key={item}
-                        scope="col"
-                        className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-white"
-                      >
-                        {item}
-                      </th>
-                    )
-                  )}
+                  {[
+                    'Item',
+                    'Price',
+                    'APR',
+                    'Next Payment Due',
+                    'Next Minimum Payment',
+                    'Principal Remaining',
+                  ].map((item) => (
+                    <th
+                      key={item}
+                      scope="col"
+                      className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-white"
+                    >
+                      {item}
+                    </th>
+                  ))}
                   <th scope="col" className="relative px-6 py-3">
                     <span className="sr-only">Cancel</span>
                   </th>
@@ -258,38 +263,36 @@ const UserListingsTableRow = ({
       </td>
 
       {/* NEXT PAYMENT DUE */}
-      <td className="whitespace-nowrap px-6 py-4">
-        10 days
-      </td>
+      <td className="whitespace-nowrap px-6 py-4">10 days</td>
 
       {/* NEXT MINIMUM PAYMENT */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         <FormatCrypto
-            amount={price?.amount?.decimal}
-            address={price?.currency?.contract}
-            decimals={price?.currency?.decimals}
-            maximumFractionDigits={8}
-          />
-          {usdPrice && (
-            <div className="text-xs text-neutral-600 dark:text-neutral-300">
-              {formatDollar(usdPrice)}
-            </div>
-          )}
+          amount={price?.amount?.decimal}
+          address={price?.currency?.contract}
+          decimals={price?.currency?.decimals}
+          maximumFractionDigits={8}
+        />
+        {usdPrice && (
+          <div className="text-xs text-neutral-600 dark:text-neutral-300">
+            {formatDollar(usdPrice)}
+          </div>
+        )}
       </td>
 
       {/* PRINCIPAL REMAINING */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         <FormatCrypto
-            amount={price?.amount?.decimal}
-            address={price?.currency?.contract}
-            decimals={price?.currency?.decimals}
-            maximumFractionDigits={8}
-          />
-          {usdPrice && (
-            <div className="text-xs text-neutral-600 dark:text-neutral-300">
-              {formatDollar(usdPrice)}
-            </div>
-          )}
+          amount={price?.amount?.decimal}
+          address={price?.currency?.contract}
+          decimals={price?.currency?.decimals}
+          maximumFractionDigits={8}
+        />
+        {usdPrice && (
+          <div className="text-xs text-neutral-600 dark:text-neutral-300">
+            {formatDollar(usdPrice)}
+          </div>
+        )}
       </td>
 
       {/* MAKE PAYMENT */}
@@ -299,9 +302,7 @@ const UserListingsTableRow = ({
 
       {/* CANCEL OFFER */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <button
-          className="btn-primary-outline gap-2 dark:ring-primary-900 dark:focus:ring-4"
-        >
+        <button className="btn-primary-outline gap-2 dark:ring-primary-900 dark:focus:ring-4">
           Cancel Offer
         </button>
       </td>
