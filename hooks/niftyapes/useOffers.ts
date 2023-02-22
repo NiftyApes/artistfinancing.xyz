@@ -11,7 +11,7 @@ type OffersParams = {
   nftId?: string
 }
 
-type Offer = {
+type OfferDetails = {
   creator: Address
   downPaymentAmount: '4000000000000000'
   expiration: number
@@ -21,6 +21,13 @@ type Offer = {
   periodDuration: number
   periodInterestRateBps: number
   price: string
+}
+
+export type Offer = {
+  offer: OfferDetails
+  signature: string
+  createdAt: Date
+  status: string
 }
 
 const getOffers = async ({
