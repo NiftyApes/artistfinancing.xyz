@@ -11,10 +11,13 @@ import { Collection } from 'types/reservoir'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import { getPricing } from 'lib/token/pricing'
+import useOffers from 'hooks/niftyapes/useOffers'
+import { setToast } from './token/setToast'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
 type Props = {
+  collectionId: string
   tokens: ReturnType<typeof useTokens>['tokens']
   collectionImage: string | undefined
   collectionSize?: number | undefined
@@ -24,6 +27,7 @@ type Props = {
 }
 
 const TokensGrid: FC<Props> = ({
+  collectionId,
   tokens,
   viewRef,
   collectionImage,
@@ -40,6 +44,12 @@ const TokensGrid: FC<Props> = ({
   const sortBy = router.query['sortBy']?.toString()
   const sortDirection = router.query['sortDirection']?.toString()
   const cartPools = useRecoilValue(getPricingPools)
+  const {
+    data: offersData,
+    error,
+    isLoading: isLoadingOffers,
+  } = useOffers({ collection: collectionId })
+  console.log(offersData)
 
   useEffect(() => {
     const cartHasPool = Object.values(cartPools).length > 0
@@ -67,6 +77,14 @@ const TokensGrid: FC<Props> = ({
 
   if (!CHAIN_ID) return null
 
+  if (error) {
+    setToast({
+      kind: 'error',
+      message: 'Please retry by reloading this page.',
+      title: 'Failed to load financing offers',
+    })
+  }
+
   return (
     <>
       <SwapCartModal
@@ -89,12 +107,13 @@ const TokensGrid: FC<Props> = ({
         className="masonry-grid"
         columnClassName="masonry-grid_column"
       >
-        {tokens.isFetchingInitialData || isLoading
+        {tokens.isFetchingInitialData || isLoading || isLoadingOffers
           ? Array(20)
               .fill(null)
               .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
           : sortedTokens?.map((token, idx) => {
-              const hasFinanceListing = idx < 3 ? true : false
+              // Check if token has a NiftyApes loan offer
+              // const hasFinanceListing = offersData?.find((offer) => {})
 
               return (
                 <TokenCard
@@ -106,7 +125,7 @@ const TokensGrid: FC<Props> = ({
                   setClearCartOpen={setClearCartOpen}
                   setCartToSwap={setCartToSwap}
                   key={`${token?.token?.contract}:${token?.token?.tokenId}`}
-                  hasFinanceListing={hasFinanceListing}
+                  hasFinanceListing={false}
                 />
               )
             })}

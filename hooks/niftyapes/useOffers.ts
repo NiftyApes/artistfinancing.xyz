@@ -10,12 +10,14 @@ type OffersParams = {
   nftId?: string
 }
 
-const useOffers = ({
+type Offers = {}
+
+const getOffers = async ({
   collection,
   creator,
   nftId,
   includeExpired,
-}: OffersParams) => {
+}: OffersParams): Promise<Offers> => {
   const url = qs.stringifyUrl({
     url: '/offers',
     query: {
@@ -26,9 +28,22 @@ const useOffers = ({
     },
   })
 
-  const getOffers = () => instance.get(url)
+  try {
+    const response = await instance.get(url)
+    return response.data
+  } catch (err) {
+    console.error('failed to fetch offers', err)
+    throw err
+  }
+}
 
-  const { data, error, isLoading } = useQuery(
+const useOffers = ({
+  collection,
+  creator,
+  nftId,
+  includeExpired,
+}: OffersParams) => {
+  return useQuery(
     [
       'offers',
       {
@@ -38,14 +53,8 @@ const useOffers = ({
         nftId,
       },
     ],
-    getOffers
+    () => getOffers({ collection, creator, nftId, includeExpired })
   )
-
-  return {
-    data,
-    error,
-    isLoading,
-  }
 }
 
 export default useOffers
