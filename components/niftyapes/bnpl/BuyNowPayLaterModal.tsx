@@ -72,17 +72,17 @@ export default function BuyNowPayLaterModal({
     executeBuy({
       offer: {
         creator: '0x5e739684A36C47EE17A004a76d3094E3795177fd',
-        downPaymentAmount: '10000000000000000',
-        expiration: 1679004772,
-        minimumPrincipalPerPeriod: '2000000000000000',
-        nftId: '260',
-        nftContractAddress: '0xACeC411DD36946bb5bEC9900eF28Bb58be7AcBD4',
+        downPaymentAmount: '8000000000000000',
+        expiration: 1679439324,
+        minimumPrincipalPerPeriod: '1600000000000000',
+        nftId: '1335168',
+        nftContractAddress: '0xf5de760f2e916647fd766B4AD9E85ff943cE3A2b',
         periodDuration: 2592000,
         periodInterestRateBps: 164,
-        price: '50000000000000000',
+        price: '40000000000000000',
       },
       signature:
-        '0xc06e2426b4aa86e4c11a124d7a0321862a9f20c4ff5ee4cc3d9197c88ebb7f3742a90e87596207add505552f6c2e0c70ced87368ca7f90db124e941c5d2e5e8c1b',
+        '0xf74ecb0f01ec7b01b424a81033acca6374c876a6ac637a59d7ceb88fc79e14cf02a6a34315c0319d31b5e81b7c88aebc4305dd8a4e7ac437301c1b3e2829c5e31c',
       onSuccess() {
         setStep(Step.Success)
       },

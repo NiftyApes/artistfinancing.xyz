@@ -33,8 +33,6 @@ export default function useExecuteBuy() {
           throw Error('Missing seller financing contract address')
         }
 
-        console.log('offer', offer)
-
         const config = await prepareWriteContract({
           address,
           abi: [
@@ -122,12 +120,11 @@ export default function useExecuteBuy() {
             signature,
           ],
           overrides: {
-            gasLimit: BigNumber.from('210000'),
+            value: BigNumber.from(offer.downPaymentAmount),
           },
         })
         const tx = await writeContract(config)
         const receipt = await tx.wait()
-        console.log(receipt)
 
         if (receipt.status !== 1) {
           throw new Error('reason: revert')
