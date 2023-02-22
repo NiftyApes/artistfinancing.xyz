@@ -1,15 +1,14 @@
-import { Address, useProvider } from 'wagmi'
+import { useProvider } from 'wagmi'
 import { isGoerli, isMainnet } from './useContracts'
 
 import { GoerliAbi } from '../../contracts/niftyapes/goerli.abi'
 import useEnvChain from '../useEnvChain'
-import { Abi } from 'abitype'
 
 
-interface UseNiftyApesContract {
-  address: Address;
-  abi: Abi
-}
+// interface UseNiftyApesContract {
+//   address: Address;
+//   abi: Abi
+// }
 
 export const useNiftyApesContract = () => {
 

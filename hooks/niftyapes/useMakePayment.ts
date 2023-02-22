@@ -10,7 +10,6 @@ interface IMakePaymentHookProps {
 
 export const useMakePayment = (props: IMakePaymentHookProps) => {
 
-  //
   const { paymentAmount, nftContractAddress, nftId } = props
   const { address: niftyApesContractAddress, abi } = useNiftyApesContract()
 
