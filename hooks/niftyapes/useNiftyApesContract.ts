@@ -11,7 +11,7 @@ interface UseNiftyApesContract {
   abi: Abi
 }
 
-export const useNiftyApesContract = (): UseNiftyApesContract => {
+export const useNiftyApesContract = () => {
 
   const provider = useProvider()
   const chain = useEnvChain()
