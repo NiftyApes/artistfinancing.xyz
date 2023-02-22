@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Flex,
@@ -19,6 +21,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
+import useExecuteBuy from 'hooks/niftyapes/useExecuteBuy'
 import useCoinConversion from 'hooks/useCoinConversion'
 import useTokens from 'hooks/useTokens'
 import { formatDollar } from 'lib/numbers'
@@ -39,7 +42,11 @@ export default function BuyNowPayLaterModal({
   token?: ReturnType<typeof useTokens>['tokens']['data'][0]
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
+  const { executeBuy } = useExecuteBuy()
   const [step, setStep] = useState<Step>(Step.Checkout)
+  const [isError, setIsError] = useState(false)
+
+  // TODO: Use terms loaded from API.
   const terms = {
     listPrice: 1.2,
     downPaymentPercent: 20,
@@ -53,8 +60,37 @@ export default function BuyNowPayLaterModal({
   const usdPrice = useCoinConversion('usd')
 
   const onClose = () => {
+    setIsError(false) // reset error
     setStep(Step.Checkout)
     onModalClose()
+  }
+
+  const onCheckout = () => {
+    setIsError(false) // reset error
+    setStep(Step.WalletApproval)
+    // TODO: Replace this with actual data from signature offer for this token.
+    executeBuy({
+      offer: {
+        creator: '0x5e739684A36C47EE17A004a76d3094E3795177fd',
+        downPaymentAmount: '8000000000000000',
+        expiration: 1679439324,
+        minimumPrincipalPerPeriod: '1600000000000000',
+        nftId: '1335168',
+        nftContractAddress: '0xf5de760f2e916647fd766B4AD9E85ff943cE3A2b',
+        periodDuration: 2592000,
+        periodInterestRateBps: 164,
+        price: '40000000000000000',
+      },
+      signature:
+        '0xf74ecb0f01ec7b01b424a81033acca6374c876a6ac637a59d7ceb88fc79e14cf02a6a34315c0319d31b5e81b7c88aebc4305dd8a4e7ac437301c1b3e2829c5e31c',
+      onSuccess() {
+        setStep(Step.Success)
+      },
+      onError() {
+        setIsError(true)
+        setStep(Step.Checkout)
+      },
+    })
   }
 
   return (
@@ -106,6 +142,13 @@ export default function BuyNowPayLaterModal({
               <Box p="6" w="full">
                 {step === Step.Checkout && (
                   <VStack spacing="8" align="left">
+                    {isError && (
+                      <Alert bg="red.900" rounded="md" status="error">
+                        <AlertIcon />
+                        There was an error completing your purchase. Please try
+                        again.
+                      </Alert>
+                    )}
                     <VStack spacing="4" align="left">
                       <Heading size="md">Financing Terms</Heading>
                       <Grid
@@ -183,19 +226,12 @@ export default function BuyNowPayLaterModal({
                       </VStack>
                     </HStack>
 
-                    <Button
-                      colorScheme={'blue'}
-                      onClick={() => {
-                        setStep(Step.WalletApproval)
-                        setTimeout(() => {
-                          setStep(Step.Success)
-                        }, 3000)
-                      }}
-                    >
+                    <Button colorScheme={'blue'} onClick={onCheckout}>
                       Checkout
                     </Button>
                   </VStack>
                 )}
+
                 {step === Step.WalletApproval && (
                   <VStack w="full" h="full" justify="space-between">
                     <VStack justify="center" spacing="10" flexGrow={1}>
@@ -221,6 +257,7 @@ export default function BuyNowPayLaterModal({
                     ></Button>
                   </VStack>
                 )}
+
                 {step === Step.Success && (
                   <VStack w="full" h="full" justify="space-between">
                     <VStack justify="center" spacing="8" flexGrow={1}>
@@ -231,7 +268,7 @@ export default function BuyNowPayLaterModal({
                       />
                       <VStack>
                         <Heading size={'md'} textAlign="center">
-                          Congrats! Your NFT has been purchased!
+                          Congrats! Your NFT has been purchased with financing!
                         </Heading>
                         <Text align="center">
                           <Text as="span" color="blue.600">
