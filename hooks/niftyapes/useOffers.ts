@@ -13,7 +13,7 @@ type OffersParams = {
 
 type OfferDetails = {
   creator: Address
-  downPaymentAmount: '4000000000000000'
+  downPaymentAmount: string
   expiration: number
   minimumPrincipalPerPeriod: string
   nftContractAddress: string
