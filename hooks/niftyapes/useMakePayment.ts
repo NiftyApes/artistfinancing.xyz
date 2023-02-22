@@ -18,7 +18,10 @@ export const useMakePayment = (props: IMakePaymentHookProps) => {
     abi: abi,
     address: niftyApesContractAddress,
     args: [nftContractAddress, nftId],
-    functionName: 'makePayment'
+    functionName: 'makePayment',
+    overrides:{
+      value: paymentAmount
+    }
   })
 
   const { data, write } = useContractWrite(config)
