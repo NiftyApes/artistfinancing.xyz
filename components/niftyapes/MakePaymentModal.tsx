@@ -19,7 +19,7 @@ import { AiOutlineArrowRight } from 'react-icons/ai'
 import { SiEthereum } from 'react-icons/si'
 import PaymentModalTermStats from './PaymentModalTermStats'
 import { ethers, BigNumber } from 'ethers'
-import { useMakePayment } from '../../hooks/niftyapes/useMakePayment';
+import { useMakePayment } from '../../hooks/niftyapes/useMakePayment'
 
 enum Step {
   Checkout,
@@ -47,7 +47,7 @@ export default function MakePaymentModal({
     onModalClose()
   }
 
-  const { data: paymentTransaction, isLoading, isSuccess, makePayment } = useMakePayment({
+  const { data: paymentTransaction, isLoading, isSuccess, write } = useMakePayment({
     nftContractAddress: data.contract,
     paymentAmount: ethers.utils.parseEther('0.0123'),
     nftId: BigNumber.from(data.tokenId)
@@ -144,7 +144,7 @@ export default function MakePaymentModal({
                         </div>
                         <input value={'5.07433'} type='text'
                                className='reservoir-label-l input-primary-outline dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:ring-primary-900 dark:placeholder:text-neutral-400  dark:focus:ring-4' />
-                        <button className='btn-purple-fill ml-auto' onClick={() => makePayment?.()}>
+                        <button className='btn-purple-fill ml-auto' onClick={() => write?.()}>
                           Make Payment
                         </button>
                       </div>
