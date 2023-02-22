@@ -113,7 +113,7 @@ const TokensGrid: FC<Props> = ({
               .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
           : sortedTokens?.map((token, idx) => {
               // Check if token has a NiftyApes loan offer
-              // const hasFinanceListing = offersData?.find((offer) => {})
+              const hasFinanceListing = offersData?.find((offer) => {})
 
               return (
                 <TokenCard

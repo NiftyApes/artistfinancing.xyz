@@ -2,6 +2,7 @@ import { useQuery } from 'react-query'
 import qs from 'query-string'
 
 import instance from 'lib/niftyapes/AxiosInstance'
+import { Address } from 'wagmi'
 
 type OffersParams = {
   collection?: string
@@ -10,14 +11,24 @@ type OffersParams = {
   nftId?: string
 }
 
-type Offers = {}
+type Offer = {
+  creator: Address
+  downPaymentAmount: '4000000000000000'
+  expiration: number
+  minimumPrincipalPerPeriod: string
+  nftContractAddress: string
+  nftId: string
+  periodDuration: number
+  periodInterestRateBps: number
+  price: string
+}
 
 const getOffers = async ({
   collection,
   creator,
   nftId,
   includeExpired,
-}: OffersParams): Promise<Offers> => {
+}: OffersParams): Promise<Offer[]> => {
   const url = qs.stringifyUrl({
     url: '/offers',
     query: {
