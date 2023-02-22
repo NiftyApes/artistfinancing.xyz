@@ -19,7 +19,7 @@ export const useMakePayment = (props: IMakePaymentHookProps) => {
     address: niftyApesContractAddress,
     args: [nftContractAddress, nftId],
     functionName: 'makePayment',
-    overrides:{
+    overrides: {
       value: paymentAmount
     }
   })
