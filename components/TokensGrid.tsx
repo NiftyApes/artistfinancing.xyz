@@ -49,7 +49,6 @@ const TokensGrid: FC<Props> = ({
     error,
     isLoading: isLoadingOffers,
   } = useOffers({ collection: collectionId })
-  console.log(offersData)
 
   useEffect(() => {
     const cartHasPool = Object.values(cartPools).length > 0
