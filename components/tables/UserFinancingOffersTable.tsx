@@ -128,17 +128,24 @@ const UserFinancingOffersTable: FC<Props> = ({
             <table className="min-w-full table-auto dark:divide-neutral-600">
               <thead className="bg-white dark:bg-black">
                 <tr>
-                  {['Item', 'Price', 'Down payment', 'Min. payment', 'Pay period', 'APR', 'Duration', 'Expires'].map(
-                    (item) => (
-                      <th
-                        key={item}
-                        scope="col"
-                        className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-white"
-                      >
-                        {item}
-                      </th>
-                    )
-                  )}
+                  {[
+                    'Item',
+                    'Price',
+                    'Down payment',
+                    'Min. payment',
+                    'Pay period',
+                    'APR',
+                    'Duration',
+                    'Expires',
+                  ].map((item) => (
+                    <th
+                      key={item}
+                      scope="col"
+                      className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-white"
+                    >
+                      {item}
+                    </th>
+                  ))}
                   <th scope="col" className="relative px-6 py-3">
                     <span className="sr-only">Cancel</span>
                   </th>
@@ -281,9 +288,7 @@ const UserListingsTableRow = ({
       </td>
 
       {/* PAY PERIOD */}
-      <td className="whitespace-nowrap px-6 py-4">
-        10 days
-      </td>
+      <td className="whitespace-nowrap px-6 py-4">10 days</td>
 
       {/* APR */}
       <td className="px-6 py-4 font-light text-neutral-600 dark:text-neutral-300">
@@ -291,21 +296,14 @@ const UserListingsTableRow = ({
       </td>
 
       {/* DURATION */}
-      <td className="whitespace-nowrap px-6 py-4">
-        10 days
-      </td>
+      <td className="whitespace-nowrap px-6 py-4">10 days</td>
 
       {/* EXPIRES */}
-      <td className="whitespace-nowrap px-6 py-4">
-        10 days
-      </td>
-
+      <td className="whitespace-nowrap px-6 py-4">10 days</td>
 
       {/* CANCEL LOAN */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <button
-          className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
-        >
+        <button className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4">
           Cancel Loan
         </button>
       </td>

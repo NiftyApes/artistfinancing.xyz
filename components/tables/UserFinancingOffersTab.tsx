@@ -1,9 +1,9 @@
-import React, { ComponentProps } from 'react';
-import { toast } from 'react-hot-toast';
-import { useNetwork } from 'wagmi';
-import Toast from 'components/Toast';
-import UserFinancingOffersTable from './UserFinancingOffersTable';
-import useSearchCommunity from 'hooks/useSearchCommunity';
+import React, { ComponentProps } from 'react'
+import { toast } from 'react-hot-toast'
+import { useNetwork } from 'wagmi'
+import Toast from 'components/Toast'
+import UserFinancingOffersTable from './UserFinancingOffersTable'
+import useSearchCommunity from 'hooks/useSearchCommunity'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID || ''
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
@@ -11,8 +11,8 @@ const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
 const COLLECTION_SET_ID = process.env.NEXT_PUBLIC_COLLECTION_SET_ID
 
 const UserFinancingOffersTab: React.FC = () => {
-  const { chain: activeChain } = useNetwork();
-  const isInTheWrongNetwork = activeChain?.id !== +CHAIN_ID;
+  const { chain: activeChain } = useNetwork()
+  const isInTheWrongNetwork = activeChain?.id !== +CHAIN_ID
 
   const setToast: (data: ComponentProps<typeof Toast>['data']) => any = (
     data
@@ -34,16 +34,16 @@ const UserFinancingOffersTab: React.FC = () => {
 
   return (
     <div className="mt-14 justify-center dark:text-white">
-      <div className="text-center mb-6">
+      <div className="mb-6 text-center">
         <UserFinancingOffersTable
-          collectionIds={collectionIds} 
-          isOwner 
+          collectionIds={collectionIds}
+          isOwner
           modal={{ isInTheWrongNetwork, setToast }}
           showActive
-          />
+        />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UserFinancingOffersTab;
+export default UserFinancingOffersTab
