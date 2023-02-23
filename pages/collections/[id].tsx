@@ -201,6 +201,7 @@ const Home: NextPage<Props> = ({ fallback, id }) => {
                   collectionId={id!}
                   tokens={tokens}
                   viewRef={refTokens}
+                  collection={collection}
                   collectionImage={collection?.image as string}
                   collectionSize={stats.data?.stats?.tokenCount}
                   collectionAttributes={attributes}

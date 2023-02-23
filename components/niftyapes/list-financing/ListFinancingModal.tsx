@@ -1,6 +1,4 @@
 import {
-  Box,
-  Button,
   Flex,
   Heading,
   Image,
@@ -15,17 +13,20 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useTokens } from '@reservoir0x/reservoir-kit-ui'
+import { setToast } from 'components/token/setToast'
+import useCreateListing from 'hooks/niftyapes/useCreateListing'
+import useERC721Approval from 'hooks/niftyapes/useERC721Approval'
 import { Expiration } from 'lib/niftyapes/expirationOptions'
 import getAttributeFloor from 'lib/niftyapes/getAttributeFloor'
-import FinancingTermsForm, { FinancingTerms } from './FinancingTermsForm'
-import TokenStats from './TokenStats'
-import ListingSuccess from './ListingSuccess'
+import { useState } from 'react'
+import { Collection } from 'types/reservoir'
+import { Address } from 'wagmi'
 import TermsStats from '../TermStats'
+import FinancingTermsForm, { FinancingTerms } from './FinancingTermsForm'
+import ListingSuccess from './ListingSuccess'
+import TokenStats from './TokenStats'
 import WalletApproval from './WalletApproval'
-import useCreateListing from 'hooks/niftyapes/useCreateListing'
-import { setToast } from 'components/token/setToast'
-import useERC721Approval from 'hooks/niftyapes/useERC721Approval'
 
 enum Step {
   SetTerms,
@@ -34,24 +35,23 @@ enum Step {
   Success,
 }
 
-// TODO: Type out props.
 export default function ListFinancingModal({
   token,
   collection,
   currListingExists,
-  showListing,
+  roundedButton,
 }: {
-  token: any
-  collection: any
+  token: ReturnType<typeof useTokens>['data'][0]
+  collection?: Collection
   currListingExists: boolean
-  showListing: () => void
+  roundedButton: boolean
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [step, setStep] = useState<Step>(Step.SetTerms)
   const { createListing } = useCreateListing()
   const { approvalRequired, grantApproval } = useERC721Approval({
     tokenId: token?.token?.tokenId as string,
-    contractAddress: token?.token?.contract,
+    contractAddress: token?.token?.contract as Address,
   })
 
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
@@ -87,7 +87,6 @@ export default function ListFinancingModal({
       token,
       onSuccess: () => {
         setStep(Step.Success)
-        showListing()
       },
       onError,
     })
@@ -126,18 +125,19 @@ export default function ListFinancingModal({
 
   return (
     <>
-      <Button
-        w="full"
+      <button
         onClick={() => {
           onOpen()
           setTerms(defaultTerms)
         }}
-        colorScheme="blue"
+        className={`btn-primary-fill reservoir-subtitle flex h-[40px] w-full items-center justify-center whitespace-nowrap ${
+          roundedButton ? 'rounded-md' : 'rounded-none'
+        } text-white focus:ring-0`}
       >
         {currListingExists
           ? 'Create new finance listing'
           : 'Create finance listing'}
-      </Button>
+      </button>
 
       <Modal isOpen={isOpen} onClose={onClose} size="4xl">
         <ModalOverlay />
@@ -161,13 +161,13 @@ export default function ListFinancingModal({
                   borderRadius="md"
                   boxSize="200px"
                   objectFit="cover"
-                  src={token.token.image}
-                  alt={token.token.name}
+                  src={token?.token?.image}
+                  alt={token?.token?.name}
                 ></Image>
                 <VStack align="left" w="full">
-                  <Heading size="sm">{token.token.name}</Heading>
+                  <Heading size="sm">{token?.token?.name}</Heading>
                   <Text mt="0 !important" fontSize="xs" color="whiteAlpha.800">
-                    {token.token.collection.name}
+                    {token?.token?.collection?.name}
                   </Text>
                 </VStack>
                 {step === Step.SetTerms && (
@@ -197,8 +197,8 @@ export default function ListFinancingModal({
                 )}
                 {[Step.ApproveContract, Step.SignOffer].includes(step) && (
                   <WalletApproval
-                    imageSrc={token.token.image}
-                    tokenName={token.token.name}
+                    imageSrc={token?.token?.image}
+                    tokenName={token?.token?.name}
                     isError={listingErr}
                     backToEdit={() => {
                       setListingErr(false)
@@ -210,8 +210,8 @@ export default function ListFinancingModal({
                 )}
                 {step === Step.Success && (
                   <ListingSuccess
-                    tokenName={token.token.name}
-                    collectionName={token.token.collection.name}
+                    tokenName={token?.token?.name}
+                    collectionName={token?.token?.collection?.name}
                     onClose={onClose}
                   />
                 )}

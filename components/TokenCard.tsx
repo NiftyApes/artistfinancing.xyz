@@ -40,6 +40,7 @@ if (CURRENCIES) {
 
 type Props = {
   token?: ReturnType<typeof useTokens>['tokens']['data'][0]
+  collection?: Collection
   collectionImage: string | undefined
   collectionSize?: number | undefined
   collectionAttributes?: Collection['attributes']
@@ -51,6 +52,7 @@ type Props = {
 
 const TokenCard: FC<Props> = ({
   token,
+  collection,
   collectionImage,
   collectionSize,
   collectionAttributes,
@@ -171,6 +173,7 @@ const TokenCard: FC<Props> = ({
         {financeOffer ? (
           <NiftyApesTokenCardSection
             token={token}
+            collection={collection}
             isOwner={isOwner}
             offer={financeOffer}
           />

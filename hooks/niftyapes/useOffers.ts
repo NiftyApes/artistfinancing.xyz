@@ -25,9 +25,9 @@ type OfferDetails = {
 
 export type Offer = {
   offer: OfferDetails
-  signature: string
+  signature: `0x${string}`
   createdAt: Date
-  status: string
+  status: 'ACTIVE' | 'USED_TO_EXECUTE_LOAN' | 'CANCELLED'
 }
 
 const getOffers = async ({

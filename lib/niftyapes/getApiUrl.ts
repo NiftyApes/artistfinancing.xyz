@@ -7,7 +7,7 @@ export function getBaseApiUrl(chainId: number) {
 }
 
 export function getApiUrl(chainId: number, path: string) {
-  return `${getBaseApiUrl(chainId)}/v1/${path}`
+  return `${getBaseApiUrl(chainId)}/${path}`
 }
 
 function getChainName(chainId: number): string {
