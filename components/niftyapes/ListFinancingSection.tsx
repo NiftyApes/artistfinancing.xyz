@@ -18,15 +18,6 @@ import BuyNowPayLaterModal from './bnpl/BuyNowPayLaterModal'
 import CancelListingModal from './cancel-listing/CancelListingModal'
 import ListFinancingModal from './list-financing/ListFinancingModal'
 
-type OfferTerms = {
-  price: string
-  downPayment: string
-  apr: number
-  minPrincipal: string
-  payPeriodDuration: number
-  expiration: string
-}
-
 export default function ListFinancingSection({
   token,
   collection,
@@ -105,7 +96,14 @@ function CurrentListing({
   terms,
   isOwner,
 }: {
-  terms: OfferTerms
+  terms: {
+    price: string
+    downPayment: string
+    apr: number
+    minPrincipal: string
+    payPeriodDuration: number
+    expiration: string
+  }
   isOwner: boolean
 }) {
   return (
