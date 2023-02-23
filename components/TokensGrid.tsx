@@ -18,6 +18,7 @@ const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
 type Props = {
   collectionId: string
+  collection?: Collection
   tokens: ReturnType<typeof useTokens>['tokens']
   collectionImage: string | undefined
   collectionSize?: number | undefined
@@ -28,6 +29,7 @@ type Props = {
 
 const TokensGrid: FC<Props> = ({
   collectionId,
+  collection,
   tokens,
   viewRef,
   collectionImage,
@@ -110,7 +112,7 @@ const TokensGrid: FC<Props> = ({
           ? Array(20)
               .fill(null)
               .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
-          : sortedTokens?.map((token, idx) => {
+          : sortedTokens?.map((token) => {
               // Check if token has a NiftyApes loan offer
               const financeOffer = offersData?.find(
                 (offer) => offer.offer.nftId === token?.token?.tokenId
@@ -119,6 +121,7 @@ const TokensGrid: FC<Props> = ({
               return (
                 <TokenCard
                   token={token}
+                  collection={collection}
                   collectionImage={collectionImage}
                   collectionSize={collectionSize}
                   collectionAttributes={collectionAttributes}

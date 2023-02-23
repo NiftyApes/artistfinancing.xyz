@@ -1,5 +1,6 @@
 import {
   Box,
+  Center,
   Grid,
   GridItem,
   Heading,
@@ -8,41 +9,55 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
-import { useState } from 'react'
+import useOffers from 'hooks/niftyapes/useOffers'
+import { DateTime, Duration } from 'luxon'
+import { Collection } from 'types/reservoir'
 import BuyNowPayLaterModal from './bnpl/BuyNowPayLaterModal'
 import CancelListingModal from './cancel-listing/CancelListingModal'
-import { FinancingTerms } from './list-financing/FinancingTermsForm'
 import ListFinancingModal from './list-financing/ListFinancingModal'
-import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
-import getAttributeFloor from 'lib/niftyapes/getAttributeFloor'
 
 export default function ListFinancingSection({
   token,
   collection,
   isOwner,
 }: {
-  token: any
-  collection: any
+  token: ReturnType<typeof useTokens>['data'][0]
+  collection: Collection
   isOwner: boolean
 }) {
-  // TODO: Replace with terms from loaded data.
-  const attributeFloor = getAttributeFloor(token?.token?.attributes)
-  const defaultTerms = {
-    listPrice:
-      attributeFloor || collection?.floorAsk?.price?.amount?.native || 0,
-    downPaymentPercent: 20,
-    apr: 20,
-    minPrincipalPercent: 5,
-    payPeriodDays: 30,
-    expiration: Expiration.OneMonth,
+  const {
+    data: offerData,
+    error,
+    isLoading,
+  } = useOffers({ collection: collection?.id, nftId: token?.token?.tokenId })
+  const listing = offerData?.filter((offer) => offer.status !== 'CANCELLED')[0]
+
+  let terms = null
+  if (listing) {
+    const { periodInterestRateBps, periodDuration } = listing.offer
+    const interestRatePerSecond = periodInterestRateBps / periodDuration / 100
+    const apr = Math.round(interestRatePerSecond * (365 * 86400))
+
+    terms = {
+      price: listing.offer.price,
+      downPayment: listing.offer.downPaymentAmount,
+      apr,
+      minPrincipal: listing.offer.minimumPrincipalPerPeriod,
+      payPeriodDuration: Duration.fromObject({
+        seconds: listing.offer.periodDuration,
+      }).as('days'),
+      expiration: DateTime.fromSeconds(listing.offer.expiration).toRelative()!,
+    }
   }
-  const [currListingExists, setCurrListingExists] = useState(true)
 
   return (
     <VStack w="full" align="left" spacing="8">
       <VStack w="full" align="left" spacing="0">
-        <Heading size="md">List with financing</Heading>
+        <Heading size="md">
+          {isOwner ? 'List with financing' : 'Buy now, pay later'}
+        </Heading>
         <HStack>
           <Text>on NiftyApes</Text>
           <Image
@@ -52,31 +67,26 @@ export default function ListFinancingSection({
           />
         </HStack>
       </VStack>
-      {currListingExists && (
-        <CurrentListing terms={defaultTerms} isOwner={isOwner} />
-      )}
+      {listing && <CurrentListing terms={terms!} isOwner={isOwner} />}
       {isOwner ? (
         <HStack>
           <ListFinancingModal
             token={token}
             collection={collection}
-            currListingExists={currListingExists}
-            showListing={() => {
-              setCurrListingExists(true)
-            }}
+            currListingExists={listing ? true : false}
+            roundedButton={true}
           />
-          {currListingExists && (
-            <CancelListingModal
-              onSuccess={() => {
-                setCurrListingExists(false)
-              }}
-            />
-          )}
+          {/* TODO Pass listing to cancel listing modal */}
+          {listing && <CancelListingModal />}
         </HStack>
+      ) : listing ? (
+        <BuyNowPayLaterModal
+          token={token}
+          roundedButton={true}
+          offer={listing}
+        />
       ) : (
-        <Box borderRadius="md" overflow="hidden">
-          <BuyNowPayLaterModal token={token} />
-        </Box>
+        <Box>No current finance listings</Box>
       )}
     </VStack>
   )
@@ -86,11 +96,16 @@ function CurrentListing({
   terms,
   isOwner,
 }: {
-  terms: FinancingTerms
+  terms: {
+    price: string
+    downPayment: string
+    apr: number
+    minPrincipal: string
+    payPeriodDuration: number
+    expiration: string
+  }
   isOwner: boolean
 }) {
-  const paidOnSale = (terms.downPaymentPercent / 100) * terms.listPrice
-
   return (
     <VStack w="full" align="left" spacing="4">
       <Heading size="sm">
@@ -99,14 +114,14 @@ function CurrentListing({
       <Grid rowGap="2" columnGap="12" templateColumns={'1fr 1fr'}>
         <GridItem>
           <HStack justify="space-between">
-            <Text>Price</Text>
-            <FormatNativeCrypto amount={terms.listPrice} />
+            <Text>Down payment</Text>
+            <FormatNativeCrypto amount={terms.downPayment} />
           </HStack>
         </GridItem>
         <GridItem>
           <HStack justify="space-between">
-            <Text>Down payment</Text>
-            <FormatNativeCrypto amount={paidOnSale} />
+            <Text>Price</Text>
+            <FormatNativeCrypto amount={terms.price} />
           </HStack>
         </GridItem>
         <GridItem>
@@ -117,24 +132,20 @@ function CurrentListing({
         </GridItem>
         <GridItem>
           <HStack justify="space-between">
-            <Text>Minimum payment</Text>
-            <Text fontWeight="semibold">{`${terms.minPrincipalPercent}%`}</Text>
+            <Text>Minimum principal</Text>
+            <FormatNativeCrypto amount={terms.minPrincipal} />
           </HStack>
         </GridItem>
         <GridItem>
           <HStack justify="space-between">
             <Text>Pay period</Text>
-            <Text fontWeight="semibold">{`${terms.payPeriodDays} days`}</Text>
+            <Text fontWeight="semibold">{`${terms.payPeriodDuration} days`}</Text>
           </HStack>
         </GridItem>
         <GridItem>
           <HStack justify="space-between">
             <Text>Expires</Text>
-            <Text fontWeight="semibold">
-              {expirationOptions.find(
-                (option) => option.value === terms.expiration
-              )?.label || 'None'}
-            </Text>
+            <Text fontWeight="semibold">{terms.expiration}</Text>
           </HStack>
         </GridItem>
       </Grid>

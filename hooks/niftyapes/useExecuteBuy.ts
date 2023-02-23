@@ -2,7 +2,6 @@ import { Address, prepareWriteContract, writeContract } from '@wagmi/core'
 import { BigNumber } from 'ethers'
 import { useSellerFinancingContractAddress } from './useContracts'
 
-// TODO: Possibly return to types.
 export default function useExecuteBuy() {
   const address = useSellerFinancingContractAddress()
 
