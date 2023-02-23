@@ -55,7 +55,7 @@ export default function MakePaymentModal({
   } = useMakePayment({
     nftContractAddress: data.contract,
     paymentAmount: ethers.utils.parseEther('0.0123'),
-    nftId: BigNumber.from(data.tokenId),
+    nftId: BigNumber.from(data.tokenId || 0),
   })
 
   return (
