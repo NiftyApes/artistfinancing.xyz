@@ -1,13 +1,11 @@
-import {
-  FC,
-} from 'react'
-import { DateTime } from 'luxon'
-import FormatCrypto from 'components/FormatCrypto'
+import { FC } from 'react'
 import { useRouter } from 'next/router'
-import LoadingIcon from 'components/LoadingIcon'
 import { useMediaQuery } from '@react-hookz/web'
+
 import useOffers, { Offer } from 'hooks/niftyapes/useOffers'
-import { format } from 'date-fns'
+import processOffer from 'lib/niftyapes/processOffer'
+import LoadingIcon from 'components/LoadingIcon'
+import FormatCrypto from 'components/FormatCrypto'
 
 const UserFinancingOffersTable: FC = () => {
   const router = useRouter()
@@ -194,31 +192,3 @@ const UserFinancingOffersTableMobileRow = ({
 }
 
 export default UserFinancingOffersTable
-
-function processOffer(listing: Offer['offer']) {
-  const tokenId = listing.nftId;
-  const contract = listing.nftContractAddress;
-
-  const price = parseInt(listing?.price, 10);
-  const downPaymentAmount = parseInt(listing?.downPaymentAmount, 10);
-
-  const data = {
-    contract,
-    tokenId,
-    expiration:
-      listing?.expiration === 0
-        ? 'Never'
-        : DateTime.fromMillis(+`${listing?.expiration}000`).toRelative(),
-    id: listing?.nftId,
-    price,
-    downPaymentAmount,
-    periodDuration: format(new Date(listing?.periodDuration * 1000), 'Pp'),
-    address: listing?.nftContractAddress,
-    apr: listing?.periodInterestRateBps,
-    minPayment: Number(listing?.minimumPrincipalPerPeriod) + (Number(listing?.periodInterestRateBps) * Number(price - downPaymentAmount)),
-  }
-
-  const tokenHref = `/${data.contract}/${data.tokenId}`
-
-  return { ...data, tokenHref }
-}
