@@ -15,12 +15,11 @@ import {
 } from '@chakra-ui/react'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { setToast } from 'components/token/setToast'
-import useCreateListing, {
-  FinancingTerms,
-} from 'hooks/niftyapes/useCreateListing'
+import useCreateListing from 'hooks/niftyapes/useCreateListing'
 import useERC721Approval from 'hooks/niftyapes/useERC721Approval'
 import { Expiration } from 'lib/niftyapes/expirationOptions'
 import getAttributeFloor from 'lib/niftyapes/getAttributeFloor'
+import { FinancingTerms } from 'lib/niftyapes/processOfferFormFields'
 import { useState } from 'react'
 import { Collection } from 'types/reservoir'
 import { Address } from 'wagmi'
@@ -141,7 +140,7 @@ export default function ListFinancingModal({
           : 'Create finance listing'}
       </button>
 
-      <Modal isOpen={isOpen} onClose={onClose} size="4xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="5xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader borderTopRadius="md" bg="gray.700">

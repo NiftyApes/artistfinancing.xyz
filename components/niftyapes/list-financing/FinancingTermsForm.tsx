@@ -19,30 +19,30 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
-import { FinancingTerms } from 'hooks/niftyapes/useCreateListing'
 import useCoinConversion from 'hooks/useCoinConversion'
 import useEnvChain from 'hooks/useEnvChain'
 import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
+import processFormValues, {
+  FinancingTerms,
+} from 'lib/niftyapes/processOfferFormFields'
 import { formatDollar } from 'lib/numbers'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IoInformationCircleOutline } from 'react-icons/io5'
 
-type FinancingFormFields = {
+export type FinancingFormFields = {
   listPrice: string
   downPaymentPercent: string
   apr: string
   payPeriodDays: number
-  loanDurMos: number
+  loanDurMos: string
   expiration: Expiration
 }
 
 export default function FinancingTermsForm({
   onSubmit,
-  setTerms,
   defaultTerms,
 }: {
   onSubmit: () => void
-  setTerms: Dispatch<SetStateAction<FinancingTerms>>
   defaultTerms: FinancingTerms
 }) {
   const chain = useEnvChain()
@@ -52,7 +52,7 @@ export default function FinancingTermsForm({
     downPaymentPercent: String(defaultTerms.downPaymentPercent),
     apr: String(defaultTerms.apr),
     payPeriodDays: defaultTerms.payPeriodDays,
-    loanDurMos: 6,
+    loanDurMos: '6',
     expiration: defaultTerms.expiration,
   })
   const updateTerm = (key: string) => {
@@ -86,11 +86,7 @@ export default function FinancingTermsForm({
     setFormErrorMsgs(errorMsgs)
   }, [formFields, hasSubmittedOnce])
 
-  const receivedOnSale =
-    (Number(formFields.downPaymentPercent) / 100) * Number(formFields.listPrice)
-  const intEachPer =
-    (Number(formFields.apr) / 100) * Number(formFields.listPrice)
-  const remainingPrincipal = Number(formFields.listPrice) - receivedOnSale
+  const processedOffer = processFormValues(formFields)
 
   return (
     <VStack align={'left'} spacing={6}>
@@ -121,8 +117,8 @@ export default function FinancingTermsForm({
         <GridItem>
           <ExtraInfo
             text="Profit"
-            tooltipText="How much ETH you will receive after marketplace fees and creator royalties are subtracted."
-            amount={Number(formFields.listPrice)}
+            tooltipText="How much ETH you will receive after marketplace fees and creator royalties are subtracted. Paid over time."
+            amount={processedOffer.profit}
           />
         </GridItem>
 
@@ -140,7 +136,10 @@ export default function FinancingTermsForm({
         </GridItem>
 
         <GridItem>
-          <ExtraInfo text="Received on sale" amount={receivedOnSale} />
+          <ExtraInfo
+            text="Received on sale"
+            amount={processedOffer.receivedOnSale}
+          />
         </GridItem>
 
         {/* Annual interest rate */}
@@ -157,23 +156,27 @@ export default function FinancingTermsForm({
         </GridItem>
 
         <GridItem>
-          <ExtraInfo text="Interest each period" amount={intEachPer} />
+          <ExtraInfo
+            text="Interest per period"
+            tooltipText="An estimate of interest earned over each loan period based on current terms."
+            amount={processedOffer.intPerPeriod}
+          />
         </GridItem>
 
         {/* Loan duration */}
         <GridItem>
           <FormControl>
-            <FormLabel>Loan duration</FormLabel>
+            <FormLabel>Loan duration (Months)</FormLabel>
 
             <NumberInput
               flexGrow="1"
               bg="gray.900"
               borderRadius="md"
               min={1}
-              value={((val) => val + ' months')(formFields.loanDurMos)}
+              precision={0}
+              defaultValue={formFields.loanDurMos}
               onChange={(valueString) => {
-                const parsedValue = valueString.replace(/^ months/, '')
-                updateTerm(parsedValue)
+                updateTerm('loanDurMos')(valueString)
               }}
             >
               <NumberInputField border="0" borderColor="gray.400" />
@@ -182,8 +185,10 @@ export default function FinancingTermsForm({
         </GridItem>
 
         <GridItem>
-          {/* TODO */}
-          {/* <ExtraInfo text="Minimum each period" amount={minEachPer} /> */}
+          <ExtraInfo
+            text="Min principal per period"
+            amount={processedOffer.minPrincipalPerPeriod}
+          />
         </GridItem>
 
         {/* Pay period duration */}

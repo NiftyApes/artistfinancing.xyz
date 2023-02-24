@@ -1,20 +1,12 @@
 import { signTypedData } from '@wagmi/core'
 import { parseUnits } from 'ethers/lib/utils'
 import useEnvChain from 'hooks/useEnvChain'
-import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
+import expirationOptions from 'lib/niftyapes/expirationOptions'
+import { FinancingTerms } from 'lib/niftyapes/processOfferFormFields'
 import { saveSignatureOfferInDb } from 'lib/niftyapes/saveSignatureOfferInDb'
 import { DateTime } from 'luxon'
 import { useAccount } from 'wagmi'
 import { useSellerFinancingContractAddress } from './useContracts'
-
-export type FinancingTerms = {
-  listPrice: number
-  downPaymentPercent: number
-  apr: number
-  minPrincipalPercent: number
-  payPeriodDays: number
-  expiration: Expiration
-}
 
 export default function useCreateListing() {
   const { address: creator } = useAccount()
