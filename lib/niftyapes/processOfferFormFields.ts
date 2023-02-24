@@ -1,6 +1,6 @@
 import { FinancingFormFields } from 'components/niftyapes/list-financing/FinancingTermsForm'
-import { Duration } from 'luxon'
-import { Expiration } from './expirationOptions'
+import { DateTime, Duration } from 'luxon'
+import expirationOptions, { Expiration } from './expirationOptions'
 
 export type FinancingTerms = {
   listPrice: number
@@ -9,14 +9,17 @@ export type FinancingTerms = {
   loanDurMos: number
   payPeriodDays: number
   expiration: Expiration
-  receivedOnSale: number
-  remainingPrincipal: number
-  minPrincipalPerPeriod: number
-  periodInterestRate: number
-  periodInterestRateBps: number
-  totalIntEarned: number
-  intPerPeriod: number
-  profit: number
+  expirationSeconds?: number
+  downPaymentAmount?: number
+  remainingPrincipal?: number
+  minPrincipalPerPeriod?: number
+  numPayPeriods?: number
+  periodDuration?: number
+  periodInterestRate?: number
+  periodInterestRateBps?: number
+  totalIntEarned?: number
+  intPerPeriod?: number
+  profit?: number
 }
 
 export default function processFormValues(
@@ -31,9 +34,9 @@ export default function processFormValues(
     expiration: formFields.expiration,
   }
 
-  const receivedOnSale =
+  const downPaymentAmount =
     (fieldNums.downPaymentPercent / 100) * fieldNums.listPrice
-  const remainingPrincipal = fieldNums.listPrice - receivedOnSale
+  const remainingPrincipal = fieldNums.listPrice - downPaymentAmount
   const loanDurDays = Duration.fromObject({
     months: fieldNums.loanDurMos,
   }).as('days')
@@ -42,8 +45,8 @@ export default function processFormValues(
   // Calculate periodInterestRate basis points
   const periodDuration = fieldNums.payPeriodDays * 86400 // in seconds
   const interestRatePerSecond = fieldNums.apr / (365 * 86400)
-  const periodInterestRate = Math.round(interestRatePerSecond * periodDuration)
-  const periodInterestRateBps = periodInterestRate * 100
+  const periodInterestRate = interestRatePerSecond * periodDuration
+  const periodInterestRateBps = Math.round(periodInterestRate * 100)
   const totalIntEarned = calculateTotalInterest(
     periodInterestRate,
     remainingPrincipal,
@@ -55,16 +58,33 @@ export default function processFormValues(
   // TODO: Subtract royalties and marketplace fees
   const profit = fieldNums.listPrice + totalIntEarned
 
+  // Calculate expiration in seconds
+  const expirationOption = expirationOptions.find(
+    (option) => option.value === fieldNums.expiration
+  )!
+
+  const expirationSeconds = Math.round(
+    DateTime.now()
+      .plus({
+        [expirationOption.relativeTimeUnit as string]:
+          expirationOption.relativeTime,
+      })
+      .toSeconds()
+  )
+
   return {
     ...fieldNums,
-    receivedOnSale,
+    downPaymentAmount,
     remainingPrincipal,
     minPrincipalPerPeriod,
+    numPayPeriods,
+    periodDuration,
     periodInterestRate,
     periodInterestRateBps,
     totalIntEarned,
     intPerPeriod,
     profit,
+    expirationSeconds,
   }
 }
 

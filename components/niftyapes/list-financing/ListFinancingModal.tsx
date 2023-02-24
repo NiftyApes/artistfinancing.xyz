@@ -61,8 +61,8 @@ export default function ListFinancingModal({
       attributeFloor || collection?.floorAsk?.price?.amount?.native || 0,
     downPaymentPercent: 20,
     apr: 20,
-    minPrincipalPercent: 5,
     payPeriodDays: 30,
+    loanDurMos: 6,
     expiration: Expiration.OneMonth,
   }
   const [terms, setTerms] = useState<FinancingTerms>(defaultTerms)
@@ -191,9 +191,9 @@ export default function ListFinancingModal({
                 )}
                 {step === Step.SetTerms && (
                   <FinancingTermsForm
-                    setTerms={setTerms}
                     onSubmit={onSubmit}
-                    defaultTerms={terms}
+                    terms={terms}
+                    setTerms={setTerms}
                   />
                 )}
                 {[Step.ApproveContract, Step.SignOffer].includes(step) && (

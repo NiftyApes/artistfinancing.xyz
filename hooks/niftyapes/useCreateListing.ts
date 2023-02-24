@@ -1,10 +1,8 @@
 import { signTypedData } from '@wagmi/core'
-import { parseUnits } from 'ethers/lib/utils'
+import { parseEther } from 'ethers/lib/utils'
 import useEnvChain from 'hooks/useEnvChain'
-import expirationOptions from 'lib/niftyapes/expirationOptions'
 import { FinancingTerms } from 'lib/niftyapes/processOfferFormFields'
 import { saveSignatureOfferInDb } from 'lib/niftyapes/saveSignatureOfferInDb'
-import { DateTime } from 'luxon'
 import { useAccount } from 'wagmi'
 import { useSellerFinancingContractAddress } from './useContracts'
 
@@ -56,42 +54,15 @@ export default function useCreateListing() {
         }
 
         // Calculate amounts in wei
-        const price = parseUnits(String(terms.listPrice || 0), 'ether')
-        // Percentage precision capped at 2 so multiply by 100 to remove decimal
-        const downPaymentAmount = price
-          .mul(parseFloat(terms.downPaymentPercent.toFixed(2)) * 100)
-          .div(10000)
+        const price = parseEther(String(terms.listPrice))
+        const downPaymentAmount = parseEther(String(terms.downPaymentAmount))
         const remainingPrincipal = price.sub(downPaymentAmount)
-        // Percentage precision capped at 2 so multiply by 100 to remove decimal
-        const minimumPrincipalPerPeriod = remainingPrincipal
-          .mul(parseFloat(terms.minPrincipalPercent.toFixed(2)) * 100)
-          .div(10000)
-
-        // Calculate periodInterestRate basis points
-        const periodDuration = terms.payPeriodDays * 86400 // in seconds
-        const interestRatePerSecond = terms.apr / (365 * 86400)
-        const periodInterestRateBps = Math.round(
-          interestRatePerSecond * periodDuration * 100
+        const minimumPrincipalPerPeriod = remainingPrincipal.div(
+          terms.numPayPeriods!
         )
-
-        // Calculate expiration in seconds
-        const expirationOption = expirationOptions.find(
-          (option) => option.value === terms.expiration
-        )
-
-        if (!expirationOption) {
-          throw Error('Missing expiration')
-        }
-
-        const expiration = Math.round(
-          DateTime.now()
-            .plus({
-              [expirationOption.relativeTimeUnit as string]:
-                expirationOption.relativeTime,
-            })
-            .toSeconds()
-        )
-
+        const periodDuration = terms.periodDuration!
+        const periodInterestRateBps = terms.periodInterestRateBps!
+        const expiration = terms.expirationSeconds!
         const nftId = token.token.tokenId
         const nftContractAddress = token.token.contract
 

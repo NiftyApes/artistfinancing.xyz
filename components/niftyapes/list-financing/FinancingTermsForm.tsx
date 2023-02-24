@@ -26,7 +26,7 @@ import processFormValues, {
   FinancingTerms,
 } from 'lib/niftyapes/processOfferFormFields'
 import { formatDollar } from 'lib/numbers'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { IoInformationCircleOutline } from 'react-icons/io5'
 
 export type FinancingFormFields = {
@@ -40,20 +40,22 @@ export type FinancingFormFields = {
 
 export default function FinancingTermsForm({
   onSubmit,
-  defaultTerms,
+  setTerms,
+  terms,
 }: {
   onSubmit: () => void
-  defaultTerms: FinancingTerms
+  setTerms: Dispatch<SetStateAction<FinancingTerms>>
+  terms: FinancingTerms
 }) {
   const chain = useEnvChain()
 
   const [formFields, setFormFields] = useState<FinancingFormFields>({
-    listPrice: String(defaultTerms.listPrice),
-    downPaymentPercent: String(defaultTerms.downPaymentPercent),
-    apr: String(defaultTerms.apr),
-    payPeriodDays: defaultTerms.payPeriodDays,
-    loanDurMos: '6',
-    expiration: defaultTerms.expiration,
+    listPrice: String(terms.listPrice),
+    downPaymentPercent: String(terms.downPaymentPercent),
+    apr: String(terms.apr),
+    payPeriodDays: terms.payPeriodDays,
+    loanDurMos: String(terms.loanDurMos),
+    expiration: terms.expiration,
   })
   const updateTerm = (key: string) => {
     return (value: string) => {
@@ -75,18 +77,16 @@ export default function FinancingTermsForm({
   }
 
   useEffect(() => {
+    setTerms(processFormValues(formFields))
+
     // Validate on first submission and revalidate as fields change
-    if (!hasSubmittedOnce) {
-      return
+    if (hasSubmittedOnce) {
+      const { hasErr, errorMsgs } = validateFormFields(formFields)
+
+      setIsFormErr(hasErr)
+      setFormErrorMsgs(errorMsgs)
     }
-
-    const { hasErr, errorMsgs } = validateFormFields(formFields)
-
-    setIsFormErr(hasErr)
-    setFormErrorMsgs(errorMsgs)
   }, [formFields, hasSubmittedOnce])
-
-  const processedOffer = processFormValues(formFields)
 
   return (
     <VStack align={'left'} spacing={6}>
@@ -118,7 +118,7 @@ export default function FinancingTermsForm({
           <ExtraInfo
             text="Profit"
             tooltipText="How much ETH you will receive after marketplace fees and creator royalties are subtracted. Paid over time."
-            amount={processedOffer.profit}
+            amount={terms.profit}
           />
         </GridItem>
 
@@ -136,10 +136,7 @@ export default function FinancingTermsForm({
         </GridItem>
 
         <GridItem>
-          <ExtraInfo
-            text="Received on sale"
-            amount={processedOffer.receivedOnSale}
-          />
+          <ExtraInfo text="Received on sale" amount={terms.downPaymentAmount} />
         </GridItem>
 
         {/* Annual interest rate */}
@@ -159,7 +156,7 @@ export default function FinancingTermsForm({
           <ExtraInfo
             text="Interest per period"
             tooltipText="An estimate of interest earned over each loan period based on current terms."
-            amount={processedOffer.intPerPeriod}
+            amount={terms.intPerPeriod}
           />
         </GridItem>
 
@@ -187,7 +184,7 @@ export default function FinancingTermsForm({
         <GridItem>
           <ExtraInfo
             text="Min principal per period"
-            amount={processedOffer.minPrincipalPerPeriod}
+            amount={terms.minPrincipalPerPeriod}
           />
         </GridItem>
 
@@ -282,7 +279,7 @@ function ExtraInfo({
 }: {
   text: string
   tooltipText?: string
-  amount: number
+  amount?: number
 }) {
   const usdPrice = useCoinConversion('usd')
 
@@ -307,7 +304,7 @@ function ExtraInfo({
             fontWeight="semibold"
             color="whiteAlpha.600"
           >
-            {formatDollar(usdPrice * amount)}
+            {formatDollar(usdPrice * (amount || 0))}
           </Text>
         )}
       </VStack>
