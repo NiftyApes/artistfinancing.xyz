@@ -95,6 +95,9 @@ export default function ListFinancingModal({
     // reset error
     setListingErr(false)
 
+    // TODO: Clean this up to validate on the form itself.
+    setTerms(cleanTerms(terms))
+
     if (approvalRequired) {
       setStep(Step.ApproveContract)
       grantApproval({
@@ -222,4 +225,11 @@ export default function ListFinancingModal({
       </Modal>
     </>
   )
+}
+
+function cleanTerms(terms: FinancingTerms) {
+  return {
+    ...terms,
+    listPrice: terms.listPrice || 0,
+  }
 }

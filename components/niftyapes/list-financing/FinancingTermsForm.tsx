@@ -20,10 +20,9 @@ import {
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import useCoinConversion from 'hooks/useCoinConversion'
 import useEnvChain from 'hooks/useEnvChain'
-import { formatDollar } from 'lib/numbers'
 import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
+import { formatDollar } from 'lib/numbers'
 import { Dispatch, SetStateAction } from 'react'
-import { FaPercent } from 'react-icons/fa'
 import { IoInformationCircleOutline } from 'react-icons/io5'
 
 export type FinancingTerms = {
@@ -49,6 +48,11 @@ export default function FinancingTermsForm({
   const intEachPer = (terms.apr / 100) * terms.listPrice
   const remainingPrincipal = terms.listPrice - paidOnSale
   const minEachPer = (terms.minPrincipalPercent / 100) * remainingPrincipal
+  const updateTerm = (key: string) => {
+    return (value: string | number) => {
+      setTerms({ ...terms, [key]: value })
+    }
+  }
 
   return (
     <VStack align={'left'} spacing={6}>
@@ -66,10 +70,8 @@ export default function FinancingTermsForm({
                 <Text>{chain?.nativeCurrency.symbol || 'ETH'}</Text>
               </HStack>
               <TermInputNumber
-                defaultValue={terms.listPrice}
-                onChange={(_, listPrice) => {
-                  setTerms({ ...terms, listPrice })
-                }}
+                value={terms.listPrice}
+                updateTerm={updateTerm('listPrice')}
               />
             </HStack>
           </FormControl>
@@ -90,10 +92,8 @@ export default function FinancingTermsForm({
 
             <TermInputNumber
               withPercent={true}
-              defaultValue={terms.downPaymentPercent}
-              onChange={(_, downPaymentPercent) => {
-                setTerms({ ...terms, downPaymentPercent })
-              }}
+              value={terms.downPaymentPercent}
+              updateTerm={updateTerm('downPaymentPercent')}
             />
           </FormControl>
         </GridItem>
@@ -109,10 +109,8 @@ export default function FinancingTermsForm({
 
             <TermInputNumber
               withPercent={true}
-              defaultValue={terms.apr}
-              onChange={(_, apr) => {
-                setTerms({ ...terms, apr })
-              }}
+              value={terms.apr}
+              updateTerm={updateTerm('apr')}
             />
           </FormControl>
         </GridItem>
@@ -128,10 +126,8 @@ export default function FinancingTermsForm({
 
             <TermInputNumber
               withPercent={true}
-              defaultValue={terms.minPrincipalPercent}
-              onChange={(_, minPrincipalPercent) => {
-                setTerms({ ...terms, minPrincipalPercent })
-              }}
+              value={terms.minPrincipalPercent}
+              updateTerm={updateTerm('minPrincipalPercent')}
             />
           </FormControl>
         </GridItem>
@@ -193,29 +189,32 @@ export default function FinancingTermsForm({
 }
 
 function TermInputNumber({
-  defaultValue,
-  onChange,
+  value,
+  updateTerm,
   withPercent,
-}: NumberInputProps & { withPercent?: boolean }) {
-  const numInput = (
+}: NumberInputProps & {
+  withPercent?: boolean
+  updateTerm: (value: string | number) => void
+}) {
+  const formatPercent = (val: number | string | undefined) => val + '%'
+  const parsePercent = (val: string) => val.replace(/^\%/, '')
+
+  return (
     <NumberInput
       flexGrow="1"
       bg="gray.900"
       borderRadius="md"
-      defaultValue={defaultValue}
-      onChange={onChange}
+      min={0}
+      value={withPercent ? formatPercent(value) : value}
+      onChange={(valueString) => {
+        const parsedValue = withPercent
+          ? parsePercent(valueString)
+          : valueString
+        updateTerm(parsedValue)
+      }}
     >
       <NumberInputField border="0" borderColor="gray.400" />
     </NumberInput>
-  )
-
-  return withPercent ? (
-    <HStack>
-      {numInput}
-      <Icon as={FaPercent} />
-    </HStack>
-  ) : (
-    numInput
   )
 }
 
@@ -229,6 +228,7 @@ function ExtraInfo({
   amount: number
 }) {
   const usdPrice = useCoinConversion('usd')
+  amount = Number(amount)
 
   return (
     <VStack align="start">

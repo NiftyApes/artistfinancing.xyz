@@ -56,7 +56,7 @@ export default function useCreateListing() {
         }
 
         // Calculate amounts in wei
-        const price = parseUnits(String(terms.listPrice), 'ether')
+        const price = parseUnits(String(terms.listPrice || 0), 'ether')
         const downPaymentAmount = price.mul(terms.downPaymentPercent).div(100)
         const remainingPrincipal = price.sub(downPaymentAmount)
         const minimumPrincipalPerPeriod = remainingPrincipal
