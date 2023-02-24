@@ -1,6 +1,7 @@
 import {
   Button,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Grid,
   GridItem,
@@ -20,35 +21,72 @@ import {
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import useCoinConversion from 'hooks/useCoinConversion'
 import useEnvChain from 'hooks/useEnvChain'
-import { formatDollar } from 'lib/numbers'
 import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
-import { Dispatch, SetStateAction } from 'react'
-import { FaPercent } from 'react-icons/fa'
+import processFormValues, {
+  FinancingTerms,
+} from 'lib/niftyapes/processOfferFormFields'
+import { formatDollar } from 'lib/numbers'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { IoInformationCircleOutline } from 'react-icons/io5'
 
-export type FinancingTerms = {
-  listPrice: number
-  downPaymentPercent: number
-  apr: number
-  minPrincipalPercent: number
+export type FinancingFormFields = {
+  listPrice: string
+  downPaymentPercent: string
+  apr: string
   payPeriodDays: number
+  loanDurMos: string
   expiration: Expiration
 }
 
 export default function FinancingTermsForm({
   onSubmit,
-  terms,
   setTerms,
+  terms,
 }: {
   onSubmit: () => void
-  terms: FinancingTerms
   setTerms: Dispatch<SetStateAction<FinancingTerms>>
+  terms: FinancingTerms
 }) {
   const chain = useEnvChain()
-  const paidOnSale = (terms.downPaymentPercent / 100) * terms.listPrice
-  const intEachPer = (terms.apr / 100) * terms.listPrice
-  const remainingPrincipal = terms.listPrice - paidOnSale
-  const minEachPer = (terms.minPrincipalPercent / 100) * remainingPrincipal
+
+  const [formFields, setFormFields] = useState<FinancingFormFields>({
+    listPrice: String(terms.listPrice),
+    downPaymentPercent: String(terms.downPaymentPercent),
+    apr: String(terms.apr),
+    payPeriodDays: terms.payPeriodDays,
+    loanDurMos: String(terms.loanDurMos),
+    expiration: terms.expiration,
+  })
+  const updateTerm = (key: string) => {
+    return (value: string) => {
+      setFormFields({ ...formFields, [key]: value })
+    }
+  }
+  const [isFormErr, setIsFormErr] = useState(false)
+  const [formErrorMsgs, setFormErrorMsgs] = useState({
+    listPrice: '',
+    loanDurMos: '',
+  })
+  const [hasSubmittedOnce, setHasSubmittedOnce] = useState(false)
+
+  const validateAndSubmit = () => {
+    setHasSubmittedOnce(true)
+    const { hasErr } = validateFormFields(formFields)
+    if (hasErr) return
+    onSubmit()
+  }
+
+  useEffect(() => {
+    setTerms(processFormValues(formFields))
+
+    // Validate on first submission and revalidate as fields change
+    if (hasSubmittedOnce) {
+      const { hasErr, errorMsgs } = validateFormFields(formFields)
+
+      setIsFormErr(hasErr)
+      setFormErrorMsgs(errorMsgs)
+    }
+  }, [formFields, hasSubmittedOnce])
 
   return (
     <VStack align={'left'} spacing={6}>
@@ -57,7 +95,7 @@ export default function FinancingTermsForm({
       <Grid templateColumns="5fr 2fr" gap={4}>
         {/* List price */}
         <GridItem>
-          <FormControl>
+          <FormControl isInvalid={formErrorMsgs.listPrice !== ''}>
             <FormLabel>List price</FormLabel>
             <HStack spacing="2">
               <Image src="/niftyapes/banana.png" />
@@ -66,20 +104,21 @@ export default function FinancingTermsForm({
                 <Text>{chain?.nativeCurrency.symbol || 'ETH'}</Text>
               </HStack>
               <TermInputNumber
-                defaultValue={terms.listPrice}
-                onChange={(_, listPrice) => {
-                  setTerms({ ...terms, listPrice })
-                }}
+                value={formFields.listPrice}
+                updateTerm={updateTerm('listPrice')}
               />
             </HStack>
+            {formErrorMsgs.listPrice !== '' && (
+              <FormErrorMessage>{formErrorMsgs.listPrice}</FormErrorMessage>
+            )}
           </FormControl>
         </GridItem>
 
         <GridItem>
           <ExtraInfo
             text="Profit"
-            tooltipText="How much ETH you will receive after marketplace fees and creator royalties are subtracted."
-            amount={terms.listPrice}
+            tooltipText="How much ETH you will receive after marketplace fees and creator royalties are subtracted. Paid over time."
+            amount={terms.profit}
           />
         </GridItem>
 
@@ -90,54 +129,63 @@ export default function FinancingTermsForm({
 
             <TermInputNumber
               withPercent={true}
-              defaultValue={terms.downPaymentPercent}
-              onChange={(_, downPaymentPercent) => {
-                setTerms({ ...terms, downPaymentPercent })
-              }}
+              value={formFields.downPaymentPercent}
+              updateTerm={updateTerm('downPaymentPercent')}
             />
           </FormControl>
         </GridItem>
 
         <GridItem>
-          <ExtraInfo text="Paid on sale" amount={paidOnSale} />
+          <ExtraInfo text="Received on sale" amount={terms.downPaymentAmount} />
         </GridItem>
 
         {/* Annual interest rate */}
         <GridItem>
           <FormControl>
-            <FormLabel>Annual interest rate</FormLabel>
+            <FormLabel>Annual interest rate (APR)</FormLabel>
 
             <TermInputNumber
               withPercent={true}
-              defaultValue={terms.apr}
-              onChange={(_, apr) => {
-                setTerms({ ...terms, apr })
-              }}
+              value={formFields.apr}
+              updateTerm={updateTerm('apr')}
             />
           </FormControl>
         </GridItem>
 
         <GridItem>
-          <ExtraInfo text="Interest each period" amount={intEachPer} />
+          <ExtraInfo
+            text="Interest per period"
+            tooltipText="An estimate of interest earned over each loan period based on current terms."
+            amount={terms.intPerPeriod}
+          />
         </GridItem>
 
-        {/* Minimum principal per pay period */}
+        {/* Loan duration */}
         <GridItem>
           <FormControl>
-            <FormLabel>Minimum principal per pay period</FormLabel>
+            <FormLabel>Loan duration (Months)</FormLabel>
 
-            <TermInputNumber
-              withPercent={true}
-              defaultValue={terms.minPrincipalPercent}
-              onChange={(_, minPrincipalPercent) => {
-                setTerms({ ...terms, minPrincipalPercent })
+            <NumberInput
+              flexGrow="1"
+              bg="gray.900"
+              borderRadius="md"
+              min={1}
+              precision={0}
+              defaultValue={formFields.loanDurMos}
+              onChange={(valueString) => {
+                updateTerm('loanDurMos')(valueString)
               }}
-            />
+            >
+              <NumberInputField border="0" borderColor="gray.400" />
+            </NumberInput>
           </FormControl>
         </GridItem>
 
         <GridItem>
-          <ExtraInfo text="Minimum each period" amount={minEachPer} />
+          <ExtraInfo
+            text="Min principal per period"
+            amount={terms.minPrincipalPerPeriod}
+          />
         </GridItem>
 
         {/* Pay period duration */}
@@ -151,10 +199,10 @@ export default function FinancingTermsForm({
                 { value: 30, label: '30 days' },
                 { value: 60, label: '60 days' },
               ]}
-              defaultValue={terms.payPeriodDays}
+              defaultValue={formFields.payPeriodDays}
               onChange={(event) => {
-                setTerms({
-                  ...terms,
+                setFormFields({
+                  ...formFields,
                   payPeriodDays: Number(event.target.value),
                 })
               }}
@@ -171,10 +219,10 @@ export default function FinancingTermsForm({
 
             <TermInputSelect
               options={expirationOptions}
-              defaultValue={terms.expiration}
+              defaultValue={formFields.expiration}
               onChange={(event) => {
-                setTerms({
-                  ...terms,
+                setFormFields({
+                  ...formFields,
                   expiration: Number(event.target.value) as Expiration,
                 })
               }}
@@ -185,7 +233,11 @@ export default function FinancingTermsForm({
         <GridItem></GridItem>
       </Grid>
 
-      <Button colorScheme={'blue'} onClick={onSubmit}>
+      <Button
+        isDisabled={isFormErr}
+        colorScheme={'blue'}
+        onClick={validateAndSubmit}
+      >
         Next
       </Button>
     </VStack>
@@ -193,29 +245,30 @@ export default function FinancingTermsForm({
 }
 
 function TermInputNumber({
-  defaultValue,
-  onChange,
+  value,
+  updateTerm,
   withPercent,
-}: NumberInputProps & { withPercent?: boolean }) {
-  const numInput = (
+}: NumberInputProps & {
+  withPercent?: boolean
+  updateTerm: (value: string) => void
+}) {
+  const formatValue = (val: string) => {
+    return withPercent ? val + '%' : val
+  }
+
+  return (
     <NumberInput
       flexGrow="1"
       bg="gray.900"
       borderRadius="md"
-      defaultValue={defaultValue}
-      onChange={onChange}
+      min={0}
+      value={formatValue(String(value))}
+      onChange={(valueString) => {
+        updateTerm(valueString)
+      }}
     >
       <NumberInputField border="0" borderColor="gray.400" />
     </NumberInput>
-  )
-
-  return withPercent ? (
-    <HStack>
-      {numInput}
-      <Icon as={FaPercent} />
-    </HStack>
-  ) : (
-    numInput
   )
 }
 
@@ -226,7 +279,7 @@ function ExtraInfo({
 }: {
   text: string
   tooltipText?: string
-  amount: number
+  amount?: number
 }) {
   const usdPrice = useCoinConversion('usd')
 
@@ -251,7 +304,7 @@ function ExtraInfo({
             fontWeight="semibold"
             color="whiteAlpha.600"
           >
-            {formatDollar(usdPrice * amount)}
+            {formatDollar(usdPrice * (amount || 0))}
           </Text>
         )}
       </VStack>
@@ -283,4 +336,25 @@ function TermInputSelect({
       ))}
     </Select>
   )
+}
+
+function validateFormFields(formFields: FinancingFormFields) {
+  let errorMsgs = {
+    listPrice: validateNumField(formFields.listPrice),
+    loanDurMos: validateNumField(String(formFields.loanDurMos)),
+  }
+
+  const hasErr = Object.values(errorMsgs).some((errMsg) => errMsg !== '')
+
+  return { hasErr, errorMsgs }
+}
+
+function validateNumField(field: string) {
+  const parsedField = parseFloat(field)
+
+  if (Number.isNaN(parsedField) || parsedField <= 0) {
+    return 'Please enter a number greater than 0'
+  }
+
+  return ''
 }

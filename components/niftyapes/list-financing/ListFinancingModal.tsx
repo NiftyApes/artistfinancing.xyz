@@ -19,11 +19,12 @@ import useCreateListing from 'hooks/niftyapes/useCreateListing'
 import useERC721Approval from 'hooks/niftyapes/useERC721Approval'
 import { Expiration } from 'lib/niftyapes/expirationOptions'
 import getAttributeFloor from 'lib/niftyapes/getAttributeFloor'
+import { FinancingTerms } from 'lib/niftyapes/processOfferFormFields'
 import { useState } from 'react'
 import { Collection } from 'types/reservoir'
 import { Address } from 'wagmi'
 import TermsStats from '../TermStats'
-import FinancingTermsForm, { FinancingTerms } from './FinancingTermsForm'
+import FinancingTermsForm from './FinancingTermsForm'
 import ListingSuccess from './ListingSuccess'
 import TokenStats from './TokenStats'
 import WalletApproval from './WalletApproval'
@@ -60,8 +61,8 @@ export default function ListFinancingModal({
       attributeFloor || collection?.floorAsk?.price?.amount?.native || 0,
     downPaymentPercent: 20,
     apr: 20,
-    minPrincipalPercent: 5,
     payPeriodDays: 30,
+    loanDurMos: 6,
     expiration: Expiration.OneMonth,
   }
   const [terms, setTerms] = useState<FinancingTerms>(defaultTerms)
@@ -139,7 +140,7 @@ export default function ListFinancingModal({
           : 'Create finance listing'}
       </button>
 
-      <Modal isOpen={isOpen} onClose={onClose} size="4xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="5xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader borderTopRadius="md" bg="gray.700">
@@ -190,9 +191,9 @@ export default function ListFinancingModal({
                 )}
                 {step === Step.SetTerms && (
                   <FinancingTermsForm
+                    onSubmit={onSubmit}
                     terms={terms}
                     setTerms={setTerms}
-                    onSubmit={onSubmit}
                   />
                 )}
                 {[Step.ApproveContract, Step.SignOffer].includes(step) && (

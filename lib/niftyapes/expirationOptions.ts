@@ -64,8 +64,8 @@ const expirationOptions: ExpirationOption[] = [
   {
     label: 'None',
     value: Expiration.None,
-    relativeTime: null,
-    relativeTimeUnit: null,
+    relativeTime: 10,
+    relativeTimeUnit: 'years',
   },
 ]
 

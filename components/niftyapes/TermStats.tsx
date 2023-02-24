@@ -1,19 +1,9 @@
-import { Text, HStack, VStack } from '@chakra-ui/react'
+import { HStack, Text, VStack } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
-import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
+import expirationOptions from 'lib/niftyapes/expirationOptions'
+import { FinancingTerms } from 'lib/niftyapes/processOfferFormFields'
 
-type Terms = {
-  listPrice: number
-  downPaymentPercent: number
-  apr: number
-  minPrincipalPercent: number
-  payPeriodDays: number
-  expiration?: Expiration
-}
-
-export default function TermsStats({ terms }: { terms: Terms }) {
-  const paidOnSale = (terms.downPaymentPercent / 100) * terms.listPrice
-
+export default function TermsStats({ terms }: { terms: FinancingTerms }) {
   return (
     <VStack
       bg="gray.700"
@@ -30,7 +20,7 @@ export default function TermsStats({ terms }: { terms: Terms }) {
       </HStack>
       <HStack justify="space-between">
         <Text>Down payment</Text>
-        <FormatNativeCrypto amount={paidOnSale} />
+        <FormatNativeCrypto amount={terms.downPaymentAmount} />
       </HStack>
       <HStack justify="space-between">
         <Text>APR</Text>
@@ -38,7 +28,7 @@ export default function TermsStats({ terms }: { terms: Terms }) {
       </HStack>
       <HStack justify="space-between">
         <Text>Minimum payment</Text>
-        <Text fontWeight="semibold">{`${terms.minPrincipalPercent}%`}</Text>
+        <FormatNativeCrypto amount={terms.minPrincipalPerPeriod} />
       </HStack>
       <HStack justify="space-between">
         <Text>Pay period</Text>
