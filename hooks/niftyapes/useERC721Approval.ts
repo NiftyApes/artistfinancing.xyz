@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers'
 import { getAddress } from 'ethers/lib/utils.js'
 import { useEffect, useState } from 'react'
 import { Address } from 'wagmi'
-import { useSellerFinancingContractAddress } from './useContracts'
+import { useNiftyApesContract } from './useNiftyApesContract'
 
 export default function useERC721Approval({
   tokenId,
@@ -12,7 +12,7 @@ export default function useERC721Approval({
   contractAddress: Address
   tokenId: string
 }) {
-  const operator = useSellerFinancingContractAddress()
+  const { address: operator } = useNiftyApesContract()
 
   const [hasApproval, setHasApproval] = useState(false)
   const [hasCheckedApproval, setHasCheckedApproval] = useState(false)

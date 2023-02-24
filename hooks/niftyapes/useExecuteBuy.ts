@@ -1,9 +1,9 @@
 import { Address, prepareWriteContract, writeContract } from '@wagmi/core'
 import { BigNumber } from 'ethers'
-import { useSellerFinancingContractAddress } from './useContracts'
+import { useNiftyApesContract } from './useNiftyApesContract'
 
 export default function useExecuteBuy() {
-  const address = useSellerFinancingContractAddress()
+  const { address } = useNiftyApesContract()
 
   return {
     async executeBuy({
