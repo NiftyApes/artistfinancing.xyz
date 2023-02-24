@@ -9,6 +9,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import LoadingDots from '../LoadingDots'
+import { ListFinancingSteps } from './ListFinancingModal'
 
 export default function WalletApproval({
   imageSrc,
@@ -16,26 +17,31 @@ export default function WalletApproval({
   isError,
   backToEdit,
   retry,
-  contractApprovalRequired,
+  step,
 }: {
   imageSrc?: string
   tokenName?: string
   isError: boolean
   backToEdit: () => void
   retry: () => void
-  contractApprovalRequired: boolean
+  step: ListFinancingSteps
 }) {
+  const buttonLoadingText =
+    step === ListFinancingSteps.ApproveContract
+      ? 'Waiting for Approval'
+      : 'Waiting for Signature'
+
   return (
-    <VStack h="full" justify="space-between">
+    <VStack w="full" h="full" justify="space-between">
       {isError && (
-        <Alert bg="red.900" rounded="md" status="error">
+        <Alert w="full" bg="red.900" rounded="md" status="error">
           <AlertIcon />
           There was an error listing your item
         </Alert>
       )}
       <VStack justify="center" spacing="10" flexGrow={1}>
         <Heading size={'md'} textAlign="center">
-          {contractApprovalRequired
+          {step === ListFinancingSteps.ApproveContract
             ? `Approve ${window.location.hostname} (on NiftyApes) to access item in your wallet`
             : `Confirm finance listing on ${window.location.hostname} (on NiftyApes) in your wallet`}
         </Heading>
@@ -54,7 +60,7 @@ export default function WalletApproval({
           />
         </HStack>
         <Text align="center">
-          {contractApprovalRequired
+          {step === ListFinancingSteps.ApproveContract
             ? 'Each NFT you want to trade requires a one-time approval transaction'
             : 'A free off-chain signature to create the finance listing'}
         </Text>
@@ -76,7 +82,7 @@ export default function WalletApproval({
       ) : (
         <Button
           isLoading
-          loadingText="Waiting for Approval"
+          loadingText={buttonLoadingText}
           colorScheme="blue"
           w="full"
         ></Button>

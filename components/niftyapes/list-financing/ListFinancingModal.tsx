@@ -29,7 +29,7 @@ import ListingSuccess from './ListingSuccess'
 import TokenStats from './TokenStats'
 import WalletApproval from './WalletApproval'
 
-enum Step {
+export enum ListFinancingSteps {
   SetTerms,
   ApproveContract,
   SignOffer,
@@ -48,12 +48,15 @@ export default function ListFinancingModal({
   roundedButton: boolean
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
-  const [step, setStep] = useState<Step>(Step.SetTerms)
+  const [step, setStep] = useState<ListFinancingSteps>(
+    ListFinancingSteps.SetTerms
+  )
   const { createListing } = useCreateListing()
-  const { approvalRequired, grantApproval } = useERC721Approval({
-    tokenId: token?.token?.tokenId as string,
-    contractAddress: token?.token?.contract as Address,
-  })
+  const { approvalRequired, grantApproval, approvalCheckErr } =
+    useERC721Approval({
+      tokenId: token?.token?.tokenId as string,
+      contractAddress: token?.token?.contract as Address,
+    })
 
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
   const defaultTerms = {
@@ -75,19 +78,27 @@ export default function ListFinancingModal({
       title: 'Failed to list token',
     })
   }
+  const onApprovalCheckErr = () => {
+    setListingErr(true)
+    setToast({
+      kind: 'error',
+      message: 'The transaction was not completed.',
+      title: 'Failed to verify token approval',
+    })
+  }
   const onClose = () => {
     setTerms(defaultTerms)
-    setStep(Step.SetTerms)
+    setStep(ListFinancingSteps.SetTerms)
     setListingErr(false)
     onModalClose()
   }
   const onContractApproved = () => {
-    setStep(Step.SignOffer)
+    setStep(ListFinancingSteps.SignOffer)
     createListing({
       terms,
       token,
       onSuccess: () => {
-        setStep(Step.Success)
+        setStep(ListFinancingSteps.Success)
       },
       onError,
     })
@@ -95,9 +106,14 @@ export default function ListFinancingModal({
   const onSubmit = () => {
     // reset error
     setListingErr(false)
+    setStep(ListFinancingSteps.ApproveContract)
+
+    if (approvalCheckErr) {
+      onApprovalCheckErr()
+      return
+    }
 
     if (approvalRequired) {
-      setStep(Step.ApproveContract)
       grantApproval({
         onSuccess: onContractApproved,
         onError,
@@ -109,13 +125,13 @@ export default function ListFinancingModal({
 
   let progressValue = 0
   switch (step) {
-    case Step.Success:
+    case ListFinancingSteps.Success:
       progressValue = 100
       break
-    case Step.SignOffer:
+    case ListFinancingSteps.SignOffer:
       progressValue = 50
       break
-    case Step.ApproveContract:
+    case ListFinancingSteps.ApproveContract:
     default:
       progressValue = 0
   }
@@ -171,17 +187,21 @@ export default function ListFinancingModal({
                     {token?.token?.collection?.name}
                   </Text>
                 </VStack>
-                {step === Step.SetTerms && (
+                {step === ListFinancingSteps.SetTerms && (
                   <TokenStats token={token} collection={collection} />
                 )}
-                {[Step.ApproveContract, Step.SignOffer, Step.Success].includes(
-                  step
-                ) && <TermsStats terms={terms} />}
+                {[
+                  ListFinancingSteps.ApproveContract,
+                  ListFinancingSteps.SignOffer,
+                  ListFinancingSteps.Success,
+                ].includes(step) && <TermsStats terms={terms} />}
               </VStack>
               <VStack p="6" w="full">
-                {[Step.ApproveContract, Step.SignOffer, Step.Success].includes(
-                  step
-                ) && (
+                {[
+                  ListFinancingSteps.ApproveContract,
+                  ListFinancingSteps.SignOffer,
+                  ListFinancingSteps.Success,
+                ].includes(step) && (
                   <Progress
                     rounded="md"
                     w="full"
@@ -189,27 +209,30 @@ export default function ListFinancingModal({
                     value={progressValue}
                   />
                 )}
-                {step === Step.SetTerms && (
+                {step === ListFinancingSteps.SetTerms && (
                   <FinancingTermsForm
                     onSubmit={onSubmit}
                     terms={terms}
                     setTerms={setTerms}
                   />
                 )}
-                {[Step.ApproveContract, Step.SignOffer].includes(step) && (
+                {[
+                  ListFinancingSteps.ApproveContract,
+                  ListFinancingSteps.SignOffer,
+                ].includes(step) && (
                   <WalletApproval
                     imageSrc={token?.token?.image}
                     tokenName={token?.token?.name}
                     isError={listingErr}
                     backToEdit={() => {
                       setListingErr(false)
-                      setStep(Step.SetTerms)
+                      setStep(ListFinancingSteps.SetTerms)
                     }}
                     retry={onSubmit}
-                    contractApprovalRequired={approvalRequired}
+                    step={step}
                   />
                 )}
-                {step === Step.Success && (
+                {step === ListFinancingSteps.Success && (
                   <ListingSuccess
                     tokenName={token?.token?.name}
                     collectionName={token?.token?.collection?.name}

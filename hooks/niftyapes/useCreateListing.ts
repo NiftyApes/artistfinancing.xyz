@@ -4,12 +4,12 @@ import useEnvChain from 'hooks/useEnvChain'
 import { FinancingTerms } from 'lib/niftyapes/processOfferFormFields'
 import { saveSignatureOfferInDb } from 'lib/niftyapes/saveSignatureOfferInDb'
 import { useAccount } from 'wagmi'
-import { useSellerFinancingContractAddress } from './useContracts'
+import { useNiftyApesContract } from './useNiftyApesContract'
 
 export default function useCreateListing() {
-  const { address: creator } = useAccount()
   const chain = useEnvChain()
-  const verifyingContract = useSellerFinancingContractAddress()
+  const { address: creator } = useAccount()
+  const { address: verifyingContract } = useNiftyApesContract()
 
   return {
     createListing: async function ({
