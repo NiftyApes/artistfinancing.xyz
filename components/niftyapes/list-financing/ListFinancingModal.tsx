@@ -15,7 +15,9 @@ import {
 } from '@chakra-ui/react'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { setToast } from 'components/token/setToast'
-import useCreateListing from 'hooks/niftyapes/useCreateListing'
+import useCreateListing, {
+  FinancingTerms,
+} from 'hooks/niftyapes/useCreateListing'
 import useERC721Approval from 'hooks/niftyapes/useERC721Approval'
 import { Expiration } from 'lib/niftyapes/expirationOptions'
 import getAttributeFloor from 'lib/niftyapes/getAttributeFloor'
@@ -23,7 +25,7 @@ import { useState } from 'react'
 import { Collection } from 'types/reservoir'
 import { Address } from 'wagmi'
 import TermsStats from '../TermStats'
-import FinancingTermsForm, { FinancingTerms } from './FinancingTermsForm'
+import FinancingTermsForm from './FinancingTermsForm'
 import ListingSuccess from './ListingSuccess'
 import TokenStats from './TokenStats'
 import WalletApproval from './WalletApproval'
@@ -94,9 +96,6 @@ export default function ListFinancingModal({
   const onSubmit = () => {
     // reset error
     setListingErr(false)
-
-    // TODO: Clean this up to validate on the form itself.
-    setTerms(cleanTerms(terms))
 
     if (approvalRequired) {
       setStep(Step.ApproveContract)
@@ -193,9 +192,9 @@ export default function ListFinancingModal({
                 )}
                 {step === Step.SetTerms && (
                   <FinancingTermsForm
-                    terms={terms}
                     setTerms={setTerms}
                     onSubmit={onSubmit}
+                    defaultTerms={terms}
                   />
                 )}
                 {[Step.ApproveContract, Step.SignOffer].includes(step) && (
@@ -225,11 +224,4 @@ export default function ListFinancingModal({
       </Modal>
     </>
   )
-}
-
-function cleanTerms(terms: FinancingTerms) {
-  return {
-    ...terms,
-    listPrice: terms.listPrice || 0,
-  }
 }

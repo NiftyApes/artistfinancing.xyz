@@ -1,12 +1,20 @@
 import { signTypedData } from '@wagmi/core'
-import { FinancingTerms } from 'components/niftyapes/list-financing/FinancingTermsForm'
 import { parseUnits } from 'ethers/lib/utils'
 import useEnvChain from 'hooks/useEnvChain'
-import expirationOptions from 'lib/niftyapes/expirationOptions'
+import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
 import { saveSignatureOfferInDb } from 'lib/niftyapes/saveSignatureOfferInDb'
 import { DateTime } from 'luxon'
-import { Address, useAccount } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { useSellerFinancingContractAddress } from './useContracts'
+
+export type FinancingTerms = {
+  listPrice: number
+  downPaymentPercent: number
+  apr: number
+  minPrincipalPercent: number
+  payPeriodDays: number
+  expiration: Expiration
+}
 
 export default function useCreateListing() {
   const { address: creator } = useAccount()
@@ -57,11 +65,15 @@ export default function useCreateListing() {
 
         // Calculate amounts in wei
         const price = parseUnits(String(terms.listPrice || 0), 'ether')
-        const downPaymentAmount = price.mul(terms.downPaymentPercent).div(100)
+        // Percentage precision capped at 2 so multiply by 100 to remove decimal
+        const downPaymentAmount = price
+          .mul(parseFloat(terms.downPaymentPercent.toFixed(2)) * 100)
+          .div(10000)
         const remainingPrincipal = price.sub(downPaymentAmount)
+        // Percentage precision capped at 2 so multiply by 100 to remove decimal
         const minimumPrincipalPerPeriod = remainingPrincipal
-          .mul(terms.minPrincipalPercent)
-          .div(100)
+          .mul(parseFloat(terms.minPrincipalPercent.toFixed(2)) * 100)
+          .div(10000)
 
         // Calculate periodInterestRate basis points
         const periodDuration = terms.payPeriodDays * 86400 // in seconds
