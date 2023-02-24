@@ -16,6 +16,7 @@ export default function useERC721Approval({
 
   const [hasApproval, setHasApproval] = useState(false)
   const [hasCheckedApproval, setHasCheckedApproval] = useState(false)
+  const [approvalCheckErr, setApprovalCheckErr] = useState(false)
 
   useEffect(() => {
     async function checkWhetherHasApproval() {
@@ -23,31 +24,37 @@ export default function useERC721Approval({
         return
       }
 
-      const data = await readContract({
-        address: contractAddress,
-        abi: [
-          {
-            inputs: [
-              { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
-            ],
-            name: 'getApproved',
-            outputs: [{ internalType: 'address', name: '', type: 'address' }],
-            stateMutability: 'view',
-            type: 'function',
-          },
-        ],
-        functionName: 'getApproved',
-        args: [BigNumber.from(tokenId)],
-      })
+      try {
+        const data = await readContract({
+          address: contractAddress,
+          abi: [
+            {
+              inputs: [
+                { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+              ],
+              name: 'getApproved',
+              outputs: [{ internalType: 'address', name: '', type: 'address' }],
+              stateMutability: 'view',
+              type: 'function',
+            },
+          ],
+          functionName: 'getApproved',
+          args: [BigNumber.from(tokenId)],
+        })
 
-      setHasApproval(getAddress(data) === getAddress(operator))
-      setHasCheckedApproval(true)
+        setHasApproval(getAddress(data) === getAddress(operator))
+        setHasCheckedApproval(true)
+      } catch (err) {
+        console.error('Error checking token approval', err)
+        setApprovalCheckErr(true)
+      }
     }
 
     checkWhetherHasApproval()
   }, [tokenId, operator, hasCheckedApproval])
 
   return {
+    approvalCheckErr: approvalCheckErr,
     approvalRequired: hasCheckedApproval && !hasApproval,
 
     grantApproval: async ({
@@ -89,7 +96,7 @@ export default function useERC721Approval({
         onSuccess && onSuccess()
         setHasCheckedApproval(false)
       } catch (err) {
-        console.error(err)
+        console.error('Error granting token approval', err)
         onError()
       }
     },
