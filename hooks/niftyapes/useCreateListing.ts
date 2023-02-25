@@ -1,7 +1,7 @@
 import { signTypedData } from '@wagmi/core'
 import { parseEther } from 'ethers/lib/utils'
 import useEnvChain from 'hooks/useEnvChain'
-import { FinancingTerms } from 'lib/niftyapes/processOfferFormFields'
+import { FinancingTerms } from 'lib/niftyapes/processOffer'
 import { saveSignatureOfferInDb } from 'lib/niftyapes/saveSignatureOfferInDb'
 import { useAccount } from 'wagmi'
 import { useNiftyApesContract } from './useNiftyApesContract'

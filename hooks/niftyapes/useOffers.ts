@@ -16,7 +16,7 @@ type OfferDetails = {
   downPaymentAmount: string
   expiration: number
   minimumPrincipalPerPeriod: string
-  nftContractAddress: string
+  nftContractAddress: Address
   nftId: string
   periodDuration: number
   periodInterestRateBps: number

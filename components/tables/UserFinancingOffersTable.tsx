@@ -12,7 +12,10 @@ const UserFinancingOffersTable: FC = () => {
   const isMobile = useMediaQuery('only screen and (max-width : 730px)')
   const { address } = router.query
 
-  const { data: offers = [], isLoading } = useOffers({ creator: address as string, includeExpired: true });
+  const { data: offers = [], isLoading } = useOffers({
+    creator: address as string,
+    includeExpired: true,
+  })
 
   if (isLoading) {
     return (
@@ -75,14 +78,15 @@ const UserFinancingOffersTable: FC = () => {
               </thead>
               <tbody>
                 {offers.map((listing: Offer, index) => {
-                  const { offer, signature } = listing;
+                  const { offer, signature } = listing
 
                   return (
-                  <UserListingsTableRow
-                    key={`${signature}-${index}`}
-                    offer={offer}
-                  />
-                )})}
+                    <UserListingsTableRow
+                      key={`${signature}-${index}`}
+                      offer={offer}
+                    />
+                  )
+                })}
               </tbody>
             </table>
           )}
@@ -91,12 +95,10 @@ const UserFinancingOffersTable: FC = () => {
 }
 
 type UserOffersRowProps = {
-  offer: Offer['offer'],
+  offer: Offer['offer']
 }
 
-const UserListingsTableRow = ({
-  offer,
-}: UserOffersRowProps) => {
+const UserListingsTableRow = ({ offer }: UserOffersRowProps) => {
   const {
     price,
     downPaymentAmount,
@@ -104,37 +106,27 @@ const UserListingsTableRow = ({
     periodDuration,
     apr,
     tokenId,
-    minPayment
+    minPayment,
   } = processOffer(offer)
 
   return (
-    <tr
-      className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white dark:border-b-neutral-600 dark:bg-black"
-    >
+    <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white dark:border-b-neutral-600 dark:bg-black">
       {/* ITEM */}
-      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        {tokenId}
-      </td>
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">{tokenId}</td>
 
       {/* PRICE */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <FormatCrypto
-          amount={price}
-        />
+        <FormatCrypto amount={price} />
       </td>
 
       {/* DOWN PAYMENT */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <FormatCrypto
-          amount={downPaymentAmount}
-        />
+        <FormatCrypto amount={downPaymentAmount} />
       </td>
 
       {/* MIN. PAYMENT */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <FormatCrypto
-          amount={minPayment}
-        />
+        <FormatCrypto amount={minPayment} />
       </td>
 
       {/* PAY PERIOD */}
@@ -161,27 +153,17 @@ const UserListingsTableRow = ({
   )
 }
 
-const UserFinancingOffersTableMobileRow = ({
-  offer,
-}: UserOffersRowProps) => {
-  const {
-    price,
-    expiration,
-    tokenId,
-  } = processOffer(offer)
+const UserFinancingOffersTableMobileRow = ({ offer }: UserOffersRowProps) => {
+  const { price, expiration, tokenId } = processOffer(offer)
 
   return (
-    <div
-      className="border-b-[1px] border-solid border-b-neutral-300	py-[16px]"
-    >
+    <div className="border-b-[1px] border-solid border-b-neutral-300	py-[16px]">
       <div className="flex items-center justify-between">
         <div className="reservoir-h6 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap font-headings text-sm dark:text-white">
           {tokenId}
         </div>
         <div className="flex flex-col">
-          <FormatCrypto
-            amount={price}
-          />
+          <FormatCrypto amount={price} />
         </div>
       </div>
       <div className="flex items-center justify-between pt-4">

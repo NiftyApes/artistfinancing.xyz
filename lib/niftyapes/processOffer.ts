@@ -1,34 +1,168 @@
-import { format } from "date-fns";
-import { DateTime } from "luxon";
+import { FinancingFormFields } from 'components/niftyapes/list-financing/FinancingTermsForm'
+import { formatEther } from 'ethers/lib/utils.js'
+import { Offer } from 'hooks/niftyapes/useOffers'
+import { DateTime, Duration } from 'luxon'
+import { Address } from 'wagmi'
+import expirationOptions, { Expiration } from './expirationOptions'
 
-import { Offer } from "hooks/niftyapes/useOffers";
-
-function processOffer(offerDetails: Offer['offer']) {
-  const tokenId = offerDetails.nftId;
-  const contract = offerDetails.nftContractAddress;
-
-  const price = parseInt(offerDetails?.price, 10);
-  const downPaymentAmount = parseInt(offerDetails?.downPaymentAmount, 10);
-
-  const data = {
-    contract,
-    tokenId,
-    expiration:
-      offerDetails?.expiration === 0
-        ? 'Never'
-        : DateTime.fromMillis(+`${offerDetails?.expiration}000`).toRelative(),
-    id: offerDetails?.nftId,
-    price,
-    downPaymentAmount,
-    periodDuration: format(new Date(offerDetails?.periodDuration * 1000), 'Pp'),
-    address: offerDetails?.nftContractAddress,
-    apr: offerDetails?.periodInterestRateBps,
-    minPayment: Number(offerDetails?.minimumPrincipalPerPeriod) + (Number(offerDetails?.periodInterestRateBps) * Number(price - downPaymentAmount)),
-  }
-
-  const tokenHref = `/${data.contract}/${data.tokenId}`
-
-  return { ...data, tokenHref }
+export type FinancingTerms = {
+  listPrice: number
+  downPaymentPercent: number
+  apr: number
+  loanDurMos: number
+  payPeriodDays: number
+  expiration?: Expiration
+  expirationRelative?: string
+  contract?: Address
+  tokenId?: string
+  expirationSeconds?: number
+  downPaymentAmount?: number
+  remainingPrincipal?: number
+  minPrincipalPerPeriod?: number
+  numPayPeriods?: number
+  periodDuration?: number
+  periodInterestRate?: number
+  periodInterestRateBps?: number
+  totalIntEarned?: number
+  intPerPeriod?: number
+  profit?: number
+  totalCost?: number
+  tokenHref?: string
 }
 
-export default processOffer;
+export function processOffer(offerDetails: Offer['offer']): FinancingTerms {
+  const tokenId = offerDetails.nftId
+  const contract = offerDetails.nftContractAddress
+  const listPrice = Number(formatEther(offerDetails.price))
+  const downPaymentAmount = Number(formatEther(offerDetails.downPaymentAmount))
+  const remainingPrincipal = listPrice - downPaymentAmount
+  const downPaymentPercent = (downPaymentAmount / listPrice) * 100
+  const apr = calculateAPR(
+    offerDetails.periodInterestRateBps,
+    offerDetails.periodDuration
+  )
+  const minPrincipalPerPeriod = Number(
+    formatEther(offerDetails.minimumPrincipalPerPeriod)
+  )
+  const payPeriodDays = Duration.fromObject({
+    seconds: offerDetails.periodDuration,
+  }).as('days')
+  const numPayPeriods = Math.ceil(remainingPrincipal / minPrincipalPerPeriod)
+  const loanDurMos = Duration.fromObject({
+    days: payPeriodDays * numPayPeriods,
+  }).as('months')
+  const periodInterestRate = offerDetails.periodInterestRateBps / 100
+  const totalIntEarned = calculateTotalInterest(
+    periodInterestRate,
+    remainingPrincipal,
+    minPrincipalPerPeriod,
+    numPayPeriods
+  )
+  const totalCost = listPrice + totalIntEarned
+
+  return {
+    contract,
+    tokenId,
+    listPrice,
+    downPaymentAmount,
+    downPaymentPercent,
+    apr,
+    minPrincipalPerPeriod,
+    payPeriodDays,
+    loanDurMos,
+    totalCost,
+    expirationRelative: DateTime.fromSeconds(
+      offerDetails.expiration
+    ).toRelative()!,
+    tokenHref: `/${contract}/${tokenId}`,
+  }
+}
+
+export function processFormValues(
+  formFields: FinancingFormFields
+): FinancingTerms {
+  const fieldNums = {
+    listPrice: Number(formFields.listPrice),
+    downPaymentPercent: Number(formFields.downPaymentPercent),
+    apr: Number(formFields.apr),
+    payPeriodDays: formFields.payPeriodDays,
+    loanDurMos: Number(formFields.loanDurMos),
+    expiration: formFields.expiration,
+  }
+
+  const downPaymentAmount =
+    (fieldNums.downPaymentPercent / 100) * fieldNums.listPrice
+  const remainingPrincipal = fieldNums.listPrice - downPaymentAmount
+  const loanDurDays = Duration.fromObject({
+    months: fieldNums.loanDurMos,
+  }).as('days')
+  const numPayPeriods = Math.ceil(loanDurDays / formFields.payPeriodDays)
+  const minPrincipalPerPeriod = remainingPrincipal / numPayPeriods
+  // Calculate periodInterestRate basis points
+  const periodDuration = fieldNums.payPeriodDays * 86400 // in seconds
+  const interestRatePerSecond = fieldNums.apr / (365 * 86400)
+  const periodInterestRate = interestRatePerSecond * periodDuration
+  const periodInterestRateBps = Math.round(periodInterestRate * 100)
+  const totalIntEarned = calculateTotalInterest(
+    periodInterestRate,
+    remainingPrincipal,
+    minPrincipalPerPeriod,
+    numPayPeriods
+  )
+  const intPerPeriod = totalIntEarned / numPayPeriods
+
+  // TODO: Subtract royalties and marketplace fees
+  const profit = fieldNums.listPrice + totalIntEarned
+
+  // Calculate expiration in seconds
+  const expirationOption = expirationOptions.find(
+    (option) => option.value === fieldNums.expiration
+  )!
+
+  const expirationSeconds = Math.round(
+    DateTime.now()
+      .plus({
+        [expirationOption.relativeTimeUnit as string]:
+          expirationOption.relativeTime,
+      })
+      .toSeconds()
+  )
+
+  return {
+    ...fieldNums,
+    downPaymentAmount,
+    remainingPrincipal,
+    minPrincipalPerPeriod,
+    numPayPeriods,
+    periodDuration,
+    periodInterestRate,
+    periodInterestRateBps,
+    totalIntEarned,
+    intPerPeriod,
+    profit,
+    expirationSeconds,
+  }
+}
+
+function calculateTotalInterest(
+  periodInterestRate: number,
+  remainingPrincipal: number,
+  minPrincipalPerPeriod: number,
+  numPayPeriods: number
+) {
+  let totalIntEarned = 0
+  for (let i = 0; i < numPayPeriods; i++) {
+    totalIntEarned += (periodInterestRate / 100) * remainingPrincipal
+    remainingPrincipal -= minPrincipalPerPeriod
+  }
+
+  return totalIntEarned
+}
+
+function calculateAPR(
+  periodInterestRateBps: number,
+  periodDuration: number
+): number {
+  const interestRatePerSecond = periodInterestRateBps / periodDuration / 100
+  return Math.round(interestRatePerSecond * (365 * 86400))
+}

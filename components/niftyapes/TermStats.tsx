@@ -1,7 +1,7 @@
 import { HStack, Text, VStack } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import expirationOptions from 'lib/niftyapes/expirationOptions'
-import { FinancingTerms } from 'lib/niftyapes/processOfferFormFields'
+import { FinancingTerms } from 'lib/niftyapes/processOffer'
 
 export default function TermsStats({ terms }: { terms: FinancingTerms }) {
   return (
