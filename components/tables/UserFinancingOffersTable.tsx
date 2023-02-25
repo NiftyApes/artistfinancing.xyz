@@ -3,9 +3,9 @@ import { useRouter } from 'next/router'
 import { useMediaQuery } from '@react-hookz/web'
 
 import useOffers, { Offer } from 'hooks/niftyapes/useOffers'
-import processOffer from 'lib/niftyapes/processOffer'
+import { processOffer } from 'lib/niftyapes/processOffer'
 import LoadingIcon from 'components/LoadingIcon'
-import FormatCrypto from 'components/FormatCrypto'
+import FormatNativeCrypto from 'components/FormatNativeCrypto'
 
 const UserFinancingOffersTable: FC = () => {
   const router = useRouter()
@@ -57,7 +57,7 @@ const UserFinancingOffersTable: FC = () => {
                     'Item',
                     'Price',
                     'Down payment',
-                    'Min. payment',
+                    'Min. principal payment',
                     'Pay period',
                     'APR',
                     'Duration',
@@ -100,33 +100,39 @@ type UserOffersRowProps = {
 
 const UserListingsTableRow = ({ offer }: UserOffersRowProps) => {
   const {
-    price,
+    listPrice,
     downPaymentAmount,
-    expiration,
-    periodDuration,
+    expirationRelative,
+    payPeriodDays,
     apr,
     tokenId,
-    minPayment,
+    minPrincipalPerPeriod,
   } = processOffer(offer)
 
   return (
-    <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white dark:border-b-neutral-600 dark:bg-black">
+    <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
       {/* ITEM */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">{tokenId}</td>
 
       {/* PRICE */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <FormatCrypto amount={price} />
+        <FormatNativeCrypto maximumFractionDigits={4} amount={listPrice} />
       </td>
 
       {/* DOWN PAYMENT */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <FormatCrypto amount={downPaymentAmount} />
+        <FormatNativeCrypto
+          maximumFractionDigits={4}
+          amount={downPaymentAmount}
+        />
       </td>
 
       {/* MIN. PAYMENT */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <FormatCrypto amount={minPayment} />
+        <FormatNativeCrypto
+          maximumFractionDigits={4}
+          amount={minPrincipalPerPeriod}
+        />
       </td>
 
       {/* PAY PERIOD */}
@@ -138,10 +144,10 @@ const UserListingsTableRow = ({ offer }: UserOffersRowProps) => {
       </td>
 
       {/* DURATION */}
-      <td className="whitespace-nowrap px-6 py-4">{periodDuration}</td>
+      <td className="whitespace-nowrap px-6 py-4">{payPeriodDays} days</td>
 
       {/* EXPIRES */}
-      <td className="whitespace-nowrap px-6 py-4">{expiration}</td>
+      <td className="whitespace-nowrap px-6 py-4">{expirationRelative}</td>
 
       {/* CANCEL LOAN */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
@@ -154,7 +160,7 @@ const UserListingsTableRow = ({ offer }: UserOffersRowProps) => {
 }
 
 const UserFinancingOffersTableMobileRow = ({ offer }: UserOffersRowProps) => {
-  const { price, expiration, tokenId } = processOffer(offer)
+  const { listPrice, expiration, tokenId } = processOffer(offer)
 
   return (
     <div className="border-b-[1px] border-solid border-b-neutral-300	py-[16px]">
@@ -163,7 +169,7 @@ const UserFinancingOffersTableMobileRow = ({ offer }: UserOffersRowProps) => {
           {tokenId}
         </div>
         <div className="flex flex-col">
-          <FormatCrypto amount={price} />
+          <FormatNativeCrypto maximumFractionDigits={4} amount={listPrice} />
         </div>
       </div>
       <div className="flex items-center justify-between pt-4">
