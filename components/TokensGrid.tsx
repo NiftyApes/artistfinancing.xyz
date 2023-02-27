@@ -115,7 +115,9 @@ const TokensGrid: FC<Props> = ({
           : sortedTokens?.map((token) => {
               // Check if token has a NiftyApes loan offer
               const financeOffer = offersData?.find(
-                (offer) => offer.offer.nftId === token?.token?.tokenId
+                (offer) =>
+                  offer.offer.nftId === token?.token?.tokenId &&
+                  offer.status !== 'CANCELLED'
               )
 
               return (

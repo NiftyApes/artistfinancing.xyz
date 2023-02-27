@@ -1,6 +1,5 @@
 import {
   Box,
-  Center,
   Grid,
   GridItem,
   Heading,
@@ -11,8 +10,9 @@ import {
 } from '@chakra-ui/react'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
+import { setToast } from 'components/token/setToast'
 import useOffers from 'hooks/niftyapes/useOffers'
-import { DateTime, Duration } from 'luxon'
+import { FinancingTerms, processOffer } from 'lib/niftyapes/processOffer'
 import { Collection } from 'types/reservoir'
 import BuyNowPayLaterModal from './bnpl/BuyNowPayLaterModal'
 import CancelListingModal from './cancel-listing/CancelListingModal'
@@ -27,29 +27,19 @@ export default function ListFinancingSection({
   collection: Collection
   isOwner: boolean
 }) {
-  const {
-    data: offerData,
-    error,
-    isLoading,
-  } = useOffers({ collection: collection?.id, nftId: token?.token?.tokenId })
+  const { data: offerData, isError } = useOffers({
+    collection: collection?.id,
+    nftId: token?.token?.tokenId,
+  })
   const listing = offerData?.filter((offer) => offer.status !== 'CANCELLED')[0]
+  const terms = listing ? processOffer(listing.offer) : null
 
-  let terms = null
-  if (listing) {
-    const { periodInterestRateBps, periodDuration } = listing.offer
-    const interestRatePerSecond = periodInterestRateBps / periodDuration / 100
-    const apr = Math.round(interestRatePerSecond * (365 * 86400))
-
-    terms = {
-      price: listing.offer.price,
-      downPayment: listing.offer.downPaymentAmount,
-      apr,
-      minPrincipal: listing.offer.minimumPrincipalPerPeriod,
-      payPeriodDuration: Duration.fromObject({
-        seconds: listing.offer.periodDuration,
-      }).as('days'),
-      expiration: DateTime.fromSeconds(listing.offer.expiration).toRelative()!,
-    }
+  if (isError) {
+    setToast({
+      kind: 'error',
+      message: 'An error occurred while checking for current listing.',
+      title: 'Failed to load listing',
+    })
   }
 
   return (
@@ -96,14 +86,7 @@ function CurrentListing({
   terms,
   isOwner,
 }: {
-  terms: {
-    price: string
-    downPayment: string
-    apr: number
-    minPrincipal: string
-    payPeriodDuration: number
-    expiration: string
-  }
+  terms: FinancingTerms
   isOwner: boolean
 }) {
   return (
@@ -115,13 +98,25 @@ function CurrentListing({
         <GridItem>
           <HStack justify="space-between">
             <Text>Down payment</Text>
-            <FormatNativeCrypto amount={terms.downPayment} />
+            <FormatNativeCrypto amount={terms.downPaymentAmount} />
           </HStack>
         </GridItem>
         <GridItem>
           <HStack justify="space-between">
             <Text>Price</Text>
-            <FormatNativeCrypto amount={terms.price} />
+            <FormatNativeCrypto amount={terms.listPrice} />
+          </HStack>
+        </GridItem>
+        <GridItem>
+          <HStack justify="space-between">
+            <Text>Minimum principal</Text>
+            <FormatNativeCrypto amount={terms.minPrincipalPerPeriod} />
+          </HStack>
+        </GridItem>
+        <GridItem>
+          <HStack justify="space-between">
+            <Text>Pay period</Text>
+            <Text fontWeight="semibold">{`${terms.payPeriodDays} days`}</Text>
           </HStack>
         </GridItem>
         <GridItem>
@@ -132,20 +127,20 @@ function CurrentListing({
         </GridItem>
         <GridItem>
           <HStack justify="space-between">
-            <Text>Minimum principal</Text>
-            <FormatNativeCrypto amount={terms.minPrincipal} />
+            <Text>Total cost</Text>
+            <FormatNativeCrypto amount={terms.totalCost} />
           </HStack>
         </GridItem>
         <GridItem>
           <HStack justify="space-between">
-            <Text>Pay period</Text>
-            <Text fontWeight="semibold">{`${terms.payPeriodDuration} days`}</Text>
+            <Text>Loan duration</Text>
+            <Text fontWeight="semibold">{`${terms.loanDurMos} months`}</Text>
           </HStack>
         </GridItem>
         <GridItem>
           <HStack justify="space-between">
             <Text>Expires</Text>
-            <Text fontWeight="semibold">{terms.expiration}</Text>
+            <Text fontWeight="semibold">{terms.expirationRelative}</Text>
           </HStack>
         </GridItem>
       </Grid>

@@ -21,17 +21,16 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
-import { formatEther } from 'ethers/lib/utils.js'
 import useExecuteBuy from 'hooks/niftyapes/useExecuteBuy'
 import { Offer } from 'hooks/niftyapes/useOffers'
 import useCoinConversion from 'hooks/useCoinConversion'
 import useTokens from 'hooks/useTokens'
+import { processOffer } from 'lib/niftyapes/processOffer'
 import { formatDollar } from 'lib/numbers'
-import { Duration } from 'luxon'
 import { useState } from 'react'
 import { IoCheckmarkCircle, IoWallet } from 'react-icons/io5'
 import LoadingDots from '../LoadingDots'
-import TermStats from '../TermStats'
+import TermsStats from '../TermStats'
 
 enum Step {
   Checkout,
@@ -51,31 +50,20 @@ export default function BuyNowPayLaterModal({
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const { executeBuy } = useExecuteBuy()
   const [step, setStep] = useState<Step>(Step.Checkout)
-  const [isError, setIsError] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const { offer: offerDetails, signature } = offer
-  const interestRatePerSecond =
-    offerDetails.periodInterestRateBps / offerDetails.periodDuration / 100
-  const apr = Math.round(interestRatePerSecond * (365 * 86400))
-  const terms = {
-    price: offerDetails.price,
-    downPayment: offerDetails.downPaymentAmount,
-    apr,
-    minPrincipal: offerDetails.minimumPrincipalPerPeriod,
-    payPeriodDuration: Duration.fromObject({
-      seconds: offerDetails.periodDuration,
-    }).as('days'),
-  }
+  const terms = processOffer(offerDetails)
   const usdPrice = useCoinConversion('usd')
 
   const onClose = () => {
-    setIsError(false) // reset error
+    setErrorMsg('') // reset error
     setStep(Step.Checkout)
     onModalClose()
   }
 
   const onCheckout = () => {
-    setIsError(false) // reset error
+    setErrorMsg('') // reset error
     setStep(Step.WalletApproval)
     executeBuy({
       offer: offerDetails,
@@ -83,8 +71,8 @@ export default function BuyNowPayLaterModal({
       onSuccess() {
         setStep(Step.Success)
       },
-      onError() {
-        setIsError(true)
+      onError(errMsg: string) {
+        setErrorMsg(errMsg)
         setStep(Step.Checkout)
       },
     })
@@ -131,18 +119,18 @@ export default function BuyNowPayLaterModal({
                     {token?.token?.collection?.name}
                   </Text>
                 </VStack>
-                {/* TODO: Add back term stats */}
-                {[Step.WalletApproval, Step.Success].includes(step) && null}
+                {[Step.WalletApproval, Step.Success].includes(step) && (
+                  <TermsStats terms={terms} />
+                )}
               </VStack>
 
               <Box p="6" w="full">
                 {step === Step.Checkout && (
                   <VStack spacing="8" align="left">
-                    {isError && (
+                    {errorMsg !== '' && (
                       <Alert bg="red.900" rounded="md" status="error">
                         <AlertIcon />
-                        There was an error completing your purchase. Please try
-                        again.
+                        {errorMsg}
                       </Alert>
                     )}
                     <VStack spacing="4" align="left">
@@ -158,13 +146,15 @@ export default function BuyNowPayLaterModal({
                         <GridItem>
                           <HStack justify="space-between">
                             <Text>Down payment</Text>
-                            <FormatNativeCrypto amount={terms.downPayment} />
+                            <FormatNativeCrypto
+                              amount={terms.downPaymentAmount}
+                            />
                           </HStack>
                         </GridItem>
                         <GridItem>
                           <HStack justify="space-between">
                             <Text>Price</Text>
-                            <FormatNativeCrypto amount={terms.price} />
+                            <FormatNativeCrypto amount={terms.listPrice} />
                           </HStack>
                         </GridItem>
                         <GridItem>
@@ -176,13 +166,39 @@ export default function BuyNowPayLaterModal({
                         <GridItem>
                           <HStack justify="space-between">
                             <Text>Minimum principal</Text>
-                            <FormatNativeCrypto amount={terms.minPrincipal} />
+                            <FormatNativeCrypto
+                              amount={terms.minPrincipalPerPeriod}
+                            />
                           </HStack>
                         </GridItem>
                         <GridItem>
                           <HStack justify="space-between">
                             <Text>Pay period</Text>
-                            <Text fontWeight="semibold">{`${terms.payPeriodDuration} days`}</Text>
+                            <Text fontWeight="semibold">{`${terms.payPeriodDays} days`}</Text>
+                          </HStack>
+                        </GridItem>
+                        <GridItem>
+                          <HStack justify="space-between">
+                            <Text>Loan duration</Text>
+                            <Text fontWeight="semibold">{`${terms.loanDurMos} months`}</Text>
+                          </HStack>
+                        </GridItem>
+                        <GridItem>
+                          <HStack justify="space-between">
+                            <Text>Total cost</Text>
+                            <VStack>
+                              <FormatNativeCrypto amount={terms.totalCost} />
+                              {usdPrice && (
+                                <Text
+                                  fontSize={'xs'}
+                                  fontWeight="semibold"
+                                  mt="0 !important"
+                                  color="whiteAlpha.600"
+                                >
+                                  {formatDollar(usdPrice * terms.totalCost!)}
+                                </Text>
+                              )}
+                            </VStack>
                           </HStack>
                         </GridItem>
                       </Grid>
@@ -192,7 +208,7 @@ export default function BuyNowPayLaterModal({
                       <Heading size="lg">Total due now</Heading>
                       <VStack>
                         <FormatNativeCrypto
-                          amount={terms.downPayment}
+                          amount={terms.downPaymentAmount}
                           logoWidth={21}
                           fontSize={21}
                         />
@@ -202,9 +218,7 @@ export default function BuyNowPayLaterModal({
                             fontWeight="semibold"
                             color="whiteAlpha.600"
                           >
-                            {formatDollar(
-                              usdPrice * Number(formatEther(terms.downPayment))
-                            )}
+                            {formatDollar(usdPrice * terms.downPaymentAmount!)}
                           </Text>
                         )}
                       </VStack>

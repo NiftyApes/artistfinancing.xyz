@@ -1,9 +1,8 @@
 import { Box, HStack, Icon, Image, Text, VStack } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
-import { BigNumber } from 'ethers'
 import { Offer } from 'hooks/niftyapes/useOffers'
 import useTokens from 'hooks/useTokens'
-import { DateTime } from 'luxon'
+import { processOffer } from 'lib/niftyapes/processOffer'
 import { FiClock } from 'react-icons/fi'
 import { Collection } from 'types/reservoir'
 import BuyNowPayLaterModal from './bnpl/BuyNowPayLaterModal'
@@ -20,21 +19,15 @@ export default function TokenCardSection({
   isOwner: boolean
   offer: Offer
 }) {
-  const downPaymentAmount = BigNumber.from(offer.offer.downPaymentAmount)
-
-  const { periodInterestRateBps, periodDuration } = offer.offer
-  const interestRatePerSecond = periodInterestRateBps / periodDuration / 100
-  const apr = Math.round(interestRatePerSecond * (365 * 86400))
-
-  const expiration = DateTime.fromSeconds(offer.offer.expiration).toRelative()
+  const terms = processOffer(offer.offer)
 
   return (
     <Box>
       <VStack px="4" pb="4">
         <HStack w="full" justify={'space-between'}>
-          <HStack>
-            <FormatNativeCrypto amount={downPaymentAmount} />
-            <Text>Down</Text>
+          <HStack spacing={1}>
+            <FormatNativeCrypto amount={terms.downPaymentAmount} />
+            <Text fontWeight={'semibold'}>Down</Text>
           </HStack>
           <Image
             borderRadius="full"
@@ -43,10 +36,10 @@ export default function TokenCardSection({
           />
         </HStack>
         <HStack w="full" spacing="4" justify={'space-between'}>
-          <Text>{`${apr}% APR`}</Text>
+          <Text fontWeight={'semibold'}>{`${terms.apr}% APR`}</Text>
           <HStack spacing="1">
             <Icon as={FiClock} />
-            <Text>{expiration}</Text>
+            <Text fontWeight={'semibold'}>{terms.expirationRelative}</Text>
           </HStack>
         </HStack>
       </VStack>

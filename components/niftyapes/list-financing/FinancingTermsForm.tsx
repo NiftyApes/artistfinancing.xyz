@@ -22,9 +22,7 @@ import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import useCoinConversion from 'hooks/useCoinConversion'
 import useEnvChain from 'hooks/useEnvChain'
 import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
-import processFormValues, {
-  FinancingTerms,
-} from 'lib/niftyapes/processOfferFormFields'
+import { FinancingTerms, processFormValues } from 'lib/niftyapes/processOffer'
 import { formatDollar } from 'lib/numbers'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { IoInformationCircleOutline } from 'react-icons/io5'
@@ -55,7 +53,7 @@ export default function FinancingTermsForm({
     apr: String(terms.apr),
     payPeriodDays: terms.payPeriodDays,
     loanDurMos: String(terms.loanDurMos),
-    expiration: terms.expiration,
+    expiration: terms.expiration!,
   })
   const updateTerm = (key: string) => {
     return (value: string) => {

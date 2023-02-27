@@ -1,4 +1,9 @@
-import { Address, prepareWriteContract, writeContract } from '@wagmi/core'
+import {
+  Address,
+  prepareWriteContract,
+  RpcError,
+  writeContract,
+} from '@wagmi/core'
 import { BigNumber } from 'ethers'
 import { useNiftyApesContract } from './useNiftyApesContract'
 
@@ -25,7 +30,7 @@ export default function useExecuteBuy() {
       }
       signature: `0x${string}`
       onSuccess: () => void
-      onError: () => void
+      onError: (errMsg: string) => void
     }) {
       try {
         if (!address) {
@@ -132,7 +137,14 @@ export default function useExecuteBuy() {
         onSuccess && onSuccess()
       } catch (err) {
         console.error(err)
-        onError()
+        if ((err as any).code === 'INSUFFICIENT_FUNDS') {
+          onError('Insufficient funds to complete your purchase.')
+          return
+        }
+
+        onError(
+          'There was an error completing your purchase. Please try again. '
+        )
       }
     },
   }
