@@ -46,8 +46,8 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
   const router = useRouter()
   const { address } = router.query;
 
-  const { data: loans, isLoading } = useLoans({ owner: address})
-  const { ref} = useInView();
+  const { data: loans, isLoading } = useLoans({ owner: address as string })
+  const { ref } = useInView()
 
   if (isLoading) {
     return (
@@ -294,7 +294,7 @@ const UserListingsTableRow = ({
   )
 }
 
-const UpcomingPaymentsTableRow = ({ref, loan, offer }: LoansRowProps) => {
+const UpcomingPaymentsTableRow = ({ ref, loan, offer }: LoansRowProps) => {
 
 
   const { remainingPrincipal, minimumPrincipalPerPeriod, periodInterestRateBps, periodEndTimestamp } = loan
