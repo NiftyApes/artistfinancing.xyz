@@ -4,8 +4,8 @@ import qs from 'query-string'
 import instance from 'lib/niftyapes/AxiosInstance'
 
 type LoansParams = {
-  owner?: string
-  creator?: string
+  owner?: string | string[]
+    creator?: string | string[]
 }
 
 export const useLoans = ({

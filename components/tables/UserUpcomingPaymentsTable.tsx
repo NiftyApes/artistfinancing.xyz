@@ -16,7 +16,7 @@ import { useInView } from 'react-intersection-observer'
 import { useRouter } from 'next/router'
 import * as Dialog from '@radix-ui/react-dialog'
 import LoadingIcon from 'components/LoadingIcon'
-import { useMediaQuery } from '@react-hookz/web'
+
 import { FiAlertCircle } from 'react-icons/fi'
 import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
 import useLoans from '../../hooks/niftyapes/useLoans'
@@ -44,12 +44,10 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
                                               }) => {
 
   const router = useRouter()
-  const isMobile = useMediaQuery('only screen and (max-width : 730px)')
-  const { address } = router.query
+  const { address } = router.query;
 
-  const { data: loans, isLoading } = useLoans({ owner: address })
+  const { data: loans, isLoading } = useLoans({ owner: address})
   const { ref} = useInView();
-
 
   if (isLoading) {
     return (
@@ -114,7 +112,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
           </thead>
           <tbody>
           {loans.data.map((item: any, index: null) => (
-            <UpcomingPaymentsTableRow ref={ref} loan={item.loan} offer={item.offer.offer} key={index} />
+            <UpcomingPaymentsTableRow ref={ref} loan={item.loan} isOwner={true} offer={item.offer.offer} key={index} />
           ))}
           </tbody>
         </table>
