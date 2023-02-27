@@ -117,8 +117,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
           {loans.data.map((item: any, index: null) => {
 
 
-
-              return <UpcomingPaymentsTableRow ref={ref} loan={item.loan} isOwner={true} offer={new Offer(item.offer)} key={index} />
+              return <UpcomingPaymentsTableRow ref={ref} loan={item.loan} isOwner={true} offer={item.offer.offer} key={index} />
             }
           )}
           </tbody>
@@ -170,28 +169,28 @@ type UserListingsRowProps = {
 
 const UpcomingPaymentsTableRow = ({ ref, loan, offer }: LoansRowProps) => {
 
-  type OfferDetails = {
-    creator: Address
-    downPaymentAmount: string
-    expiration: number
-    minimumPrincipalPerPeriod: string
-    nftContractAddress: Address
-    nftId: string
-    periodDuration: number
-    periodInterestRateBps: number
-    price: string
-  }
-
-
-  const {
-    listPrice,
-    downPaymentAmount,
-    expirationRelative,
-    payPeriodDays,
-    apr,
-    tokenId,
-    minPrincipalPerPeriod
-  } = processOffer(offer.offer)
+  // type OfferDetails = {
+  //   creator: Address
+  //   downPaymentAmount: string
+  //   expiration: number
+  //   minimumPrincipalPerPeriod: string
+  //   nftContractAddress: Address
+  //   nftId: string
+  //   periodDuration: number
+  //   periodInterestRateBps: number
+  //   price: string
+  // }
+  //
+  //
+  // const {
+  //   listPrice,
+  //   downPaymentAmount,
+  //   expirationRelative,
+  //   payPeriodDays,
+  //   apr,
+  //   tokenId,
+  //   minPrincipalPerPeriod
+  // } = processOffer(offer.offer)
 
 
   const { remainingPrincipal, minimumPrincipalPerPeriod, periodInterestRateBps, periodEndTimestamp } = loan
