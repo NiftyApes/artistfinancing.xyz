@@ -149,10 +149,10 @@ const UserListingsTableRow = ({ offer }: UserOffersRowProps) => {
       {/* EXPIRES */}
       <td className="whitespace-nowrap px-6 py-4">{expirationRelative}</td>
 
-      {/* CANCEL LOAN */}
+      {/* CANCEL OFFER */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         <button className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4">
-          Cancel Loan
+          Cancel Offer
         </button>
       </td>
     </tr>
