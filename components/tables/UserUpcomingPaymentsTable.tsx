@@ -5,7 +5,7 @@ import {
 import { DateTime } from 'luxon'
 import Link from 'next/link'
 import { optimizeImage } from 'lib/optmizeImage'
-import { useSigner } from 'wagmi'
+import { Address, useSigner } from 'wagmi'
 import Toast from 'components/Toast'
 import CancelListing from 'components/CancelListing'
 import FormatCrypto from 'components/FormatCrypto'
@@ -21,7 +21,9 @@ import { FiAlertCircle } from 'react-icons/fi'
 import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
 import useLoans from '../../hooks/niftyapes/useLoans'
 import { BigNumber } from 'ethers'
+
 import { format } from 'date-fns'
+import { processOffer } from '../../lib/niftyapes/processOffer'
 
 const API_BASE =
   process.env.NEXT_PUBLIC_RESERVOIR_API_BASE || 'https://api.reservoir.tools'
@@ -44,7 +46,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
                                               }) => {
 
   const router = useRouter()
-  const { address } = router.query;
+  const { address } = router.query
 
   const { data: loans, isLoading } = useLoans({ owner: address as string })
   const { ref } = useInView()
@@ -111,9 +113,14 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
           </tr>
           </thead>
           <tbody>
-          {loans.data.map((item: any, index: null) => (
-            <UpcomingPaymentsTableRow ref={ref} loan={item.loan} isOwner={true} offer={item.offer.offer} key={index} />
-          ))}
+
+          {loans.data.map((item: any, index: null) => {
+
+
+
+              return <UpcomingPaymentsTableRow ref={ref} loan={item.loan} isOwner={true} offer={new Offer(item.offer)} key={index} />
+            }
+          )}
           </tbody>
         </table>
       )}
@@ -160,141 +167,31 @@ type UserListingsRowProps = {
   ref: null | ((node?: Element | null) => void)
 }
 
-const UserListingsTableRow = ({
-                                isOwner,
-                                listing,
-                                modal,
-                                mutate,
-                                ref
-                              }: UserListingsRowProps) => {
-  const { data: signer } = useSigner()
-  const usdConversion = useCoinConversion(
-    listing?.price?.currency?.symbol ? 'usd' : undefined,
-    listing?.price?.currency?.symbol
-  )
-
-  const usdPrice =
-    usdConversion && listing?.price?.amount?.decimal
-      ? usdConversion * listing?.price?.amount?.decimal
-      : null
-
-  const {
-    collectionName,
-    contract,
-    expiration,
-    id,
-    image,
-    name,
-    tokenHref,
-    tokenId,
-    price,
-    source
-  } = processListing(listing)
-
-  return (
-    <tr
-      ref={ref}
-      className='group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white dark:border-b-neutral-600 dark:bg-black'
-    >
-      {/* ITEM */}
-      <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
-        <Link href={tokenHref} legacyBehavior={true}>
-          <a className='flex items-center gap-2'>
-            <div className='relative h-16 w-16'>
-              {image && (
-                <div className='aspect-w-1 aspect-h-1 relative overflow-hidden rounded'>
-                  <img
-                    src={optimizeImage(image, 64)}
-                    alt='Bid Image'
-                    className='w-[64px] object-contain'
-                    width='64'
-                    height='64'
-                  />
-                </div>
-              )}
-            </div>
-            <span className='whitespace-nowrap'>
-              <div
-                className='reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white'>
-                {name}
-              </div>
-              <div className='text-xs text-neutral-600 dark:text-neutral-300'>
-                {collectionName}
-              </div>
-            </span>
-          </a>
-        </Link>
-      </td>
-
-      {/* PRICE */}
-      <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
-        <FormatCrypto
-          amount={price?.amount?.decimal}
-          address={price?.currency?.contract}
-          decimals={price?.currency?.decimals}
-          maximumFractionDigits={8}
-        />
-        {usdPrice && (
-          <div className='text-xs text-neutral-600 dark:text-neutral-300'>
-            {formatDollar(usdPrice)}
-          </div>
-        )}
-      </td>
-
-      {/* APR */}
-      <td className='px-6 py-4 font-light text-neutral-600 dark:text-neutral-300'>
-        20%
-      </td>
-
-      {/* NEXT PAYMENT DUE */}
-      <td className='whitespace-nowrap px-6 py-4'>10 days</td>
-
-      {/* NEXT MINIMUM PAYMENT */}
-      <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
-        <FormatCrypto
-          amount={price?.amount?.decimal}
-          address={price?.currency?.contract}
-          decimals={price?.currency?.decimals}
-          maximumFractionDigits={8}
-        />
-        {usdPrice && (
-          <div className='text-xs text-neutral-600 dark:text-neutral-300'>
-            {formatDollar(usdPrice)}
-          </div>
-        )}
-      </td>
-
-      {/* PRINCIPAL REMAINING */}
-      <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
-        <FormatCrypto
-          amount={price?.amount?.decimal}
-          address={price?.currency?.contract}
-          decimals={price?.currency?.decimals}
-          maximumFractionDigits={8}
-        />
-        {usdPrice && (
-          <div className='text-xs text-neutral-600 dark:text-neutral-300'>
-            {formatDollar(usdPrice)}
-          </div>
-        )}
-      </td>
-
-      {/* MAKE PAYMENT */}
-      <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
-        <MakePaymentModal data={{ ...listing, image, name, collectionName }} />
-      </td>
-
-      {/* CANCEL OFFER */}
-      <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
-        <button className='btn-primary-outline gap-2 dark:ring-primary-900 dark:focus:ring-4'>
-          Cancel Offer
-        </button>
-      </td>
-    </tr>
-  )
-}
 
 const UpcomingPaymentsTableRow = ({ ref, loan, offer }: LoansRowProps) => {
+
+  type OfferDetails = {
+    creator: Address
+    downPaymentAmount: string
+    expiration: number
+    minimumPrincipalPerPeriod: string
+    nftContractAddress: Address
+    nftId: string
+    periodDuration: number
+    periodInterestRateBps: number
+    price: string
+  }
+
+
+  const {
+    listPrice,
+    downPaymentAmount,
+    expirationRelative,
+    payPeriodDays,
+    apr,
+    tokenId,
+    minPrincipalPerPeriod
+  } = processOffer(offer.offer)
 
 
   const { remainingPrincipal, minimumPrincipalPerPeriod, periodInterestRateBps, periodEndTimestamp } = loan

@@ -99,6 +99,7 @@ type UserOffersRowProps = {
 }
 
 const UserListingsTableRow = ({ offer }: UserOffersRowProps) => {
+
   const {
     listPrice,
     downPaymentAmount,
