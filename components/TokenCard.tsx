@@ -21,6 +21,7 @@ import { Collection } from 'types/reservoir'
 import { useAccount, useNetwork, useSigner } from 'wagmi'
 import RarityTooltip from './RarityTooltip'
 import { setToast } from './token/setToast'
+import { Offer } from 'hooks/niftyapes/useOffers'
 
 const SOURCE_ICON = process.env.NEXT_PUBLIC_SOURCE_ICON
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
@@ -39,24 +40,26 @@ if (CURRENCIES) {
 
 type Props = {
   token?: ReturnType<typeof useTokens>['tokens']['data'][0]
+  collection?: Collection
   collectionImage: string | undefined
   collectionSize?: number | undefined
   collectionAttributes?: Collection['attributes']
   mutate: MutatorCallback
   setClearCartOpen?: Dispatch<SetStateAction<boolean>>
   setCartToSwap?: Dispatch<SetStateAction<any | undefined>>
-  hasFinanceListing?: boolean
+  financeOffer?: Offer
 }
 
 const TokenCard: FC<Props> = ({
   token,
+  collection,
   collectionImage,
   collectionSize,
   collectionAttributes,
   mutate,
   setClearCartOpen,
   setCartToSwap,
-  hasFinanceListing,
+  financeOffer,
 }) => {
   const account = useAccount()
   const { data: signer } = useSigner()
@@ -145,7 +148,7 @@ const TokenCard: FC<Props> = ({
       </Link>
       <div
         className={`absolute bottom-[0px] w-full bg-white transition-all dark:bg-neutral-800 md:-bottom-[41px] ${
-          !isOwner && !price ? '' : 'group-hover:bottom-[0px]'
+          !isOwner && !price && !financeOffer ? '' : 'group-hover:bottom-[0px]'
         }`}
       >
         <div className="flex items-center justify-between">
@@ -167,8 +170,13 @@ const TokenCard: FC<Props> = ({
               />
             )}
         </div>
-        {hasFinanceListing ? (
-          <NiftyApesTokenCardSection token={token} isOwner={isOwner} />
+        {financeOffer ? (
+          <NiftyApesTokenCardSection
+            token={token}
+            collection={collection}
+            isOwner={isOwner}
+            offer={financeOffer}
+          />
         ) : (
           <>
             <div className="flex items-center justify-between px-4 pb-4 lg:pb-3">

@@ -27,8 +27,6 @@ enum Step {
   Success,
 }
 
-const SECONDS_IN_DAY = 86400;
-
 export default function MakePaymentModal({
   data,
 }: {
@@ -36,15 +34,12 @@ export default function MakePaymentModal({
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [step, setStep] = useState<Step>(Step.Success)
-
-  const {loan, offer} = data
-
   const terms = {
-    remainingPrincipal: loan.remainingPrincipal,
-    apr: loan.periodInterestRateBps,
-    minPrincipalPercent: loan.minimumPrincipalPerPeriod,
-    payPeriodDays: loan.periodDuration / SECONDS_IN_DAY,
-    duration: formatDistanceToNow(new Date(loan.periodEndTimestamp * 1000)),
+    remainingPrincipal: 20,
+    apr: 20,
+    minPrincipalPercent: 5,
+    payPeriodDays: 30,
+    duration: formatDistanceToNow(addMonths(new Date(), 12)),
   }
 
   const onClose = () => {
@@ -58,9 +53,9 @@ export default function MakePaymentModal({
     isSuccess,
     write,
   } = useMakePayment({
-    nftContractAddress: offer.nftContractAddress,
+    nftContractAddress: data.contract,
     paymentAmount: ethers.utils.parseEther('0.0123'),
-    nftId: BigNumber.from(offer.nftId),
+    nftId: BigNumber.from(data.tokenId || 0),
   })
 
   return (
@@ -130,7 +125,7 @@ export default function MakePaymentModal({
                       </div>
                       <div className="flex flex-col items-center gap-2">
                         <div className="flex flex-row items-center font-semibold">
-                          <p>{format(new Date(loan.periodEndTimestamp * 1000), 'Pp')}</p>
+                          <p>{format(addMonths(new Date(), 12), 'Pp')}</p>
                         </div>
                         <p className="text-sm text-gray-300">
                           Next Payment Due

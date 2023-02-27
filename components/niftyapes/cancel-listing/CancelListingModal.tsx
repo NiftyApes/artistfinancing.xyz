@@ -16,11 +16,7 @@ import { useState } from 'react'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import LoadingDots from '../LoadingDots'
 
-export default function CancelListingModal({
-  onSuccess,
-}: {
-  onSuccess: () => void
-}) {
+export default function CancelListingModal() {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const [cancellationSuccess, setCancellationSuccess] = useState(false)
   const onClose = () => {
@@ -52,7 +48,6 @@ export default function CancelListingModal({
               <CancellationInProgress
                 onApprove={() => {
                   setCancellationSuccess(true)
-                  onSuccess()
                 }}
                 onClose={onClose}
               />
