@@ -4,19 +4,19 @@ import qs from 'query-string'
 import instance from 'lib/niftyapes/AxiosInstance'
 
 type LoansParams = {
-  owner?: string
-  creator?: string
+  buyer?: string
+  seller?: string
 }
 
 export const useLoans = ({
-                           creator,
-                           owner
+                           seller,
+                           buyer
                          }: LoansParams) => {
   const url = qs.stringifyUrl({
     url: '/loans',
     query: {
-      creator,
-      owner
+      seller: seller,
+      buyer: buyer
     }
   })
 
@@ -26,8 +26,8 @@ export const useLoans = ({
     [
       'loans',
       {
-        creator,
-        owner
+        seller: seller,
+        buyer: buyer
       }
     ],
     getLoans
