@@ -2,7 +2,7 @@ import { Grid, Skeleton } from '@chakra-ui/react'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import TokenCard from 'components/TokenCard'
 import { getAddress } from 'ethers/lib/utils.js'
-import useOffers, { Offer } from 'hooks/niftyapes/useOffers'
+import useOffers from 'hooks/niftyapes/useOffers'
 import { useAccount } from 'wagmi'
 
 export default function FeaturedFinancingOffers() {
@@ -22,19 +22,6 @@ export default function FeaturedFinancingOffers() {
   } = useTokens({
     tokens: tokenQueries,
   })
-  const offersWithTokens = activeOffers?.map((offer) => {
-    const token = tokens.find(
-      (token) =>
-        getAddress(token?.token?.contract || '') ===
-          offer.offer.nftContractAddress &&
-        token?.token?.tokenId === offer.offer.nftId
-    )
-
-    return {
-      offer,
-      token,
-    }
-  })
 
   if (isLoadingOffers || isFetchingTokens) {
     return (
@@ -45,6 +32,26 @@ export default function FeaturedFinancingOffers() {
       </Grid>
     )
   }
+
+  const offersWithTokens = activeOffers
+    ?.map((offer) => {
+      const token = tokens.find(
+        (token) =>
+          getAddress(token?.token?.contract || '') ===
+            offer.offer.nftContractAddress &&
+          token?.token?.tokenId === offer.offer.nftId
+      )
+
+      return {
+        offer,
+        token,
+      }
+    })
+    .filter(
+      ({ offer, token }) =>
+        // Filter out offers where creator is not the current NFT owner
+        getAddress(offer.offer.creator) === getAddress(token?.token?.owner!)
+    )
 
   return (
     <Grid templateColumns={'repeat(5, 1fr)'} gap={12}>

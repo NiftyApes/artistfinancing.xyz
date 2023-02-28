@@ -36,10 +36,15 @@ export default function TokenCardSection({
           />
         </HStack>
         <HStack w="full" spacing="4" justify={'space-between'}>
-          <Text fontWeight={'semibold'}>{`${terms.apr}% APR`}</Text>
+          <Text
+            fontSize={'sm'}
+            fontWeight={'semibold'}
+          >{`${terms.apr}% APR`}</Text>
           <HStack spacing="1">
             <Icon as={FiClock} />
-            <Text fontWeight={'semibold'}>{terms.expirationRelative}</Text>
+            <Text fontSize={'sm'} fontWeight={'semibold'}>
+              {terms.expirationRelative}
+            </Text>
           </HStack>
         </HStack>
       </VStack>

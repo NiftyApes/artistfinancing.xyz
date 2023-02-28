@@ -11,6 +11,7 @@ import {
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { setToast } from 'components/token/setToast'
+import { getAddress } from 'ethers/lib/utils.js'
 import useOffers from 'hooks/niftyapes/useOffers'
 import { FinancingTerms, processOffer } from 'lib/niftyapes/processOffer'
 import { Collection } from 'types/reservoir'
@@ -31,7 +32,12 @@ export default function ListFinancingSection({
     collection: collection?.id,
     nftId: token?.token?.tokenId,
   })
-  const listing = offerData?.filter((offer) => offer.status !== 'CANCELLED')[0]
+  // Get most recent active listing where offer creator and nft owner are the same
+  const listing = offerData?.filter(
+    (offer) =>
+      offer.status === 'ACTIVE' &&
+      getAddress(token?.token?.owner!) === getAddress(offer.offer.creator)
+  )[0]
   const terms = listing ? processOffer(listing.offer) : null
 
   if (isError) {

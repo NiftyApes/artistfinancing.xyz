@@ -13,6 +13,7 @@ import { useRecoilValue } from 'recoil'
 import { getPricing } from 'lib/token/pricing'
 import useOffers from 'hooks/niftyapes/useOffers'
 import { setToast } from './token/setToast'
+import { getAddress } from 'ethers/lib/utils.js'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
@@ -117,7 +118,9 @@ const TokensGrid: FC<Props> = ({
               const financeOffer = offersData?.find(
                 (offer) =>
                   offer.offer.nftId === token?.token?.tokenId &&
-                  offer.status !== 'CANCELLED'
+                  offer.status === 'ACTIVE' &&
+                  getAddress(token?.token?.owner!) ===
+                    getAddress(offer.offer.creator)
               )
 
               return (
