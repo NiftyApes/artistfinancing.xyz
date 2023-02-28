@@ -26,6 +26,7 @@ import { format } from 'date-fns'
 import { processOffer } from '../../lib/niftyapes/processOffer'
 import { Offer, OfferDetails } from '../../hooks/niftyapes/useOffers'
 import FormatNativeCrypto from '../FormatNativeCrypto'
+import { useNiftyApesContract } from '../../hooks/niftyapes/useNiftyApesContract'
 
 const API_BASE =
   process.env.NEXT_PUBLIC_RESERVOIR_API_BASE || 'https://api.reservoir.tools'
@@ -50,7 +51,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
   const router = useRouter()
   const { address } = router.query
 
-  const { data: loans, isLoading } = useLoans({ owner: address as string })
+  const { data: loans, isLoading } = useLoans({ buyer: address as string })
   const { ref } = useInView()
 
   if (isLoading) {
@@ -176,6 +177,8 @@ const UpcomingPaymentsTableRow = ({ ref, loan, buyerNft, offer }: LoansRowProps)
     tokenId
   } = processOffer(offer)
 
+  const { address } = useNiftyApesContract()
+
   const { periodEndTimestamp, remainingPrincipal } = loan
 
 
@@ -228,7 +231,9 @@ const UpcomingPaymentsTableRow = ({ ref, loan, buyerNft, offer }: LoansRowProps)
       {/* MAKE PAYMENT */}
       <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
         <button
-          onClick={() => window.open(buyerNft.tokenId, 'blank')}
+          onClick={() => {
+            window.location.href = `/${address}/${buyerNft.tokenId}`
+          }}
           className='btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4'
         >Sell Loan
         </button>
