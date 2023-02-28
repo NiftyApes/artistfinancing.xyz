@@ -1,4 +1,4 @@
-import { Grid } from '@chakra-ui/react'
+import { Grid, Skeleton } from '@chakra-ui/react'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import TokenCard from 'components/TokenCard'
 import { getAddress } from 'ethers/lib/utils.js'
@@ -15,7 +15,11 @@ export default function FeaturedFinancingOffers() {
   const tokenQueries = activeOffers?.map(
     (offer) => `${offer.offer.nftContractAddress}:${offer.offer.nftId}`
   )
-  const { data: tokens, mutate: tokensMutate } = useTokens({
+  const {
+    data: tokens,
+    mutate: tokensMutate,
+    isFetchingPage: isFetchingTokens,
+  } = useTokens({
     tokens: tokenQueries,
   })
   const offersWithTokens = activeOffers?.map((offer) => {
@@ -32,10 +36,21 @@ export default function FeaturedFinancingOffers() {
     }
   })
 
+  if (isLoadingOffers || isFetchingTokens) {
+    return (
+      <Grid templateColumns={'repeat(5, 1fr)'} gap={12}>
+        {[...Array(10)].map((_, idx) => (
+          <Skeleton key={idx} rounded="md" height="sm" />
+        ))}
+      </Grid>
+    )
+  }
+
   return (
     <Grid templateColumns={'repeat(5, 1fr)'} gap={12}>
-      {offersWithTokens?.map(({ offer, token }) => (
+      {offersWithTokens?.map(({ offer, token }, idx) => (
         <TokenCard
+          key={idx}
           token={token}
           financeOffer={offer}
           collectionImage={undefined}
