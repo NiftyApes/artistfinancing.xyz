@@ -9,6 +9,7 @@ import Footer from 'components/Footer'
 import { useMediaQuery } from '@react-hookz/web'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import FeaturedFinancingOffers from 'components/niftyapes/FeaturedFinancingOffers'
 
 // Environment variables
 // For more information about these variables
@@ -86,6 +87,12 @@ const Home: NextPage<Props> = ({ fallback }) => {
       <header className="col-span-full mb-12 mt-[66px] px-4 md:mt-40 lg:px-0">
         <h1 className="reservoir-h1 text-center dark:text-white">{tagline}</h1>
       </header>
+      <div className="col-span-full px-6 md:px-16">
+        <div className="mb-9 flex w-full items-center justify-between">
+          <div className="reservoir-h4 dark:text-white">Pay for it later</div>
+        </div>
+        <FeaturedFinancingOffers />
+      </div>
       <div className="col-span-full px-6 md:px-16">
         <div className="mb-9 flex w-full items-center justify-between">
           <div className="reservoir-h4 dark:text-white">
