@@ -24,6 +24,8 @@ import { BigNumber } from 'ethers'
 
 import { format } from 'date-fns'
 import { processOffer } from '../../lib/niftyapes/processOffer'
+import { Offer, OfferDetails } from '../../hooks/niftyapes/useOffers'
+import FormatNativeCrypto from '../FormatNativeCrypto'
 
 const API_BASE =
   process.env.NEXT_PUBLIC_RESERVOIR_API_BASE || 'https://api.reservoir.tools'
@@ -97,7 +99,9 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
               'APR',
               'Next Payment Due',
               'Next Minimum Payment',
-              'Principal Remaining'
+              'Principal Remaining',
+              'Make Payment',
+              'Sell Loan'
             ].map((item) => (
               <th
                 key={item}
@@ -116,8 +120,14 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
 
           {loans.data.map((item: any, index: null) => {
 
-
-              return <UpcomingPaymentsTableRow ref={ref} loan={item.loan} isOwner={true} offer={item.offer.offer} key={index} />
+              return <UpcomingPaymentsTableRow
+                buyerNft={item.buyerNft}
+                isOwner={true}
+                key={index}
+                loan={item.loan}
+                offer={item.offer.offer}
+                ref={ref}
+              />
             }
           )}
           </tbody>
@@ -140,20 +150,10 @@ type LoansRowProps = {
     periodEndTimestamp: number,
     periodBeginTimestamp: number
   },
-  offer: {
-    minimumPrincipalPerPeriod: string,
-    periodDuration: number,
-    creator: string,
-    nftContractAddress: string,
-    price: string,
-    periodInterestRateBps: number,
-    nftId: 110,
-    expiration: 1676593371,
-    downPaymentAmount: string,
+  buyerNft: {
+    tokenId: string
   }
-
-  // modal: Props['modal']
-  // mutate: ReturnType<typeof useListings>['mutate']
+  offer: OfferDetails,
   ref: null | ((node?: Element | null) => void)
 }
 
@@ -167,36 +167,16 @@ type UserListingsRowProps = {
 }
 
 
-const UpcomingPaymentsTableRow = ({ ref, loan, offer }: LoansRowProps) => {
+const UpcomingPaymentsTableRow = ({ ref, loan, buyerNft, offer }: LoansRowProps) => {
 
-  // type OfferDetails = {
-  //   creator: Address
-  //   downPaymentAmount: string
-  //   expiration: number
-  //   minimumPrincipalPerPeriod: string
-  //   nftContractAddress: Address
-  //   nftId: string
-  //   periodDuration: number
-  //   periodInterestRateBps: number
-  //   price: string
-  // }
-  //
-  //
-  // const {
-  //   listPrice,
-  //   downPaymentAmount,
-  //   expirationRelative,
-  //   payPeriodDays,
-  //   apr,
-  //   tokenId,
-  //   minPrincipalPerPeriod
-  // } = processOffer(offer.offer)
+  const {
+    apr,
+    listPrice,
+    minPrincipalPerPeriod,
+    tokenId
+  } = processOffer(offer)
 
-
-  const { remainingPrincipal, minimumPrincipalPerPeriod, periodInterestRateBps, periodEndTimestamp } = loan
-  const { price, nftId } = offer
-
-  const minPayment = Number(minimumPrincipalPerPeriod) + (Number(periodInterestRateBps) * Number(remainingPrincipal))
+  const { periodEndTimestamp, remainingPrincipal } = loan
 
 
   return (
@@ -205,19 +185,17 @@ const UpcomingPaymentsTableRow = ({ ref, loan, offer }: LoansRowProps) => {
       className='group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white dark:border-b-neutral-600 dark:bg-black'>
       {/* ITEM */}
       <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
-        {nftId}
+        {tokenId}
       </td>
 
       {/* PRICE */}
       <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
-        <FormatCrypto
-          amount={BigNumber.from(price)}
-        />
+        <FormatNativeCrypto maximumFractionDigits={4} amount={listPrice} />
       </td>
 
       {/* APR */}
       <td className='px-6 py-4 font-light text-neutral-600 dark:text-neutral-300'>
-        {periodInterestRateBps}
+        {apr}%
       </td>
 
       {/* NEXT PAYMENT DUE */}
@@ -227,21 +205,34 @@ const UpcomingPaymentsTableRow = ({ ref, loan, offer }: LoansRowProps) => {
 
       {/* NEXT MINIMUM PAYMENT */}
       <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
-        <FormatCrypto
-          amount={BigNumber.from(String(minPayment))}
+        <FormatNativeCrypto
+          maximumFractionDigits={4}
+          amount={minPrincipalPerPeriod}
         />
+
       </td>
 
       {/* PRINCIPAL REMAINING */}
       <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
-        <FormatCrypto
-          amount={BigNumber.from(remainingPrincipal)}
+        <FormatNativeCrypto
+          maximumFractionDigits={4}
+          amount={remainingPrincipal}
         />
       </td>
 
       {/* MAKE PAYMENT */}
       <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
         <MakePaymentModal data={{ loan, offer, image: '/niftyapes/banana.png' }} />
+      </td>
+
+      {/* MAKE PAYMENT */}
+      <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
+        <button
+          onClick={() => window.open(buyerNft.tokenId, 'blank')}
+          className='btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4'
+        >Sell Loan
+        </button>
+
       </td>
     </tr>
   )

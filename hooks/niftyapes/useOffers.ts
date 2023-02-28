@@ -11,7 +11,7 @@ type OffersParams = {
   nftId?: string
 }
 
-type OfferDetails = {
+export type OfferDetails = {
   creator: Address
   downPaymentAmount: string
   expiration: number
