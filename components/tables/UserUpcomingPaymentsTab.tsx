@@ -32,9 +32,10 @@ const UserUpcomingPaymentsTab: React.FC = () => {
         .filter((contract) => !!contract) as string[]) || []
   }
 
+
   return (
-    <div className="mt-14 justify-center dark:text-white">
-      <div className="mb-6 text-center">
+    <div className='mt-14 justify-center dark:text-white'>
+      <div className='mb-6 text-center'>
         <UserUpcomingPaymentsTable
           collectionIds={collectionIds}
           isOwner

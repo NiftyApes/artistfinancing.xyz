@@ -47,13 +47,16 @@ export function processOffer(offerDetails: Offer['offer']): FinancingTerms {
   const payPeriodDays = Duration.fromObject({
     seconds: offerDetails.periodDuration,
   }).as('days')
+
   const numPayPeriods =
     Math.ceil(remainingPrincipal / minPrincipalPerPeriod) || 0
+
   const loanDurMos = Math.round(
     Duration.fromObject({
       days: payPeriodDays * numPayPeriods,
     }).as('months')
   )
+
   const periodInterestRate = offerDetails.periodInterestRateBps / 100
   const totalIntEarned = calculateTotalInterest(
     periodInterestRate,
