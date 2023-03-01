@@ -37,7 +37,7 @@ export default function FeaturedFinancingOffers() {
     ?.map((offer) => {
       const token = tokens.find(
         (token) =>
-          getAddress(token?.token?.contract || '') ===
+          getAddress(token?.token?.contract!) ===
             offer.offer.nftContractAddress &&
           token?.token?.tokenId === offer.offer.nftId
       )
