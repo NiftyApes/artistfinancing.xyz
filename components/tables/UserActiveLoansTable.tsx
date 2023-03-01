@@ -64,12 +64,11 @@ const UserActiveLoansTable: FC = () => {
                   {[
                     'Item',
                     'Price',
-                    'Down payment',
-                    'Min. principal payment',
-                    'Pay period',
                     'APR',
-                    'Duration',
-                    'Expires',
+                    'Next payment',
+                    'Principal Remaining',
+                    'Make Payment',
+                    'Sell Loan',
                   ].map((item) => (
                     <th
                       key={item}
