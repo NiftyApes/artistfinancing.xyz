@@ -26,6 +26,8 @@ import CollectionActivityTab from 'components/tables/CollectionActivityTab'
 import RefreshButton from 'components/RefreshButton'
 import SortTokens from 'components/SortTokens'
 import MobileTokensFilter from 'components/filter/MobileTokensFilter'
+import { useNiftyApesContract } from 'hooks/niftyapes/useNiftyApesContract'
+import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 
 // Environment variables
 // For more information about these variables
@@ -56,6 +58,7 @@ const Home: NextPage<Props> = ({ fallback, id }) => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const scrollRef = useRef<HTMLDivElement | null>(null)
+  const { address: niftyapesContractAddress } = useNiftyApesContract()
 
   const scrollToTop = () => {
     let top = (scrollRef.current?.offsetTop || 0) - 91 //Offset from parent element minus height of navbar
@@ -72,6 +75,10 @@ const Home: NextPage<Props> = ({ fallback, id }) => {
     collectionResponse.data && collectionResponse.data[0]
       ? collectionResponse.data[0]
       : undefined
+
+  if (collection && isEqualAddress(collection?.id, niftyapesContractAddress)) {
+    collection.image = `${window.location.origin}/niftyapes/placeholder.png`
+  }
 
   const stats = useCollectionStats(router, id)
 

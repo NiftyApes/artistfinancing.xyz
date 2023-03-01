@@ -4,6 +4,7 @@ import { useUserTokens } from '@reservoir0x/reservoir-kit-ui'
 import { useInView } from 'react-intersection-observer'
 import TokenCard from './TokenCard'
 import { paths } from '@reservoir0x/reservoir-sdk'
+import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
 
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
 const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
@@ -50,6 +51,8 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
     fetchNextPage,
     mutate,
   } = userTokens
+  const { addNiftyApesTokenImages } = useNiftyApesImages()
+  addNiftyApesTokenImages(tokens)
   const isEmpty = tokens.length === 0
   const { ref, inView } = useInView()
 
