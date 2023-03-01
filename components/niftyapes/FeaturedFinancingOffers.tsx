@@ -1,17 +1,12 @@
 import { Grid, Skeleton } from '@chakra-ui/react'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import TokenCard from 'components/TokenCard'
-import { getAddress } from 'ethers/lib/utils.js'
 import useOffers from 'hooks/niftyapes/useOffers'
-import { useAccount } from 'wagmi'
+import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 
 export default function FeaturedFinancingOffers() {
-  const { address } = useAccount()
   const { data: offersData, error, isLoading: isLoadingOffers } = useOffers({})
-  const activeOffers = offersData?.filter(
-    // Show active offers that aren't created by current account
-    (offer) => offer.status === 'ACTIVE' && offer.offer.creator !== address
-  )
+  const activeOffers = offersData?.filter((offer) => offer.status === 'ACTIVE')
   const tokenQueries = activeOffers?.map(
     (offer) => `${offer.offer.nftContractAddress}:${offer.offer.nftId}`
   )
@@ -37,9 +32,10 @@ export default function FeaturedFinancingOffers() {
     ?.map((offer) => {
       const token = tokens.find(
         (token) =>
-          getAddress(token?.token?.contract!) ===
-            offer.offer.nftContractAddress &&
-          token?.token?.tokenId === offer.offer.nftId
+          isEqualAddress(
+            token?.token?.contract,
+            offer.offer.nftContractAddress
+          ) && token?.token?.tokenId === offer.offer.nftId
       )
 
       return {
@@ -47,10 +43,9 @@ export default function FeaturedFinancingOffers() {
         token,
       }
     })
-    .filter(
-      ({ offer, token }) =>
-        // Filter out offers where creator is not the current NFT owner
-        getAddress(offer.offer.creator) === getAddress(token?.token?.owner!)
+    .filter(({ offer, token }) =>
+      // Filter out offers where creator is not the current NFT owner
+      isEqualAddress(offer.offer.creator, token?.token?.owner)
     )
 
   return (
