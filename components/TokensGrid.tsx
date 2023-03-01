@@ -1,19 +1,19 @@
+import SwapCartModal from 'components/SwapCartModal'
+import useOffers from 'hooks/niftyapes/useOffers'
+import isEqualAddress from 'lib/niftyapes/isEqualAddress'
+import { getPricing } from 'lib/token/pricing'
+import { useRouter } from 'next/router'
 import { FC, useEffect, useState } from 'react'
-import LoadingCard from './LoadingCard'
 import { useInView } from 'react-intersection-observer'
 import Masonry from 'react-masonry-css'
-import useTokens from '../hooks/useTokens'
-import SwapCartModal from 'components/SwapCartModal'
-import TokenCard from './TokenCard'
-import { Token } from 'recoil/cart/atom'
-import { getPricingPools } from 'recoil/cart'
-import { Collection } from 'types/reservoir'
-import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import { getPricing } from 'lib/token/pricing'
-import useOffers from 'hooks/niftyapes/useOffers'
+import { getPricingPools } from 'recoil/cart'
+import { Token } from 'recoil/cart/atom'
+import { Collection } from 'types/reservoir'
+import useTokens from '../hooks/useTokens'
+import LoadingCard from './LoadingCard'
 import { setToast } from './token/setToast'
-import { getAddress } from 'ethers/lib/utils.js'
+import TokenCard from './TokenCard'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
@@ -119,8 +119,7 @@ const TokensGrid: FC<Props> = ({
                 (offer) =>
                   offer.offer.nftId === token?.token?.tokenId &&
                   offer.status === 'ACTIVE' &&
-                  getAddress(token?.token?.owner!) ===
-                    getAddress(offer.offer.creator)
+                  isEqualAddress(offer.offer.creator, token?.token?.owner)
               )
 
               return (

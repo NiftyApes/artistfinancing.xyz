@@ -1,8 +1,8 @@
 import { Grid, Skeleton } from '@chakra-ui/react'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import TokenCard from 'components/TokenCard'
-import { getAddress } from 'ethers/lib/utils.js'
 import useOffers from 'hooks/niftyapes/useOffers'
+import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { useAccount } from 'wagmi'
 
 export default function FeaturedFinancingOffers() {
@@ -37,9 +37,10 @@ export default function FeaturedFinancingOffers() {
     ?.map((offer) => {
       const token = tokens.find(
         (token) =>
-          getAddress(token?.token?.contract!) ===
-            offer.offer.nftContractAddress &&
-          token?.token?.tokenId === offer.offer.nftId
+          isEqualAddress(
+            token?.token?.contract,
+            offer.offer.nftContractAddress
+          ) && token?.token?.tokenId === offer.offer.nftId
       )
 
       return {
@@ -47,10 +48,9 @@ export default function FeaturedFinancingOffers() {
         token,
       }
     })
-    .filter(
-      ({ offer, token }) =>
-        // Filter out offers where creator is not the current NFT owner
-        getAddress(offer.offer.creator) === getAddress(token?.token?.owner!)
+    .filter(({ offer, token }) =>
+      // Filter out offers where creator is not the current NFT owner
+      isEqualAddress(offer.offer.creator, token?.token?.owner)
     )
 
   return (
