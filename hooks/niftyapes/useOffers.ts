@@ -26,7 +26,7 @@ export type OfferDetails = {
 export type Offer = {
   offer: OfferDetails
   signature: `0x${string}`
-  createdAt: Date
+  createdAt: number
   status: 'ACTIVE' | 'USED_TO_EXECUTE_LOAN' | 'CANCELLED'
 }
 
