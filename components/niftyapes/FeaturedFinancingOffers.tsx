@@ -3,15 +3,10 @@ import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import TokenCard from 'components/TokenCard'
 import useOffers from 'hooks/niftyapes/useOffers'
 import isEqualAddress from 'lib/niftyapes/isEqualAddress'
-import { useAccount } from 'wagmi'
 
 export default function FeaturedFinancingOffers() {
-  const { address } = useAccount()
   const { data: offersData, error, isLoading: isLoadingOffers } = useOffers({})
-  const activeOffers = offersData?.filter(
-    // Show active offers that aren't created by current account
-    (offer) => offer.status === 'ACTIVE' && offer.offer.creator !== address
-  )
+  const activeOffers = offersData?.filter((offer) => offer.status === 'ACTIVE')
   const tokenQueries = activeOffers?.map(
     (offer) => `${offer.offer.nftContractAddress}:${offer.offer.nftId}`
   )
