@@ -12,7 +12,7 @@ import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { setToast } from 'components/token/setToast'
 import useOffers from 'hooks/niftyapes/useOffers'
-import compareAddresses from 'lib/niftyapes/compareAddresses'
+import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { FinancingTerms, processOffer } from 'lib/niftyapes/processOffer'
 import { Collection } from 'types/reservoir'
 import BuyNowPayLaterModal from './bnpl/BuyNowPayLaterModal'
@@ -36,7 +36,7 @@ export default function ListFinancingSection({
   const listing = offerData?.filter(
     (offer) =>
       offer.status === 'ACTIVE' &&
-      compareAddresses(offer.offer.creator, token?.token?.owner)
+      isEqualAddress(offer.offer.creator, token?.token?.owner)
   )[0]
   const terms = listing ? processOffer(listing.offer) : null
 

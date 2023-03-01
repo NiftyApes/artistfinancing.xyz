@@ -3,7 +3,7 @@ import { Address } from 'wagmi'
 
 type MaybeAddress = Address | string | undefined
 
-export default function addressesEqual(
+export default function isEqualAddress(
   addr1: MaybeAddress,
   addr2: MaybeAddress
 ) {

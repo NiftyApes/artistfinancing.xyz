@@ -1,6 +1,6 @@
 import { prepareWriteContract, readContract, writeContract } from '@wagmi/core'
 import { BigNumber } from 'ethers'
-import addressesEqual from 'lib/niftyapes/compareAddresses'
+import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { useEffect, useState } from 'react'
 import { Address } from 'wagmi'
 import { useNiftyApesContract } from './useNiftyApesContract'
@@ -42,7 +42,7 @@ export default function useERC721Approval({
           args: [BigNumber.from(tokenId)],
         })
 
-        setHasApproval(addressesEqual(data, operator))
+        setHasApproval(isEqualAddress(data, operator))
         setHasCheckedApproval(true)
       } catch (err) {
         console.error('Error checking token approval', err)

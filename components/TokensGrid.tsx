@@ -1,6 +1,6 @@
 import SwapCartModal from 'components/SwapCartModal'
 import useOffers from 'hooks/niftyapes/useOffers'
-import compareAddresses from 'lib/niftyapes/compareAddresses'
+import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { getPricing } from 'lib/token/pricing'
 import { useRouter } from 'next/router'
 import { FC, useEffect, useState } from 'react'
@@ -119,7 +119,7 @@ const TokensGrid: FC<Props> = ({
                 (offer) =>
                   offer.offer.nftId === token?.token?.tokenId &&
                   offer.status === 'ACTIVE' &&
-                  compareAddresses(offer.offer.creator, token?.token?.owner)
+                  isEqualAddress(offer.offer.creator, token?.token?.owner)
               )
 
               return (
