@@ -10,7 +10,7 @@ import { Address } from 'wagmi'
 import { processOffer } from 'lib/niftyapes/processOffer'
 import { OfferDetails } from 'hooks/niftyapes/useOffers'
 import { useNiftyApesContract } from 'hooks/niftyapes/useNiftyApesContract'
-import { format } from 'date-fns'
+import { format, isAfter } from 'date-fns'
 import { useSeizeAsset } from 'hooks/niftyapes/useSeizeAsset'
 import { BigNumber } from 'ethers'
 
@@ -68,7 +68,7 @@ const UserActiveLoansTable: FC = () => {
                     'APR',
                     'Next payment',
                     'Principal Remaining',
-                    'Sieze Asset',
+                    'Seize Asset',
                     'Sell Loan',
                   ].map((item) => (
                     <th
@@ -113,20 +113,21 @@ type LoansRowProps = {
   offer: OfferDetails
 }
 const UserListingsTableRow = ({ loan, sellerNft, offer }: LoansRowProps) => {
-  const { apr, listPrice, minPrincipalPerPeriod, tokenId } = processOffer(offer)
+  const { apr, listPrice, tokenId } = processOffer(offer)
 
   const { address } = useNiftyApesContract()
 
-  const { periodEndTimestamp, remainingPrincipal, minimumPayment } =
+  const { periodEndTimestamp, remainingPrincipal, isPastDue } =
     processLoan(loan)
 
   const {
-    isLoading: isLoadingSiezeAsset,
+    isLoading: isLoadingSeizeAsset,
+    isError,
     write,
   } = useSeizeAsset({
     nftContractAddress: offer.nftContractAddress,
     nftId: BigNumber.from(offer.nftId),
-  })
+  });
 
   return (
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
@@ -156,14 +157,14 @@ const UserListingsTableRow = ({ loan, sellerNft, offer }: LoansRowProps) => {
       />
     </td>
 
-    {/* SIEZE ASSET */}
+    {/* SEIZE ASSET */}
     <td className="whitespace-nowrap px-6 py-4 dark:text-white">
       <button
-        disabled={isLoadingSiezeAsset}
+        disabled={isLoadingSeizeAsset || isPastDue}
         onClick={() => write?.()}
         className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
       >
-        Sieze Asset
+        Seize Asset
       </button>
     </td>
 
