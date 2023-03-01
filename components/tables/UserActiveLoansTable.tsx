@@ -5,13 +5,12 @@ import { useMediaQuery } from '@react-hookz/web'
 import { processLoan } from 'lib/niftyapes/processLoan'
 import LoadingIcon from 'components/LoadingIcon'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
-import useLoans, { Loan } from 'hooks/niftyapes/useLoans'
+import useLoans, { Loan, LoanDetails } from 'hooks/niftyapes/useLoans'
 import { Address } from 'wagmi'
 import { processOffer } from 'lib/niftyapes/processOffer'
 import { OfferDetails } from 'hooks/niftyapes/useOffers'
 import { useNiftyApesContract } from 'hooks/niftyapes/useNiftyApesContract'
 import { format } from 'date-fns'
-import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
 import { useSeizeAsset } from 'hooks/niftyapes/useSeizeAsset'
 import { BigNumber } from 'ethers'
 
@@ -107,16 +106,7 @@ const UserActiveLoansTable: FC = () => {
 type LoansRowProps = {
   isOwner: boolean
 
-  loan: {
-    buyerNftId: string
-    sellerNftId: string
-    remainingPrincipal: string
-    minimumPrincipalPerPeriod: string
-    periodInterestRateBps: number
-    periodDuration: number
-    periodEndTimestamp: number
-    periodBeginTimestamp: number
-  }
+  loan: LoanDetails,
   sellerNft: {
     tokenId: string
   }
