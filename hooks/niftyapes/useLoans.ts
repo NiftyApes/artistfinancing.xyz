@@ -12,6 +12,8 @@ export const useLoans = ({
                            seller,
                            buyer
                          }: LoansParams) => {
+
+
   const url = qs.stringifyUrl({
     url: '/loans',
     query: {
@@ -24,7 +26,7 @@ export const useLoans = ({
 
   const { data, error, isLoading } = useQuery(
     [
-      'loans',
+      url,
       {
         seller: seller,
         buyer: buyer
@@ -36,7 +38,8 @@ export const useLoans = ({
   return {
     data,
     error,
-    isLoading
+    isLoading,
+    query:url,
   }
 }
 

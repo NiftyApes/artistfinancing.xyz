@@ -2,34 +2,19 @@ import {
   ComponentProps,
   FC
 } from 'react'
-import { DateTime } from 'luxon'
-import Link from 'next/link'
-import { optimizeImage } from 'lib/optmizeImage'
-import { Address, useSigner } from 'wagmi'
 import Toast from 'components/Toast'
-import CancelListing from 'components/CancelListing'
-import FormatCrypto from 'components/FormatCrypto'
-import useCoinConversion from 'hooks/useCoinConversion'
-import { formatDollar } from 'lib/numbers'
-import { useListings } from '@reservoir0x/reservoir-kit-ui'
-import { useInView } from 'react-intersection-observer'
 import { useRouter } from 'next/router'
-import * as Dialog from '@radix-ui/react-dialog'
 import LoadingIcon from 'components/LoadingIcon'
 
 import { FiAlertCircle } from 'react-icons/fi'
 import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
 import useLoans from '../../hooks/niftyapes/useLoans'
-import { BigNumber } from 'ethers'
 
 import { format } from 'date-fns'
 import { processOffer } from '../../lib/niftyapes/processOffer'
-import { Offer, OfferDetails } from '../../hooks/niftyapes/useOffers'
+import { OfferDetails } from '../../hooks/niftyapes/useOffers'
 import FormatNativeCrypto from '../FormatNativeCrypto'
 import { useNiftyApesContract } from '../../hooks/niftyapes/useNiftyApesContract'
-
-const API_BASE =
-  process.env.NEXT_PUBLIC_RESERVOIR_API_BASE || 'https://api.reservoir.tools'
 
 type Props = {
   isOwner: boolean
@@ -52,7 +37,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
   const { address } = router.query
 
   const { data: loans, isLoading } = useLoans({ buyer: address as string })
-  const { ref } = useInView()
+
 
   if (isLoading) {
     return (
@@ -127,7 +112,6 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
                 key={index}
                 loan={item.loan}
                 offer={item.offer.offer}
-                ref={ref}
               />
             }
           )}
@@ -155,20 +139,10 @@ type LoansRowProps = {
     tokenId: string
   }
   offer: OfferDetails,
-  ref: null | ((node?: Element | null) => void)
 }
 
 
-type UserListingsRowProps = {
-  isOwner: boolean
-  listing: ReturnType<typeof useListings>['data'][0]
-  modal: Props['modal']
-  mutate: ReturnType<typeof useListings>['mutate']
-  ref: null | ((node?: Element | null) => void)
-}
-
-
-const UpcomingPaymentsTableRow = ({ ref, loan, buyerNft, offer }: LoansRowProps) => {
+const UpcomingPaymentsTableRow = ({ loan, buyerNft, offer }: LoansRowProps) => {
 
   const {
     apr,
@@ -184,7 +158,6 @@ const UpcomingPaymentsTableRow = ({ ref, loan, buyerNft, offer }: LoansRowProps)
 
   return (
     <tr
-      ref={ref}
       className='group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white dark:border-b-neutral-600 dark:bg-black'>
       {/* ITEM */}
       <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
@@ -225,7 +198,7 @@ const UpcomingPaymentsTableRow = ({ ref, loan, buyerNft, offer }: LoansRowProps)
 
       {/* MAKE PAYMENT */}
       <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
-        <MakePaymentModal data={{ loan, offer, image: '/niftyapes/banana.png' }} />
+        <MakePaymentModal offer={offer} loan={loan} data={{ image: '/niftyapes/banana.png' }} />
       </td>
 
       {/* MAKE PAYMENT */}
@@ -243,154 +216,4 @@ const UpcomingPaymentsTableRow = ({ ref, loan, buyerNft, offer }: LoansRowProps)
   )
 }
 
-const UserUpcomingPaymentsTableMobileRow = ({
-                                              isOwner,
-                                              listing,
-                                              modal,
-                                              mutate,
-                                              ref
-                                            }: UserListingsRowProps) => {
-  const { data: signer } = useSigner()
-  const usdConversion = useCoinConversion(
-    listing?.price?.currency?.symbol ? 'usd' : undefined,
-    listing?.price?.currency?.symbol
-  )
-
-  const usdPrice =
-    usdConversion && listing?.price?.amount?.decimal
-      ? usdConversion * listing?.price?.amount?.decimal
-      : null
-
-  const {
-    collectionName,
-    contract,
-    expiration,
-    id,
-    image,
-    name,
-    tokenHref,
-    tokenId,
-    price,
-    source
-  } = processListing(listing)
-
-  return (
-    <div
-      className='border-b-[1px] border-solid border-b-neutral-300	py-[16px]'
-      ref={ref}
-    >
-      <div className='flex items-center justify-between'>
-        <Link href={tokenHref || '#'} legacyBehavior={true}>
-          <a className='flex items-center gap-2'>
-            <div className='relative h-14 w-14'>
-              {image && (
-                <div className='aspect-w-1 aspect-h-1 relative overflow-hidden rounded'>
-                  <img
-                    src={optimizeImage(image, 56)}
-                    alt='Bid Image'
-                    className='w-[56px] object-contain'
-                    width='56'
-                    height='56'
-                  />
-                </div>
-              )}
-            </div>
-            <div>
-              <div
-                className='reservoir-h6 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap font-headings text-sm dark:text-white'>
-                {name}
-              </div>
-              <div
-                className='max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap text-xs text-neutral-600 dark:text-neutral-300'>
-                {collectionName}
-              </div>
-            </div>
-          </a>
-        </Link>
-        <div className='flex flex-col'>
-          <FormatCrypto
-            amount={price?.amount?.decimal}
-            address={price?.currency?.contract}
-            decimals={price?.currency?.decimals}
-            maximumFractionDigits={8}
-          />
-          {usdPrice && (
-            <span className='mt-1 text-right text-xs text-neutral-600 dark:text-neutral-300'>
-              {formatDollar(usdPrice)}
-            </span>
-          )}
-        </div>
-      </div>
-      <div className='flex items-center justify-between pt-4'>
-        <div>
-          <a
-            href={source.link || '#'}
-            target='_blank'
-            rel='noreferrer'
-            className='mb-1 flex items-center gap-1 font-light text-primary-700 dark:text-primary-300'
-          >
-            {source.icon && (
-              <img className='h-6 w-6' alt='Source Icon' src={source.icon} />
-            )}
-            <span className='max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap text-xs'>
-              {source.name}
-            </span>
-          </a>
-          <div className='text-xs font-light text-neutral-600 dark:text-neutral-300'>{`Expires ${expiration}`}</div>
-        </div>
-        <CancelListing
-          data={{
-            id,
-            contract,
-            tokenId
-          }}
-          signer={signer}
-          show={isOwner}
-          isInTheWrongNetwork={modal.isInTheWrongNetwork}
-          setToast={modal.setToast}
-          mutate={mutate}
-          trigger={
-            <Dialog.Trigger
-              className='btn-primary-outline min-w-[120px] bg-white py-[3px] text-sm text-[#FF3B3B] dark:border-neutral-600 dark:bg-black dark:text-[#FF9A9A] dark:ring-primary-900 dark:focus:ring-4'>
-              Cancel
-            </Dialog.Trigger>
-          }
-        />
-      </div>
-    </div>
-  )
-}
-
 export default UserUpcomingPaymentsTable
-
-function processListing(listing: ReturnType<typeof useListings>['data'][0]) {
-  const tokenId = listing?.tokenSetId?.split(':')[2]
-  const contract = listing?.tokenSetId?.split(':')[1]
-  const collectionRedirectUrl = `${API_BASE}/redirect/collections/${listing?.contract}/image/v1`
-
-  const data = {
-    contract,
-    tokenId,
-    image: listing?.criteria?.data?.token?.image || collectionRedirectUrl,
-    name: listing?.criteria?.data?.token?.name,
-    expiration:
-      listing?.expiration === 0
-        ? 'Never'
-        : DateTime.fromMillis(+`${listing?.expiration}000`).toRelative(),
-    id: listing?.id,
-    collectionName: listing?.criteria?.data?.collection?.name,
-    price: listing?.price,
-    source: {
-      icon: (listing?.source?.icon as string) || null,
-      name: (listing?.source?.name as string) || null,
-      link:
-        listing?.source?.domain && tokenId
-          ? `${API_BASE}/redirect/sources/${listing?.source?.domain}/tokens/${contract}:${tokenId}/link/v2`
-          : `https://${listing?.source?.domain as string}` || null
-    }
-  }
-
-  const tokenHref = `/${data.contract}/${data.tokenId}`
-
-  return { ...data, tokenHref }
-}

@@ -45,7 +45,7 @@ export function processOffer(offerDetails: Offer['offer']): FinancingTerms {
     formatEther(offerDetails.minimumPrincipalPerPeriod)
   )
   const payPeriodDays = Duration.fromObject({
-    seconds: offerDetails.periodDuration,
+    seconds: offerDetails.periodDuration
   }).as('days')
 
   const numPayPeriods =
@@ -53,7 +53,7 @@ export function processOffer(offerDetails: Offer['offer']): FinancingTerms {
 
   const loanDurMos = Math.round(
     Duration.fromObject({
-      days: payPeriodDays * numPayPeriods,
+      days: payPeriodDays * numPayPeriods
     }).as('months')
   )
 
@@ -80,7 +80,7 @@ export function processOffer(offerDetails: Offer['offer']): FinancingTerms {
     expirationRelative: DateTime.fromSeconds(
       offerDetails.expiration
     ).toRelative()!,
-    tokenHref: `/${contract}/${tokenId}`,
+    tokenHref: `/${contract}/${tokenId}`
   }
 }
 
@@ -93,14 +93,14 @@ export function processFormValues(
     apr: Number(formFields.apr),
     payPeriodDays: formFields.payPeriodDays,
     loanDurMos: Number(formFields.loanDurMos),
-    expiration: formFields.expiration,
+    expiration: formFields.expiration
   }
 
   const downPaymentAmount =
     (fieldNums.downPaymentPercent / 100) * fieldNums.listPrice
   const remainingPrincipal = fieldNums.listPrice - downPaymentAmount
   const loanDurDays = Duration.fromObject({
-    months: fieldNums.loanDurMos,
+    months: fieldNums.loanDurMos
   }).as('days')
   const numPayPeriods = Math.ceil(loanDurDays / formFields.payPeriodDays)
   const minPrincipalPerPeriod = remainingPrincipal / numPayPeriods
@@ -129,7 +129,7 @@ export function processFormValues(
     DateTime.now()
       .plus({
         [expirationOption.relativeTimeUnit as string]:
-          expirationOption.relativeTime,
+        expirationOption.relativeTime
       })
       .toSeconds()
   )
@@ -146,7 +146,7 @@ export function processFormValues(
     totalIntEarned,
     intPerPeriod,
     profit,
-    expirationSeconds,
+    expirationSeconds
   }
 }
 
