@@ -3,8 +3,10 @@ import UserActiveLoansTable from './UserActiveLoansTable'
 
 const UserActiveLoansTab: React.FC = () => {
   return (
-    <div className="reservoir-body mt-14 grid justify-center dark:text-white">
-      <UserActiveLoansTable />
+    <div className="mt-14 justify-center dark:text-white">
+      <div className="mb-6 text-center">
+        <UserActiveLoansTable />
+      </div>
     </div>
   )
 }

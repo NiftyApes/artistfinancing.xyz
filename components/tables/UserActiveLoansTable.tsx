@@ -12,6 +12,8 @@ import { OfferDetails } from 'hooks/niftyapes/useOffers'
 import { useNiftyApesContract } from 'hooks/niftyapes/useNiftyApesContract'
 import { format } from 'date-fns'
 import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
+import { useSeizeAsset } from 'hooks/niftyapes/useSeizeAsset'
+import { BigNumber } from 'ethers'
 
 const UserActiveLoansTable: FC = () => {
   const router = useRouter()
@@ -67,7 +69,7 @@ const UserActiveLoansTable: FC = () => {
                     'APR',
                     'Next payment',
                     'Principal Remaining',
-                    'Make Payment',
+                    'Sieze Asset',
                     'Sell Loan',
                   ].map((item) => (
                     <th
@@ -128,6 +130,14 @@ const UserListingsTableRow = ({ loan, sellerNft, offer }: LoansRowProps) => {
   const { periodEndTimestamp, remainingPrincipal, minimumPayment } =
     processLoan(loan)
 
+  const {
+    isLoading: isLoadingSiezeAsset,
+    write,
+  } = useSeizeAsset({
+    nftContractAddress: offer.nftContractAddress,
+    nftId: BigNumber.from(offer.nftId),
+  })
+
   return (
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
     {/* ITEM */}
@@ -156,13 +166,15 @@ const UserListingsTableRow = ({ loan, sellerNft, offer }: LoansRowProps) => {
       />
     </td>
 
-    {/* MAKE PAYMENT */}
+    {/* SIEZE ASSET */}
     <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-      <MakePaymentModal
-        offer={offer}
-        loan={loan}
-        data={{ image: '/niftyapes/banana.png' }}
-      />
+      <button
+        disabled={isLoadingSiezeAsset}
+        onClick={() => write?.()}
+        className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
+      >
+        Sieze Asset
+      </button>
     </td>
 
     {/* SELL LOAN */}
