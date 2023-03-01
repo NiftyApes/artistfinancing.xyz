@@ -7,7 +7,7 @@ type Terms = {
   duration: number
   minPayment: BigNumber
   payPeriodDays: number
-  remainingPrincipal: number
+  remainingPrincipal: string
 }
 
 export default function PaymentModalTermStats({ terms }: { terms: Terms }) {
@@ -23,7 +23,10 @@ export default function PaymentModalTermStats({ terms }: { terms: Terms }) {
     >
       <HStack justify="space-between">
         <Text>Principal</Text>
-        <FormatNativeCrypto maximumFractionDigits={4} amount={terms.remainingPrincipal} />
+        <FormatNativeCrypto
+          maximumFractionDigits={4}
+          amount={terms.remainingPrincipal}
+        />
       </HStack>
       <HStack justify="space-between">
         <Text>APR</Text>
@@ -31,7 +34,10 @@ export default function PaymentModalTermStats({ terms }: { terms: Terms }) {
       </HStack>
       <HStack justify="space-between">
         <Text>Min. payment</Text>
-        <FormatNativeCrypto maximumFractionDigits={4} amount={terms.minPayment} />
+        <FormatNativeCrypto
+          maximumFractionDigits={4}
+          amount={terms.minPayment}
+        />
       </HStack>
       <HStack justify="space-between">
         <Text>Pay period</Text>
