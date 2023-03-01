@@ -1,12 +1,13 @@
 import { Text, HStack, VStack } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
+import { BigNumber } from 'ethers'
 
 type Terms = {
-  remainingPrincipal: number
   apr: number
-  minPrincipalPercent: number
+  duration: number
+  minPayment: BigNumber
   payPeriodDays: number
-  duration?: string
+  remainingPrincipal: number
 }
 
 export default function PaymentModalTermStats({ terms }: { terms: Terms }) {
@@ -21,16 +22,16 @@ export default function PaymentModalTermStats({ terms }: { terms: Terms }) {
       spacing="1"
     >
       <HStack justify="space-between">
-        <Text>Remaining principal</Text>
-        <FormatNativeCrypto amount={terms.remainingPrincipal} />
+        <Text>Principal</Text>
+        <FormatNativeCrypto maximumFractionDigits={4} amount={terms.remainingPrincipal} />
       </HStack>
       <HStack justify="space-between">
         <Text>APR</Text>
         <Text fontWeight="semibold">{`${terms.apr}%`}</Text>
       </HStack>
       <HStack justify="space-between">
-        <Text>Minimum payment</Text>
-        <Text fontWeight="semibold">{`${terms.minPrincipalPercent}%`}</Text>
+        <Text>Min. payment</Text>
+        <FormatNativeCrypto maximumFractionDigits={4} amount={terms.minPayment} />
       </HStack>
       <HStack justify="space-between">
         <Text>Pay period</Text>

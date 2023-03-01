@@ -3,7 +3,7 @@ import {
   Address,
   useContractWrite,
   usePrepareContractWrite,
-  useWaitForTransaction,
+  useWaitForTransaction
 } from 'wagmi'
 import { BigNumber } from 'ethers'
 
@@ -23,15 +23,15 @@ export const useMakePayment = (props: IMakePaymentHookProps) => {
     args: [nftContractAddress, nftId],
     functionName: 'makePayment',
     overrides: {
-      value: paymentAmount,
-    },
+      value: paymentAmount
+    }
   })
 
   const { data, write } = useContractWrite(config)
 
-  const { isLoading, isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
+  const { isLoading, isSuccess, isError } = useWaitForTransaction({
+    hash: data?.hash
   })
 
-  return { data, isLoading, isSuccess, write }
+  return { data, isLoading, isSuccess, isError, write }
 }
