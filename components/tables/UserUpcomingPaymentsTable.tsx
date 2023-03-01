@@ -143,7 +143,7 @@ const UpcomingPaymentsTableRow = ({ loan, buyerNft, offer }: LoansRowProps) => {
     processLoan(loan)
 
   return (
-    <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white dark:border-b-neutral-600 dark:bg-black">
+    <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
       {/* ITEM */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">{tokenId}</td>
 
@@ -164,10 +164,7 @@ const UpcomingPaymentsTableRow = ({ loan, buyerNft, offer }: LoansRowProps) => {
 
       {/* NEXT MINIMUM PAYMENT */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <FormatNativeCrypto
-          maximumFractionDigits={4}
-          amount={minPrincipalPerPeriod}
-        />
+        <FormatNativeCrypto maximumFractionDigits={4} amount={minimumPayment} />
       </td>
 
       {/* PRINCIPAL REMAINING */}
@@ -203,4 +200,3 @@ const UpcomingPaymentsTableRow = ({ loan, buyerNft, offer }: LoansRowProps) => {
 }
 
 export default UserUpcomingPaymentsTable
-
