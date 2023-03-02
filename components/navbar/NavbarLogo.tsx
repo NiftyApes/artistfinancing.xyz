@@ -43,18 +43,14 @@ const NavbarLogo: FC<Props> = ({ variant, className }) => {
         <img
           src={desktopLogo}
           alt={logoAlt}
-          className={`h-9 w-auto md:block ${
+          className={`h-16 w-auto md:block ${
             !variant ? 'hidden md:block' : ''
           } ${mobileVariant ? 'hidden' : ''} ${desktopVariant ? 'block' : ''}`}
         />
         {chain?.testnet && (
           <div
             className={`reservoir-tiny inline rounded-[4px] bg-[#EFC45C] p-1 py-[2px]
-          ${
-            !variant || desktopVariant
-              ? 'md:absolute md:left-[-50px] md:bottom-[8px]'
-              : ''
-          }
+          ${!variant || desktopVariant ? 'md:absolute md:left-[-54px]' : ''}
           `}
           >
             Testnet
