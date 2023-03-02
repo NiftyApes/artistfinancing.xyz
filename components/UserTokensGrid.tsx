@@ -80,6 +80,7 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
         <>
           {entitledTokens?.map((token) => (
             <TokenCard
+              key={`${token?.token?.contract}${token?.token?.tokenId}`}
               token={token}
               collectionImage={undefined}
               mutate={mutate}
