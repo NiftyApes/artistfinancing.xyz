@@ -130,7 +130,7 @@ const UserListingsTableRow = ({ loan, sellerNft, offer, token }: LoansRowProps) 
   const { address } = useNiftyApesContract()
 
   const { periodEndTimestamp, remainingPrincipal, isPastDue } =
-    processLoan(loan)
+    processLoan(loan, offer)
 
   const {
     isLoading: isLoadingSeizeAsset,
