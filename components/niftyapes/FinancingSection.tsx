@@ -1,25 +1,34 @@
 import {
   Box,
+  Center,
   Grid,
   GridItem,
   Heading,
   HStack,
+  Icon,
   Image,
+  Spinner,
   Text,
+  Tooltip,
   VStack,
 } from '@chakra-ui/react'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
+import EthAccount from 'components/EthAccount'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { setToast } from 'components/token/setToast'
+import { useNftOwnership } from 'hooks/niftyapes/useNftOwnership'
 import useOffers from 'hooks/niftyapes/useOffers'
 import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { FinancingTerms, processOffer } from 'lib/niftyapes/processOffer'
+import Link from 'next/link'
+import { IoInformationCircleOutline } from 'react-icons/io5'
 import { Collection } from 'types/reservoir'
+import { Address, useAccount } from 'wagmi'
 import BuyNowPayLaterModal from './bnpl/BuyNowPayLaterModal'
 import CancelListingModal from './cancel-listing/CancelListingModal'
 import ListFinancingModal from './list-financing/ListFinancingModal'
 
-export default function ListFinancingSection({
+export default function FinancingSection({
   token,
   collection,
   isOwner,
@@ -28,7 +37,11 @@ export default function ListFinancingSection({
   collection: Collection
   isOwner: boolean
 }) {
-  const { data: offerData, isError } = useOffers({
+  const {
+    data: offerData,
+    isError,
+    isLoading: isLoadingOffers,
+  } = useOffers({
     collection: collection?.id,
     nftId: token?.token?.tokenId,
   })
@@ -48,41 +61,92 @@ export default function ListFinancingSection({
     })
   }
 
+  const { address } = useAccount()
+  const { isEntitledToNft, isLoading: isLoadingOwnershipCheck } =
+    useNftOwnership()
+  const isNiftyApesOwned = isEntitledToNft(
+    token?.token?.contract as Address,
+    token?.token?.tokenId
+  )
+
   return (
     <VStack w="full" align="left" spacing="8">
-      <VStack w="full" align="left" spacing="0">
-        <Heading size="md">
-          {isOwner ? 'List with financing' : 'Buy now, pay later'}
-        </Heading>
-        <HStack>
-          <Text>on NiftyApes</Text>
-          <Image
-            borderRadius="md"
-            boxSize="1.5rem"
-            src="/niftyapes/banana.png"
-          />
-        </HStack>
-      </VStack>
-      {listing && <CurrentListing terms={terms!} isOwner={isOwner} />}
-      {isOwner ? (
-        <HStack>
-          <ListFinancingModal
-            token={token}
-            collection={collection}
-            currListingExists={listing ? true : false}
-            roundedButton={true}
-          />
-          {/* TODO Pass listing to cancel listing modal */}
-          {listing && <CancelListingModal />}
-        </HStack>
-      ) : listing ? (
-        <BuyNowPayLaterModal
-          token={token}
-          roundedButton={true}
-          offer={listing}
-        />
+      {isLoadingOffers || isLoadingOwnershipCheck ? (
+        <Center>
+          <Spinner size="xl" />
+        </Center>
+      ) : isNiftyApesOwned ? (
+        <VStack spacing="4">
+          <VStack w="full" align="left" spacing="0">
+            <Heading size="md">Purchased with Financing</Heading>
+            <HStack>
+              <Text>on NiftyApes</Text>
+              <Image
+                borderRadius="md"
+                boxSize="1.5rem"
+                src="/niftyapes/banana.png"
+              />
+            </HStack>
+          </VStack>
+          <VStack w="full" align="left">
+            <HStack>
+              <div className="reservoir-h6 font-headings dark:text-white">
+                Owner
+              </div>
+              <Tooltip
+                hasArrow
+                placement="right"
+                label="You are entitled to this NFT once your loan is paid in full."
+              >
+                <span>
+                  <Icon boxSize={'5'} as={IoInformationCircleOutline} />
+                </span>
+              </Tooltip>
+            </HStack>
+            <Link href={`/address/${address}`} legacyBehavior={true}>
+              <a>
+                <EthAccount address={address} side="left" />
+              </a>
+            </Link>
+          </VStack>
+        </VStack>
       ) : (
-        <Box>No current finance listings</Box>
+        <>
+          <VStack w="full" align="left" spacing="0">
+            <Heading size="md">
+              {isOwner ? 'List with financing' : 'Buy now, pay later'}
+            </Heading>
+            <HStack>
+              <Text>on NiftyApes</Text>
+              <Image
+                borderRadius="md"
+                boxSize="1.5rem"
+                src="/niftyapes/banana.png"
+              />
+            </HStack>
+          </VStack>
+          {listing && <CurrentListing terms={terms!} isOwner={isOwner} />}
+          {isOwner ? (
+            <HStack>
+              <ListFinancingModal
+                token={token}
+                collection={collection}
+                currListingExists={listing ? true : false}
+                roundedButton={true}
+              />
+              {/* TODO Pass listing to cancel listing modal */}
+              {listing && <CancelListingModal />}
+            </HStack>
+          ) : listing ? (
+            <BuyNowPayLaterModal
+              token={token}
+              roundedButton={true}
+              offer={listing}
+            />
+          ) : (
+            <Box>No current finance listings</Box>
+          )}
+        </>
       )}
     </VStack>
   )

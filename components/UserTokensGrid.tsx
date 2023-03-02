@@ -5,6 +5,7 @@ import { useInView } from 'react-intersection-observer'
 import TokenCard from './TokenCard'
 import { paths } from '@reservoir0x/reservoir-sdk'
 import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
+import { useNftOwnership } from 'hooks/niftyapes/useNftOwnership'
 
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
 const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
@@ -53,8 +54,9 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
   } = userTokens
   const { addNiftyApesTokenImages } = useNiftyApesImages()
   addNiftyApesTokenImages(tokens)
-  const isEmpty = tokens.length === 0
   const { ref, inView } = useInView()
+
+  const { entitledTokens, isLoadingTokens } = useNftOwnership()
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -62,7 +64,7 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
     }
   }, [inView])
 
-  if (isEmpty && !isFetchingPage) {
+  if (tokens.length === 0 && !isFetchingPage) {
     return (
       <div className="grid justify-center text-xl font-semibold">No tokens</div>
     )
@@ -70,11 +72,20 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
 
   return (
     <div className="mx-auto mb-8 grid max-w-[2400px] gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
-      {isFetchingInitialData
-        ? Array(10)
-            .fill(null)
-            .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
-        : tokens?.map((token) => (
+      {isFetchingInitialData || isLoadingTokens ? (
+        Array(10)
+          .fill(null)
+          .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
+      ) : (
+        <>
+          {entitledTokens?.map((token) => (
+            <TokenCard
+              token={token}
+              collectionImage={undefined}
+              mutate={mutate}
+            />
+          ))}
+          {tokens?.map((token) => (
             <TokenCard
               token={{
                 token: {
@@ -93,6 +104,8 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
               collectionImage={token?.token?.collection?.imageUrl}
             />
           ))}
+        </>
+      )}
       {isFetchingPage ? (
         Array(10)
           .fill(null)
