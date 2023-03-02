@@ -1,21 +1,21 @@
-import { FC, useEffect, useState, ComponentProps, useRef } from 'react'
-import { FiChevronDown, FiMoreVertical, FiRefreshCcw } from 'react-icons/fi'
-import { paths } from '@reservoir0x/reservoir-sdk'
-import { BidModal, Trait } from '@reservoir0x/reservoir-kit-ui'
-import { useNetwork, useSigner } from 'wagmi'
-import Toast from 'components/Toast'
-import toast from 'react-hot-toast'
-import useCollectionStats from 'hooks/useCollectionStats'
-import { useRouter } from 'next/router'
-import useTokens from 'hooks/useTokens'
-import HeroSocialLinks from 'components/hero/HeroSocialLinks'
-import HeroBackground from 'components/hero/HeroBackground'
-import HeroStats from 'components/hero/HeroStats'
-import Sweep from './Sweep'
-import ReactMarkdown from 'react-markdown'
-import { useMediaQuery } from '@react-hookz/web'
-import { useCollections } from '@reservoir0x/reservoir-kit-ui'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+import { useMediaQuery } from '@react-hookz/web'
+import { BidModal, Trait, useCollections } from '@reservoir0x/reservoir-kit-ui'
+import { paths } from '@reservoir0x/reservoir-sdk'
+import HeroBackground from 'components/hero/HeroBackground'
+import HeroSocialLinks from 'components/hero/HeroSocialLinks'
+import HeroStats from 'components/hero/HeroStats'
+import Toast from 'components/Toast'
+import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
+import useCollectionStats from 'hooks/useCollectionStats'
+import useTokens from 'hooks/useTokens'
+import { useRouter } from 'next/router'
+import { ComponentProps, FC, useEffect, useRef, useState } from 'react'
+import toast from 'react-hot-toast'
+import { FiChevronDown, FiMoreVertical, FiRefreshCcw } from 'react-icons/fi'
+import ReactMarkdown from 'react-markdown'
+import { useNetwork, useSigner } from 'wagmi'
+import Sweep from './Sweep'
 
 const PROXY_API_BASE = process.env.NEXT_PUBLIC_PROXY_API_BASE
 const envBannerImage = process.env.NEXT_PUBLIC_BANNER_IMAGE
@@ -37,6 +37,7 @@ type Props = {
 
 const Hero: FC<Props> = ({ fallback, collectionId }) => {
   const { data: signer } = useSigner()
+  const { addNiftyApesCollectionImage } = useNiftyApesImages()
   const collectionResponse = useCollections({
     id: collectionId,
     includeTopBid: true,
@@ -45,6 +46,8 @@ const Hero: FC<Props> = ({ fallback, collectionId }) => {
     collectionResponse.data && collectionResponse.data[0]
       ? collectionResponse.data[0]
       : undefined
+  addNiftyApesCollectionImage(collection)
+
   const router = useRouter()
   const stats = useCollectionStats(router, collectionId)
   const [attribute, setAttribute] = useState<Trait>(undefined)

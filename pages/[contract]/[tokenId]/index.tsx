@@ -20,6 +20,9 @@ import {
   useUserTokens,
 } from '@reservoir0x/reservoir-kit-ui'
 import { useAccount } from 'wagmi'
+import isEqualAddress from 'lib/niftyapes/isEqualAddress'
+import { useNiftyApesContract } from 'hooks/niftyapes/useNiftyApesContract'
+import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
 
 // Environment variables
 // For more information about these variables
@@ -83,11 +86,14 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
     router.query?.tokenId?.toString() || ''
   )
 
+  const { addNiftyApesTokenImages, addNiftyApesCollectionImage } =
+    useNiftyApesImages()
   const collectionResponse = useCollections({ id: collectionId })
   const collection =
     collectionResponse.data && collectionResponse.data[0]
       ? collectionResponse.data[0]
       : undefined
+  addNiftyApesCollectionImage(collection)
 
   const tokenData = useTokens({
     tokens: [
@@ -99,6 +105,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
   })
 
   const tokens = tokenData.data
+  addNiftyApesTokenImages(tokens)
   const token = tokens?.[0] || { token: tokenDetails }
   const checkUserOwnership = token.token?.kind === 'erc1155'
   const { data: userTokens } = useUserTokens(
