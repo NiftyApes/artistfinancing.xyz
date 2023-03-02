@@ -97,8 +97,8 @@ const TokensGrid: FC<Props> = ({
       <Masonry
         key="tokensGridMasonry"
         breakpointCols={{
-          default: 6,
-          1900: 5,
+          default: 4,
+          1900: 4,
           1536: 4,
           1280: 3,
           1024: 2,
