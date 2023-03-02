@@ -10,9 +10,11 @@ import { Address } from 'wagmi'
 import { processOffer } from 'lib/niftyapes/processOffer'
 import { OfferDetails } from 'hooks/niftyapes/useOffers'
 import { useNiftyApesContract } from 'hooks/niftyapes/useNiftyApesContract'
-import { format, isAfter } from 'date-fns'
+import { format } from 'date-fns'
 import { useSeizeAsset } from 'hooks/niftyapes/useSeizeAsset'
 import { BigNumber } from 'ethers'
+import { useTokens } from '@reservoir0x/reservoir-kit-ui'
+import { optimizeImage } from 'lib/optmizeImage'
 
 const UserActiveLoansTable: FC = () => {
   const router = useRouter()
@@ -22,6 +24,13 @@ const UserActiveLoansTable: FC = () => {
   const { data: loans = [], isLoading } = useLoans({
     seller: address as Address,
   })
+
+  const tokensQueryArr = loans?.map(
+    (item) => `${item.offer.offer.nftContractAddress}:${item.offer.offer.nftId}`
+  )
+  const tokens = useTokens({
+    tokens: tokensQueryArr,
+  });
 
   if (isLoading) {
     return (
@@ -56,6 +65,7 @@ const UserActiveLoansTable: FC = () => {
               key={index}
               loan={item.loan}
               offer={item.offer.offer}
+              token={tokens.data[index]}
             />
           ))
         : loans.length > 0 && (
@@ -93,6 +103,7 @@ const UserActiveLoansTable: FC = () => {
                     key={index}
                     loan={item.loan}
                     offer={item.offer.offer}
+                    token={tokens.data[index]}
                     />
                   )
                 })}
@@ -111,14 +122,15 @@ type LoansRowProps = {
     tokenId: string
   }
   offer: OfferDetails
+  token: ReturnType<typeof useTokens>['data'][0];
 }
-const UserListingsTableRow = ({ loan, sellerNft, offer }: LoansRowProps) => {
-  const { apr, listPrice, tokenId } = processOffer(offer)
+const UserListingsTableRow = ({ loan, sellerNft, offer, token }: LoansRowProps) => {
+  const { apr, listPrice, image, tokenName, collectionName } = processOffer(offer, token)
 
   const { address } = useNiftyApesContract()
 
   const { periodEndTimestamp, remainingPrincipal, isPastDue } =
-    processLoan(loan)
+    processLoan(loan, offer)
 
   const {
     isLoading: isLoadingSeizeAsset,
@@ -132,7 +144,31 @@ const UserListingsTableRow = ({ loan, sellerNft, offer }: LoansRowProps) => {
   return (
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
     {/* ITEM */}
-    <td className="whitespace-nowrap px-6 py-4 dark:text-white">{tokenId}</td>
+    <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+      <div className="flex items-center gap-2">
+        <div className="relative h-16 w-16">
+          <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded">
+            <img
+              src={image ? optimizeImage(image, 64) :'/niftyapes/placeholder.png'}
+              alt="Bid Image"
+              className="w-[64px] object-contain"
+              width="64"
+              height="64"
+            />
+          </div>
+        </div>
+        <span className="whitespace-nowrap">
+          <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
+            {tokenName ? tokenName : collectionName}
+          </div>
+          {tokenName && (
+            <div className="text-xs text-neutral-600 dark:text-neutral-300">
+              {collectionName}
+            </div>
+          )}
+        </span>
+      </div>
+    </td>
 
     {/* PRICE */}
     <td className="whitespace-nowrap px-6 py-4 dark:text-white">
@@ -183,21 +219,26 @@ const UserListingsTableRow = ({ loan, sellerNft, offer }: LoansRowProps) => {
   )
 }
 
-const UserActiveLoansMobileTableRow = ({ offer }: LoansRowProps) => {
-  const { listPrice, expiration, tokenId } = processOffer(offer)
+const UserActiveLoansMobileTableRow = ({ offer, token }: LoansRowProps) => {
+  const { listPrice, image } = processOffer(offer, token)
 
   return (
     <div className="border-b-[1px] border-solid border-b-neutral-300	py-[16px]">
       <div className="flex items-center justify-between">
-        <div className="reservoir-h6 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap font-headings text-sm dark:text-white">
-          {tokenId}
+        <div className="relative h-14 w-14">
+          <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded">
+            <img
+              src={image ? optimizeImage(image, 56) :'/niftyapes/placeholder.png'}
+              alt="Bid Image"
+              className="w-[56px] object-contain"
+              width="56"
+              height="56"
+            />
+          </div>
         </div>
         <div className="flex flex-col">
           <FormatNativeCrypto maximumFractionDigits={4} amount={listPrice} />
         </div>
-      </div>
-      <div className="flex items-center justify-between pt-4">
-        <div className="text-xs font-light text-neutral-600 dark:text-neutral-300">{`Expires ${expiration}`}</div>
       </div>
     </div>
   )

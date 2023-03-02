@@ -13,6 +13,8 @@ import { OfferDetails } from '../../hooks/niftyapes/useOffers'
 import { processOffer } from '../../lib/niftyapes/processOffer'
 import FormatNativeCrypto from '../FormatNativeCrypto'
 import { processLoan } from 'lib/niftyapes/processLoan'
+import { useTokens } from '@reservoir0x/reservoir-kit-ui'
+import { optimizeImage } from 'lib/optmizeImage'
 
 type Props = {
   isOwner: boolean
@@ -32,6 +34,13 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
 }) => {
   const { address } = useAccount()
   const { data: loans, isLoading } = useLoans({ buyer: address })
+
+  const tokensQueryArr = loans?.map(
+    (item) => `${item.offer.offer.nftContractAddress}:${item.offer.offer.nftId}`
+  )
+  const tokens = useTokens({
+    tokens: tokensQueryArr,
+  });
 
   if (isLoading) {
     return (
@@ -105,6 +114,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
                   key={index}
                   loan={item.loan}
                   offer={item.offer.offer}
+                  token={tokens.data[index]}
                 />
               )
             })}
@@ -132,10 +142,11 @@ type LoansRowProps = {
     tokenId: string
   }
   offer: OfferDetails
+  token: ReturnType<typeof useTokens>['data'][0];
 }
 
-const UpcomingPaymentsTableRow = ({ loan, buyerNft, offer }: LoansRowProps) => {
-  const { apr, listPrice, minPrincipalPerPeriod, tokenId } = processOffer(offer)
+const UpcomingPaymentsTableRow = ({ loan, buyerNft, offer, token }: LoansRowProps) => {
+  const { apr, listPrice, image, collectionName, tokenName } = processOffer(offer, token)
 
   const { address } = useNiftyApesContract()
 
@@ -145,7 +156,31 @@ const UpcomingPaymentsTableRow = ({ loan, buyerNft, offer }: LoansRowProps) => {
   return (
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
       {/* ITEM */}
-      <td className="whitespace-nowrap px-6 py-4 dark:text-white">{tokenId}</td>
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+        <div className="flex items-center gap-2">
+          <div className="relative h-16 w-16">
+            <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded">
+              <img
+                src={image ? optimizeImage(image, 64) :'/niftyapes/placeholder.png'}
+                alt="Bid Image"
+                className="w-[64px] object-contain"
+                width="64"
+                height="64"
+              />
+            </div>
+          </div>
+          <span className="whitespace-nowrap">
+            <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
+              {tokenName ? tokenName : collectionName}
+            </div>
+            {tokenName && (
+              <div className="text-xs text-neutral-600 dark:text-neutral-300">
+                {collectionName}
+              </div>
+            )}
+          </span>
+        </div>
+      </td>
 
       {/* PRICE */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">

@@ -1,3 +1,4 @@
+import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { FinancingFormFields } from 'components/niftyapes/list-financing/FinancingTermsForm'
 import { formatEther } from 'ethers/lib/utils.js'
 import { Offer } from 'hooks/niftyapes/useOffers'
@@ -28,10 +29,15 @@ export type FinancingTerms = {
   profit?: number
   totalCost?: number
   tokenHref?: string
+  tokenName?: string
+  collectionName?: string
+  image?: string
 }
 
-export function processOffer(offerDetails: Offer['offer']): FinancingTerms {
-  const tokenId = offerDetails.nftId
+export function processOffer(offerDetails: Offer['offer'], tokenContainer?: ReturnType<typeof useTokens>['data'][0]): FinancingTerms {
+  const token: Record<string, any> = tokenContainer?.token || {};
+  
+  let tokenId: any = offerDetails.nftId
   const contract = offerDetails.nftContractAddress
   const listPrice = Number(formatEther(offerDetails.price))
   const downPaymentAmount = Number(formatEther(offerDetails.downPaymentAmount))
@@ -67,6 +73,9 @@ export function processOffer(offerDetails: Offer['offer']): FinancingTerms {
   const totalCost = listPrice + totalIntEarned
 
   return {
+    image: token?.image,
+    tokenName: token?.name || `#${tokenId}`,
+    collectionName: token?.collection?.name || '',
     contract,
     tokenId,
     listPrice,
