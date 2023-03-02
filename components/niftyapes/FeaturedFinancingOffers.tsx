@@ -94,9 +94,8 @@ export default function FeaturedFinancingOffers() {
               <Skeleton key={idx} rounded="md" height="sm" mb="6" />
             ))
           : fullOffers?.map(({ offer, token, collection }, idx) => (
-              <Box mb="12">
+              <Box mb="12" key={idx}>
                 <TokenCard
-                  key={idx}
                   token={token}
                   financeOffer={offer}
                   collection={collection}
