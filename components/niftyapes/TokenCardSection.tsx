@@ -1,4 +1,13 @@
-import { Box, HStack, Icon, Image, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Grid,
+  GridItem,
+  HStack,
+  Icon,
+  Image,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { Offer } from 'hooks/niftyapes/useOffers'
 import useTokens from 'hooks/useTokens'
@@ -24,29 +33,40 @@ export default function TokenCardSection({
   return (
     <Box>
       <VStack px="4" pb="4">
-        <HStack w="full" justify={'space-between'}>
-          <HStack spacing={1}>
-            <FormatNativeCrypto amount={terms.downPaymentAmount} />
-            <Text fontWeight={'semibold'}>Down</Text>
-          </HStack>
-          <Image
-            borderRadius="full"
-            boxSize="1.5rem"
-            src="/niftyapes/NA-BLACK.png"
-          />
-        </HStack>
-        <HStack w="full" spacing="4" justify={'space-between'}>
-          <Text
-            fontSize={'sm'}
-            fontWeight={'semibold'}
-          >{`${terms.apr}% APR`}</Text>
-          <HStack spacing="1">
-            <Icon as={FiClock} />
+        <Grid w="full" templateColumns={'repeat(5, 1fr)'} gap={2}>
+          <GridItem colSpan={2}>
+            <HStack spacing={1}>
+              <FormatNativeCrypto amount={terms.downPaymentAmount} />
+              <Text fontWeight={'semibold'}>Down</Text>
+            </HStack>
+          </GridItem>
+          <GridItem colSpan={2}>
+            <Text
+              fontSize={'sm'}
+              fontWeight={'semibold'}
+            >{`${terms.apr}% APR`}</Text>
+          </GridItem>
+          <GridItem colSpan={1}>
+            <Image
+              borderRadius="full"
+              boxSize="1.5rem"
+              src="/niftyapes/NA-BLACK.png"
+            />
+          </GridItem>
+          <GridItem colSpan={2}>
+            <HStack spacing="1">
+              <Icon as={FiClock} />
+              <Text fontSize={'sm'} fontWeight={'semibold'}>
+                {terms.loanDurMos} months
+              </Text>
+            </HStack>
+          </GridItem>
+          <GridItem colSpan={3}>
             <Text fontSize={'sm'} fontWeight={'semibold'}>
-              {terms.expirationRelative}
+              Expires {terms.expirationRelative}
             </Text>
-          </HStack>
-        </HStack>
+          </GridItem>
+        </Grid>
       </VStack>
       {isOwner ? (
         <ListFinancingModal
