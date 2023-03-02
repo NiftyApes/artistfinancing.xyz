@@ -27,7 +27,7 @@ export type Offer = {
   offer: OfferDetails
   signature: `0x${string}`
   createdAt: number
-  status: 'ACTIVE' | 'USED_TO_EXECUTED_LOAN' | 'CANCELLED'
+  status: 'ACTIVE' | 'USED_TO_EXECUTE_LOAN' | 'CANCELLED'
 }
 
 const getOffers = async ({

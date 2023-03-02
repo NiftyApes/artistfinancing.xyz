@@ -101,7 +101,7 @@ const UserFinancingOffersTable: FC = () => {
 type UserOffersRowProps = {
   offer: Offer['offer'],
   signature: `0x${string}`,
-  status: 'ACTIVE' | 'USED_TO_EXECUTED_LOAN' | 'CANCELLED',
+  status: 'ACTIVE' | 'USED_TO_EXECUTE_LOAN' | 'CANCELLED',
 }
 
 const UserListingsTableRow = ({ offer, status, signature }: UserOffersRowProps) => {
@@ -171,7 +171,7 @@ const UserListingsTableRow = ({ offer, status, signature }: UserOffersRowProps) 
       {/* CANCEL OFFER */}
       <td className='whitespace-nowrap px-6 py-4 dark:text-white'>
         {status === 'CANCELLED' && 'Cancelled'}
-        {status === 'USED_TO_EXECUTED_LOAN' && 'Active Loan'}
+        {status === 'USED_TO_EXECUTE_LOAN' && 'Active Loan'}
         {status === 'ACTIVE' &&
           <button className='btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4 disabled:opacity-50'
                   disabled={isLoading}
