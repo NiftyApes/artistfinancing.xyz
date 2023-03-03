@@ -41,6 +41,7 @@ export default function FinancingSection({
     data: offerData,
     isError,
     isLoading: isLoadingOffers,
+    refetch,
   } = useOffers({
     collection: collection?.id,
     nftId: token?.token?.tokenId,
@@ -134,8 +135,9 @@ export default function FinancingSection({
                 currListingExists={listing ? true : false}
                 roundedButton={true}
               />
-              {/* TODO Pass listing to cancel listing modal */}
-              {listing && <CancelListingModal />}
+              {listing && (
+                <CancelListingModal offer={listing} refetch={refetch} />
+              )}
             </HStack>
           ) : listing ? (
             <BuyNowPayLaterModal
