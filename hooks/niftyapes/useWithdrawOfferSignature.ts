@@ -3,7 +3,7 @@ import {
   Address,
   useContractWrite,
   usePrepareContractWrite,
-  useWaitForTransaction
+  useWaitForTransaction,
 } from 'wagmi'
 
 import { BigNumber } from 'ethers'
@@ -23,7 +23,9 @@ interface IWithdrawOfferSignatureProps {
   signature: `0x${string}`
 }
 
-export const useWithdrawOfferSignature = (props: IWithdrawOfferSignatureProps) => {
+export const useWithdrawOfferSignature = (
+  props: IWithdrawOfferSignatureProps
+) => {
   const { offer, signature } = props
   const { address: niftyApesContractAddress, abi } = useNiftyApesContract()
 
@@ -42,18 +44,35 @@ export const useWithdrawOfferSignature = (props: IWithdrawOfferSignatureProps) =
         nftContractAddress: offer.nftContractAddress as Address,
         periodDuration: offer.periodDuration,
         periodInterestRateBps: offer.periodInterestRateBps,
-        price: BigNumber.from(offer.price)
+        price: BigNumber.from(offer.price),
       },
-      signature
+      signature,
     ],
-    functionName: 'withdrawOfferSignature'
+    functionName: 'withdrawOfferSignature',
   })
 
-  const { data, write } = useContractWrite(config)
+  const {
+    data,
+    write,
+    isLoading: isLoadingWrite,
+    isError: isErrorWrite,
+  } = useContractWrite(config)
 
-  const { isLoading, isSuccess, isError } = useWaitForTransaction({
-    hash: data?.hash
+  const {
+    isLoading: isLoadingTx,
+    isSuccess,
+    isError: isErrorTx,
+  } = useWaitForTransaction({
+    hash: data?.hash,
   })
 
-  return { data, isLoading, isSuccess, isError, write }
+  return {
+    data,
+    isLoadingTx,
+    isLoadingWrite,
+    isSuccess,
+    isErrorTx,
+    isErrorWrite,
+    write,
+  }
 }

@@ -12,23 +12,49 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { Offer } from 'hooks/niftyapes/useOffers'
+import { useWithdrawOfferSignature } from 'hooks/niftyapes/useWithdrawOfferSignature'
+import { useEffect } from 'react'
 import { IoCheckmarkCircle } from 'react-icons/io5'
+import { MdOutlineError } from 'react-icons/md'
 import LoadingDots from '../LoadingDots'
 
-export default function CancelListingModal() {
+export default function CancelListingModal({
+  offer,
+  refetch,
+}: {
+  offer: Offer
+  refetch: () => void
+}) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
-  const [cancellationSuccess, setCancellationSuccess] = useState(false)
   const onClose = () => {
-    setCancellationSuccess(false)
     onModalClose()
   }
+  const {
+    write,
+    isErrorTx,
+    isErrorWrite,
+    isSuccess,
+    isLoadingTx,
+    isLoadingWrite,
+  } = useWithdrawOfferSignature({
+    offer: offer.offer,
+    signature: offer.signature,
+  })
+  const onCancel = () => {
+    onOpen()
+    write?.()
+  }
+
+  useEffect(() => {
+    setTimeout(refetch, 3000)
+  }, [isSuccess])
 
   return (
     <>
       <Button
         w="full"
-        onClick={onOpen}
+        onClick={onCancel}
         variant="outline"
         colorScheme="gray"
         _hover={{ bg: 'gray.800' }}
@@ -44,16 +70,11 @@ export default function CancelListingModal() {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody p="12">
-            {!cancellationSuccess ? (
-              <CancellationInProgress
-                onApprove={() => {
-                  setCancellationSuccess(true)
-                }}
-                onClose={onClose}
-              />
-            ) : (
-              <CancellationSuccess onClose={onClose} />
+            {(isLoadingWrite || isLoadingTx) && <CancellationInProgress />}
+            {(isErrorWrite || isErrorTx) && (
+              <CancellationError onClose={onClose} />
             )}
+            {isSuccess && <CancellationSuccess onClose={onClose} />}
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -61,16 +82,21 @@ export default function CancelListingModal() {
   )
 }
 
-function CancellationInProgress({
-  onClose,
-  onApprove,
-}: {
-  onClose: () => void
-  onApprove: () => void
-}) {
-  // TODO: Replace with actual data.
-  setTimeout(onApprove, 3000)
+function CancellationError({ onClose }: { onClose: () => void }) {
+  return (
+    <VStack spacing="6">
+      <VStack spacing="2">
+        <Heading size="md">Cancellation Error</Heading>
+        <Icon color="red.400" boxSize="20" as={MdOutlineError} />
+      </VStack>
+      <Button onClick={onClose} colorScheme="blue" w="full">
+        Close
+      </Button>
+    </VStack>
+  )
+}
 
+function CancellationInProgress() {
   return (
     <VStack spacing="6">
       <VStack align="left" spacing="2">
@@ -81,15 +107,6 @@ function CancellationInProgress({
         </Text>
       </VStack>
       <LoadingDots />
-      <Button
-        w="full"
-        variant="outline"
-        colorScheme="red"
-        _hover={{ bg: 'blackAlpha.100' }}
-        onClick={onClose}
-      >
-        Abort cancellation
-      </Button>
     </VStack>
   )
 }
