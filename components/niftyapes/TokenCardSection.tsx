@@ -37,12 +37,13 @@ export default function TokenCardSection({
           <GridItem colSpan={2}>
             <HStack spacing={1}>
               <FormatNativeCrypto amount={terms.downPaymentAmount} />
-              <Text fontWeight={'semibold'}>Down</Text>
+              <Text fontSize="sm" fontWeight={'semibold'}>Down</Text>
             </HStack>
           </GridItem>
           <GridItem colSpan={2}>
             <Text
-              fontSize={'sm'}
+              mt={1}
+              fontSize={'xs'}
               fontWeight={'semibold'}
             >{`${terms.apr}% APR`}</Text>
           </GridItem>
@@ -56,13 +57,13 @@ export default function TokenCardSection({
           <GridItem colSpan={2}>
             <HStack spacing="1">
               <Icon as={FiClock} />
-              <Text fontSize={'sm'} fontWeight={'semibold'}>
+              <Text fontSize={'xs'} fontWeight={'semibold'}>
                 {terms.loanDurMos} months
               </Text>
             </HStack>
           </GridItem>
           <GridItem colSpan={3}>
-            <Text fontSize={'sm'} fontWeight={'semibold'}>
+            <Text fontSize={'xs'} fontWeight={'semibold'}>
               Expires {terms.expirationRelative}
             </Text>
           </GridItem>
