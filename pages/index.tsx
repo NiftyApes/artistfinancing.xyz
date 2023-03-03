@@ -87,7 +87,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
       <header className="col-span-full mb-12 mt-[66px] px-4 md:mt-40 lg:px-0">
         <h1 className="reservoir-h1 text-center dark:text-white">{tagline}</h1>
         <h3 className="reservoir-h3 text-center dark:text-white">
-          Pay for them later
+          With terms that don&#39;t suck
         </h3>
       </header>
       <div className="col-span-full px-6 md:px-16">
