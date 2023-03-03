@@ -1,13 +1,4 @@
-import {
-  Box,
-  Grid,
-  GridItem,
-  HStack,
-  Icon,
-  Image,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, HStack, Icon, Image, Text, VStack } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { Offer } from 'hooks/niftyapes/useOffers'
 import useTokens from 'hooks/useTokens'
@@ -33,41 +24,34 @@ export default function TokenCardSection({
   return (
     <Box>
       <VStack px="4" pb="4">
-        <Grid w="full" templateColumns={'repeat(5, 1fr)'} gap={2}>
-          <GridItem colSpan={2}>
-            <HStack spacing={1}>
-              <FormatNativeCrypto amount={terms.downPaymentAmount} />
-              <Text fontSize="sm" fontWeight={'semibold'}>Down</Text>
-            </HStack>
-          </GridItem>
-          <GridItem colSpan={2}>
-            <Text
-              mt={1}
-              fontSize={'xs'}
-              fontWeight={'semibold'}
-            >{`${terms.apr}% APR`}</Text>
-          </GridItem>
-          <GridItem colSpan={1}>
-            <Image
-              borderRadius="full"
-              boxSize="1.5rem"
-              src="/niftyapes/NA-BLACK.png"
-            />
-          </GridItem>
-          <GridItem colSpan={2}>
-            <HStack spacing="1">
-              <Icon as={FiClock} />
-              <Text fontSize={'xs'} fontWeight={'semibold'}>
-                {terms.loanDurMos} months
-              </Text>
-            </HStack>
-          </GridItem>
-          <GridItem colSpan={3}>
-            <Text fontSize={'xs'} fontWeight={'semibold'}>
-              Expires {terms.expirationRelative}
+        <HStack w="full" justify={'space-around'} spacing="4">
+          <HStack spacing={1}>
+            <FormatNativeCrypto amount={terms.downPaymentAmount} />
+            <Text fontSize="sm" fontWeight={'semibold'}>
+              Down
             </Text>
-          </GridItem>
-        </Grid>
+          </HStack>
+          <Text
+            fontSize={'sm'}
+            fontWeight={'semibold'}
+          >{`${terms.apr}% APR`}</Text>
+          <Image
+            borderRadius="full"
+            boxSize="1.5rem"
+            src="/niftyapes/NA-BLACK.png"
+          />
+        </HStack>
+        <HStack w="full" justify={'space-around'} spacing="4">
+          <HStack spacing="1">
+            <Icon as={FiClock} />
+            <Text fontSize={'sm'} fontWeight={'semibold'}>
+              {terms.loanDurMos} mos
+            </Text>
+          </HStack>
+          <Text fontSize={'sm'} fontWeight={'semibold'}>
+            Expires {terms.expirationRelative}
+          </Text>
+        </HStack>
       </VStack>
       {isOwner ? (
         <ListFinancingModal
