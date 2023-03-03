@@ -41,6 +41,9 @@ import {
 } from '@rainbow-me/rainbowkit'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
+import { QueryClientProvider, QueryClient } from 'react-query'
+
+const queryClient = new QueryClient()
 
 // Select a custom ether.js interface for connecting to a network
 // Reference = https://wagmi-xyz.vercel.app/docs/provider#provider-optional
@@ -61,6 +64,8 @@ const PRIMARY_COLOR = process.env.NEXT_PUBLIC_PRIMARY_COLOR || 'default'
 const DISABLE_POWERED_BY_RESERVOIR =
   process.env.NEXT_PUBLIC_DISABLE_POWERED_BY_RESERVOIR
 import presetColors from '../colors'
+import { ChakraProvider } from '@chakra-ui/react'
+import chakraTheme from '../theme'
 
 const FEE_BPS = process.env.NEXT_PUBLIC_FEE_BPS
 const FEE_RECIPIENT = process.env.NEXT_PUBLIC_FEE_RECIPIENT
@@ -93,13 +98,17 @@ function AppWrapper(props: AppProps & { baseUrl: string }) {
   const defaultTheme = DARK_MODE_ENABLED ? 'dark' : 'light'
 
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme={defaultTheme}
-      forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
-    >
-      <App {...props} />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider theme={chakraTheme}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme={defaultTheme}
+          forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
+        >
+          <App {...props} />
+        </ThemeProvider>
+      </ChakraProvider>
+    </QueryClientProvider>
   )
 }
 

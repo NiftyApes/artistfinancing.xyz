@@ -28,6 +28,9 @@ import { truncateAddress } from 'lib/truncateText'
 import { paths, setParams } from '@reservoir0x/reservoir-sdk'
 import UserActivityTab from 'components/tables/UserActivityTab'
 import useMounted from 'hooks/useMounted'
+import UserUpcomingPaymentsTab from 'components/tables/UserUpcomingPaymentsTab'
+import UserFinancingOffersTab from 'components/tables/UserFinancingOffersTab'
+import UserActiveLoansTab from 'components/tables/UserActiveLoansTab'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
@@ -104,6 +107,9 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
   if (isOwner) {
     tabs = [
       { name: 'Tokens', id: 'portfolio' },
+      { name: 'Upcoming Payments', id: 'upcoming_payments' },
+      { name: 'Financing Offers', id: 'financing_offers' },
+      { name: 'Active Loans', id: 'active_loans' },
       { name: 'Offers Made', id: 'buying' },
       { name: 'Active Listings', id: 'listings' },
       { name: 'Inactive Listings', id: 'listings_inactive' },
@@ -155,6 +161,21 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
                 <UserTokensGrid fallback={fallback} owner={address || ''} />
               </div>
             </Tabs.Content>
+            {isOwner && (
+              <Tabs.Content value="upcoming_payments" className="col-span-full">
+                <UserUpcomingPaymentsTab />
+              </Tabs.Content>
+            )}
+            {isOwner && (
+              <Tabs.Content value="financing_offers" className="col-span-full">
+                <UserFinancingOffersTab />
+              </Tabs.Content>
+            )}
+            {isOwner && (
+              <Tabs.Content value="active_loans" className="col-span-full">
+                <UserActiveLoansTab />
+              </Tabs.Content>
+            )}
             {isOwner && (
               <>
                 <Tabs.Content value="buying">

@@ -1,31 +1,33 @@
+import * as Tabs from '@radix-ui/react-tabs'
+import { useCollections } from '@reservoir0x/reservoir-kit-ui'
+import { paths, setParams } from '@reservoir0x/reservoir-sdk'
+import AttributesFlex from 'components/AttributesFlex'
+import MobileTokensFilter from 'components/filter/MobileTokensFilter'
+import FormatNativeCrypto from 'components/FormatNativeCrypto'
+import Hero from 'components/Hero'
+import Layout from 'components/Layout'
+import RefreshButton from 'components/RefreshButton'
+import Sidebar from 'components/Sidebar'
+import SortTokens from 'components/SortTokens'
+import Sweep from 'components/Sweep'
+import CollectionActivityTab from 'components/tables/CollectionActivityTab'
+import { setToast } from 'components/token/setToast'
+import TokensGrid from 'components/TokensGrid'
+import { useNiftyApesContract } from 'hooks/niftyapes/useNiftyApesContract'
+import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
+import useCollectionStats from 'hooks/useCollectionStats'
+import useTokens from 'hooks/useTokens'
+import { formatNumber } from 'lib/numbers'
+import { toggleOnItem } from 'lib/router'
 import type {
   GetStaticPaths,
   GetStaticProps,
   InferGetStaticPropsType,
   NextPage,
 } from 'next'
-import { useRouter } from 'next/router'
-import Layout from 'components/Layout'
-import { useRef, useState } from 'react'
-import useCollectionStats from 'hooks/useCollectionStats'
-import useTokens from 'hooks/useTokens'
-import { setToast } from 'components/token/setToast'
-import { paths, setParams } from '@reservoir0x/reservoir-sdk'
-import Hero from 'components/Hero'
-import { formatNumber } from 'lib/numbers'
-import Sidebar from 'components/Sidebar'
-import AttributesFlex from 'components/AttributesFlex'
-import TokensGrid from 'components/TokensGrid'
 import Head from 'next/head'
-import FormatNativeCrypto from 'components/FormatNativeCrypto'
-import * as Tabs from '@radix-ui/react-tabs'
-import { toggleOnItem } from 'lib/router'
-import Sweep from 'components/Sweep'
-import { useCollections } from '@reservoir0x/reservoir-kit-ui'
-import CollectionActivityTab from 'components/tables/CollectionActivityTab'
-import RefreshButton from 'components/RefreshButton'
-import SortTokens from 'components/SortTokens'
-import MobileTokensFilter from 'components/filter/MobileTokensFilter'
+import { useRouter } from 'next/router'
+import { useRef, useState } from 'react'
 
 // Environment variables
 // For more information about these variables
@@ -56,6 +58,7 @@ const Home: NextPage<Props> = ({ fallback, id }) => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const scrollRef = useRef<HTMLDivElement | null>(null)
+  const { address: niftyapesContractAddress } = useNiftyApesContract()
 
   const scrollToTop = () => {
     let top = (scrollRef.current?.offsetTop || 0) - 91 //Offset from parent element minus height of navbar
@@ -72,6 +75,8 @@ const Home: NextPage<Props> = ({ fallback, id }) => {
     collectionResponse.data && collectionResponse.data[0]
       ? collectionResponse.data[0]
       : undefined
+  const { addNiftyApesCollectionImage } = useNiftyApesImages()
+  addNiftyApesCollectionImage(collection)
 
   const stats = useCollectionStats(router, id)
 
@@ -198,8 +203,10 @@ const Home: NextPage<Props> = ({ fallback, id }) => {
                   </div>
                 </div>
                 <TokensGrid
+                  collectionId={id!}
                   tokens={tokens}
                   viewRef={refTokens}
+                  collection={collection}
                   collectionImage={collection?.image as string}
                   collectionSize={stats.data?.stats?.tokenCount}
                   collectionAttributes={attributes}

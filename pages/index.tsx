@@ -9,6 +9,9 @@ import Footer from 'components/Footer'
 import { useMediaQuery } from '@react-hookz/web'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import FeaturedFinancingOffers from 'components/niftyapes/FeaturedFinancingOffers'
+import GlobalModal from 'components/niftyapes/GlobalModal'
+import { Link } from '@chakra-ui/react'
 
 // Environment variables
 // For more information about these variables
@@ -85,7 +88,47 @@ const Home: NextPage<Props> = ({ fallback }) => {
       </Head>
       <header className="col-span-full mb-12 mt-[66px] px-4 md:mt-40 lg:px-0">
         <h1 className="reservoir-h1 text-center dark:text-white">{tagline}</h1>
+        <h3 className="reservoir-h3 text-center dark:text-white">
+          With terms that don&#39;t suck
+        </h3>
       </header>
+      <GlobalModal
+        storageKey="TOS_marketplace"
+        actionText="Accept"
+        title="Terms of Services"
+        description={
+          <div>
+            Your use of the NiftyApes App is expressly conditioned on your
+            acceptance of NiftyApes’
+            <Link
+              color="purple.400"
+              target="_blank"
+              href="https://blog.niftyapes.money/legal-privacy-tos/"
+            >
+              &nbsp;Terms of Service&nbsp;
+            </Link>
+            and
+            <Link
+              color="purple.400"
+              target="_blank"
+              href="https://blog.niftyapes.money/legal-privacy-tos/"
+            >
+              &nbsp;Privacy Policy&nbsp;
+            </Link>
+            . By clicking accept and close, you indicate that you have read
+            and agree to the NiftyApes Terms of Service and Privacy Policy,
+            and that you consent to collection, storage and use of your
+            personal information for the purposes set forth in the Privacy
+            Policy.
+          </div>
+        }
+      />
+      <div className="col-span-full px-6 md:px-16">
+        <div className="mb-9 flex w-full items-center justify-between">
+          <div className="reservoir-h4 dark:text-white">Featured Offers</div>
+        </div>
+        <FeaturedFinancingOffers />
+      </div>
       <div className="col-span-full px-6 md:px-16">
         <div className="mb-9 flex w-full items-center justify-between">
           <div className="reservoir-h4 dark:text-white">

@@ -1,20 +1,25 @@
+import SwapCartModal from 'components/SwapCartModal'
+import useOffers from 'hooks/niftyapes/useOffers'
+import isEqualAddress from 'lib/niftyapes/isEqualAddress'
+import { getPricing } from 'lib/token/pricing'
+import { useRouter } from 'next/router'
 import { FC, useEffect, useState } from 'react'
-import LoadingCard from './LoadingCard'
 import { useInView } from 'react-intersection-observer'
 import Masonry from 'react-masonry-css'
-import useTokens from '../hooks/useTokens'
-import SwapCartModal from 'components/SwapCartModal'
-import TokenCard from './TokenCard'
-import { Token } from 'recoil/cart/atom'
-import { getPricingPools } from 'recoil/cart'
-import { Collection } from 'types/reservoir'
-import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import { getPricing } from 'lib/token/pricing'
+import { getPricingPools } from 'recoil/cart'
+import { Token } from 'recoil/cart/atom'
+import { Collection } from 'types/reservoir'
+import useTokens from '../hooks/useTokens'
+import LoadingCard from './LoadingCard'
+import { setToast } from './token/setToast'
+import TokenCard from './TokenCard'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
 type Props = {
+  collectionId: string
+  collection?: Collection
   tokens: ReturnType<typeof useTokens>['tokens']
   collectionImage: string | undefined
   collectionSize?: number | undefined
@@ -24,6 +29,8 @@ type Props = {
 }
 
 const TokensGrid: FC<Props> = ({
+  collectionId,
+  collection,
   tokens,
   viewRef,
   collectionImage,
@@ -40,6 +47,11 @@ const TokensGrid: FC<Props> = ({
   const sortBy = router.query['sortBy']?.toString()
   const sortDirection = router.query['sortDirection']?.toString()
   const cartPools = useRecoilValue(getPricingPools)
+  const {
+    data: offersData,
+    error,
+    isLoading: isLoadingOffers,
+  } = useOffers({ collection: collectionId })
 
   useEffect(() => {
     const cartHasPool = Object.values(cartPools).length > 0
@@ -67,6 +79,14 @@ const TokensGrid: FC<Props> = ({
 
   if (!CHAIN_ID) return null
 
+  if (error) {
+    setToast({
+      kind: 'error',
+      message: 'Please retry by reloading this page.',
+      title: 'Failed to load financing offers',
+    })
+  }
+
   return (
     <>
       <SwapCartModal
@@ -77,8 +97,8 @@ const TokensGrid: FC<Props> = ({
       <Masonry
         key="tokensGridMasonry"
         breakpointCols={{
-          default: 6,
-          1900: 5,
+          default: 4,
+          1900: 4,
           1536: 4,
           1280: 3,
           1024: 2,
@@ -89,14 +109,23 @@ const TokensGrid: FC<Props> = ({
         className="masonry-grid"
         columnClassName="masonry-grid_column"
       >
-        {tokens.isFetchingInitialData || isLoading
+        {tokens.isFetchingInitialData || isLoading || isLoadingOffers
           ? Array(20)
               .fill(null)
               .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
           : sortedTokens?.map((token) => {
+              // Check if token has a NiftyApes loan offer
+              const financeOffer = offersData?.find(
+                (offer) =>
+                  offer.offer.nftId === token?.token?.tokenId &&
+                  offer.status === 'ACTIVE' &&
+                  isEqualAddress(offer.offer.creator, token?.token?.owner)
+              )
+
               return (
                 <TokenCard
                   token={token}
+                  collection={collection}
                   collectionImage={collectionImage}
                   collectionSize={collectionSize}
                   collectionAttributes={collectionAttributes}
@@ -104,6 +133,7 @@ const TokensGrid: FC<Props> = ({
                   setClearCartOpen={setClearCartOpen}
                   setCartToSwap={setCartToSwap}
                   key={`${token?.token?.contract}:${token?.token?.tokenId}`}
+                  financeOffer={financeOffer}
                 />
               )
             })}
