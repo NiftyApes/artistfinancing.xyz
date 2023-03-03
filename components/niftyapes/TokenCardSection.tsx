@@ -24,7 +24,7 @@ export default function TokenCardSection({
   return (
     <Box>
       <VStack px="4" pb="4">
-        <HStack w="full" justify={'space-around'} spacing="4">
+        <HStack w="full" justify={'space-evenly'} spacing="4">
           <HStack spacing={1}>
             <FormatNativeCrypto amount={terms.downPaymentAmount} />
             <Text fontSize="sm" fontWeight={'semibold'}>
@@ -41,7 +41,7 @@ export default function TokenCardSection({
             src="/niftyapes/NA-BLACK.png"
           />
         </HStack>
-        <HStack w="full" justify={'space-around'} spacing="4">
+        <HStack w="full" justify={'space-evenly'} spacing="4">
           <HStack spacing="1">
             <Icon as={FiClock} />
             <Text fontSize={'sm'} fontWeight={'semibold'}>
