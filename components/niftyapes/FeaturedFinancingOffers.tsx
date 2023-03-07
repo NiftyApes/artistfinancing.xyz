@@ -3,7 +3,7 @@ import { useCollections, useTokens } from '@reservoir0x/reservoir-kit-ui'
 import TokenCard from 'components/TokenCard'
 import useOffers from 'hooks/niftyapes/useOffers'
 import isEqualAddress from 'lib/niftyapes/isEqualAddress'
-import { uniq } from 'lodash'
+import { sortBy, uniq, uniqBy } from 'lodash'
 import { useState } from 'react'
 import Masonry from 'react-masonry-css'
 
@@ -13,9 +13,18 @@ export default function FeaturedFinancingOffers() {
     setNumOffers(numOffers + 10)
   }
   const { data: offersData, isLoading: isLoadingOffers } = useOffers({})
+
   const activeOffers = offersData?.filter((offer) => offer.status === 'ACTIVE')
+
+  const mostRecentActiveOfferForEachNft = uniqBy(
+    // sortBy is redundant since the API is already sorting
+    // but it doesn't hurt to have it both on the backend and frontend
+    sortBy(activeOffers, (offer) => -offer.createdAt),
+    (offer) => `${offer.offer.nftContractAddress}:${offer.offer.nftId}`
+  )
+
   const tokenQueries = uniq(
-    activeOffers?.map(
+    mostRecentActiveOfferForEachNft?.map(
       (offer) => `${offer.offer.nftContractAddress}:${offer.offer.nftId}`
     )
   )
@@ -28,7 +37,7 @@ export default function FeaturedFinancingOffers() {
     tokens: tokenQueries,
   })
 
-  const offersWithTokens = activeOffers
+  const offersWithTokens = mostRecentActiveOfferForEachNft
     ?.map((offer) => {
       const token = tokens.find(
         (token) =>
