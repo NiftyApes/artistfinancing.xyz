@@ -21,4 +21,4 @@ jobs:
           git checkout goerli-staging
           git pull
           git rebase github-actions
-          git push -f
+          git push
