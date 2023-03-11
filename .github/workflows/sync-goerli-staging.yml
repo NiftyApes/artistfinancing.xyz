@@ -20,5 +20,5 @@ jobs:
           git fetch --unshallow
           git checkout goerli-staging
           git pull
-          git rebase staging
+          git rebase github-actions
           git push goerli-staging -f
