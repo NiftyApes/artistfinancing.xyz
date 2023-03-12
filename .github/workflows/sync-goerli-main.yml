@@ -1,9 +1,9 @@
-name: Sync goerli staging
+name: Sync goerli main
 
 on:
   push:
     branches:
-      - staging
+      - main
 
 jobs:
   sync-branches:
@@ -15,10 +15,10 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
-      - name: Sync staging with goerli-staging
+      - name: Sync main with goerli-main
         run: |
           git fetch --unshallow
-          git checkout goerli-staging
+          git checkout goerli-main
           git pull
-          git rebase staging
+          git rebase main
           git push
