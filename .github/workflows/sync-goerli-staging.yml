@@ -1,9 +1,9 @@
-name: Sync Back to Develop
+name: Sync goerli staging
 
 on:
   push:
     branches:
-      - dev
+      - staging
 
 jobs:
   sync-branches:
@@ -15,10 +15,10 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
-      - name: Sync staging with dev
+      - name: Sync staging with goerli-staging
         run: |
           git fetch --unshallow
-          git checkout staging
+          git checkout goerli-staging
           git pull
-          git merge --no-ff dev -m "Auto-merge dev into staging"
-          git push
+          git rebase staging
+          git push -f
