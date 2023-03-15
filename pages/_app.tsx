@@ -29,7 +29,7 @@ import {
   lightTheme,
   ReservoirKitProvider,
   ReservoirKitProviderProps,
-  ReservoirKitTheme
+  ReservoirKitTheme,
 } from '@reservoir0x/reservoir-kit-ui'
 import { FC, useEffect, useState } from 'react'
 import '@rainbow-me/rainbowkit/styles.css'
@@ -38,7 +38,7 @@ import {
   getDefaultWallets,
   RainbowKitProvider,
   darkTheme as rainbowKitDarkTheme,
-  lightTheme as rainbowKitLightTheme
+  lightTheme as rainbowKitLightTheme,
 } from '@rainbow-me/rainbowkit'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
@@ -90,13 +90,13 @@ const { chains, provider } = configureChains(
 
 const { connectors } = getDefaultWallets({
   appName: SOURCE_NAME || 'Reservoir Market',
-  chains
+  chains,
 })
 
 const wagmiClient = createClient({
   autoConnect: true,
   connectors,
-  provider
+  provider,
 })
 
 function AppWrapper(props: AppProps & { baseUrl: string }) {
@@ -106,7 +106,7 @@ function AppWrapper(props: AppProps & { baseUrl: string }) {
     <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={chakraTheme}>
         <ThemeProvider
-          attribute='class'
+          attribute="class"
           defaultTheme={defaultTheme}
           forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
         >
@@ -118,23 +118,26 @@ function AppWrapper(props: AppProps & { baseUrl: string }) {
 }
 
 const App: FC<AppProps & { baseUrl: string }> = ({
-                                                   Component,
-                                                   pageProps,
-                                                   baseUrl
-                                                 }) => {
+  Component,
+  pageProps,
+  baseUrl,
+}) => {
   const { theme } = useTheme()
   const router = useRouter()
   const defaultTheme = DARK_MODE_ENABLED ? 'dark' : 'light'
-  const [reservoirKitTheme, setReservoirKitTheme] = useState<ReservoirKitTheme | undefined>()
-  const [rainbowKitTheme, setRainbowKitTheme] = useState<| ReturnType<typeof rainbowKitDarkTheme>
+  const [reservoirKitTheme, setReservoirKitTheme] = useState<
+    ReservoirKitTheme | undefined
+  >()
+  const [rainbowKitTheme, setRainbowKitTheme] = useState<
+    | ReturnType<typeof rainbowKitDarkTheme>
     | ReturnType<typeof rainbowKitLightTheme>
-    | undefined>()
+    | undefined
+  >()
   const marketplaceTheme = THEME_SWITCHING_ENABLED ? theme : defaultTheme
 
   const { trackView } = useGoogleAnalytics()
 
   useEffect(() => {
-
     const handleRouteChange = (url: string) => {
       trackView(url)
     }
@@ -147,7 +150,6 @@ const App: FC<AppProps & { baseUrl: string }> = ({
   }, [router.events])
 
   useEffect(() => {
-
     const primaryColor = (PRIMARY_COLOR as string) || 'default'
     const primaryColorPalette = (
       presetColors as Record<string, Record<string, string>>
@@ -159,12 +161,12 @@ const App: FC<AppProps & { baseUrl: string }> = ({
           headlineFont: FONT_FAMILY,
           font: BODY_FONT_FAMILY,
           primaryColor: primaryColorPalette['700'],
-          primaryHoverColor: primaryColorPalette['900']
+          primaryHoverColor: primaryColorPalette['900'],
         })
       )
       setRainbowKitTheme(
         rainbowKitDarkTheme({
-          borderRadius: 'small'
+          borderRadius: 'small',
         })
       )
     } else {
@@ -173,12 +175,12 @@ const App: FC<AppProps & { baseUrl: string }> = ({
           headlineFont: FONT_FAMILY,
           font: BODY_FONT_FAMILY,
           primaryColor: primaryColorPalette['700'],
-          primaryHoverColor: primaryColorPalette['900']
+          primaryHoverColor: primaryColorPalette['900'],
         })
       )
       setRainbowKitTheme(
         rainbowKitLightTheme({
-          borderRadius: 'small'
+          borderRadius: 'small',
         })
       )
     }
@@ -194,14 +196,14 @@ const App: FC<AppProps & { baseUrl: string }> = ({
       DISABLE_POWERED_BY_RESERVOIR != undefined &&
       DISABLE_POWERED_BY_RESERVOIR != null,
     source: SOURCE_DOMAIN,
-    normalizeRoyalties: true
+    normalizeRoyalties: true,
   }
 
   if (FEE_BPS && FEE_RECIPIENT) {
     options = {
       ...options,
       marketplaceFee: +FEE_BPS,
-      marketplaceFeeRecipient: FEE_RECIPIENT
+      marketplaceFeeRecipient: FEE_RECIPIENT,
     }
   }
 
@@ -212,7 +214,7 @@ const App: FC<AppProps & { baseUrl: string }> = ({
           <RainbowKitProvider
             chains={chains}
             theme={rainbowKitTheme}
-            modalSize='compact'
+            modalSize="compact"
           >
             <AnalyticsProvider>
               <Component {...pageProps} />
