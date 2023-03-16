@@ -16,6 +16,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import useTokens from 'hooks/useTokens'
+import { DateTime } from 'luxon'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import { MdOutlineError } from 'react-icons/md'
 import LoadingDots from './LoadingDots'
@@ -49,11 +50,17 @@ export default function AcceptOfferModal({
   //   setTimeout(refetch, 3000)
   // }, [isSuccess])
 
+  const topBid = token?.market?.topBid
+  const showAcceptOffer = topBid?.id !== null && topBid?.id !== undefined
+  const expiration = DateTime.fromSeconds(topBid?.validUntil!).toRelative()
+
   return (
     <>
-      <Button w="full" onClick={onCancel} colorScheme="purple">
-        Accept Offer
-      </Button>
+      {showAcceptOffer && (
+        <Button w="full" onClick={onCancel} colorScheme="purple">
+          Accept Offer
+        </Button>
+      )}
 
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
@@ -63,16 +70,21 @@ export default function AcceptOfferModal({
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody p="0">
-            <HStack
+            <VStack
               justify="space-between"
               borderBottom="1px"
               borderColor="gray.600"
               p="6"
             >
-              <VStack align="left">
+              <HStack w="full" justify={'space-between'}>
                 <Heading size="xs" color="gray.400">
                   Item
                 </Heading>
+                <Heading size="xs" color="gray.400">
+                  Offer
+                </Heading>
+              </HStack>
+              <HStack w="full" justify={'space-between'}>
                 <HStack spacing="4">
                   <Image
                     borderRadius="md"
@@ -82,23 +94,22 @@ export default function AcceptOfferModal({
                     alt={token?.token?.name}
                   ></Image>
                   <VStack align="left" w="full">
-                    <Heading size="sm">{token?.token?.name}</Heading>
+                    <Heading size="md">{token?.token?.name}</Heading>
                     <Text
                       mt="0 !important"
-                      fontSize="xs"
+                      fontSize="md"
                       color="whiteAlpha.800"
                     >
                       {token?.token?.collection?.name}
                     </Text>
+
+                    <Text fontSize="sm" color="gray.400">
+                      Expires {expiration}
+                    </Text>
                   </VStack>
                 </HStack>
-              </VStack>
-              <VStack>
-                <Heading size="xs" color="gray.400">
-                  Offer
-                </Heading>
-              </VStack>
-            </HStack>
+              </HStack>
+            </VStack>
             <Box p="6">
               <Text>WOMP</Text>
             </Box>

@@ -183,6 +183,35 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
       ? true
       : false
 
+  const topBid = (
+    <Price
+      title="Top Offer"
+      source={
+        offerSourceName && (
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href={offerSourceRedirect}
+            className="reservoir-body flex items-center gap-2 dark:text-white"
+          >
+            on {offerSourceName}
+            <img className="h-6 w-6" src={offerSourceLogo} alt="Source Logo" />
+          </a>
+        )
+      }
+      price={
+        <FormatCrypto
+          amount={token?.market?.topBid?.price?.amount?.decimal}
+          address={token?.market?.topBid?.price?.currency?.contract}
+          decimals={token?.market?.topBid?.price?.currency?.decimals}
+          logoWidth={30}
+          maximumFractionDigits={8}
+        />
+      }
+      usdPrice={topBidUsdPrice}
+    />
+  )
+
   return (
     <div className="col-span-full md:col-span-4 lg:col-span-5 lg:col-start-2">
       <article className="col-span-full rounded-2xl border border-gray-300 bg-white p-6 dark:border-neutral-600 dark:bg-black">
@@ -192,36 +221,7 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
           </Center>
         ) : isNiftyApesOwned ? (
           <VStack w="full" align={'left'} spacing="4">
-            <Price
-              title="Top Offer"
-              source={
-                offerSourceName && (
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={offerSourceRedirect}
-                    className="reservoir-body flex items-center gap-2 dark:text-white"
-                  >
-                    on {offerSourceName}
-                    <img
-                      className="h-6 w-6"
-                      src={offerSourceLogo}
-                      alt="Source Logo"
-                    />
-                  </a>
-                )
-              }
-              price={
-                <FormatCrypto
-                  amount={token?.market?.topBid?.price?.amount?.decimal}
-                  address={token?.market?.topBid?.price?.currency?.contract}
-                  decimals={token?.market?.topBid?.price?.currency?.decimals}
-                  logoWidth={30}
-                  maximumFractionDigits={8}
-                />
-              }
-              usdPrice={topBidUsdPrice}
-            />
+            {topBid}
             <AcceptOfferModal token={token} />
           </VStack>
         ) : (
@@ -257,36 +257,7 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
                 }
                 usdPrice={floorAskUsdPrice}
               />
-              <Price
-                title="Top Offer"
-                source={
-                  offerSourceName && (
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={offerSourceRedirect}
-                      className="reservoir-body flex items-center gap-2 dark:text-white"
-                    >
-                      on {offerSourceName}
-                      <img
-                        className="h-6 w-6"
-                        src={offerSourceLogo}
-                        alt="Source Logo"
-                      />
-                    </a>
-                  )
-                }
-                price={
-                  <FormatCrypto
-                    amount={token?.market?.topBid?.price?.amount?.decimal}
-                    address={token?.market?.topBid?.price?.currency?.contract}
-                    decimals={token?.market?.topBid?.price?.currency?.decimals}
-                    logoWidth={30}
-                    maximumFractionDigits={8}
-                  />
-                }
-                usdPrice={topBidUsdPrice}
-              />
+              {topBid}
             </div>
             <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2">
               {account.isDisconnected ? (
