@@ -97,9 +97,9 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
     floorAskPrice?.currency?.symbol
   )
 
-  const { isEntitledToNft, isLoadingLoans: isLoadingOwnershipCheck } =
+  const { activeLoanforNft, isLoadingLoans: isLoadingOwnershipCheck } =
     useNftOwnership()
-  const isNiftyApesOwned = isEntitledToNft(
+  const activeLoan = activeLoanforNft(
     token?.token?.contract as Address,
     token?.token?.tokenId
   )
@@ -219,13 +219,14 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
           <Center>
             <Spinner size="xl" />
           </Center>
-        ) : isNiftyApesOwned ? (
+        ) : !!activeLoan ? (
           <VStack w="full" align={'left'} spacing="4">
             {topBid}
             <AcceptOfferModal
               token={token}
               listSourceLogo={listSourceLogo}
               topBidUsdPrice={topBidUsdPrice}
+              activeLoan={activeLoan}
             />
           </VStack>
         ) : (

@@ -38,5 +38,15 @@ export const useNftOwnership = () => {
           offer.offer.nftId === tokenId
       )
     },
+    activeLoanforNft(contract: Address, tokenId?: string) {
+      if (!address || !activeLoans) return undefined
+
+      // Find active loan matching this contract and tokenId
+      return activeLoans.find(
+        ({ offer }) =>
+          isEqualAddress(offer.offer.nftContractAddress, contract) &&
+          offer.offer.nftId === tokenId
+      )
+    },
   }
 }

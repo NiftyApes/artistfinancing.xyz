@@ -16,6 +16,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import FormatCrypto from 'components/FormatCrypto'
+import { Loan } from 'hooks/niftyapes/useLoans'
 import useTokens from 'hooks/useTokens'
 import { formatDollar } from 'lib/numbers'
 import { DateTime } from 'luxon'
@@ -27,10 +28,12 @@ export default function AcceptOfferModal({
   token,
   listSourceLogo,
   topBidUsdPrice,
+  activeLoan,
 }: {
   token?: ReturnType<typeof useTokens>['tokens']['data'][0]
   listSourceLogo: string
   topBidUsdPrice: number | null
+  activeLoan: Loan
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const onClose = () => {
@@ -60,7 +63,8 @@ export default function AcceptOfferModal({
   const showAcceptOffer = topBid?.id !== null && topBid?.id !== undefined
   const expiration = DateTime.fromSeconds(topBid?.validUntil!).toRelative()
 
-  console.log(topBid)
+  console.log('topBid', topBid)
+  console.log('activeLoan', activeLoan)
 
   return (
     <>
