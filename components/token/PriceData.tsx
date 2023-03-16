@@ -222,7 +222,7 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
               }
               usdPrice={topBidUsdPrice}
             />
-            <AcceptOfferModal />
+            <AcceptOfferModal token={token} />
           </VStack>
         ) : (
           <>

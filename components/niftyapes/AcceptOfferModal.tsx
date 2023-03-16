@@ -1,7 +1,10 @@
 import {
+  Box,
   Button,
   Heading,
+  HStack,
   Icon,
+  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,13 +15,16 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useWithdrawOfferSignature } from 'hooks/niftyapes/useWithdrawOfferSignature'
-import { useEffect } from 'react'
+import useTokens from 'hooks/useTokens'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import { MdOutlineError } from 'react-icons/md'
 import LoadingDots from './LoadingDots'
 
-export default function AcceptOfferModal() {
+export default function AcceptOfferModal({
+  token,
+}: {
+  token?: ReturnType<typeof useTokens>['tokens']['data'][0]
+}) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const onClose = () => {
     onModalClose()
@@ -53,10 +59,50 @@ export default function AcceptOfferModal() {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader borderTopRadius="md" bg="gray.700">
-            Cancel your listing
+            Accept Offer
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody p="12"></ModalBody>
+          <ModalBody p="0">
+            <HStack
+              justify="space-between"
+              borderBottom="1px"
+              borderColor="gray.600"
+              p="6"
+            >
+              <VStack align="left">
+                <Heading size="xs" color="gray.400">
+                  Item
+                </Heading>
+                <HStack spacing="4">
+                  <Image
+                    borderRadius="md"
+                    boxSize="100px"
+                    objectFit="cover"
+                    src={token?.token?.image}
+                    alt={token?.token?.name}
+                  ></Image>
+                  <VStack align="left" w="full">
+                    <Heading size="sm">{token?.token?.name}</Heading>
+                    <Text
+                      mt="0 !important"
+                      fontSize="xs"
+                      color="whiteAlpha.800"
+                    >
+                      {token?.token?.collection?.name}
+                    </Text>
+                  </VStack>
+                </HStack>
+              </VStack>
+              <VStack>
+                <Heading size="xs" color="gray.400">
+                  Offer
+                </Heading>
+              </VStack>
+            </HStack>
+            <Box p="6">
+              <Text>WOMP</Text>
+            </Box>
+          </ModalBody>
         </ModalContent>
       </Modal>
     </>
