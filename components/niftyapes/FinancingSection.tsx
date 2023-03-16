@@ -21,6 +21,7 @@ import useOffers from 'hooks/niftyapes/useOffers'
 import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { FinancingTerms, processOffer } from 'lib/niftyapes/processOffer'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { IoInformationCircleOutline } from 'react-icons/io5'
 import { Collection } from 'types/reservoir'
 import { Address, useAccount } from 'wagmi'
@@ -34,16 +35,20 @@ export default function FinancingSection({
   isOwner,
 }: {
   token: ReturnType<typeof useTokens>['data'][0]
-  collection: Collection
+  collection?: Collection
   isOwner: boolean
 }) {
+  const router = useRouter()
+  const { contract } = router.query
+  const collectionId = collection?.id || (contract as string)
+
   const {
     data: offerData,
     isError,
     isLoading: isLoadingOffers,
     refetch,
   } = useOffers({
-    collection: collection?.id,
+    collection: collectionId,
     nftId: token?.token?.tokenId,
   })
   // Get most recent active listing where offer creator and nft owner are the same
@@ -71,86 +76,90 @@ export default function FinancingSection({
   )
 
   return (
-    <VStack w="full" align="left" spacing="8">
-      {isLoadingOffers || isLoadingOwnershipCheck ? (
-        <Center>
-          <Spinner size="xl" />
-        </Center>
-      ) : isNiftyApesOwned ? (
-        <VStack spacing="4">
-          <VStack w="full" align="left" spacing="0">
-            <Heading size="md">Purchased with Financing</Heading>
-            <HStack>
-              <Text>on NiftyApes</Text>
-              <Image
-                borderRadius="md"
-                boxSize="1.5rem"
-                src="/niftyapes/banana.png"
-              />
-            </HStack>
-          </VStack>
-          <VStack w="full" align="left">
-            <HStack>
-              <div className="reservoir-h6 font-headings dark:text-white">
-                Owner
-              </div>
-              <Tooltip
-                hasArrow
-                placement="right"
-                label="You are entitled to this NFT once your loan is paid in full."
-              >
-                <span>
-                  <Icon boxSize={'5'} as={IoInformationCircleOutline} />
-                </span>
-              </Tooltip>
-            </HStack>
-            <Link href={`/address/${address}`} legacyBehavior={true}>
-              <a>
-                <EthAccount address={address} side="left" />
-              </a>
-            </Link>
-          </VStack>
-        </VStack>
-      ) : (
-        <>
-          <VStack w="full" align="left" spacing="0">
-            <Heading size="md">
-              {isOwner ? 'List with financing' : 'Buy now, pay later'}
-            </Heading>
-            <HStack>
-              <Text>on NiftyApes</Text>
-              <Image
-                borderRadius="md"
-                boxSize="1.5rem"
-                src="/niftyapes/banana.png"
-              />
-            </HStack>
-          </VStack>
-          {listing && <CurrentListing terms={terms!} isOwner={isOwner} />}
-          {isOwner ? (
-            <HStack>
-              <ListFinancingModal
-                token={token}
-                collection={collection}
-                currListingExists={listing ? true : false}
-                roundedButton={true}
-              />
-              {listing && (
-                <CancelListingModal offer={listing} refetch={refetch} />
-              )}
-            </HStack>
-          ) : listing ? (
-            <BuyNowPayLaterModal
-              token={token}
-              roundedButton={true}
-              offer={listing}
-            />
+    <div className="col-span-full md:col-span-4 lg:col-span-5 lg:col-start-2">
+      <article className="col-span-full rounded-2xl border border-gray-300 bg-white p-6 dark:border-neutral-600 dark:bg-black">
+        <VStack w="full" align="left" spacing="8">
+          {isLoadingOffers || isLoadingOwnershipCheck ? (
+            <Center>
+              <Spinner size="xl" />
+            </Center>
+          ) : isNiftyApesOwned ? (
+            <VStack spacing="4">
+              <VStack w="full" align="left" spacing="0">
+                <Heading size="md">Purchased with Financing</Heading>
+                <HStack>
+                  <Text>on NiftyApes</Text>
+                  <Image
+                    borderRadius="md"
+                    boxSize="1.5rem"
+                    src="/niftyapes/banana.png"
+                  />
+                </HStack>
+              </VStack>
+              <VStack w="full" align="left">
+                <HStack>
+                  <div className="reservoir-h6 font-headings dark:text-white">
+                    Owner
+                  </div>
+                  <Tooltip
+                    hasArrow
+                    placement="right"
+                    label="You are entitled to this NFT once your loan is paid in full."
+                  >
+                    <span>
+                      <Icon boxSize={'5'} as={IoInformationCircleOutline} />
+                    </span>
+                  </Tooltip>
+                </HStack>
+                <Link href={`/address/${address}`} legacyBehavior={true}>
+                  <a>
+                    <EthAccount address={address} side="left" />
+                  </a>
+                </Link>
+              </VStack>
+            </VStack>
           ) : (
-            <Box>No current finance listings</Box>
+            <>
+              <VStack w="full" align="left" spacing="0">
+                <Heading size="md">
+                  {isOwner ? 'List with financing' : 'Buy now, pay later'}
+                </Heading>
+                <HStack>
+                  <Text>on NiftyApes</Text>
+                  <Image
+                    borderRadius="md"
+                    boxSize="1.5rem"
+                    src="/niftyapes/banana.png"
+                  />
+                </HStack>
+              </VStack>
+              {listing && <CurrentListing terms={terms!} isOwner={isOwner} />}
+              {isOwner ? (
+                <HStack>
+                  <ListFinancingModal
+                    token={token}
+                    collection={collection}
+                    currListingExists={listing ? true : false}
+                    roundedButton={true}
+                  />
+                  {listing && (
+                    <CancelListingModal offer={listing} refetch={refetch} />
+                  )}
+                </HStack>
+              ) : listing ? (
+                <BuyNowPayLaterModal
+                  token={token}
+                  roundedButton={true}
+                  offer={listing}
+                />
+              ) : (
+                <Box>No current finance listings</Box>
+              )}
+            </>
           )}
-        </>
-      )}
-    </VStack>
+        </VStack>
+      </article>
+    </div>
   )
 }
 
