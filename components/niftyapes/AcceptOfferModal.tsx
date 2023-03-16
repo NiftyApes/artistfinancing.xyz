@@ -15,6 +15,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
+import FormatCrypto from 'components/FormatCrypto'
 import useTokens from 'hooks/useTokens'
 import { DateTime } from 'luxon'
 import { IoCheckmarkCircle } from 'react-icons/io5'
@@ -53,6 +54,8 @@ export default function AcceptOfferModal({
   const topBid = token?.market?.topBid
   const showAcceptOffer = topBid?.id !== null && topBid?.id !== undefined
   const expiration = DateTime.fromSeconds(topBid?.validUntil!).toRelative()
+
+  console.log(topBid)
 
   return (
     <>
@@ -108,6 +111,15 @@ export default function AcceptOfferModal({
                     </Text>
                   </VStack>
                 </HStack>
+                <VStack>
+                  <FormatCrypto
+                    amount={token?.market?.topBid?.price?.amount?.decimal}
+                    address={token?.market?.topBid?.price?.currency?.contract}
+                    decimals={token?.market?.topBid?.price?.currency?.decimals}
+                    logoWidth={30}
+                    maximumFractionDigits={8}
+                  />
+                </VStack>
               </HStack>
             </VStack>
             <Box p="6">
