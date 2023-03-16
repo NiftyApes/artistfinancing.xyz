@@ -1,4 +1,4 @@
-import { Center, Spinner } from '@chakra-ui/react'
+import { Center, Spinner, VStack } from '@chakra-ui/react'
 import {
   AcceptBidModal,
   BidModal,
@@ -11,6 +11,7 @@ import CancelListing from 'components/CancelListing'
 import CancelOffer from 'components/CancelOffer'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import FormatCrypto from 'components/FormatCrypto'
+import AcceptOfferModal from 'components/niftyapes/AcceptOfferModal'
 import SwapCartModal from 'components/SwapCartModal'
 import { useNftOwnership } from 'hooks/niftyapes/useNftOwnership'
 import useCoinConversion from 'hooks/useCoinConversion'
@@ -190,36 +191,39 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
             <Spinner size="xl" />
           </Center>
         ) : isNiftyApesOwned ? (
-          <Price
-            title="Top Offer"
-            source={
-              offerSourceName && (
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={offerSourceRedirect}
-                  className="reservoir-body flex items-center gap-2 dark:text-white"
-                >
-                  on {offerSourceName}
-                  <img
-                    className="h-6 w-6"
-                    src={offerSourceLogo}
-                    alt="Source Logo"
-                  />
-                </a>
-              )
-            }
-            price={
-              <FormatCrypto
-                amount={token?.market?.topBid?.price?.amount?.decimal}
-                address={token?.market?.topBid?.price?.currency?.contract}
-                decimals={token?.market?.topBid?.price?.currency?.decimals}
-                logoWidth={30}
-                maximumFractionDigits={8}
-              />
-            }
-            usdPrice={topBidUsdPrice}
-          />
+          <VStack w="full" align={'left'} spacing="4">
+            <Price
+              title="Top Offer"
+              source={
+                offerSourceName && (
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={offerSourceRedirect}
+                    className="reservoir-body flex items-center gap-2 dark:text-white"
+                  >
+                    on {offerSourceName}
+                    <img
+                      className="h-6 w-6"
+                      src={offerSourceLogo}
+                      alt="Source Logo"
+                    />
+                  </a>
+                )
+              }
+              price={
+                <FormatCrypto
+                  amount={token?.market?.topBid?.price?.amount?.decimal}
+                  address={token?.market?.topBid?.price?.currency?.contract}
+                  decimals={token?.market?.topBid?.price?.currency?.decimals}
+                  logoWidth={30}
+                  maximumFractionDigits={8}
+                />
+              }
+              usdPrice={topBidUsdPrice}
+            />
+            <AcceptOfferModal />
+          </VStack>
         ) : (
           <>
             <div className="grid grid-cols-2 gap-6">
