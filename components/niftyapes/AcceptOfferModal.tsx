@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import FormatCrypto from 'components/FormatCrypto'
 import useTokens from 'hooks/useTokens'
+import { formatDollar } from 'lib/numbers'
 import { DateTime } from 'luxon'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import { MdOutlineError } from 'react-icons/md'
@@ -24,8 +25,12 @@ import LoadingDots from './LoadingDots'
 
 export default function AcceptOfferModal({
   token,
+  listSourceLogo,
+  topBidUsdPrice,
 }: {
   token?: ReturnType<typeof useTokens>['tokens']['data'][0]
+  listSourceLogo: string
+  topBidUsdPrice: number | null
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const onClose = () => {
@@ -96,7 +101,7 @@ export default function AcceptOfferModal({
                     src={token?.token?.image}
                     alt={token?.token?.name}
                   ></Image>
-                  <VStack align="left" w="full">
+                  <VStack align="start" w="full">
                     <Heading size="md">{token?.token?.name}</Heading>
                     <Text
                       mt="0 !important"
@@ -111,7 +116,8 @@ export default function AcceptOfferModal({
                     </Text>
                   </VStack>
                 </HStack>
-                <VStack>
+                <VStack align="end">
+                  <Image boxSize="6" src={listSourceLogo} alt="Source Logo" />
                   <FormatCrypto
                     amount={token?.market?.topBid?.price?.amount?.decimal}
                     address={token?.market?.topBid?.price?.currency?.contract}
@@ -119,6 +125,10 @@ export default function AcceptOfferModal({
                     logoWidth={30}
                     maximumFractionDigits={8}
                   />
+
+                  <Text fontSize="sm" color="gray.400">
+                    {formatDollar(topBidUsdPrice)}
+                  </Text>
                 </VStack>
               </HStack>
             </VStack>
@@ -149,7 +159,7 @@ function AcceptOfferError({ onClose }: { onClose: () => void }) {
 function AcceptOfferInProgress() {
   return (
     <VStack spacing="6">
-      <VStack align="left" spacing="2">
+      <VStack align="start" spacing="2">
         <Heading size="md">Submit cancellation</Heading>
         <Text>
           To cancel this listing you must confirm the transaction and pay the

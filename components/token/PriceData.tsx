@@ -222,7 +222,11 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
         ) : isNiftyApesOwned ? (
           <VStack w="full" align={'left'} spacing="4">
             {topBid}
-            <AcceptOfferModal token={token} />
+            <AcceptOfferModal
+              token={token}
+              listSourceLogo={listSourceLogo}
+              topBidUsdPrice={topBidUsdPrice}
+            />
           </VStack>
         ) : (
           <>
