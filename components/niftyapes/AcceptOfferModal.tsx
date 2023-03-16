@@ -61,7 +61,7 @@ export default function AcceptOfferModal({
 
   const topBid = token?.market?.topBid
   const showAcceptOffer = topBid?.id !== null && topBid?.id !== undefined
-  const expiration = DateTime.fromSeconds(topBid?.validUntil!).toRelative()
+  const expiration = DateTime.fromSeconds(topBid?.validUntil || 0).toRelative()
 
   console.log('topBid', topBid)
   console.log('activeLoan', activeLoan)
@@ -136,9 +136,10 @@ export default function AcceptOfferModal({
                 </VStack>
               </HStack>
             </VStack>
-            <Box p="6">
-              <Text>WOMP</Text>
-            </Box>
+            <HStack p="6">
+              <Heading size="md">You Get</Heading>
+              <VStack></VStack>
+            </HStack>
           </ModalBody>
         </ModalContent>
       </Modal>

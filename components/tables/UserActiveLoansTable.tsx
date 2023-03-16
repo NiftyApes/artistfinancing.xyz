@@ -30,7 +30,7 @@ const UserActiveLoansTable: FC = () => {
   )
   const tokens = useTokens({
     tokens: tokensQueryArr,
-  });
+  })
 
   if (isLoading) {
     return (
@@ -98,12 +98,12 @@ const UserActiveLoansTable: FC = () => {
                 {loans.map((item: Loan, index) => {
                   return (
                     <UserListingsTableRow
-                    sellerNft={item.sellerNft}
-                    isOwner={true}
-                    key={index}
-                    loan={item.loan}
-                    offer={item.offer.offer}
-                    token={tokens.data[index]}
+                      sellerNft={item.sellerNft}
+                      isOwner={true}
+                      key={index}
+                      loan={item.loan}
+                      offer={item.offer.offer}
+                      token={tokens.data[index]}
                     />
                   )
                 })}
@@ -117,20 +117,30 @@ const UserActiveLoansTable: FC = () => {
 type LoansRowProps = {
   isOwner: boolean
 
-  loan: LoanDetails,
+  loan: LoanDetails
   sellerNft: {
     tokenId: string
   }
   offer: OfferDetails
-  token: ReturnType<typeof useTokens>['data'][0];
+  token: ReturnType<typeof useTokens>['data'][0]
 }
-const UserListingsTableRow = ({ loan, sellerNft, offer, token }: LoansRowProps) => {
-  const { apr, listPrice, image, tokenName, collectionName } = processOffer(offer, token)
+const UserListingsTableRow = ({
+  loan,
+  sellerNft,
+  offer,
+  token,
+}: LoansRowProps) => {
+  const { apr, listPrice, image, tokenName, collectionName } = processOffer(
+    offer,
+    token
+  )
 
   const { address } = useNiftyApesContract()
 
-  const { periodEndTimestamp, remainingPrincipal, isPastDue } =
-    processLoan(loan, offer)
+  const { periodEndTimestamp, remainingPrincipal, inDefault } =
+    processLoan(loan)
+
+  console.log('inDefault', inDefault)
 
   const {
     isLoading: isLoadingSeizeAsset,
@@ -139,83 +149,89 @@ const UserListingsTableRow = ({ loan, sellerNft, offer, token }: LoansRowProps) 
   } = useSeizeAsset({
     nftContractAddress: offer.nftContractAddress,
     nftId: BigNumber.from(offer.nftId),
-  });
+  })
+
+  console.log('isLoadingSeizeAsset', isLoadingSeizeAsset)
 
   return (
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
-    {/* ITEM */}
-    <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-      <div className="flex items-center gap-2">
-        <div className="relative h-16 w-16">
-          <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded">
-            <img
-              src={image ? optimizeImage(image, 64) :'/niftyapes/placeholder.png'}
-              alt="Bid Image"
-              className="w-[64px] object-contain"
-              width="64"
-              height="64"
-            />
-          </div>
-        </div>
-        <span className="whitespace-nowrap">
-          <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
-            {tokenName ? tokenName : collectionName}
-          </div>
-          {tokenName && (
-            <div className="text-xs text-neutral-600 dark:text-neutral-300">
-              {collectionName}
+      {/* ITEM */}
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+        <div className="flex items-center gap-2">
+          <div className="relative h-16 w-16">
+            <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded">
+              <img
+                src={
+                  image
+                    ? optimizeImage(image, 64)
+                    : '/niftyapes/placeholder.png'
+                }
+                alt="Bid Image"
+                className="w-[64px] object-contain"
+                width="64"
+                height="64"
+              />
             </div>
-          )}
-        </span>
-      </div>
-    </td>
+          </div>
+          <span className="whitespace-nowrap">
+            <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
+              {tokenName ? tokenName : collectionName}
+            </div>
+            {tokenName && (
+              <div className="text-xs text-neutral-600 dark:text-neutral-300">
+                {collectionName}
+              </div>
+            )}
+          </span>
+        </div>
+      </td>
 
-    {/* PRICE */}
-    <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-      <FormatNativeCrypto maximumFractionDigits={4} amount={listPrice} />
-    </td>
+      {/* PRICE */}
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+        <FormatNativeCrypto maximumFractionDigits={4} amount={listPrice} />
+      </td>
 
-    {/* APR */}
-    <td className="px-6 py-4 font-light text-neutral-600 dark:text-neutral-300">
-      {apr}%
-    </td>
+      {/* APR */}
+      <td className="px-6 py-4 font-light text-neutral-600 dark:text-neutral-300">
+        {apr}%
+      </td>
 
-    {/* NEXT PAYMENT DUE */}
-    <td className="whitespace-nowrap px-6 py-4">
-      {format(new Date(periodEndTimestamp * 1000), 'Pp')}
-    </td>
+      {/* NEXT PAYMENT DUE */}
+      <td className="whitespace-nowrap px-6 py-4">
+        {format(new Date(periodEndTimestamp * 1000), 'Pp')}
+      </td>
 
-    {/* PRINCIPAL REMAINING */}
-    <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-      <FormatNativeCrypto
-        maximumFractionDigits={4}
-        amount={remainingPrincipal}
-      />
-    </td>
+      {/* PRINCIPAL REMAINING */}
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+        <FormatNativeCrypto
+          maximumFractionDigits={4}
+          amount={remainingPrincipal}
+        />
+      </td>
 
-    {/* SEIZE ASSET */}
-    <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-      <button
-        disabled={isLoadingSeizeAsset || isPastDue}
-        onClick={() => write?.()}
-        className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
-      >
-        Seize Asset
-      </button>
-    </td>
+      {/* SEIZE ASSET */}
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+        <button
+          disabled={isLoadingSeizeAsset || !inDefault}
+          onClick={() => write?.()}
+          className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
+        >
+          Seize Asset
+        </button>
+      </td>
 
-    {/* SELL LOAN */}
-    <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-      <button
-        onClick={() => {
-          window.location.href = `/${address}/${sellerNft.tokenId}`
-        }}
-        className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
-      >
-        Sell Loan
-      </button>
-    </td>
-  </tr>
+      {/* SELL LOAN */}
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+        <button
+          onClick={() => {
+            window.location.href = `/${address}/${sellerNft.tokenId}`
+          }}
+          className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
+        >
+          Sell Loan
+        </button>
+      </td>
+    </tr>
   )
 }
 
@@ -228,7 +244,9 @@ const UserActiveLoansMobileTableRow = ({ offer, token }: LoansRowProps) => {
         <div className="relative h-14 w-14">
           <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded">
             <img
-              src={image ? optimizeImage(image, 56) :'/niftyapes/placeholder.png'}
+              src={
+                image ? optimizeImage(image, 56) : '/niftyapes/placeholder.png'
+              }
               alt="Bid Image"
               className="w-[56px] object-contain"
               width="56"
