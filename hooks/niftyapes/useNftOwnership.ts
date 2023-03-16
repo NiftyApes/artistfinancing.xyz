@@ -29,7 +29,7 @@ export const useNftOwnership = () => {
     isLoadingTokens: isFetchingPage || isFetchingInitialData,
     entitledTokens,
     isEntitledToNft(contract: Address, tokenId?: string) {
-      if (!activeLoans) return false
+      if (!address || !activeLoans) return false
 
       // Find active loan matching this contract and tokenId
       return activeLoans.some(
