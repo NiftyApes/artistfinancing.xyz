@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Heading,
   HStack,
@@ -18,6 +17,7 @@ import {
 import FormatCrypto from 'components/FormatCrypto'
 import { Loan } from 'hooks/niftyapes/useLoans'
 import useTokens from 'hooks/useTokens'
+import { processLoan } from 'lib/niftyapes/processLoan'
 import { formatDollar } from 'lib/numbers'
 import { DateTime } from 'luxon'
 import { IoCheckmarkCircle } from 'react-icons/io5'
@@ -62,6 +62,7 @@ export default function AcceptOfferModal({
   const topBid = token?.market?.topBid
   const showAcceptOffer = topBid?.id !== null && topBid?.id !== undefined
   const expiration = DateTime.fromSeconds(topBid?.validUntil || 0).toRelative()
+  const { interestToBePaid, remainingPrincipal } = processLoan(activeLoan.loan)
 
   console.log('topBid', topBid)
   console.log('activeLoan', activeLoan)
