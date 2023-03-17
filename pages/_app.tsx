@@ -18,6 +18,7 @@ import 'styles/rodger.css'
 import 'styles/ingrammono.css'
 import type { AppContext, AppProps } from 'next/app'
 import { default as NextApp } from 'next/app'
+import { useRouter } from 'next/router'
 import { WagmiConfig, createClient, configureChains } from 'wagmi'
 import * as allChains from 'wagmi/chains'
 import AnalyticsProvider from 'components/AnalyticsProvider'
@@ -42,6 +43,7 @@ import {
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 import { QueryClientProvider, QueryClient } from 'react-query'
+import ReactGA from 'react-ga4'
 
 const queryClient = new QueryClient()
 
@@ -66,6 +68,7 @@ const DISABLE_POWERED_BY_RESERVOIR =
 import presetColors from '../colors'
 import { ChakraProvider } from '@chakra-ui/react'
 import chakraTheme from '../theme'
+import { useGoogleAnalytics } from '../hooks/niftyapes/useGoogleAnalytics'
 
 const FEE_BPS = process.env.NEXT_PUBLIC_FEE_BPS
 const FEE_RECIPIENT = process.env.NEXT_PUBLIC_FEE_RECIPIENT
@@ -73,6 +76,8 @@ const SOURCE_DOMAIN = process.env.NEXT_PUBLIC_SOURCE_DOMAIN
 const API_BASE = process.env.NEXT_PUBLIC_RESERVOIR_API_BASE
 const SOURCE_NAME = process.env.NEXT_PUBLIC_SOURCE_NAME
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
+
+ReactGA.initialize('G-WSYXEQ3MFP')
 
 const envChain = Object.values(allChains).find(
   (chain) => chain.id === +(CHAIN_ID || allChains.mainnet)
@@ -118,6 +123,7 @@ const App: FC<AppProps & { baseUrl: string }> = ({
   baseUrl,
 }) => {
   const { theme } = useTheme()
+  const router = useRouter()
   const defaultTheme = DARK_MODE_ENABLED ? 'dark' : 'light'
   const [reservoirKitTheme, setReservoirKitTheme] = useState<
     ReservoirKitTheme | undefined
@@ -128,6 +134,20 @@ const App: FC<AppProps & { baseUrl: string }> = ({
     | undefined
   >()
   const marketplaceTheme = THEME_SWITCHING_ENABLED ? theme : defaultTheme
+
+  const { trackView } = useGoogleAnalytics()
+
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      trackView(url)
+    }
+
+    router.events.on('routeChangeComplete', handleRouteChange)
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [router.events])
 
   useEffect(() => {
     const primaryColor = (PRIMARY_COLOR as string) || 'default'
