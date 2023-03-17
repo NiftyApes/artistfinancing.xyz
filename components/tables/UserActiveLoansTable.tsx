@@ -140,8 +140,6 @@ const UserListingsTableRow = ({
   const { periodEndTimestamp, remainingPrincipal, inDefault } =
     processLoan(loan)
 
-  console.log('inDefault', inDefault)
-
   const {
     isLoading: isLoadingSeizeAsset,
     isError,
@@ -150,8 +148,6 @@ const UserListingsTableRow = ({
     nftContractAddress: offer.nftContractAddress,
     nftId: BigNumber.from(offer.nftId),
   })
-
-  console.log('isLoadingSeizeAsset', isLoadingSeizeAsset)
 
   return (
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
