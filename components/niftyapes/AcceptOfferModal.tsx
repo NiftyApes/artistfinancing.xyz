@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Heading,
   HStack,
@@ -15,11 +16,13 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import FormatCrypto from 'components/FormatCrypto'
+import { formatEther } from 'ethers/lib/utils.js'
 import { Loan } from 'hooks/niftyapes/useLoans'
 import useTokens from 'hooks/useTokens'
 import { processLoan } from 'lib/niftyapes/processLoan'
 import { formatDollar } from 'lib/numbers'
 import { DateTime } from 'luxon'
+import { FaMinus } from 'react-icons/fa'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import { MdOutlineError } from 'react-icons/md'
 import LoadingDots from './LoadingDots'
@@ -62,10 +65,17 @@ export default function AcceptOfferModal({
   const topBid = token?.market?.topBid
   const showAcceptOffer = topBid?.id !== null && topBid?.id !== undefined
   const expiration = DateTime.fromSeconds(topBid?.validUntil || 0).toRelative()
+  const price = token?.market?.topBid?.price?.amount?.decimal || 0
   const { interestToBePaid, remainingPrincipal } = processLoan(activeLoan.loan)
+  console.log(price)
+  console.log(remainingPrincipal)
+  console.log(interestToBePaid)
+  const total =
+    price - Number(formatEther(remainingPrincipal)) - interestToBePaid
 
   console.log('topBid', topBid)
   console.log('activeLoan', activeLoan)
+  console.log('total', total)
 
   return (
     <>
@@ -124,23 +134,74 @@ export default function AcceptOfferModal({
                 <VStack align="end">
                   <Image boxSize="6" src={listSourceLogo} alt="Source Logo" />
                   <FormatCrypto
-                    amount={token?.market?.topBid?.price?.amount?.decimal}
+                    amount={price}
                     address={token?.market?.topBid?.price?.currency?.contract}
                     decimals={token?.market?.topBid?.price?.currency?.decimals}
-                    logoWidth={30}
                     maximumFractionDigits={8}
                   />
-
                   <Text fontSize="sm" color="gray.400">
                     {formatDollar(topBidUsdPrice)}
                   </Text>
                 </VStack>
               </HStack>
             </VStack>
-            <HStack p="6">
-              <Heading size="md">You Get</Heading>
-              <VStack></VStack>
-            </HStack>
+            <VStack p="6" w="full" spacing="4">
+              <HStack w="full" justify={'space-between'}>
+                <Text color="gray.400">Bid price</Text>
+                <FormatCrypto
+                  amount={price}
+                  address={token?.market?.topBid?.price?.currency?.contract}
+                  decimals={token?.market?.topBid?.price?.currency?.decimals}
+                  maximumFractionDigits={8}
+                />
+              </HStack>
+              <HStack w="full" justify={'space-between'}>
+                <Text color="gray.400">Remaining loan principal</Text>
+                <HStack w="150px" justify={'space-between'}>
+                  <Icon as={FaMinus} boxSize="2" />
+                  <FormatCrypto
+                    amount={remainingPrincipal}
+                    address={token?.market?.topBid?.price?.currency?.contract}
+                    decimals={token?.market?.topBid?.price?.currency?.decimals}
+                    maximumFractionDigits={8}
+                  />
+                </HStack>
+              </HStack>
+              <HStack w="full" justify={'space-between'}>
+                <Text color="gray.400">Remaining interest</Text>
+                <HStack w="150px" justify={'space-between'}>
+                  <Icon as={FaMinus} boxSize="2" />
+                  <FormatCrypto
+                    amount={interestToBePaid}
+                    address={token?.market?.topBid?.price?.currency?.contract}
+                    decimals={token?.market?.topBid?.price?.currency?.decimals}
+                    maximumFractionDigits={8}
+                  />
+                </HStack>
+              </HStack>
+              <HStack mt="6" w="full" justify={'space-between'}>
+                <Heading size={'md'} fontWeight="semibold">
+                  Total
+                </Heading>
+                <HStack
+                  w="150px"
+                  justify={'space-between'}
+                  py="4"
+                  borderTop="1px"
+                  borderColor="gray.600"
+                >
+                  <Icon boxSize={2} as={total < 0 ? FaMinus : Box} />
+                  <FormatCrypto
+                    amount={Math.abs(total)}
+                    address={token?.market?.topBid?.price?.currency?.contract}
+                    decimals={token?.market?.topBid?.price?.currency?.decimals}
+                    logoWidth={30}
+                    fontSize={20}
+                    maximumFractionDigits={8}
+                  />
+                </HStack>
+              </HStack>
+            </VStack>
           </ModalBody>
         </ModalContent>
       </Modal>
