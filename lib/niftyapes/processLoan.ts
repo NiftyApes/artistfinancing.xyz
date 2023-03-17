@@ -1,21 +1,21 @@
 import { isAfter } from 'date-fns'
 import { formatEther } from 'ethers/lib/utils.js'
 import { LoanDetails } from 'hooks/niftyapes/useLoans'
-import { OfferDetails } from 'hooks/niftyapes/useOffers'
 
 export type ProcessedLoan = LoanDetails & {
   minimumPayment: number
-  isPastDue: boolean
+  interestToBePaid: number
+  inDefault: boolean
 }
 
-export function processLoan(loan: LoanDetails, offer?: OfferDetails): ProcessedLoan {
+export function processLoan(loan: LoanDetails): ProcessedLoan {
   const minPrincipalPerPeriod = Number(
     formatEther(loan.minimumPrincipalPerPeriod)
   )
   const remainingPrincipal = Number(formatEther(loan.remainingPrincipal))
   const periodInterestRate = loan.periodInterestRateBps / 100
   const interestToBePaid = (periodInterestRate / 100) * remainingPrincipal
-  const isPastDue = offer?.expiration ? isAfter(new Date(), new Date(offer.expiration)) : true
+  const inDefault = isAfter(new Date(loan.periodEndTimestamp), new Date())
 
   let minimumPayment = minPrincipalPerPeriod + interestToBePaid
 
@@ -25,5 +25,5 @@ export function processLoan(loan: LoanDetails, offer?: OfferDetails): ProcessedL
     minimumPayment = remainingPrincipal + interestToBePaid
   }
 
-  return { ...loan, minimumPayment, isPastDue }
+  return { ...loan, minimumPayment, interestToBePaid, inDefault }
 }

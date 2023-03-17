@@ -23,7 +23,6 @@ export const useNiftyApesContract = () => {
   }
 
   if (provider && isMainnet(chain?.id)) {
-    //TODO: Fix this
     return {
       address: '0x3a5846f85e7631c32b09528dd2479334a905ee42' as Address,
       abi: ContractAbi,

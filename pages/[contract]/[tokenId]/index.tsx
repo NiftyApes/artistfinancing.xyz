@@ -1,28 +1,27 @@
-import Layout from 'components/Layout'
-import setParams from 'lib/params'
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
-import { useRouter } from 'next/router'
-import TokenAttributes from 'components/TokenAttributes'
-import Head from 'next/head'
-import { paths } from '@reservoir0x/reservoir-sdk'
-import Listings from 'components/token/Listings'
-import TokenInfo from 'components/token/TokenInfo'
-import CollectionInfo from 'components/token/CollectionInfo'
-import Owner from 'components/token/Owner'
-import PriceData from 'components/token/PriceData'
-import TokenMedia from 'components/token/TokenMedia'
-import { useEffect, useState } from 'react'
-import { TokenDetails } from 'types/reservoir'
 import {
+  useCollections,
   useTokenOpenseaBanned,
   useTokens,
-  useCollections,
   useUserTokens,
 } from '@reservoir0x/reservoir-kit-ui'
-import { useAccount } from 'wagmi'
-import isEqualAddress from 'lib/niftyapes/isEqualAddress'
-import { useNiftyApesContract } from 'hooks/niftyapes/useNiftyApesContract'
+import { paths } from '@reservoir0x/reservoir-sdk'
+import Layout from 'components/Layout'
+import FinancingSection from 'components/niftyapes/FinancingSection'
+import CollectionInfo from 'components/token/CollectionInfo'
+import Listings from 'components/token/Listings'
+import Owner from 'components/token/Owner'
+import PriceData from 'components/token/PriceData'
+import TokenInfo from 'components/token/TokenInfo'
+import TokenMedia from 'components/token/TokenMedia'
+import TokenAttributes from 'components/TokenAttributes'
 import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
+import setParams from 'lib/params'
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { TokenDetails } from 'types/reservoir'
+import { useAccount } from 'wagmi'
 
 // Environment variables
 // For more information about these variables
@@ -191,6 +190,11 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
           details={token}
           bannedOnOpenSea={bannedOnOpenSea}
           collection={collection}
+        />
+        <FinancingSection
+          token={token}
+          collection={collection}
+          isOwner={isOwner}
         />
         <PriceData
           details={tokenData}

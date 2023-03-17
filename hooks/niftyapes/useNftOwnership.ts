@@ -29,10 +29,20 @@ export const useNftOwnership = () => {
     isLoadingTokens: isFetchingPage || isFetchingInitialData,
     entitledTokens,
     isEntitledToNft(contract: Address, tokenId?: string) {
-      if (!activeLoans) return false
+      if (!address || !activeLoans) return false
 
       // Find active loan matching this contract and tokenId
       return activeLoans.some(
+        ({ offer }) =>
+          isEqualAddress(offer.offer.nftContractAddress, contract) &&
+          offer.offer.nftId === tokenId
+      )
+    },
+    activeLoanforNft(contract: Address, tokenId?: string) {
+      if (!address || !activeLoans) return undefined
+
+      // Find active loan matching this contract and tokenId
+      return activeLoans.find(
         ({ offer }) =>
           isEqualAddress(offer.offer.nftContractAddress, contract) &&
           offer.offer.nftId === tokenId
