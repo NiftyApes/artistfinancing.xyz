@@ -12,6 +12,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  Tooltip,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -22,10 +23,18 @@ import useTokens from 'hooks/useTokens'
 import { processLoan } from 'lib/niftyapes/processLoan'
 import { formatDollar } from 'lib/numbers'
 import { DateTime } from 'luxon'
+import { useState } from 'react'
 import { FaMinus } from 'react-icons/fa'
-import { IoCheckmarkCircle } from 'react-icons/io5'
+import { IoCheckmarkCircle, IoWallet } from 'react-icons/io5'
 import { MdOutlineError } from 'react-icons/md'
 import LoadingDots from './LoadingDots'
+
+enum Steps {
+  AcceptBid,
+  ConfirmTransaction,
+  AwaitTransaction,
+  Success,
+}
 
 export default function AcceptOfferModal({
   token,
@@ -39,6 +48,7 @@ export default function AcceptOfferModal({
   activeLoan: Loan
 }) {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
+  const [step, setStep] = useState(Steps.AcceptBid)
   const onClose = () => {
     onModalClose()
   }
@@ -67,15 +77,8 @@ export default function AcceptOfferModal({
   const expiration = DateTime.fromSeconds(topBid?.validUntil || 0).toRelative()
   const price = token?.market?.topBid?.price?.amount?.decimal || 0
   const { interestToBePaid, remainingPrincipal } = processLoan(activeLoan.loan)
-  console.log(price)
-  console.log(remainingPrincipal)
-  console.log(interestToBePaid)
   const total =
     price - Number(formatEther(remainingPrincipal)) - interestToBePaid
-
-  console.log('topBid', topBid)
-  console.log('activeLoan', activeLoan)
-  console.log('total', total)
 
   return (
     <>
@@ -92,7 +95,7 @@ export default function AcceptOfferModal({
             Accept Offer
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody p="0">
+          <ModalBody>
             <VStack
               justify="space-between"
               borderBottom="1px"
@@ -145,63 +148,100 @@ export default function AcceptOfferModal({
                 </VStack>
               </HStack>
             </VStack>
-            <VStack p="6" w="full" spacing="4">
-              <HStack w="full" justify={'space-between'}>
-                <Text color="gray.400">Bid price</Text>
-                <FormatCrypto
-                  amount={price}
-                  address={token?.market?.topBid?.price?.currency?.contract}
-                  decimals={token?.market?.topBid?.price?.currency?.decimals}
-                  maximumFractionDigits={8}
-                />
-              </HStack>
-              <HStack w="full" justify={'space-between'}>
-                <Text color="gray.400">Remaining loan principal</Text>
-                <HStack w="150px" justify={'space-between'}>
-                  <Icon as={FaMinus} boxSize="2" />
-                  <FormatCrypto
-                    amount={remainingPrincipal}
-                    address={token?.market?.topBid?.price?.currency?.contract}
-                    decimals={token?.market?.topBid?.price?.currency?.decimals}
-                    maximumFractionDigits={8}
-                  />
-                </HStack>
-              </HStack>
-              <HStack w="full" justify={'space-between'}>
-                <Text color="gray.400">Remaining interest</Text>
-                <HStack w="150px" justify={'space-between'}>
-                  <Icon as={FaMinus} boxSize="2" />
-                  <FormatCrypto
-                    amount={interestToBePaid}
-                    address={token?.market?.topBid?.price?.currency?.contract}
-                    decimals={token?.market?.topBid?.price?.currency?.decimals}
-                    maximumFractionDigits={8}
-                  />
-                </HStack>
-              </HStack>
-              <HStack mt="6" w="full" justify={'space-between'}>
-                <Heading size={'md'} fontWeight="semibold">
-                  Total
-                </Heading>
-                <HStack
-                  w="150px"
-                  justify={'space-between'}
-                  py="4"
-                  borderTop="1px"
-                  borderColor="gray.600"
+            {step === Steps.AcceptBid && (
+              <>
+                <VStack p="6" w="full" spacing="4">
+                  <HStack w="full" justify={'space-between'}>
+                    <Text color="gray.400">Bid price</Text>
+                    <FormatCrypto
+                      amount={price}
+                      address={token?.market?.topBid?.price?.currency?.contract}
+                      decimals={
+                        token?.market?.topBid?.price?.currency?.decimals
+                      }
+                      maximumFractionDigits={8}
+                    />
+                  </HStack>
+                  <HStack w="full" justify={'space-between'}>
+                    <Text color="gray.400">Remaining loan principal</Text>
+                    <HStack w="150px" justify={'space-between'}>
+                      <Icon as={FaMinus} boxSize="2" />
+                      <FormatCrypto
+                        amount={remainingPrincipal}
+                        address={
+                          token?.market?.topBid?.price?.currency?.contract
+                        }
+                        decimals={
+                          token?.market?.topBid?.price?.currency?.decimals
+                        }
+                        maximumFractionDigits={8}
+                      />
+                    </HStack>
+                  </HStack>
+                  <HStack w="full" justify={'space-between'}>
+                    <Text color="gray.400">Remaining interest</Text>
+                    <HStack w="150px" justify={'space-between'}>
+                      <Icon as={FaMinus} boxSize="2" />
+                      <FormatCrypto
+                        amount={interestToBePaid}
+                        address={
+                          token?.market?.topBid?.price?.currency?.contract
+                        }
+                        decimals={
+                          token?.market?.topBid?.price?.currency?.decimals
+                        }
+                        maximumFractionDigits={8}
+                      />
+                    </HStack>
+                  </HStack>
+                  <HStack mt="6" w="full" justify={'space-between'}>
+                    <Heading size={'md'} fontWeight="semibold">
+                      Total
+                    </Heading>
+                    <HStack
+                      w="150px"
+                      justify={total < 0 ? 'space-between' : 'end'}
+                      py="4"
+                      borderTop="1px"
+                      borderColor="gray.600"
+                    >
+                      {total < 0 && <Icon boxSize={2} as={FaMinus} />}
+                      <FormatCrypto
+                        amount={Math.abs(total)}
+                        address={
+                          token?.market?.topBid?.price?.currency?.contract
+                        }
+                        decimals={
+                          token?.market?.topBid?.price?.currency?.decimals
+                        }
+                        logoWidth={20}
+                        fontSize={20}
+                        maximumFractionDigits={8}
+                      />
+                    </HStack>
+                  </HStack>
+                </VStack>
+                <Tooltip
+                  isDisabled={total >= 0}
+                  label="You cannot accept a bid that is less than your outstanding loan amount."
+                  hasArrow
+                  placement="top"
                 >
-                  <Icon boxSize={2} as={total < 0 ? FaMinus : Box} />
-                  <FormatCrypto
-                    amount={Math.abs(total)}
-                    address={token?.market?.topBid?.price?.currency?.contract}
-                    decimals={token?.market?.topBid?.price?.currency?.decimals}
-                    logoWidth={30}
-                    fontSize={20}
-                    maximumFractionDigits={8}
-                  />
-                </HStack>
-              </HStack>
-            </VStack>
+                  <Button
+                    mb="4"
+                    w="full"
+                    colorScheme={'purple'}
+                    isDisabled={total < 0}
+                    onClick={() => {
+                      setStep(Steps.ConfirmTransaction)
+                    }}
+                  >
+                    Accept
+                  </Button>
+                </Tooltip>
+              </>
+            )}
+            {step === Steps.ConfirmTransaction && <ConfirmTransaction />}
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -209,35 +249,24 @@ export default function AcceptOfferModal({
   )
 }
 
-function AcceptOfferError({ onClose }: { onClose: () => void }) {
+function ConfirmTransaction() {
   return (
-    <VStack spacing="6">
-      <VStack spacing="2">
-        <Heading size="md">Cancellation Error</Heading>
-        <Icon color="red.400" boxSize="20" as={MdOutlineError} />
-      </VStack>
-      <Button onClick={onClose} colorScheme="blue" w="full">
-        Close
-      </Button>
+    <VStack pt={6} pb={4} w="full" h="full" spacing="10">
+      <Heading textAlign={'center'} size="md">
+        Confirm purchase in your wallet
+      </Heading>
+      <Icon as={IoWallet} boxSize="10" />
+      <Button
+        isLoading
+        loadingText="Waiting for Approval"
+        colorScheme="blue"
+        w="full"
+      ></Button>
     </VStack>
   )
 }
 
-function AcceptOfferInProgress() {
-  return (
-    <VStack spacing="6">
-      <VStack align="start" spacing="2">
-        <Heading size="md">Submit cancellation</Heading>
-        <Text>
-          To cancel this listing you must confirm the transaction and pay the
-          gas fee.
-        </Text>
-      </VStack>
-      <LoadingDots />
-    </VStack>
-  )
-}
-
+/*
 function AcceptOfferSuccess({ onClose }: { onClose: () => void }) {
   return (
     <VStack spacing="6">
@@ -250,4 +279,4 @@ function AcceptOfferSuccess({ onClose }: { onClose: () => void }) {
       </Button>
     </VStack>
   )
-}
+} */
