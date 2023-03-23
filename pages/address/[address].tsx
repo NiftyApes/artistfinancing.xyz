@@ -100,23 +100,19 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
   const formattedAddress = truncateAddress(address as string)
 
   let tabs = [
-    { name: 'Tokens', id: 'portfolio' },
+    { name: 'My Portfolio', id: 'portfolio' },
     { name: 'Listings', id: 'listings' },
   ]
 
   if (isOwner) {
     tabs = [
-      { name: 'Tokens', id: 'portfolio' },
+      { name: 'My Portfolio', id: 'portfolio' },
       { name: 'Upcoming Payments', id: 'upcoming_payments' },
       { name: 'Financing Offers', id: 'financing_offers' },
       { name: 'Active Loans', id: 'active_loans' },
       { name: 'Offers Made', id: 'buying' },
-      { name: 'Active Listings', id: 'listings' },
-      { name: 'Inactive Listings', id: 'listings_inactive' },
     ]
   }
-
-  tabs.push({ name: 'Activity', id: 'activity' })
 
   return (
     <Layout navbar={{}}>

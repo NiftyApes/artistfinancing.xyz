@@ -1,38 +1,13 @@
 import { FC, ReactElement, useEffect, useState } from 'react'
 import ConnectWallet from './ConnectWallet'
 import HamburgerMenu from './HamburgerMenu'
-import dynamic from 'next/dynamic'
-import { paths } from '@reservoir0x/reservoir-sdk'
-import setParams from 'lib/params'
 import NavbarLogo from 'components/navbar/NavbarLogo'
 import ThemeSwitcher from './ThemeSwitcher'
 import CartMenu from './CartMenu'
-import SearchMenu from './SearchMenu'
 import { useMediaQuery } from '@react-hookz/web'
 import useMounted from 'hooks/useMounted'
 
-const SearchCollections = dynamic(() => import('./SearchCollections'))
-const CommunityDropdown = dynamic(() => import('./CommunityDropdown'))
 const EXTERNAL_LINKS = process.env.NEXT_PUBLIC_EXTERNAL_LINKS || null
-const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
-const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
-const COLLECTION_SET_ID = process.env.NEXT_PUBLIC_COLLECTION_SET_ID
-const DEFAULT_TO_SEARCH = process.env.NEXT_PUBLIC_DEFAULT_TO_SEARCH
-
-function getInitialSearchHref() {
-  const PROXY_API_BASE = process.env.NEXT_PUBLIC_PROXY_API_BASE
-  const pathname = `${PROXY_API_BASE}/search/collections/v1`
-  const query: paths['/search/collections/v1']['get']['parameters']['query'] =
-    {}
-
-  if (COLLECTION_SET_ID) {
-    query.collectionsSetId = COLLECTION_SET_ID
-  } else {
-    if (COMMUNITY) query.community = COMMUNITY
-  }
-
-  return setParams(pathname, query)
-}
 
 const Navbar: FC = () => {
   const isMounted = useMounted()
@@ -59,62 +34,11 @@ const Navbar: FC = () => {
     })
   }
 
-  const isGlobal = !COMMUNITY && !COLLECTION && !COLLECTION_SET_ID
-  const filterableCollection = isGlobal || COMMUNITY || COLLECTION_SET_ID
-
   useEffect(() => {
     setShowLinks(externalLinks.length > 0)
   }, [])
 
-  useEffect(() => {
-    if (filterableCollection) {
-      const href = getInitialSearchHref()
 
-      fetch(href).then(async (res) => {
-        let initialResults = undefined
-
-        if (res.ok) {
-          initialResults =
-            (await res.json()) as paths['/search/collections/v1']['get']['responses']['200']['schema']
-        }
-
-        const smallCommunity =
-          initialResults?.collections &&
-          initialResults.collections.length >= 2 &&
-          initialResults.collections.length <= 10
-
-        const hasCommunityDropdown =
-          !DEFAULT_TO_SEARCH &&
-          (COMMUNITY || COLLECTION_SET_ID) &&
-          smallCommunity
-
-        if (hasCommunityDropdown) {
-          setFilterComponent(
-            <CommunityDropdown
-              collections={initialResults?.collections}
-              defaultCollectionId={COLLECTION}
-            />
-          )
-          setHasCommunityDropdown(true)
-        } else {
-          setHasCommunityDropdown(false)
-          !showDesktopSearch
-            ? setFilterComponent(
-                <SearchMenu
-                  communityId={COMMUNITY}
-                  initialResults={initialResults}
-                />
-              )
-            : setFilterComponent(
-                <SearchCollections
-                  communityId={COMMUNITY}
-                  initialResults={initialResults}
-                />
-              )
-        }
-      })
-    }
-  }, [filterableCollection, showDesktopSearch])
 
   if (!isMounted) {
     return null
@@ -154,7 +78,6 @@ const Navbar: FC = () => {
               {filterComponent && filterComponent}
             </div>
           )}
-          <CartMenu />
           <ConnectWallet />
           <ThemeSwitcher />
         </div>

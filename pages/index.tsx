@@ -3,8 +3,6 @@ import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
 import { paths } from '@reservoir0x/reservoir-sdk'
 import setParams from 'lib/params'
 import Head from 'next/head'
-import TrendingCollectionTable from 'components/TrendingCollectionTable'
-import SortTrendingCollections from 'components/SortTrendingCollections'
 import Footer from 'components/Footer'
 import { useMediaQuery } from '@react-hookz/web'
 import { useEffect } from 'react'
@@ -124,19 +122,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
         }
       />
       <div className="col-span-full px-6 md:px-16">
-        <div className="mb-9 flex w-full items-center justify-between">
-          <div className="reservoir-h4 dark:text-white">Featured Offers</div>
-        </div>
         <FeaturedFinancingOffers />
-      </div>
-      <div className="col-span-full px-6 md:px-16">
-        <div className="mb-9 flex w-full items-center justify-between">
-          <div className="reservoir-h4 dark:text-white">
-            Trending Collections
-          </div>
-          {!isSmallDevice && <SortTrendingCollections />}
-        </div>
-        <TrendingCollectionTable fallback={fallback} />
       </div>
       <Footer />
     </Layout>
