@@ -4,14 +4,17 @@ import useTokens from 'hooks/useTokens'
 import { optimizeImage } from 'lib/optmizeImage'
 import Image from 'next/legacy/image'
 import Link from 'next/link'
-import NiftyApesTokenCardSection from 'components/niftyapes/TokenCardSection'
+import NiftyApesTokenCardSection from 'components/niftyapes/TokenCardListing'
 import { ComponentPropsWithoutRef, Dispatch, FC, SetStateAction } from 'react'
 
 import { MutatorCallback } from 'swr'
 import { Collection } from 'types/reservoir'
-import { useAccount} from 'wagmi'
+import { useAccount } from 'wagmi'
 import RarityTooltip from './RarityTooltip'
 import { Offer } from 'hooks/niftyapes/useOffers'
+import TokenCardOwner from './niftyapes/TokenCardOwner'
+import BuyNowPayLaterModal from './niftyapes/bnpl/BuyNowPayLaterModal'
+import ListFinancingModal from './niftyapes/list-financing/ListFinancingModal'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 const CURRENCIES = process.env.NEXT_PUBLIC_LISTING_CURRENCIES
@@ -103,35 +106,49 @@ const TokenCard: FC<Props> = ({
           )}
         </a>
       </Link>
-      <div className={`bottom-[0px] w-full bg-white transition-all dark:bg-neutral-800 md:-bottom-[41px]`}>
-        <div className='flex items-center justify-between'>
-          <div
-            className='text-[15px]  font-semibold overflow-hidden truncate px-4 pt-4 text-gray-300 lg:pt-3'
-            title={token?.token?.name || token?.token?.tokenId}
-          >
-            {token?.token?.name || `#${token?.token?.tokenId}`}
+
+      <div className='bottom-[0px] w-full dark-bg-neutral-800 md-bottom-[41px]'>
+        <div className='pb-4 mb-2 ml-4 mr-4 border-b border-gray-500'>
+          <div className='flex items-center justify-between'>
+            <div
+              className='text-[15px] font-semibold overflow-hidden truncate pt-4 text-gray-300 lg:pt-3'
+              title={token?.token?.name || token?.token?.tokenId}
+            >
+              {token?.token?.name || `#${token?.token?.tokenId}`}
+            </div>
           </div>
-          {collectionSize &&
-            collectionAttributes &&
-            collectionAttributes?.length >= 2 &&
-            collectionSize >= 2 &&
-            token.token?.rarityRank &&
-            token.token?.kind != 'erc1155' && (
-              <RarityTooltip
-                rarityRank={token.token?.rarityRank}
-                collectionSize={collectionSize}
-              />
-            )}
+
+          {financeOffer && (
+            <NiftyApesTokenCardSection
+              offer={financeOffer}
+            />
+          )}
         </div>
-        {financeOffer && (
-          <NiftyApesTokenCardSection
-            token={token}
-            collection={collection}
-            isOwner={isOwner}
-            offer={financeOffer}
-          />
-        )}
+
+        <div className='group mb-4 ml-4 mr-4 overflow-hidden transform-gpu overflow-hidden border-1'>
+
+          <div className={!isOwner ? 'opacity-100' : 'opacity-100 transition-all group-hover-ease-out group-hover:opacity-[0]'}>
+            <TokenCardOwner details={token} />
+          </div>
+
+          {financeOffer &&
+            <div
+              className={'absolute opacity-0 bottom-[-40px] w-full transition-all group-hover:ease-out group-hover:bottom-[4px] group-hover:opacity-100'}>
+              <BuyNowPayLaterModal token={token} roundedButton={true} offer={financeOffer} />
+            </div>
+          }
+
+          {(!financeOffer && isOwner) &&
+            <div
+              className={'absolute opacity-0 bottom-[-40px] w-full transition-all group-hover:ease-out group-hover:bottom-[4px] group-hover:opacity-100'}>
+              <ListFinancingModal token={token} collection={collection} roundedButton={true}
+                                  currListingExists={false} />
+            </div>
+          }
+
+        </div>
       </div>
+
     </div>
   )
 }
