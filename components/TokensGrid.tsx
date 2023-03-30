@@ -29,15 +29,15 @@ type Props = {
 }
 
 const TokensGrid: FC<Props> = ({
-  collectionId,
-  collection,
-  tokens,
-  viewRef,
-  collectionImage,
-  collectionSize,
-  collectionAttributes,
-  isLoading,
-}) => {
+                                 collectionId,
+                                 collection,
+                                 tokens,
+                                 viewRef,
+                                 collectionImage,
+                                 collectionSize,
+                                 collectionAttributes,
+                                 isLoading
+                               }) => {
   const { data, mutate } = tokens
   const [clearCartOpen, setClearCartOpen] = useState(false)
   const [cartToSwap, setCartToSwap] = useState<undefined | Token[]>()
@@ -50,7 +50,7 @@ const TokensGrid: FC<Props> = ({
   const {
     data: offersData,
     error,
-    isLoading: isLoadingOffers,
+    isLoading: isLoadingOffers
   } = useOffers({ collection: collectionId })
 
   useEffect(() => {
@@ -83,7 +83,7 @@ const TokensGrid: FC<Props> = ({
     setToast({
       kind: 'error',
       message: 'Please retry by reloading this page.',
-      title: 'Failed to load financing offers',
+      title: 'Failed to load financing offers'
     })
   }
 
@@ -95,7 +95,7 @@ const TokensGrid: FC<Props> = ({
         cart={cartToSwap}
       />
       <Masonry
-        key="tokensGridMasonry"
+        key='tokensGridMasonry'
         breakpointCols={{
           default: 4,
           1900: 4,
@@ -104,39 +104,38 @@ const TokensGrid: FC<Props> = ({
           1024: 2,
           768: 2,
           640: 2,
-          500: 1,
+          500: 1
         }}
-        className="masonry-grid"
-        columnClassName="masonry-grid_column"
+        className='masonry-grid'
+        columnClassName='masonry-grid_column'
       >
         {tokens.isFetchingInitialData || isLoading || isLoadingOffers
           ? Array(20)
-              .fill(null)
-              .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
+            .fill(null)
+            .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
           : sortedTokens?.map((token) => {
-              // Check if token has a NiftyApes loan offer
-              const financeOffer = offersData?.find(
-                (offer) =>
-                  offer.offer.nftId === token?.token?.tokenId &&
-                  offer.status === 'ACTIVE' &&
-                  isEqualAddress(offer.offer.creator, token?.token?.owner)
-              )
+            // Check if token has a NiftyApes loan offer
 
-              return (
-                <TokenCard
-                  token={token}
-                  collection={collection}
-                  collectionImage={collectionImage}
-                  collectionSize={collectionSize}
-                  collectionAttributes={collectionAttributes}
-                  mutate={mutate}
-                  setClearCartOpen={setClearCartOpen}
-                  setCartToSwap={setCartToSwap}
-                  key={`${token?.token?.contract}:${token?.token?.tokenId}`}
-                  financeOffer={financeOffer}
-                />
-              )
-            })}
+            const financeOffer = offersData?.find(
+              (offer) =>
+                offer.offer.nftId === token?.token?.tokenId &&
+                offer.status === 'ACTIVE' &&
+                isEqualAddress(offer.offer.creator, token?.token?.owner)
+            )
+
+            return (
+              <TokenCard
+                token={token}
+                collection={collection}
+                collectionImage={collectionImage}
+                mutate={mutate}
+                setClearCartOpen={setClearCartOpen}
+                setCartToSwap={setCartToSwap}
+                key={`${token?.token?.contract}:${token?.token?.tokenId}`}
+                financeOffer={financeOffer}
+              />
+            )
+          })}
         {!didReachEnd &&
           Array(10)
             .fill(null)

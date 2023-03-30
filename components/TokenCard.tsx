@@ -4,13 +4,12 @@ import useTokens from 'hooks/useTokens'
 import { optimizeImage } from 'lib/optmizeImage'
 import Image from 'next/legacy/image'
 import Link from 'next/link'
-import NiftyApesTokenCardSection from 'components/niftyapes/TokenCardListing'
+import NiftyApesOfferDetails from 'components/niftyapes/TokeCardOfferDetails'
 import { ComponentPropsWithoutRef, Dispatch, FC, SetStateAction } from 'react'
 
 import { MutatorCallback } from 'swr'
 import { Collection } from 'types/reservoir'
 import { useAccount } from 'wagmi'
-import RarityTooltip from './RarityTooltip'
 import { Offer } from 'hooks/niftyapes/useOffers'
 import TokenCardOwner from './niftyapes/TokenCardOwner'
 import BuyNowPayLaterModal from './niftyapes/bnpl/BuyNowPayLaterModal'
@@ -42,8 +41,6 @@ const TokenCard: FC<Props> = ({
                                 token,
                                 collection,
                                 collectionImage,
-                                collectionSize,
-                                collectionAttributes,
                                 financeOffer
                               }) => {
   const account = useAccount()
@@ -119,7 +116,7 @@ const TokenCard: FC<Props> = ({
           </div>
 
           {financeOffer && (
-            <NiftyApesTokenCardSection
+            <NiftyApesOfferDetails
               offer={financeOffer}
             />
           )}
@@ -127,7 +124,8 @@ const TokenCard: FC<Props> = ({
 
         <div className='group mb-4 ml-4 mr-4 overflow-hidden transform-gpu overflow-hidden border-1'>
 
-          <div className={!isOwner ? 'opacity-100' : 'opacity-100 transition-all group-hover-ease-out group-hover:opacity-[0]'}>
+          <div
+            className={!financeOffer && !isOwner ? 'opacity-100' : 'opacity-100 transition-all group-hover-ease-out group-hover:opacity-[0]'}>
             <TokenCardOwner details={token} />
           </div>
 

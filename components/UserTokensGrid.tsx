@@ -6,6 +6,7 @@ import TokenCard from './TokenCard'
 import { paths } from '@reservoir0x/reservoir-sdk'
 import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
 import { useNftOwnership } from 'hooks/niftyapes/useNftOwnership'
+import useOffers from '../hooks/niftyapes/useOffers'
 
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
 const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
@@ -21,7 +22,7 @@ type Props = {
 const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
   const userTokensParams: Parameters<typeof useUserTokens>['1'] = {
     limit: 20,
-    normalizeRoyalties: true,
+    normalizeRoyalties: true
   }
   if (COLLECTION_SET_ID) {
     userTokensParams.collectionsSetId = COLLECTION_SET_ID
@@ -32,9 +33,15 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
   if (COLLECTION && (!COMMUNITY || !COLLECTION_SET_ID)) {
     userTokensParams.collection = COLLECTION
   }
+
+  const {
+    data: offersData,
+    isLoading: isLoadingOffers
+  } = useOffers({})
+
   const userTokens = useUserTokens(owner, userTokensParams, {
     fallbackData: [fallback.tokens],
-    revalidateOnMount: false,
+    revalidateOnMount: false
   })
 
   useEffect(() => {
@@ -50,7 +57,7 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
     isFetchingPage,
     hasNextPage,
     fetchNextPage,
-    mutate,
+    mutate
   } = userTokens
   const { addNiftyApesTokenImages } = useNiftyApesImages()
   addNiftyApesTokenImages(tokens)
@@ -66,13 +73,14 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
 
   if (tokens.length === 0 && !isFetchingPage) {
     return (
-      <div className="grid justify-center text-xl font-semibold">No tokens</div>
+      <div className='grid justify-center text-xl font-semibold'>No tokens</div>
     )
   }
 
   return (
-    <div className="mx-auto mb-8 grid max-w-[2400px] gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
-      {isFetchingInitialData || isLoadingTokens ? (
+    <div
+      className='mx-auto mb-8 grid max-w-[2400px] gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5'>
+      {isFetchingInitialData || isLoadingTokens || isLoadingOffers ? (
         Array(10)
           .fill(null)
           .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
@@ -86,25 +94,34 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
               mutate={mutate}
             />
           ))}
-          {tokens?.map((token) => (
-            <TokenCard
+          {tokens?.map((token) => {
+
+            const financeOffer = offersData?.find(
+              (offer) =>
+                offer.offer.nftId === token?.token?.tokenId &&
+                offer.status === 'ACTIVE'
+            )
+
+            return <TokenCard
               token={{
                 token: {
                   contract: token?.token?.contract || '',
                   tokenId: token?.token?.tokenId || '',
                   owner,
-                  ...token?.token,
+                  ...token?.token
                 },
                 market: {
                   floorAsk: { ...token?.ownership?.floorAsk },
-                  topBid: { ...token?.token?.topBid },
-                },
+                  topBid: { ...token?.token?.topBid }
+                }
               }}
               key={`${token?.token?.contract}${token?.token?.tokenId}`}
               mutate={mutate}
               collectionImage={token?.token?.collection?.imageUrl}
+              collection={token?.token?.collection}
+              financeOffer={financeOffer}
             />
-          ))}
+          })}
         </>
       )}
       {isFetchingPage ? (
