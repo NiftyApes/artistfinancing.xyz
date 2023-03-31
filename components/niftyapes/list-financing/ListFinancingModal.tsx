@@ -137,7 +137,7 @@ export default function ListFinancingModal({
   }
 
   if (!token || !collection) {
-    // return null
+    return null
   }
 
   return (
