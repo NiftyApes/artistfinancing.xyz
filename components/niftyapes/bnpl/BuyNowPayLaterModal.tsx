@@ -82,7 +82,7 @@ export default function BuyNowPayLaterModal({
     <>
       <button
         onClick={onOpen}
-        className={`bg-white font-bold uppercase text-black text-[14px] flex h-[40px] w-full items-center justify-center whitespace-nowrap rounded-[21px] focus:ring-0`}
+        className={`flex h-[40px] w-full items-center justify-center whitespace-nowrap rounded-[21px] bg-white text-[14px] font-bold uppercase text-black focus:ring-0`}
       >
         Buy Now, Pay Later
       </button>

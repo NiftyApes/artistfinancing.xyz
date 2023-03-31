@@ -38,8 +38,6 @@ const Navbar: FC = () => {
     setShowLinks(externalLinks.length > 0)
   }, [])
 
-
-
   if (!isMounted) {
     return null
   }

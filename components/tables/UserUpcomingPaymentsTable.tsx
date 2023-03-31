@@ -40,7 +40,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
   )
   const tokens = useTokens({
     tokens: tokensQueryArr,
-  });
+  })
 
   if (isLoading) {
     return (
@@ -142,11 +142,19 @@ type LoansRowProps = {
     tokenId: string
   }
   offer: OfferDetails
-  token: ReturnType<typeof useTokens>['data'][0];
+  token: ReturnType<typeof useTokens>['data'][0]
 }
 
-const UpcomingPaymentsTableRow = ({ loan, buyerNft, offer, token }: LoansRowProps) => {
-  const { apr, listPrice, image, collectionName, tokenName } = processOffer(offer, token)
+const UpcomingPaymentsTableRow = ({
+  loan,
+  buyerNft,
+  offer,
+  token,
+}: LoansRowProps) => {
+  const { apr, listPrice, image, collectionName, tokenName } = processOffer(
+    offer,
+    token
+  )
 
   const { address } = useNiftyApesContract()
 
@@ -161,7 +169,11 @@ const UpcomingPaymentsTableRow = ({ loan, buyerNft, offer, token }: LoansRowProp
           <div className="relative h-16 w-16">
             <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded">
               <img
-                src={image ? optimizeImage(image, 64) :'/niftyapes/placeholder.png'}
+                src={
+                  image
+                    ? optimizeImage(image, 64)
+                    : '/niftyapes/placeholder.png'
+                }
                 alt="Bid Image"
                 className="w-[64px] object-contain"
                 width="64"

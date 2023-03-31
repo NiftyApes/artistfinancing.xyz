@@ -11,7 +11,7 @@ import {
   Progress,
   Text,
   useDisclosure,
-  VStack
+  VStack,
 } from '@chakra-ui/react'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { setToast } from 'components/token/setToast'
@@ -37,11 +37,11 @@ export enum ListFinancingSteps {
 }
 
 export default function ListFinancingModal({
-                                             token,
-                                             collection,
-                                             currListingExists,
-                                             roundedButton
-                                           }: {
+  token,
+  collection,
+  currListingExists,
+  roundedButton,
+}: {
   token: ReturnType<typeof useTokens>['data'][0]
   collection?: Collection
   currListingExists: boolean
@@ -55,7 +55,7 @@ export default function ListFinancingModal({
   const { approvalRequired, grantApproval, approvalCheckErr } =
     useERC721Approval({
       tokenId: token?.token?.tokenId as string,
-      contractAddress: token?.token?.contract as Address
+      contractAddress: token?.token?.contract as Address,
     })
 
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
@@ -66,7 +66,7 @@ export default function ListFinancingModal({
     apr: 20,
     payPeriodDays: 30,
     loanDurMos: 6,
-    expiration: Expiration.OneMonth
+    expiration: Expiration.OneMonth,
   }
   const [terms, setTerms] = useState<FinancingTerms>(defaultTerms)
   const [listingErr, setListingErr] = useState(false)
@@ -75,7 +75,7 @@ export default function ListFinancingModal({
     setToast({
       kind: 'error',
       message: 'The transaction was not completed.',
-      title: 'Failed to list token'
+      title: 'Failed to list token',
     })
   }
   const onApprovalCheckErr = () => {
@@ -83,7 +83,7 @@ export default function ListFinancingModal({
     setToast({
       kind: 'error',
       message: 'The transaction was not completed.',
-      title: 'Failed to verify token approval'
+      title: 'Failed to verify token approval',
     })
   }
   const onClose = () => {
@@ -100,7 +100,7 @@ export default function ListFinancingModal({
       onSuccess: () => {
         setStep(ListFinancingSteps.Success)
       },
-      onError
+      onError,
     })
   }
   const onSubmit = () => {
@@ -116,7 +116,7 @@ export default function ListFinancingModal({
     if (approvalRequired) {
       grantApproval({
         onSuccess: onContractApproved,
-        onError
+        onError,
       })
     } else {
       onContractApproved()
@@ -147,41 +147,43 @@ export default function ListFinancingModal({
           onOpen()
           setTerms(defaultTerms)
         }}
-        className={'bg-white font-bold uppercase text-black text-[14px] flex h-[40px] w-full items-center justify-center whitespace-nowrap rounded-[21px] focus:ring-0'}
+        className={
+          'flex h-[40px] w-full items-center justify-center whitespace-nowrap rounded-[21px] bg-white text-[14px] font-bold uppercase text-black focus:ring-0'
+        }
       >
         {currListingExists
           ? 'Create new finance listing'
           : 'Create finance listing'}
       </button>
 
-      <Modal isOpen={isOpen} onClose={onClose} size='5xl'>
+      <Modal isOpen={isOpen} onClose={onClose} size="5xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader borderTopRadius='md' bg='gray.700'>
+          <ModalHeader borderTopRadius="md" bg="gray.700">
             List with Financing
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody p='0'>
+          <ModalBody p="0">
             <Flex>
               <VStack
-                w='72'
-                borderRight='1px'
-                borderColor='gray.600'
-                p='6'
+                w="72"
+                borderRight="1px"
+                borderColor="gray.600"
+                p="6"
                 flexShrink={0}
-                align='left'
+                align="left"
               >
                 <Image
-                  m='5px 0 !important'
-                  borderRadius='md'
-                  boxSize='200px'
-                  objectFit='cover'
+                  m="5px 0 !important"
+                  borderRadius="md"
+                  boxSize="200px"
+                  objectFit="cover"
                   src={token?.token?.image}
                   alt={token?.token?.name}
                 ></Image>
-                <VStack align='left' w='full'>
-                  <Heading size='sm'>{token?.token?.name}</Heading>
-                  <Text mt='0 !important' fontSize='xs' color='whiteAlpha.800'>
+                <VStack align="left" w="full">
+                  <Heading size="sm">{token?.token?.name}</Heading>
+                  <Text mt="0 !important" fontSize="xs" color="whiteAlpha.800">
                     {token?.token?.collection?.name}
                   </Text>
                 </VStack>
@@ -191,19 +193,19 @@ export default function ListFinancingModal({
                 {[
                   ListFinancingSteps.ApproveContract,
                   ListFinancingSteps.SignOffer,
-                  ListFinancingSteps.Success
+                  ListFinancingSteps.Success,
                 ].includes(step) && <TermsStats terms={terms} />}
               </VStack>
-              <VStack p='6' w='full'>
+              <VStack p="6" w="full">
                 {[
                   ListFinancingSteps.ApproveContract,
                   ListFinancingSteps.SignOffer,
-                  ListFinancingSteps.Success
+                  ListFinancingSteps.Success,
                 ].includes(step) && (
                   <Progress
-                    rounded='md'
-                    w='full'
-                    colorScheme='blue'
+                    rounded="md"
+                    w="full"
+                    colorScheme="blue"
                     value={progressValue}
                   />
                 )}
@@ -216,7 +218,7 @@ export default function ListFinancingModal({
                 )}
                 {[
                   ListFinancingSteps.ApproveContract,
-                  ListFinancingSteps.SignOffer
+                  ListFinancingSteps.SignOffer,
                 ].includes(step) && (
                   <WalletApproval
                     imageSrc={token?.token?.image}

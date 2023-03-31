@@ -18,7 +18,9 @@ import ListFinancingModal from './niftyapes/list-financing/ListFinancingModal'
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 const CURRENCIES = process.env.NEXT_PUBLIC_LISTING_CURRENCIES
 
-type ListingCurrencies = ComponentPropsWithoutRef<typeof ListModal>['currencies']
+type ListingCurrencies = ComponentPropsWithoutRef<
+  typeof ListModal
+>['currencies']
 let listingCurrencies: ListingCurrencies = undefined
 
 if (CURRENCIES) {
@@ -38,11 +40,11 @@ type Props = {
 }
 
 const TokenCard: FC<Props> = ({
-                                token,
-                                collection,
-                                collectionImage,
-                                financeOffer
-                              }) => {
+  token,
+  collection,
+  collectionImage,
+  financeOffer,
+}) => {
   const account = useAccount()
 
   const singleColumnBreakpoint = useMediaQuery('(max-width: 640px)')
@@ -50,15 +52,15 @@ const TokenCard: FC<Props> = ({
   if (!token) return null
   if (!CHAIN_ID) return null
 
-  const isOwner = token?.token?.owner?.toLowerCase() === account?.address?.toLowerCase()
+  const isOwner =
+    token?.token?.owner?.toLowerCase() === account?.address?.toLowerCase()
   const imageSize = singleColumnBreakpoint ? 533 : 250
 
   return (
     <div
       key={`${token?.token?.contract}${token?.token?.tokenId}`}
-      className='group relative mb-6 grid self-start border-[#D4D4D4] bg-white dark:border-0 dark:bg-neutral-800 dark:ring-1 dark:ring-neutral-600'
+      className="group relative mb-6 grid self-start border-[#D4D4D4] bg-white dark:border-0 dark:bg-neutral-800 dark:ring-1 dark:ring-neutral-600"
     >
-
       <Link
         key={`${token?.token?.contract}:${token?.token?.tokenId}`}
         href={`/${token?.token?.contract}/${token?.token?.tokenId}`}
@@ -70,24 +72,24 @@ const TokenCard: FC<Props> = ({
               loader={({ src }) => src}
               src={optimizeImage(token?.token?.image, imageSize)}
               alt={`${token?.token?.name}`}
-              className='w-full'
+              className="w-full"
               width={imageSize}
               height={imageSize}
-              objectFit='cover'
-              layout='responsive'
+              objectFit="cover"
+              layout="responsive"
             />
           ) : (
-            <div className='relative w-full'>
-              <div className='absolute inset-0 grid place-items-center backdrop-blur-lg'>
+            <div className="relative w-full">
+              <div className="absolute inset-0 grid place-items-center backdrop-blur-lg">
                 <div>
                   <img
                     src={optimizeImage(collectionImage, imageSize)}
                     alt={`${token?.token?.collection?.name}`}
-                    className='mx-auto mb-4 h-16 w-16 overflow-hidden rounded-full border-2 border-white'
-                    width='64'
-                    height='64'
+                    className="mx-auto mb-4 h-16 w-16 overflow-hidden rounded-full border-2 border-white"
+                    width="64"
+                    height="64"
                   />
-                  <div className='reservoir-h6 text-white'>
+                  <div className="reservoir-h6 text-white">
                     No Content Available
                   </div>
                 </div>
@@ -95,58 +97,70 @@ const TokenCard: FC<Props> = ({
               <img
                 src={optimizeImage(collectionImage, imageSize)}
                 alt={`${token?.token?.collection?.name}`}
-                className='aspect-square w-full object-cover'
-                width='250'
-                height='250'
+                className="aspect-square w-full object-cover"
+                width="250"
+                height="250"
               />
             </div>
           )}
         </a>
       </Link>
 
-      <div className='bottom-[0px] w-full dark-bg-neutral-800 md-bottom-[41px]'>
-        <div className='pb-4 mb-2 ml-4 mr-4 border-b border-gray-500'>
-          <div className='flex items-center justify-between'>
+      <div className="dark-bg-neutral-800 md-bottom-[41px] bottom-[0px] w-full">
+        <div className="mb-2 ml-4 mr-4 border-b border-gray-500 pb-4">
+          <div className="flex items-center justify-between">
             <div
-              className='text-[15px] font-semibold overflow-hidden truncate pt-4 text-gray-300 lg:pt-3'
+              className="overflow-hidden truncate pt-4 text-[15px] font-semibold text-gray-300 lg:pt-3"
               title={token?.token?.name || token?.token?.tokenId}
             >
               {token?.token?.name || `#${token?.token?.tokenId}`}
             </div>
           </div>
 
-          {financeOffer && (
-            <NiftyApesOfferDetails
-              offer={financeOffer}
-            />
-          )}
+          {financeOffer && <NiftyApesOfferDetails offer={financeOffer} />}
         </div>
 
-        <div className='group mb-4 ml-4 mr-4 overflow-hidden transform-gpu overflow-hidden border-1'>
-
+        <div className="border-1 group mb-4 ml-4 mr-4 transform-gpu overflow-hidden overflow-hidden">
           <div
-            className={!financeOffer && !isOwner ? 'opacity-100' : 'opacity-100 transition-all group-hover-ease-out group-hover:opacity-[0]'}>
+            className={
+              !financeOffer && !isOwner
+                ? 'opacity-100'
+                : 'group-hover-ease-out opacity-100 transition-all group-hover:opacity-[0]'
+            }
+          >
             <TokenCardOwner details={token} />
           </div>
 
-          {financeOffer &&
+          {financeOffer && (
             <div
-              className={'absolute opacity-0 bottom-[-40px] w-full transition-all group-hover:ease-out group-hover:bottom-[4px] group-hover:opacity-100'}>
-              <BuyNowPayLaterModal token={token} roundedButton={true} offer={financeOffer} />
+              className={
+                'absolute bottom-[-40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
+              }
+            >
+              <BuyNowPayLaterModal
+                token={token}
+                roundedButton={true}
+                offer={financeOffer}
+              />
             </div>
-          }
+          )}
 
-          {(!financeOffer && isOwner) &&
+          {!financeOffer && isOwner && (
             <div
-              className={'absolute opacity-0 bottom-[-40px] w-full transition-all group-hover:ease-out group-hover:bottom-[4px] group-hover:opacity-100'}>
-              <ListFinancingModal token={token} collection={collection} roundedButton={true}
-                                  currListingExists={false} />
+              className={
+                'absolute bottom-[-40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
+              }
+            >
+              <ListFinancingModal
+                token={token}
+                collection={collection}
+                roundedButton={true}
+                currListingExists={false}
+              />
             </div>
-          }
-
+          )}
         </div>
       </div>
-
     </div>
   )
 }
