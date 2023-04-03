@@ -115,6 +115,7 @@ const TokensGrid: FC<Props> = ({
               .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
           : sortedTokens?.map((token) => {
               // Check if token has a NiftyApes loan offer
+
               const financeOffer = offersData?.find(
                 (offer) =>
                   offer.offer.nftId === token?.token?.tokenId &&
@@ -127,8 +128,6 @@ const TokensGrid: FC<Props> = ({
                   token={token}
                   collection={collection}
                   collectionImage={collectionImage}
-                  collectionSize={collectionSize}
-                  collectionAttributes={collectionAttributes}
                   mutate={mutate}
                   setClearCartOpen={setClearCartOpen}
                   setCartToSwap={setCartToSwap}

@@ -147,9 +147,9 @@ export default function ListFinancingModal({
           onOpen()
           setTerms(defaultTerms)
         }}
-        className={`btn-primary-fill reservoir-subtitle flex h-[40px] w-full items-center justify-center whitespace-nowrap ${
-          roundedButton ? 'rounded-md' : 'rounded-none'
-        } text-white focus:ring-0`}
+        className={
+          'flex h-[40px] w-full items-center justify-center whitespace-nowrap rounded-[21px] bg-white text-[14px] font-bold uppercase text-black focus:ring-0'
+        }
       >
         {currListingExists
           ? 'Create new finance listing'

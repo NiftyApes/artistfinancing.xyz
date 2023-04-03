@@ -17,7 +17,7 @@ export const useNiftyApesContract = () => {
 
   if (provider && isGoerli(chain?.id)) {
     return {
-      address: '0x964562f3377fbbf5acc39bffea89f8dc802a64ea' as Address,
+      address: '0xa608475ec077e10d71db7476745d85f9e860e540' as Address,
       abi: ContractAbi,
     }
   }
@@ -30,7 +30,7 @@ export const useNiftyApesContract = () => {
   }
 
   return {
-    address: '0x964562f3377fbbf5acc39bffea89f8dc802a64ea' as Address,
+    address: '0xa608475ec077e10d71db7476745d85f9e860e540' as Address,
     abi: ContractAbi,
   }
 }

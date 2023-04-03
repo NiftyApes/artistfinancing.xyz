@@ -3,7 +3,7 @@ import {
   Address,
   useContractWrite,
   usePrepareContractWrite,
-  useWaitForTransaction
+  useWaitForTransaction,
 } from 'wagmi'
 import { BigNumber } from 'ethers'
 
@@ -26,7 +26,7 @@ export const useSeizeAsset = (props: ISeizeAssetProps) => {
   const { data, write } = useContractWrite(config)
 
   const { isLoading, isSuccess, isError } = useWaitForTransaction({
-    hash: data?.hash
+    hash: data?.hash,
   })
 
   return { data, isLoading, isSuccess, isError, write }

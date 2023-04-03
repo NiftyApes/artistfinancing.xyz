@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react'
 import {
   Button,
   Modal,
@@ -8,14 +8,14 @@ import {
   ModalHeader,
   ModalOverlay,
   useDisclosure,
-} from '@chakra-ui/react';
-import { useLocalStorage } from 'hooks/niftyapes/useLocalStorage';
+} from '@chakra-ui/react'
+import { useLocalStorage } from 'hooks/niftyapes/useLocalStorage'
 
 interface GlobalModalProps {
-  storageKey: string;
-  title: string;
-  description: string | JSX.Element;
-  actionText: string;
+  storageKey: string
+  title: string
+  description: string | JSX.Element
+  actionText: string
 }
 
 const GlobalModal: React.FC<GlobalModalProps> = ({
@@ -24,27 +24,27 @@ const GlobalModal: React.FC<GlobalModalProps> = ({
   description,
   actionText,
 }) => {
-  const { isOpen, onClose, onOpen } = useDisclosure();
-  const [value, setValue] = useLocalStorage(storageKey, false);
+  const { isOpen, onClose, onOpen } = useDisclosure()
+  const [value, setValue] = useLocalStorage(storageKey, false)
 
   useEffect(() => {
     if (!value) {
-      onOpen();
+      onOpen()
     }
-  }, [onOpen, value]);
+  }, [onOpen, value])
 
   const handleClose = useCallback(() => {
     if (!value) {
-      return;
+      return
     }
 
-    onClose();
-  }, [value, onClose]);
+    onClose()
+  }, [value, onClose])
 
   const handleAction = useCallback(() => {
-    setValue(true);
-    onClose();
-  }, [setValue, onClose]);
+    setValue(true)
+    onClose()
+  }, [setValue, onClose])
 
   return (
     <Modal size="xl" isOpen={isOpen} onClose={handleClose}>
@@ -53,11 +53,13 @@ const GlobalModal: React.FC<GlobalModalProps> = ({
         <ModalHeader>{title}</ModalHeader>
         <ModalBody>{description}</ModalBody>
         <ModalFooter>
-          <Button colorScheme="purple" onClick={handleAction}>{actionText}</Button>
+          <Button colorScheme="purple" onClick={handleAction}>
+            {actionText}
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
-  );
-};
+  )
+}
 
-export default GlobalModal;
+export default GlobalModal

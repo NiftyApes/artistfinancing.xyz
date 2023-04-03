@@ -113,11 +113,10 @@ const Home: NextPage<Props> = ({ fallback }) => {
             >
               &nbsp;Privacy Policy&nbsp;
             </Link>
-            . By clicking accept and close, you indicate that you have read
-            and agree to the NiftyApes Terms of Service and Privacy Policy,
-            and that you consent to collection, storage and use of your
-            personal information for the purposes set forth in the Privacy
-            Policy.
+            . By clicking accept and close, you indicate that you have read and
+            agree to the NiftyApes Terms of Service and Privacy Policy, and that
+            you consent to collection, storage and use of your personal
+            information for the purposes set forth in the Privacy Policy.
           </div>
         }
       />
