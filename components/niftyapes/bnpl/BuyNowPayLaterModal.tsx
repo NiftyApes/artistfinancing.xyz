@@ -283,6 +283,7 @@ export default function BuyNowPayLaterModal({
                           borderRadius="md"
                           boxSize="60px"
                           src="/niftyapes/NA-BLACK.png"
+                          alt="NiftyApes black logo"
                         />
                       </VStack>
                     </VStack>
