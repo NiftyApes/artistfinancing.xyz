@@ -93,6 +93,7 @@ export default function FinancingSection({
                     borderRadius="md"
                     boxSize="1.5rem"
                     src="/niftyapes/banana.png"
+                    alt="NiftyApes banana logo"
                   />
                 </HStack>
               </VStack>
@@ -130,6 +131,7 @@ export default function FinancingSection({
                     borderRadius="md"
                     boxSize="1.5rem"
                     src="/niftyapes/banana.png"
+                    alt="NiftyApes banana logo"
                   />
                 </HStack>
               </VStack>
