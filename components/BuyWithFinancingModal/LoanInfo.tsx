@@ -28,10 +28,13 @@ const LoanInfo: FC<Props> = ({
   return (
     <div>
       {rows.map((row, i) => (
-        <div key={i}>
-          <div>{row[0]}</div>
+        <div key={i} className="flex justify-between">
+          <div>
+            <span>{row[0]}</span>
+            <span>{row[2] && <span>tooltip</span>}</span>
+          </div>
+
           <div>{row[1]}</div>
-          <div>{row[2]}</div>
         </div>
       ))}
     </div>

@@ -1,14 +1,12 @@
 import { FC, useState } from 'react'
 import DurationSelect from './DurationSelect'
-import ExplanationMsg from './ExplanationMsg'
 import LoanInfo from './LoanInfo'
-import Timeline from './Timeline'
 
 type Props = {
   nameOfWhatYouAreBuying: string
 }
 
-const PrePurchaseMainContent: FC<Props> = ({
+const PrePurchaseSideContent: FC<Props> = ({
   nameOfWhatYouAreBuying,
 }: {
   nameOfWhatYouAreBuying: string
@@ -17,13 +15,13 @@ const PrePurchaseMainContent: FC<Props> = ({
 
   return (
     <div>
-      <strong>{nameOfWhatYouAreBuying}</strong>
-      <DurationSelect duration={duration} setDuration={setDuration} />
+      <div className="flex justify-between">
+        <strong>{nameOfWhatYouAreBuying}</strong>
+        <DurationSelect duration={duration} setDuration={setDuration} />
+      </div>
       <LoanInfo totalCost="100" downPayment="10" duration={duration} APR="10" />
-      <Timeline />
-      <ExplanationMsg />
     </div>
   )
 }
 
-export default PrePurchaseMainContent
+export default PrePurchaseSideContent

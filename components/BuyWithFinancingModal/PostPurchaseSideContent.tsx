@@ -4,7 +4,7 @@ type Props = {
   nameOfWhatYouAreBuying: string
 }
 
-const PostPurchaseMainContent: FC<Props> = ({
+const PostPurchaseSideContent: FC<Props> = ({
   nameOfWhatYouAreBuying,
 }: {
   nameOfWhatYouAreBuying: string
@@ -18,4 +18,4 @@ const PostPurchaseMainContent: FC<Props> = ({
   )
 }
 
-export default PostPurchaseMainContent
+export default PostPurchaseSideContent

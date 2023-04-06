@@ -5,7 +5,7 @@ type Props = {
 }
 
 const NFTImage: FC<Props> = ({ imgSrc }: { imgSrc: string }) => {
-  return <img alt="NFT Image" src={imgSrc} />
+  return <img className="h-auto w-full" alt="NFT Image" src={imgSrc} />
 }
 
 export default NFTImage

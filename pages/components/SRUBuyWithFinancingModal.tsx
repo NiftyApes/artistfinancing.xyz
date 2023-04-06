@@ -1,5 +1,5 @@
-import SRUBuyWithFinancing from 'components/SRUBuyWithFinancing'
+import BuyWithFinancingModal from 'components/BuyWithFinancingModal'
 
 export default function SRUBuyWithFinancingModal() {
-  return <SRUBuyWithFinancing nameOfWhatYouAreBuying="Creation and Chaos" />
+  return <BuyWithFinancingModal nameOfWhatYouAreBuying="Creation and Chaos" />
 }
