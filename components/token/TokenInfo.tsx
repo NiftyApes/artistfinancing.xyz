@@ -1,7 +1,6 @@
 import useEnvChain from 'hooks/useEnvChain'
 import { truncateAddress } from 'lib/truncateText'
 import React, { FC, useState } from 'react'
-import { FiExternalLink, FiRefreshCcw } from 'react-icons/fi'
 import { TokenDetails } from 'types/reservoir'
 import { setToast } from './setToast'
 
@@ -23,7 +22,7 @@ const TokenInfo: FC<Props> = ({ token }) => {
       setToast({
         kind: 'error',
         message: message || 'Request to refresh this token was rejected.',
-        title: 'Refresh token failed',
+        title: 'Refresh token failed'
       })
 
       setRefreshLoading(false)
@@ -33,7 +32,7 @@ const TokenInfo: FC<Props> = ({ token }) => {
       if (!token) throw new Error('No token')
 
       const data = {
-        token,
+        token
       }
 
       const pathname = `${PROXY_API_BASE}/tokens/refresh/v1`
@@ -43,9 +42,9 @@ const TokenInfo: FC<Props> = ({ token }) => {
       const res = await fetch(pathname, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       })
 
       if (!res.ok) {
@@ -57,7 +56,7 @@ const TokenInfo: FC<Props> = ({ token }) => {
       setToast({
         kind: 'success',
         message: 'Request to refresh this token was accepted.',
-        title: 'Refresh token',
+        title: 'Refresh token'
       })
     } catch (err) {
       handleError()
@@ -69,62 +68,66 @@ const TokenInfo: FC<Props> = ({ token }) => {
   }
 
   return (
-    <article className="col-span-full">
-      <div className="mb-4 flex items-center justify-between">
-        <div className='text-xs uppercase mb-2 text-gray-400'>details</div>
-        <div className="flex items-center gap-2">
-          <a
-            className="reservoir-h6 font-headings"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`https://looksrare.org/collections/${token?.contract}/${token?.tokenId}`}
-          >
-            <img
-              src="/icons/LooksRare.svg"
-              alt="LooksRare Icon"
-              className="h-6 w-6"
-            />
-          </a>
-          <a
-            className="reservoir-h6 font-headings"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`https://opensea.io/assets/${token?.contract}/${token?.tokenId}`}
-          >
-            <img
-              src="/icons/OpenSea.svg"
-              alt="OpenSea Icon"
-              className="h-6 w-6"
-            />
-          </a>
-        </div>
-      </div>
+    <div>
+      <div className='text-sm uppercase mb-6 text-gray-400'>details</div>
       {token?.contract && (
-        <div className="mb-4 flex items-center justify-between">
-          <div className="reservoir-subtitle dark:text-white">
+        <div className='mb-1 flex items-center'>
+          <div className='text-gray-400 w-[180px]'>
             Contract Address
           </div>
           <div>
             <a
-              className="reservoir-h6 flex items-center gap-2 font-headings text-primary-700 dark:text-primary-100"
-              target="_blank"
-              rel="noopener noreferrer"
+              className='font-headings text-gray-300 underline'
+              target='_blank'
+              rel='noopener noreferrer'
               href={`${blockExplorerBaseUrl}/token/${token?.contract}?a=${token?.tokenId}`}
             >
               {truncateAddress(token?.contract)}
-              <FiExternalLink className="h-4 w-4" />
             </a>
           </div>
         </div>
       )}
 
-      <div className="mb-4 flex items-center justify-between">
-        <div className="reservoir-subtitle dark:text-white">Token Standard</div>
-        <div className="reservoir-h6 font-headings uppercase dark:text-white">
-          {token?.kind}
+      <div className='mb-1 flex items-center'>
+        <div className='text-gray-400 w-[180px]'>Token Standard</div>
+        <div className='font-headings text-gray-300 uppercase'>{token?.kind}</div>
+      </div>
+
+      <div className='flex items-center'>
+        <div className='text-gray-400 w-[180px]'>Blockchain</div>
+        <div className='font-headings text-gray-300'>Ethereum</div>
+      </div>
+
+      <div className='mt-8'>
+        <div className='text-base text-gray-400 float-left'>
+          <a target='_blank' rel='noopener noreferrer'
+             href={`https://etherscan.io/nft/${token?.contract}/${token?.tokenId}`}
+          >
+            <img src='/icons/sru-etherscan.svg' alt='Etherscan Icon' className='h-6 w-6 float-left mr-2 w-[17px]' />
+            Etherscan
+          </a>
+        </div>
+
+        <div className='text-base text-gray-400 float-left ml-4'>
+          <a target='_blank' rel='noopener noreferrer' href={''}>
+            <img src='/icons/sru-metadata.svg' alt='IPFS' className='h-6 w-6 float-left mr-2 w-[17px]' />
+            Metadata
+          </a>
+        </div>
+
+        <div className='text-base text-gray-400 float-left ml-4'>
+          <a target='_blank' rel='noopener noreferrer'
+             href={token?.image}
+          >
+            <img src='/icons/sru-ipfs.svg' alt='IPFS' className='h-6 w-6 float-left mr-2 w-[17px]' />
+            IPFS
+          </a>
         </div>
       </div>
-    </article>
+
+      <div className='clear-left'></div>
+
+    </div>
   )
 }
 

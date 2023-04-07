@@ -20,7 +20,7 @@ const TokenAttributes: FC<Props> = ({ token }) => {
 
   return (
     <div>
-      <div className='text-xs uppercase mb-2 text-gray-400'>attributes</div>
+      <div className='text-sm uppercase mb-6 text-gray-400'>attributes</div>
       {token?.attributes
         ?.slice()
         .sort((a, b) => (b?.floorAskPrice || 0) - (a?.floorAskPrice || 0))

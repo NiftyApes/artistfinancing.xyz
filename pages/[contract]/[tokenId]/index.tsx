@@ -19,7 +19,7 @@ import setParams from 'lib/params'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 
@@ -176,16 +176,27 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         {description}
         {image}
       </Head>
-      <div
-        className='col-span-full content-start space-y-4 px-2 pt-4 md:col-span-4 lg:col-span-5 lg:col-start-2 lg:px-0 2xl:col-span-4 2xl:col-start-3 3xl:col-start-5 4xl:col-start-7'>
-        <div className='mb-4'>
-          <TokenMedia token={token.token} />
+
+      <div className='col-span-full px-2 pt-4 md:col-span-4 lg:col-span-5 lg:col-start-2 lg:px-0 2xl:col-span-4 2xl:col-start-3 3xl:col-start-5 4xl:col-start-7'>
+        <div className='mb-14'>
+          <TokenMedia token={token?.token} />
         </div>
-          <TokenAttributes token={token?.token} />
-        <div className='hidden space-y-4 md:block'>
+
+        <div className='mb-14'>
+          <div className='reservoir-h3 font-semibold mb-1'>Description</div>
+          <div className='text-md text-gray-300'>{token?.token?.description}</div>
+        </div>
+
+        <div className='mb-14'>
           <TokenInfo token={token.token} />
         </div>
+
+        <div className='mb-10'>
+          <TokenAttributes token={token?.token} />
+        </div>
+
       </div>
+
       <div
         className='col-span-full mb-4 space-y-4 px-2 pt-0 md:col-span-4 md:col-start-5 md:pt-4 lg:col-span-5 lg:col-start-7 lg:px-0 2xl:col-span-5 2xl:col-start-7 3xl:col-start-9 4xl:col-start-11'>
         <Owner
@@ -201,7 +212,6 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       </div>
 
       <div className='col-span-full block space-y-4 px-2 md:hidden lg:px-0'>
-
         <CollectionInfo collection={collection} token={token.token} />
         <TokenInfo token={token.token} />
       </div>
