@@ -8,9 +8,6 @@ import { paths } from '@reservoir0x/reservoir-sdk'
 import Layout from 'components/Layout'
 import FinancingSection from 'components/niftyapes/FinancingSection'
 import CollectionInfo from 'components/token/CollectionInfo'
-import Listings from 'components/token/Listings'
-import Owner from 'components/token/Owner'
-import PriceData from 'components/token/PriceData'
 import TokenInfo from 'components/token/TokenInfo'
 import TokenMedia from 'components/token/TokenMedia'
 import TokenAttributes from 'components/TokenAttributes'
@@ -22,6 +19,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
+import EthAccount from '../../../components/niftyapes/EthAccount'
 
 // Environment variables
 // For more information about these variables
@@ -177,9 +175,18 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         {image}
       </Head>
 
-      <div className='col-span-full px-2 pt-4 md:col-span-4 lg:col-span-5 lg:col-start-2 lg:px-0 2xl:col-span-4 2xl:col-start-3 3xl:col-start-5 4xl:col-start-7'>
+      <div
+        className='col-span-full px-2 pt-4 md:col-span-6 lg:col-span-6 lg:col-start-2 lg:px-0 2xl:col-span-4 2xl:col-start-3 3xl:col-start-5 4xl:col-start-7'>
         <div className='mb-14'>
           <TokenMedia token={token?.token} />
+        </div>
+
+        <div className='block lg:hidden border-b-1 border-sky-500'>
+          <div className='reservoir-h3 font-semibold mb-8'>{token?.token?.name || `#${token?.token?.tokenId}`}</div>
+          <div className='grid grid-rows-1 grid-flow-col mb-8'>
+            <EthAccount side='left' label='Artist' address={token?.token?.owner} />
+            <EthAccount side='left' label='Owner' address={token?.token?.owner} />
+          </div>
         </div>
 
         <div className='mb-14'>
@@ -194,16 +201,15 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         <div className='mb-10'>
           <TokenAttributes token={token?.token} />
         </div>
-
       </div>
 
       <div
-        className='col-span-full mb-4 space-y-4 px-2 pt-0 md:col-span-4 md:col-start-5 md:pt-4 lg:col-span-5 lg:col-start-7 lg:px-0 2xl:col-span-5 2xl:col-start-7 3xl:col-start-9 4xl:col-start-11'>
-        <Owner
-          details={token}
-          bannedOnOpenSea={bannedOnOpenSea}
-          collection={collection}
-        />
+         className='col-span-full mb-4 space-y-4 px-2 pt-0 md:col-span-4 md:col-start-4 md:pt-4 lg:col-span-4 lg:col-start-8'>
+        <div className='text-4xl font-extrabold mb-8'>{token?.token?.name || `#${token?.token?.tokenId}`}</div>
+        <div className='grid grid-rows-1 grid-flow-col mb-8'>
+          <EthAccount side='left' label='Artist' address={token?.token?.owner} />
+          <EthAccount side='left' label='Owner' address={token?.token?.owner} />
+        </div>
         <FinancingSection
           token={token}
           collection={collection}
@@ -211,78 +217,8 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         />
       </div>
 
-      <div className='col-span-full block space-y-4 px-2 md:hidden lg:px-0'>
-        <CollectionInfo collection={collection} token={token.token} />
-        <TokenInfo token={token.token} />
-      </div>
     </Layout>
   )
 }
 
 export default Index
-
-export const getStaticPaths: GetStaticPaths = () => {
-  return {
-    paths: [],
-    fallback: 'blocking'
-  }
-}
-
-export const getStaticProps: GetStaticProps<{
-  collectionId: string
-  communityId?: string
-}> = async ({ params }) => {
-  const contract = params?.contract?.toString()
-  const tokenId = params?.tokenId?.toString()
-  const collectionAddress = COLLECTION ? COLLECTION.split(':')[0] : COLLECTION
-
-  if (
-    collectionAddress &&
-    !COMMUNITY &&
-    !COLLECTION_SET_ID &&
-    collectionAddress.toLowerCase() !== contract?.toLowerCase()
-  ) {
-    return {
-      notFound: true,
-      revalidate: 10
-    }
-  }
-
-  const options: RequestInit | undefined = {}
-
-  if (RESERVOIR_API_KEY) {
-    options.headers = {
-      'x-api-key': RESERVOIR_API_KEY
-    }
-  }
-
-  const url = new URL('/tokens/v5', RESERVOIR_API_BASE)
-
-  const query: paths['/tokens/v5']['get']['parameters']['query'] = {
-    tokens: [`${contract}:${tokenId}`],
-    includeTopBid: true,
-    includeAttributes: true,
-    includeDynamicPricing: true,
-    normalizeRoyalties: true
-  }
-
-  const href = setParams(url, query)
-
-  const res = await fetch(href, options)
-
-  const data =
-    (await res.json()) as paths['/tokens/v5']['get']['responses']['200']['schema']
-
-  const collectionId = data.tokens?.[0]?.token?.collection?.id
-
-  if (!collectionId) {
-    return {
-      notFound: true,
-      revalidate: 10
-    }
-  }
-
-  return {
-    props: { collectionId, tokenDetails: data?.tokens?.[0]?.token }
-  }
-}

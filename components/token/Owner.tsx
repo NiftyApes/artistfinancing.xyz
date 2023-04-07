@@ -26,12 +26,12 @@ const Owner: FC<Props> = ({ details, bannedOnOpenSea, collection }) => {
           <div>{token?.name || `#${token?.tokenId}`}</div>
         </div>
 
-        <div className='reservoir-h6 mb-2 font-headings dark:text-white'>
-          Owner
-        </div>
         {owner && (
           <Link href={`/address/${owner}`} legacyBehavior={true}>
             <a className='inline-block'>
+              <div className='text-white'>
+                Owner
+              </div>
               <EthAccount address={owner} side='left' />
             </a>
           </Link>
