@@ -9,7 +9,9 @@ export default function CreateFinanceOfferModal() {
       <button onClick={() => setOpen(true)} className="btn-primary-fill">
         Create offer
       </button>
-      <Modal open={open} onOpenChange={setOpen}></Modal>
+      <Modal open={open} onOpenChange={setOpen}>
+        <p className="text-black">Put your content here</p>
+      </Modal>
     </>
   )
 }
