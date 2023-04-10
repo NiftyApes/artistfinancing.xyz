@@ -1,19 +1,15 @@
-import * as Dialog from '@radix-ui/react-dialog'
+import Modal from 'components/Modal'
+import { useState } from 'react'
 
 export default function CreateFinanceOfferModal() {
+  const [open, setOpen] = useState(false)
+
   return (
-    <Dialog.Root>
-      <Dialog.Trigger>
-        <button className="btn-primary-fill">Create Offer</button>
-      </Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay />
-        <Dialog.Content>
-          <Dialog.Title />
-          <Dialog.Description />
-          <Dialog.Close />
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <>
+      <button onClick={() => setOpen(true)} className="btn-primary-fill">
+        Create offer
+      </button>
+      <Modal open={open} onOpenChange={setOpen}></Modal>
+    </>
   )
 }
