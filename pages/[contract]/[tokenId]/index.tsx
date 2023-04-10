@@ -167,6 +167,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       ? true
       : token?.token?.owner?.toLowerCase() === account?.address?.toLowerCase()
 
+
   return (
     <Layout navbar={{}}>
       <Head>
@@ -176,12 +177,12 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       </Head>
 
       <div
-        className='col-span-full px-2 pt-4 md:col-span-6 lg:col-span-6 lg:col-start-2 lg:px-0 2xl:col-span-4 2xl:col-start-3 3xl:col-start-5 4xl:col-start-7'>
+        className='px-2 pt-4 col-span-full col-start-1 md:col-span-full lg:col-start-2 lg:col-span-7 xl:col-span-7 xl:col-start-2 2xl:col-start-2 2xl:col-span-7 3xl:col-start-4'>
         <div className='mb-14'>
           <TokenMedia token={token?.token} />
         </div>
 
-        <div className='block lg:hidden border-b-1 border-sky-500'>
+        <div className='block lg:hidden'>
           <div className='reservoir-h3 font-semibold mb-8'>{token?.token?.name || `#${token?.token?.tokenId}`}</div>
           <div className='grid grid-rows-1 grid-flow-col mb-8'>
             <EthAccount side='left' label='Artist' address={token?.token?.owner} />
@@ -204,8 +205,8 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       </div>
 
       <div
-         className='col-span-full mb-4 space-y-4 px-2 pt-0 md:col-span-4 md:col-start-4 md:pt-4 lg:col-span-4 lg:col-start-8'>
-        <div className='text-4xl font-extrabold mb-8'>{token?.token?.name || `#${token?.token?.tokenId}`}</div>
+        className='space-y-4 px-2 pt-2 hidden lg:block col-span-full mb-4 md:col-span-3 md:col-start-8 lg:col-start-9 2xl:col-start-9 3xl:col-start-11'>
+        <div className='reservoir-h3 font-semibold mb-8'>{token?.token?.name || `#${token?.token?.tokenId}`}</div>
         <div className='grid grid-rows-1 grid-flow-col mb-8'>
           <EthAccount side='left' label='Artist' address={token?.token?.owner} />
           <EthAccount side='left' label='Owner' address={token?.token?.owner} />
