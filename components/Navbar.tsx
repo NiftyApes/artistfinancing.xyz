@@ -3,7 +3,6 @@ import ConnectWallet from './ConnectWallet'
 import HamburgerMenu from './HamburgerMenu'
 import NavbarLogo from 'components/navbar/NavbarLogo'
 import ThemeSwitcher from './ThemeSwitcher'
-import CartMenu from './CartMenu'
 import { useMediaQuery } from '@react-hookz/web'
 import useMounted from 'hooks/useMounted'
 
@@ -66,7 +65,6 @@ const Navbar: FC = () => {
       {isMobile ? (
         <div className="ml-auto flex gap-x-5">
           {!hasCommunityDropdown && filterComponent && filterComponent}
-          <CartMenu />
           <HamburgerMenu externalLinks={externalLinks} />
         </div>
       ) : (
