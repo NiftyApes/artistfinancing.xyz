@@ -8,21 +8,20 @@ type Props = {
 }
 
 const TokenMedia: FC<Props> = ({ token }) => {
-
   return (
-    <div className='col-span-full md:col-span-4 lg:col-span-5 lg:col-start-2'>
+    <div className="col-span-full md:col-span-4 lg:col-span-5 lg:col-start-2">
       <Script
-        type='module'
-        src='https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js'
+        type="module"
+        src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
       ></Script>
       <Script
         noModule
-        src='https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js'
+        src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"
       ></Script>
       {token?.media === null || token?.media === undefined ? (
         <img
-          alt='Token Image'
-          className='w-full rounded-2xl'
+          alt="Token Image"
+          className="w-full rounded-2xl"
           src={optimizeImage(token?.image, 533)}
         />
       ) : (
@@ -41,7 +40,6 @@ const Media: FC<{
   media: string
   tokenImage: string
 }> = ({ media, tokenImage }) => {
-
   const matches = media.match('(\\.[^.]+)$')
   const extension = matches ? matches[0].replace('.', '') : null
 
@@ -49,7 +47,7 @@ const Media: FC<{
   if (extension === 'mp4') {
     return (
       <video
-        className='mb-4 w-full rounded'
+        className="mb-4 w-full rounded"
         poster={tokenImage}
         controls
         autoPlay
@@ -57,7 +55,7 @@ const Media: FC<{
         playsInline
         muted
       >
-        <source src={media} type='video/mp4' />
+        <source src={media} type="video/mp4" />
         Your browser does not support the
         <code>video</code> element.
       </video>
@@ -69,11 +67,11 @@ const Media: FC<{
     return (
       <div>
         <img
-          alt='Token Audio'
-          className='mb-4 w-[533px] rounded-2xl'
+          alt="Token Audio"
+          className="mb-4 w-[533px] rounded-2xl"
           src={tokenImage}
         />
-        <audio className='mb-4 w-full' controls src={media}>
+        <audio className="mb-4 w-full" controls src={media}>
           Your browser does not support the
           <code>audio</code> element.
         </audio>
@@ -87,10 +85,10 @@ const Media: FC<{
       <model-viewer
         src={media}
         ar
-        ar-modes='webxr scene-viewer quick-look'
+        ar-modes="webxr scene-viewer quick-look"
         poster={tokenImage}
         seamless-poster
-        shadow-intensity='1'
+        shadow-intensity="1"
         camera-controls
         enable-pan
       ></model-viewer>
@@ -106,8 +104,8 @@ const Media: FC<{
   ) {
     return (
       <img
-        alt='Token Image'
-        className='w-full rounded-2xl'
+        alt="Token Image"
+        className="w-full rounded-2xl"
         src={optimizeImage(media, 533)}
       />
     )
@@ -121,19 +119,19 @@ const Media: FC<{
   ) {
     return (
       <iframe
-        className='mb-6 aspect-square h-full w-full rounded-2xl'
-        height='533'
-        width='533'
+        className="mb-6 aspect-square h-full w-full rounded-2xl"
+        height="533"
+        width="533"
         src={media}
-        sandbox='allow-scripts'
+        sandbox="allow-scripts"
       ></iframe>
     )
   }
 
   return (
     <img
-      alt='Token Image'
-      className='w-full rounded-2xl'
+      alt="Token Image"
+      className="w-full rounded-2xl"
       src={optimizeImage(tokenImage, 533)}
     />
   )

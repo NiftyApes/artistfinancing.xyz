@@ -19,20 +19,17 @@ const Owner: FC<Props> = ({ details, bannedOnOpenSea, collection }) => {
       : token?.owner
 
   return (
-    <div className='col-span-full md:col-span-4 lg:col-span-5 lg:col-start-2'>
-      <article className='col-span-full bg-white dark:border-neutral-600 dark:bg-black'>
-
-        <div className='reservoir-h3 mb-3 flex items-center gap-4 overflow-hidden font-headings dark:text-white'>
+    <div className="col-span-full md:col-span-4 lg:col-span-5 lg:col-start-2">
+      <article className="col-span-full bg-white dark:border-neutral-600 dark:bg-black">
+        <div className="reservoir-h3 mb-3 flex items-center gap-4 overflow-hidden font-headings dark:text-white">
           <div>{token?.name || `#${token?.tokenId}`}</div>
         </div>
 
         {owner && (
           <Link href={`/address/${owner}`} legacyBehavior={true}>
-            <a className='inline-block'>
-              <div className='text-white'>
-                Owner
-              </div>
-              <EthAccount address={owner} side='left' />
+            <a className="inline-block">
+              <div className="text-white">Owner</div>
+              <EthAccount address={owner} side="left" />
             </a>
           </Link>
         )}
