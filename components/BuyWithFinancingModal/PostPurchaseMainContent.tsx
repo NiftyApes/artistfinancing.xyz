@@ -1,15 +1,14 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 
 type Props = {
   nameOfWhatYouAreBuying: string
 }
 
-const PostPurchaseSideContent: FC<Props> = ({
+const PostPurchaseMainContent: FC<Props> = ({
   nameOfWhatYouAreBuying,
 }: {
   nameOfWhatYouAreBuying: string
 }) => {
-  const [duration, setDuration] = useState('1 month')
   return (
     <div>
       You have purchased <strong>{nameOfWhatYouAreBuying}</strong>.
@@ -18,4 +17,4 @@ const PostPurchaseSideContent: FC<Props> = ({
   )
 }
 
-export default PostPurchaseSideContent
+export default PostPurchaseMainContent

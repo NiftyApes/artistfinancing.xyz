@@ -1,10 +1,10 @@
+import { Cross2Icon } from '@radix-ui/react-icons'
 import { FC, useState } from 'react'
 import NFTImage from './NFTImage'
 import PostPurchaseFooter from './PostPurchaseFooter'
-import PostPurchaseMainContent from './PostPurchaseSideContent'
+import PostPurchaseMainContent from './PostPurchaseMainContent'
 import PrePurchaseFooter from './PrePurchaseFooter'
-import PrePurchaseSideContent from './PrePurchaseSideContent copy'
-import PrePurchaseUnderImageContent from './PrePurchaseUnderImageContent'
+import PrePurchaseMainContent from './PrePurchaseMainContent'
 
 type Props = {
   nameOfWhatYouAreBuying: string
@@ -18,14 +18,23 @@ const BuyWithFinancingModal: FC<Props> = ({
   const [stage, setStage] = useState<'PRE' | 'POST'>('PRE')
 
   return (
-    <div className="container max-w-4xl">
+    <div className="container relative max-w-5xl rounded-xl border-2 border-solid border-gray-500 p-6 shadow-2xl">
+      <div className="absolute top-2 right-2">
+        <Cross2Icon style={{ width: '32px', height: '32px', strokeWidth: 4 }} />
+      </div>
+      <div
+        className="mb-6 text-center text-xl md:mb-12"
+        style={{ fontFamily: 'Mulish' }}
+      >
+        Buy {nameOfWhatYouAreBuying}
+      </div>
       <div className="flex flex-wrap">
-        <div className="w-full p-2  md:w-1/3">
-          <NFTImage imgSrc="https://i.seadn.io/gae/WrAd3MWdytcr_EchzpMXR1VfpVQwg3oWzkkobUI5EG7W7xJLKz0KbGjDVbaSpTHGccBzL0v6qDuUM3yDHus7r93urgUuZLZe7zDzw2k?w=500&auto=format" />
+        <div className="w-full p-2  md:w-2/5">
+          <NFTImage imgSrc="https://ipfs.pixura.io/ipfs/QmYMW5cEt5HxCqiggN3PHSSLhF62Q5G7oNPar5BXyvC65Z/Mutateme.jpg" />
         </div>
-        <div className="w-full p-2 md:w-2/3 ">
+        <div className="mt-4 w-full py-1 md:mt-0 md:w-3/5 md:pl-10">
           {stage === 'PRE' ? (
-            <PrePurchaseSideContent
+            <PrePurchaseMainContent
               nameOfWhatYouAreBuying={nameOfWhatYouAreBuying}
             />
           ) : (
@@ -35,10 +44,8 @@ const BuyWithFinancingModal: FC<Props> = ({
           )}
         </div>
       </div>
-      <div className="w-full p-2">
-        {stage === 'PRE' ? <PrePurchaseUnderImageContent /> : 'post'}
-      </div>
-      <div className="mt-8 w-full border-t border-gray-300 pt-8">
+
+      <div className="mt-8 w-full border-t border-gray-300 pt-8 md:border-none">
         {stage === 'PRE' ? <PrePurchaseFooter /> : <PostPurchaseFooter />}
       </div>
     </div>

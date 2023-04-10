@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import TooltipDemo from './Tooltip'
 
 type Props = {
   totalCost: string
@@ -20,18 +21,20 @@ const LoanInfo: FC<Props> = ({
 }) => {
   const rows = [
     ['Total Cost', totalCost],
-    ['Down Payment', downPayment, 'optional tooltip text #1'],
-    ['Duration', duration, 'optional tooltip text #1'],
-    ['APR', APR],
+    ['Down Payment', downPayment],
+    ['Duration', duration, 'Tooltip explaining duration'],
+    ['APR', APR, 'Tooltip explaining API'],
   ]
 
   return (
-    <div>
+    <div style={{ fontFamily: 'Inter' }}>
       {rows.map((row, i) => (
         <div key={i} className="flex justify-between">
-          <div>
-            <span>{row[0]}</span>
-            <span>{row[2] && <span>tooltip</span>}</span>
+          <div className="mb-1">
+            <span className="text-gray-500">{row[0]}</span>
+            <span>
+              {row[2] && <TooltipDemo tooltipText={row[2]} key={i} />}
+            </span>
           </div>
 
           <div>{row[1]}</div>
