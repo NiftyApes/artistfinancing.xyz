@@ -34,8 +34,6 @@ type Props = {
   collectionSize?: number | undefined
   collectionAttributes?: Collection['attributes']
   mutate: MutatorCallback
-  setClearCartOpen?: Dispatch<SetStateAction<boolean>>
-  setCartToSwap?: Dispatch<SetStateAction<any | undefined>>
   financeOffer?: Offer
 }
 
