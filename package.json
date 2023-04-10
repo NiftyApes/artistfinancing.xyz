@@ -1,5 +1,5 @@
 {
-  "name": "sample-marketplace",
+  "name": "sru-marketplace",
   "scripts": {
     "dev": "next dev",
     "prettier": "prettier --write .",
