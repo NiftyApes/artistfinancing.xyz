@@ -96,9 +96,9 @@ export default function FinancingTermsForm({
           <FormControl isInvalid={formErrorMsgs.listPrice !== ''}>
             <FormLabel>List price</FormLabel>
             <HStack spacing="2">
-              <Image src="/niftyapes/banana.png" />
+              <Image src="/niftyapes/banana.png" alt="NiftyApes banana logo" />
               <HStack>
-                <Image src="/eth-dark.svg" boxSize="6" />
+                <Image src="/eth-dark.svg" boxSize="6" alt="Ethereum logo" />
                 <Text>{chain?.nativeCurrency.symbol || 'ETH'}</Text>
               </HStack>
               <TermInputNumber

@@ -23,7 +23,6 @@ import { WagmiConfig, createClient, configureChains } from 'wagmi'
 import * as allChains from 'wagmi/chains'
 import AnalyticsProvider from 'components/AnalyticsProvider'
 import { ThemeProvider, useTheme } from 'next-themes'
-import { RecoilRoot } from 'recoil'
 import {
   darkTheme,
   lightTheme,
@@ -209,19 +208,17 @@ const App: FC<AppProps & { baseUrl: string }> = ({
 
   return (
     <ReservoirKitProvider options={options} theme={reservoirKitTheme}>
-      <RecoilRoot>
-        <WagmiConfig client={wagmiClient}>
-          <RainbowKitProvider
-            chains={chains}
-            theme={rainbowKitTheme}
-            modalSize="compact"
-          >
-            <AnalyticsProvider>
-              <Component {...pageProps} />
-            </AnalyticsProvider>
-          </RainbowKitProvider>
-        </WagmiConfig>
-      </RecoilRoot>
+      <WagmiConfig client={wagmiClient}>
+        <RainbowKitProvider
+          chains={chains}
+          theme={rainbowKitTheme}
+          modalSize="compact"
+        >
+          <AnalyticsProvider>
+            <Component {...pageProps} />
+          </AnalyticsProvider>
+        </RainbowKitProvider>
+      </WagmiConfig>
     </ReservoirKitProvider>
   )
 }

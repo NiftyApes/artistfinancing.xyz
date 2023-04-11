@@ -35,6 +35,7 @@ export default function ListingSuccess({
             borderRadius="md"
             boxSize="60px"
             src="/niftyapes/NA-BLACK.png"
+            alt="NiftyApes black logo"
           />
         </VStack>
       </VStack>

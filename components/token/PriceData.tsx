@@ -12,21 +12,12 @@ import CancelOffer from 'components/CancelOffer'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import FormatCrypto from 'components/FormatCrypto'
 import AcceptOfferModal from 'components/niftyapes/AcceptOfferModal'
-import SwapCartModal from 'components/SwapCartModal'
 import { useNftOwnership } from 'hooks/niftyapes/useNftOwnership'
 import useCoinConversion from 'hooks/useCoinConversion'
 import useMounted from 'hooks/useMounted'
 import { formatDollar } from 'lib/numbers'
-import { getPricing } from 'lib/token/pricing'
 import { useRouter } from 'next/router'
 import { ComponentPropsWithoutRef, FC, ReactNode, useState } from 'react'
-import { FaShoppingCart } from 'react-icons/fa'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import recoilCartTokens, {
-  getCartCurrency,
-  getPricingPools,
-  getTokensMap,
-} from 'recoil/cart'
 import { Collection } from 'types/reservoir'
 import { Address, useAccount, useNetwork, useSigner } from 'wagmi'
 import { setToast } from './setToast'
@@ -56,16 +47,10 @@ if (CURRENCIES) {
 const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
   const router = useRouter()
   const isMounted = useMounted()
-  const [cartTokens, setCartTokens] = useRecoilState(recoilCartTokens)
-  const tokensMap = useRecoilValue(getTokensMap)
-  const cartCurrency = useRecoilValue(getCartCurrency)
-  const cartPools = useRecoilValue(getPricingPools)
   const accountData = useAccount()
   const { data: signer } = useSigner()
   const { chain: activeChain } = useNetwork()
   const reservoirClient = useReservoirClient()
-  const [clearCartOpen, setClearCartOpen] = useState(false)
-  const [cartToSwap, setCartToSwap] = useState<undefined | typeof cartTokens>()
   const account = useAccount()
   const bidOpenState = useState(true)
 
@@ -76,12 +61,7 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
   const tokenId = token?.token?.tokenId
   const contract = token?.token?.contract
 
-  let floorAskPrice = getPricing(cartPools, token)
-  let canAddToCart = true
-
-  if (!floorAskPrice && token?.market?.floorAsk?.dynamicPricing?.data?.pool) {
-    canAddToCart = false
-  }
+  let floorAskPrice = token?.market?.floorAsk?.price
 
   // Disabling the rules of hooks here due to erroneous error message,
   //  the linter is likely confused due to two custom hook calls of the same name
@@ -173,8 +153,6 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
   const offerSourceRedirect = `${API_BASE}/redirect/sources/${
     offerSourceDomain || offerSourceName
   }/tokens/${contract}:${tokenId}/link/v2`
-
-  const isInCart = Boolean(tokensMap[`${contract}:${tokenId}`])
 
   const showAcceptOffer =
     token?.market?.topBid?.id !== null &&
@@ -401,77 +379,9 @@ const PriceData: FC<Props> = ({ details, collection, isOwner }) => {
                 </>
               )}
             </div>
-            {isInCart && !isOwner && (
-              <button
-                onClick={() => {
-                  const newCartTokens = [...cartTokens]
-                  const index = newCartTokens.findIndex(
-                    (cartToken) =>
-                      cartToken?.token?.contract === contract &&
-                      cartToken?.token?.tokenId === tokenId
-                  )
-                  newCartTokens.splice(index, 1)
-                  setCartTokens(newCartTokens)
-                }}
-                className="mt-4 w-fit text-left outline-none disabled:cursor-not-allowed  dark:border-neutral-600 dark:focus:ring-4  dark:focus:ring-primary-900"
-              >
-                <span>You can also</span>{' '}
-                <span className="text-[#FF3B3B] dark:text-[#FF9A9A]">
-                  remove from cart
-                </span>
-              </button>
-            )}
-
-            {!isInCart && !isOwner && isListed && canAddToCart && (
-              <button
-                disabled={!floorAskPrice}
-                onClick={() => {
-                  if (token?.token && token.market) {
-                    if (
-                      !cartCurrency ||
-                      floorAskPrice?.currency?.contract ===
-                        cartCurrency?.contract
-                    ) {
-                      setCartTokens([
-                        ...cartTokens,
-                        {
-                          token: token.token,
-                          market: token.market,
-                        },
-                      ])
-                    } else {
-                      setCartToSwap([
-                        {
-                          token: token.token,
-                          market: token.market,
-                        },
-                      ])
-                      setClearCartOpen(true)
-                    }
-                  }
-                }}
-                className="mt-4 w-fit outline-none dark:focus:ring-4 dark:focus:ring-primary-900"
-              >
-                <div className="flex items-center dark:text-white">
-                  <div>
-                    <span>You can also</span>{' '}
-                    <span className="text-primary-700 dark:text-primary-100">
-                      add to cart
-                    </span>
-                  </div>
-
-                  <FaShoppingCart className="ml-[10px] h-[18px] w-[18px] text-primary-700 dark:text-primary-100" />
-                </div>
-              </button>
-            )}
           </>
         )}
       </article>
-      <SwapCartModal
-        open={clearCartOpen}
-        setOpen={setClearCartOpen}
-        cart={cartToSwap}
-      />
     </div>
   )
 }

@@ -57,6 +57,7 @@ export default function WalletApproval({
             borderRadius="md"
             boxSize="80px"
             src="/niftyapes/NA-BLACK.png"
+            alt="NiftyApes black logo"
           />
         </HStack>
         <Text align="center">
