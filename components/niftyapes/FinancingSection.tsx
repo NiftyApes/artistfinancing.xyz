@@ -13,6 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
+import CreateFinanceOfferModal from 'components/CreateFinanceOfferModal'
 import EthAccount from 'components/EthAccount'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { setToast } from 'components/token/setToast'
@@ -138,12 +139,13 @@ export default function FinancingSection({
               {listing && <CurrentListing terms={terms!} isOwner={isOwner} />}
               {isOwner ? (
                 <HStack>
-                  <ListFinancingModal
+                  <CreateFinanceOfferModal />
+                  {/* <ListFinancingModal
                     token={token}
                     collection={collection}
                     currListingExists={listing ? true : false}
                     roundedButton={true}
-                  />
+                  /> */}
                   {listing && (
                     <CancelListingModal offer={listing} refetch={refetch} />
                   )}
