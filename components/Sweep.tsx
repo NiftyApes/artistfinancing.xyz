@@ -1,34 +1,27 @@
-import { Execute, paths } from '@reservoir0x/reservoir-sdk'
-import React, {
-  ComponentProps,
-  FC,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
-import { SWRResponse } from 'swr'
+import { blackA, violet } from '@radix-ui/colors'
 import * as Dialog from '@radix-ui/react-dialog'
-import Toast from './Toast'
-import { useAccount, useNetwork, useSigner } from 'wagmi'
-import { SWRInfiniteResponse } from 'swr/infinite/dist/infinite'
-import { HiX } from 'react-icons/hi'
-import { optimizeImage } from 'lib/optmizeImage'
-import FormatNativeCrypto from './FormatNativeCrypto'
-import AttributesFlex from './AttributesFlex'
-import ModalCard from './modal/ModalCard'
-import { styled } from '@stitches/react'
-import { violet, blackA } from '@radix-ui/colors'
 import * as SliderPrimitive from '@radix-ui/react-slider'
-import Link from 'next/link'
-import { Signer } from 'ethers'
-import { FaBroom } from 'react-icons/fa'
-import { useReservoirClient, useTokens } from '@reservoir0x/reservoir-kit-ui'
-import { Collection } from 'types/reservoir'
-import useCoinConversion from 'hooks/useCoinConversion'
-import { formatDollar } from 'lib/numbers'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { constants } from 'ethers'
+import { useReservoirClient, useTokens } from '@reservoir0x/reservoir-kit-ui'
+import { Execute } from '@reservoir0x/reservoir-sdk'
+import { styled } from '@stitches/react'
+import { constants, Signer } from 'ethers'
+import useCoinConversion from 'hooks/useCoinConversion'
 import useEnvChain from 'hooks/useEnvChain'
+import { formatDollar } from 'lib/numbers'
+import { optimizeImage } from 'lib/optmizeImage'
+import Link from 'next/link'
+import { ComponentProps, FC, useEffect, useState } from 'react'
+import { FaBroom } from 'react-icons/fa'
+import { HiX } from 'react-icons/hi'
+import { SWRResponse } from 'swr'
+import { SWRInfiniteResponse } from 'swr/infinite/dist/infinite'
+import { Collection } from 'types/reservoir'
+import { useAccount, useNetwork, useSigner } from 'wagmi'
+import AttributesFlex from './AttributesFlex'
+import FormatNativeCrypto from './FormatNativeCrypto'
+import SweepModalCard from './SweepModalCard'
+import Toast from './Toast'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 const DARK_MODE = process.env.NEXT_PUBLIC_DARK_MODE
@@ -269,7 +262,7 @@ const Sweep: FC<Props> = ({ tokens, collection, mutate, setToast }) => {
       <Dialog.Portal>
         <Dialog.Overlay>
           {steps ? (
-            <ModalCard title="Buy Now" loading={waitingTx} steps={steps} />
+            <SweepModalCard title="Buy Now" loading={waitingTx} steps={steps} />
           ) : (
             <Dialog.Content className="fixed inset-0 z-[10000] bg-[#000000b6] px-8">
               <div className="fixed top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2 transform">
