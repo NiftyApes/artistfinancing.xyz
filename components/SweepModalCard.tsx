@@ -19,7 +19,7 @@ type Props = {
   children?: ReactNode
 }
 
-const ModalCard: FC<Props> = ({
+const SweepModalCard: FC<Props> = ({
   actionButton,
   children,
   loading,
@@ -108,7 +108,7 @@ const ModalCard: FC<Props> = ({
   )
 }
 
-export default ModalCard
+export default SweepModalCard
 
 export const ListPrice = ({
   floorSellValue,

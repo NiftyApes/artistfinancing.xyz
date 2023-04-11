@@ -1,6 +1,5 @@
 import {
   useCollections,
-  useTokenOpenseaBanned,
   useTokens,
   useUserTokens,
 } from '@reservoir0x/reservoir-kit-ui'
@@ -13,7 +12,7 @@ import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 import EthAccount from '../../../components/niftyapes/EthAccount'
@@ -23,8 +22,6 @@ import EthAccount from '../../../components/niftyapes/EthAccount'
 // refer to the README.md file on this repository
 // Reference: https://nextjs.org/docs/basic-features/environment-variables#exposing-environment-variables-to-the-browser
 // REQUIRED
-const RESERVOIR_API_BASE = process.env.NEXT_PUBLIC_RESERVOIR_API_BASE
-const RESERVOIR_API_KEY = process.env.NEXT_PUBLIC_RESERVOIR_API_KEY
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
 // OPTIONAL
@@ -32,9 +29,6 @@ const META_TITLE = process.env.NEXT_PUBLIC_META_TITLE
 const META_DESCRIPTION = process.env.NEXT_PUBLIC_META_DESCRIPTION
 const META_OG_IMAGE = process.env.NEXT_PUBLIC_META_OG_IMAGE
 
-const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
-const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
-const COLLECTION_SET_ID = process.env.NEXT_PUBLIC_COLLECTION_SET_ID
 const PROXY_API_BASE = process.env.NEXT_PUBLIC_PROXY_API_BASE
 
 type Props = {
@@ -69,16 +63,8 @@ const metadata = {
 }
 
 const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
-  const [tokenOpenSea] = useState<any>({
-    animation_url: null,
-    extension: null,
-  })
   const account = useAccount()
   const router = useRouter()
-  const bannedOnOpenSea = useTokenOpenseaBanned(
-    collectionId,
-    router.query?.tokenId?.toString() || ''
-  )
 
   const { addNiftyApesTokenImages, addNiftyApesCollectionImage } =
     useNiftyApesImages()
