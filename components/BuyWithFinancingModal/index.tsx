@@ -18,7 +18,12 @@ const BuyWithFinancingModal: FC<Props> = ({
   const [stage, setStage] = useState<'PRE' | 'POST'>('PRE')
 
   return (
-    <div className="container relative max-w-5xl rounded-xl border-2 border-solid border-gray-500 p-6 shadow-2xl">
+    <div
+      className="relative p-4"
+      style={{
+        width: 'min(100vw, 960px)',
+      }}
+    >
       <div className="absolute top-2 right-2">
         <Cross2Icon style={{ width: '32px', height: '32px', strokeWidth: 4 }} />
       </div>

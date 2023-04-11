@@ -1,9 +1,10 @@
 import BuyWithFinancingModal from 'components/BuyWithFinancingModal'
+import Modal from 'components/Modal'
 
 export default function BuyWithFinancingModalPage() {
   return (
-    <div className="mt-8 flex justify-center">
+    <Modal open={true}>
       <BuyWithFinancingModal nameOfWhatYouAreBuying="Creation and Chaos" />
-    </div>
+    </Modal>
   )
 }
