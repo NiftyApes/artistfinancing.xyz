@@ -1,4 +1,3 @@
-import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { optimizeImage } from 'lib/optmizeImage'
 import Script from 'next/script'
 import { FC } from 'react'
@@ -19,7 +18,7 @@ const TokenMedia: FC<Props> = ({ token }) => {
         noModule
         src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"
       ></Script>
-      {token?.media === null ? (
+      {token?.media === null || token?.media === undefined ? (
         <img
           alt="Token Image"
           className="w-full rounded-2xl"

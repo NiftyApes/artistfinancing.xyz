@@ -4,24 +4,19 @@ import {
   useTokens,
   useUserTokens,
 } from '@reservoir0x/reservoir-kit-ui'
-import { paths } from '@reservoir0x/reservoir-sdk'
 import Layout from 'components/Layout'
 import FinancingSection from 'components/niftyapes/FinancingSection'
-import CollectionInfo from 'components/token/CollectionInfo'
-import Listings from 'components/token/Listings'
-import Owner from 'components/token/Owner'
-import PriceData from 'components/token/PriceData'
 import TokenInfo from 'components/token/TokenInfo'
 import TokenMedia from 'components/token/TokenMedia'
 import TokenAttributes from 'components/TokenAttributes'
 import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
-import setParams from 'lib/params'
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
+import EthAccount from '../../../components/niftyapes/EthAccount'
 
 // Environment variables
 // For more information about these variables
@@ -176,114 +171,66 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         {description}
         {image}
       </Head>
-      <div className="col-span-full content-start space-y-4 px-2 pt-4 md:col-span-4 lg:col-span-5 lg:col-start-2 lg:px-0 2xl:col-span-4 2xl:col-start-3 3xl:col-start-5 4xl:col-start-7">
-        <div className="mb-4">
-          <TokenMedia token={token.token} />
+
+      <div className="col-span-full col-start-1 px-2 pt-4 md:col-span-full lg:col-span-7 lg:col-start-2 xl:col-span-7 xl:col-start-2 2xl:col-span-7 2xl:col-start-2 3xl:col-start-4">
+        <div className="mb-14">
+          <TokenMedia token={token?.token} />
         </div>
-        <div className="hidden space-y-4 md:block">
-          <CollectionInfo collection={collection} token={token.token} />
+
+        <div className="block lg:hidden">
+          <div className="reservoir-h3 mb-8 font-semibold">
+            {token?.token?.name || `#${token?.token?.tokenId}`}
+          </div>
+          <div className="mb-8 grid grid-flow-col grid-rows-1">
+            <EthAccount
+              side="left"
+              label="Artist"
+              address={token?.token?.owner}
+            />
+            <EthAccount
+              side="left"
+              label="Owner"
+              address={token?.token?.owner}
+            />
+          </div>
+        </div>
+
+        <div className="mb-14">
+          <div className="reservoir-h3 mb-1 font-semibold">Description</div>
+          <div className="text-md text-gray-300">
+            {token?.token?.description}
+          </div>
+        </div>
+
+        <div className="mb-14">
           <TokenInfo token={token.token} />
         </div>
+
+        <div className="mb-10">
+          <TokenAttributes token={token?.token} />
+        </div>
       </div>
-      <div className="col-span-full mb-4 space-y-4 px-2 pt-0 md:col-span-4 md:col-start-5 md:pt-4 lg:col-span-5 lg:col-start-7 lg:px-0 2xl:col-span-5 2xl:col-start-7 3xl:col-start-9 4xl:col-start-11">
-        <Owner
-          details={token}
-          bannedOnOpenSea={bannedOnOpenSea}
-          collection={collection}
-        />
+
+      <div className="col-span-full mb-4 hidden space-y-4 px-2 pt-2 md:col-span-3 md:col-start-8 lg:col-start-9 lg:block 2xl:col-start-9 3xl:col-start-11">
+        <div className="reservoir-h3 mb-8 font-semibold">
+          {token?.token?.name || `#${token?.token?.tokenId}`}
+        </div>
+        <div className="mb-8 grid grid-flow-col grid-rows-1">
+          <EthAccount
+            side="left"
+            label="Artist"
+            address={token?.token?.owner}
+          />
+          <EthAccount side="left" label="Owner" address={token?.token?.owner} />
+        </div>
         <FinancingSection
           token={token}
           collection={collection}
           isOwner={isOwner}
         />
-        <PriceData
-          details={tokenData}
-          collection={collection}
-          isOwner={isOwner}
-        />
-        <TokenAttributes
-          token={token?.token}
-          collection={collection}
-          isOwner={isOwner}
-        />
-        {token.token?.kind === 'erc1155' && (
-          <Listings
-            token={`${router.query?.contract?.toString()}:${router.query?.tokenId?.toString()}`}
-          />
-        )}
-      </div>
-      <div className="col-span-full block space-y-4 px-2 md:hidden lg:px-0">
-        <CollectionInfo collection={collection} token={token.token} />
-        <TokenInfo token={token.token} />
       </div>
     </Layout>
   )
 }
 
 export default Index
-
-export const getStaticPaths: GetStaticPaths = () => {
-  return {
-    paths: [],
-    fallback: 'blocking',
-  }
-}
-
-export const getStaticProps: GetStaticProps<{
-  collectionId: string
-  communityId?: string
-}> = async ({ params }) => {
-  const contract = params?.contract?.toString()
-  const tokenId = params?.tokenId?.toString()
-  const collectionAddress = COLLECTION ? COLLECTION.split(':')[0] : COLLECTION
-
-  if (
-    collectionAddress &&
-    !COMMUNITY &&
-    !COLLECTION_SET_ID &&
-    collectionAddress.toLowerCase() !== contract?.toLowerCase()
-  ) {
-    return {
-      notFound: true,
-      revalidate: 10,
-    }
-  }
-
-  const options: RequestInit | undefined = {}
-
-  if (RESERVOIR_API_KEY) {
-    options.headers = {
-      'x-api-key': RESERVOIR_API_KEY,
-    }
-  }
-
-  const url = new URL('/tokens/v5', RESERVOIR_API_BASE)
-
-  const query: paths['/tokens/v5']['get']['parameters']['query'] = {
-    tokens: [`${contract}:${tokenId}`],
-    includeTopBid: true,
-    includeAttributes: true,
-    includeDynamicPricing: true,
-    normalizeRoyalties: true,
-  }
-
-  const href = setParams(url, query)
-
-  const res = await fetch(href, options)
-
-  const data =
-    (await res.json()) as paths['/tokens/v5']['get']['responses']['200']['schema']
-
-  const collectionId = data.tokens?.[0]?.token?.collection?.id
-
-  if (!collectionId) {
-    return {
-      notFound: true,
-      revalidate: 10,
-    }
-  }
-
-  return {
-    props: { collectionId, tokenDetails: data?.tokens?.[0]?.token },
-  }
-}
