@@ -4,16 +4,13 @@ import {
   useTokens,
   useUserTokens,
 } from '@reservoir0x/reservoir-kit-ui'
-import { paths } from '@reservoir0x/reservoir-sdk'
 import Layout from 'components/Layout'
 import FinancingSection from 'components/niftyapes/FinancingSection'
-import CollectionInfo from 'components/token/CollectionInfo'
 import TokenInfo from 'components/token/TokenInfo'
 import TokenMedia from 'components/token/TokenMedia'
 import TokenAttributes from 'components/TokenAttributes'
 import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
-import setParams from 'lib/params'
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'

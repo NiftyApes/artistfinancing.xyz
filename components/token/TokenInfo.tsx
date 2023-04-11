@@ -1,6 +1,6 @@
 import useEnvChain from 'hooks/useEnvChain'
 import { truncateAddress } from 'lib/truncateText'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { setToast } from './setToast'
 
@@ -11,7 +11,6 @@ type Props = {
 }
 
 const TokenInfo: FC<Props> = ({ token }) => {
-  const [refreshLoading, setRefreshLoading] = useState(false)
   const envChain = useEnvChain()
 
   const blockExplorerBaseUrl =
@@ -24,8 +23,6 @@ const TokenInfo: FC<Props> = ({ token }) => {
         message: message || 'Request to refresh this token was rejected.',
         title: 'Refresh token failed',
       })
-
-      setRefreshLoading(false)
     }
 
     try {
@@ -36,8 +33,6 @@ const TokenInfo: FC<Props> = ({ token }) => {
       }
 
       const pathname = `${PROXY_API_BASE}/tokens/refresh/v1`
-
-      setRefreshLoading(true)
 
       const res = await fetch(pathname, {
         method: 'POST',
@@ -63,8 +58,6 @@ const TokenInfo: FC<Props> = ({ token }) => {
       console.error(err)
       return
     }
-
-    setRefreshLoading(false)
   }
 
   return (
