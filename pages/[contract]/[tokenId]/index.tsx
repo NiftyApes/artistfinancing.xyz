@@ -17,6 +17,7 @@ import React, { useEffect, useState } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 import EthAccount from '../../../components/niftyapes/EthAccount'
+import Footer from '../../../components/Footer'
 
 // Environment variables
 // For more information about these variables
@@ -229,6 +230,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
           isOwner={isOwner}
         />
       </div>
+      <Footer />
     </Layout>
   )
 }
