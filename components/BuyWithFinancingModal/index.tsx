@@ -15,7 +15,7 @@ const BuyWithFinancingModal: FC<Props> = ({
 }: {
   nameOfWhatYouAreBuying: string
 }) => {
-  const [stage, setStage] = useState<'PRE' | 'POST'>('PRE')
+  const [stage, setStage] = useState<'PRE' | 'POST'>('POST')
 
   return (
     <div
