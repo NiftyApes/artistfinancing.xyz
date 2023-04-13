@@ -11,7 +11,7 @@ export default function Header({
 }) {
   return (
     <div className="flex justify-between text-black">
-      <header>{`Create Listing for ${collectionName} #${nftId}`}</header>
+      <h4 className="text-xl">{`Create Listing for ${collectionName} #${nftId}`}</h4>
       <button onClick={onClose}>
         <IoClose size={24} />
       </button>
