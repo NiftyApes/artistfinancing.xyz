@@ -14,7 +14,7 @@ export default function CreateFinanceOfferModal({
   const [open, setOpen] = useState(false)
 
   const tabTriggerStyles =
-    'text-sm font-semibold text-gray-400 data-[state=active]:text-black'
+    'h-[35px] text-sm font-semibold text-gray-400 data-[state=active]:text-black'
 
   return (
     <>
