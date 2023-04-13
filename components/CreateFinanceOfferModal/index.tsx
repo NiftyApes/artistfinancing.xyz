@@ -3,8 +3,9 @@ import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import Modal from 'components/Modal'
 import { optimizeImage } from 'lib/optmizeImage'
 import { useState } from 'react'
-import Expiration from './expiration'
-import Header from './header'
+import Expiration from './Expiration'
+import Header from './Header'
+import CustomListingForm from './CustomListingForm'
 
 export default function CreateFinanceOfferModal({
   token,
@@ -35,19 +36,23 @@ export default function CreateFinanceOfferModal({
               src={optimizeImage(token?.token?.image, 200)}
             />
             <div className="flex flex-grow justify-between">
-              <Tabs.Root defaultValue="single">
-                <Tabs.List className="flex gap-6">
-                  <Tabs.Trigger value="single" className={tabTriggerStyles}>
-                    Single Listing
-                  </Tabs.Trigger>
-                  <Tabs.Trigger value="batch" className={tabTriggerStyles}>
-                    Batch Create
-                  </Tabs.Trigger>
+              <Tabs.Root defaultValue="custom" className="w-full">
+                <Tabs.List className="flex justify-between gap-6">
+                  <div className="flex gap-8">
+                    <Tabs.Trigger value="batch" className={tabTriggerStyles}>
+                      List Art for Sale
+                    </Tabs.Trigger>
+                    <Tabs.Trigger value="custom" className={tabTriggerStyles}>
+                      Custom Listing
+                    </Tabs.Trigger>
+                  </div>
+                  <Expiration />
                 </Tabs.List>
-                <Tabs.Content value="single" />
                 <Tabs.Content value="batch" />
+                <Tabs.Content value="custom">
+                  <CustomListingForm />
+                </Tabs.Content>
               </Tabs.Root>
-              <Expiration />
             </div>
           </div>
         </div>
