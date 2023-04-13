@@ -9,7 +9,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ descriptor, ...props }) => {
     <div className="relative">
       <input
         type="number"
-        className="w-[200px] border-[1px] border-gray-400 bg-white py-2 px-4 pr-10 font-bold text-black focus:border-transparent focus:outline-none focus:ring-2 focus:ring-black"
+        className="w-[170px] border-[1px] border-gray-400 bg-white py-2 px-4 pr-10 font-bold text-black focus:border-transparent focus:outline-none focus:ring-2 focus:ring-black"
         {...props}
       />
       {descriptor && (
