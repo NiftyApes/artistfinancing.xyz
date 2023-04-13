@@ -139,7 +139,7 @@ export default function FinancingSection({
               {listing && <CurrentListing terms={terms!} isOwner={isOwner} />}
               {isOwner ? (
                 <HStack>
-                  <CreateFinanceOfferModal />
+                  <CreateFinanceOfferModal token={token} />
                   {/* <ListFinancingModal
                     token={token}
                     collection={collection}
