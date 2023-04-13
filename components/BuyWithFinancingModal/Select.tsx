@@ -7,14 +7,21 @@ import {
 } from '@radix-ui/react-dropdown-menu'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import React from 'react'
+import { DurationSelectOption } from './types'
 
-export default function Select({ options, onSelect, value }: any) {
+type Props = {
+  options: DurationSelectOption[]
+  onSelect: (option: DurationSelectOption) => void
+  value: DurationSelectOption
+}
+
+export default function Select({ options, onSelect, value }: Props) {
   return (
     <div style={{ fontFamily: 'Inter' }}>
       <DropdownMenu>
         <DropdownMenuTrigger className="group relative">
           <span className="inline-flex select-none items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-bold hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2">
-            {value}
+            {typeof value === 'string' ? value : `${value[0]} Days`}
             <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-500 group-hover:text-gray-500" />
           </span>
         </DropdownMenuTrigger>
@@ -36,9 +43,11 @@ export default function Select({ options, onSelect, value }: any) {
                       : '0',
                 }}
               >
-                <span className="font-bold">{option}</span>
-                {index !== 0 && (
-                  <span className="hover-gray-400-to-white ml-10">10%</span>
+                <span className="font-bold">
+                  {typeof option === 'string' ? option : `${option[0]} Days`}
+                </span>
+                {typeof option !== 'string' && (
+                  <span className="hover-gray-400-to-white ml-10">{`${option[1]}%`}</span>
                 )}
               </DropdownMenuItem>
             </React.Fragment>

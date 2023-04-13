@@ -5,17 +5,26 @@ import PostPurchaseFooter from './PostPurchaseFooter'
 import PostPurchaseMainContent from './PostPurchaseMainContent'
 import PrePurchaseFooter from './PrePurchaseFooter'
 import PrePurchaseMainContent from './PrePurchaseMainContent'
+import { DurationSelectOption } from './types'
 
 type Props = {
   nameOfWhatYouAreBuying: string
+  durationSelectOptions: DurationSelectOption[]
+  getTotalCostInEthOfDurationSelectOption: (
+    duration: DurationSelectOption
+  ) => number
+  getDownPaymentInEthOfDurationSelectOption: (
+    duration: DurationSelectOption
+  ) => number
 }
 
 const BuyWithFinancingModal: FC<Props> = ({
   nameOfWhatYouAreBuying,
-}: {
-  nameOfWhatYouAreBuying: string
+  durationSelectOptions,
+  getTotalCostInEthOfDurationSelectOption,
+  getDownPaymentInEthOfDurationSelectOption,
 }) => {
-  const [stage, setStage] = useState<'PRE' | 'POST'>('POST')
+  const [stage, setStage] = useState<'PRE' | 'POST'>('PRE')
 
   return (
     <div
@@ -24,7 +33,7 @@ const BuyWithFinancingModal: FC<Props> = ({
         width: 'min(100vw, 960px)',
       }}
     >
-      <div className="absolute top-2 right-2">
+      <div className="absolute right-2 top-2">
         <Cross2Icon style={{ width: '32px', height: '32px', strokeWidth: 4 }} />
       </div>
       <div
@@ -41,6 +50,13 @@ const BuyWithFinancingModal: FC<Props> = ({
           {stage === 'PRE' ? (
             <PrePurchaseMainContent
               nameOfWhatYouAreBuying={nameOfWhatYouAreBuying}
+              durationSelectOptions={durationSelectOptions}
+              getTotalCostInEthOfDurationSelectOption={
+                getTotalCostInEthOfDurationSelectOption
+              }
+              getDownPaymentInEthOfDurationSelectOption={
+                getDownPaymentInEthOfDurationSelectOption
+              }
             />
           ) : (
             <PostPurchaseMainContent
@@ -51,7 +67,11 @@ const BuyWithFinancingModal: FC<Props> = ({
       </div>
 
       <div className="mt-8 w-full border-t border-gray-300 pt-8 md:border-none">
-        {stage === 'PRE' ? <PrePurchaseFooter /> : <PostPurchaseFooter />}
+        {stage === 'PRE' ? (
+          <PrePurchaseFooter onSuccessfulPurchase={() => setStage('POST')} />
+        ) : (
+          <PostPurchaseFooter />
+        )}
       </div>
     </div>
   )

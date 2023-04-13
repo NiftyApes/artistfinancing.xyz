@@ -1,22 +1,22 @@
 import { FC } from 'react'
 import Select from './Select'
+import { DurationSelectOption } from './types'
 
 type Props = {
-  duration: string
-  setDuration: (duration: string) => void
+  durationSelectOptions: DurationSelectOption[]
+  duration: DurationSelectOption
+  setDuration: (duration: DurationSelectOption) => void
 }
 
 const DurationSelect: FC<Props> = ({
+  durationSelectOptions,
   duration,
   setDuration,
-}: {
-  duration: string
-  setDuration: (duration: string) => void
 }) => {
   return (
     <Select
       value={duration}
-      options={['Buy Now', '1 Month', '3 Months', '6 Months']}
+      options={durationSelectOptions}
       onSelect={setDuration}
     />
   )
