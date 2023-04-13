@@ -1,9 +1,9 @@
-import * as Select from '@radix-ui/react-select'
 import * as Tabs from '@radix-ui/react-tabs'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import Modal from 'components/Modal'
 import { optimizeImage } from 'lib/optmizeImage'
 import { useState } from 'react'
+import Expiration from './expiration'
 import Header from './header'
 
 export default function CreateFinanceOfferModal({
@@ -47,10 +47,7 @@ export default function CreateFinanceOfferModal({
                 <Tabs.Content value="single" />
                 <Tabs.Content value="batch" />
               </Tabs.Root>
-              <div className="flex gap-2">
-                <em className="text-sm">Expires</em>
-                <Select.Root></Select.Root>
-              </div>
+              <Expiration />
             </div>
           </div>
         </div>
