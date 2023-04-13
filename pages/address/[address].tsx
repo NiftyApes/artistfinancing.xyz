@@ -1,39 +1,25 @@
+import * as Tabs from '@radix-ui/react-tabs'
+import { paths, setParams } from '@reservoir0x/reservoir-sdk'
+import Avatar from 'components/Avatar'
 import Layout from 'components/Layout'
+import UserActiveLoansTab from 'components/tables/UserActiveLoansTab'
+import UserFinancingOffersTab from 'components/tables/UserFinancingOffersTab'
+import UserUpcomingPaymentsTab from 'components/tables/UserUpcomingPaymentsTab'
+import UserTokensGrid from 'components/UserTokensGrid'
+import useMounted from 'hooks/useMounted'
+import { toggleOnItem } from 'lib/router'
+import { truncateAddress } from 'lib/truncateText'
 import {
   GetStaticPaths,
   GetStaticProps,
   InferGetStaticPropsType,
   NextPage,
 } from 'next'
-import { useRouter } from 'next/router'
-import {
-  useAccount,
-  useNetwork,
-  useEnsName,
-  useEnsAvatar,
-  Address,
-} from 'wagmi'
-import * as Tabs from '@radix-ui/react-tabs'
-import { toggleOnItem } from 'lib/router'
-import UserOffersTable from 'components/tables/UserOffersTable'
-import UserListingsTable from 'components/tables/UserListingsTable'
-import UserTokensGrid from 'components/UserTokensGrid'
-import Avatar from 'components/Avatar'
-import { ComponentProps } from 'react'
-import Toast from 'components/Toast'
-import toast from 'react-hot-toast'
 import Head from 'next/head'
-import useSearchCommunity from 'hooks/useSearchCommunity'
-import { truncateAddress } from 'lib/truncateText'
-import { paths, setParams } from '@reservoir0x/reservoir-sdk'
-import UserActivityTab from 'components/tables/UserActivityTab'
-import useMounted from 'hooks/useMounted'
-import UserUpcomingPaymentsTab from 'components/tables/UserUpcomingPaymentsTab'
-import UserFinancingOffersTab from 'components/tables/UserFinancingOffersTab'
-import UserActiveLoansTab from 'components/tables/UserActiveLoansTab'
+import { useRouter } from 'next/router'
+import { Address, useAccount, useEnsAvatar, useEnsName } from 'wagmi'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
-const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
 const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
 const COLLECTION_SET_ID = process.env.NEXT_PUBLIC_COLLECTION_SET_ID
 const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY
@@ -67,20 +53,6 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
       console.log('Error', error)
     },
   })
-  const { chain: activeChain } = useNetwork()
-  const collections = useSearchCommunity()
-  let collectionIds: undefined | string[] = undefined
-
-  if (COLLECTION && !COMMUNITY && !COLLECTION_SET_ID) {
-    collectionIds = [COLLECTION]
-  }
-
-  if (COMMUNITY || COLLECTION_SET_ID) {
-    collectionIds =
-      (collections?.data?.collections
-        ?.map(({ contract }) => contract)
-        .filter((contract) => !!contract) as string[]) || []
-  }
 
   if (!CHAIN_ID) {
     console.debug({ CHAIN_ID })
@@ -91,18 +63,10 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
     return null
   }
 
-  const setToast: (data: ComponentProps<typeof Toast>['data']) => any = (
-    data
-  ) => toast.custom((t) => <Toast t={t} toast={toast} data={data} />)
-
-  const isInTheWrongNetwork = activeChain?.id !== +CHAIN_ID
   const isOwner = address?.toLowerCase() === accountData?.address?.toLowerCase()
   const formattedAddress = truncateAddress(address as string)
 
-  let tabs = [
-    { name: 'My Portfolio', id: 'portfolio' },
-    { name: 'Listings', id: 'listings' },
-  ]
+  let tabs = [{ name: 'My Portfolio', id: 'portfolio' }]
 
   if (isOwner) {
     tabs = [
@@ -171,55 +135,6 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
                 <UserActiveLoansTab />
               </Tabs.Content>
             )}
-            {isOwner && (
-              <>
-                <Tabs.Content value="buying">
-                  <UserOffersTable
-                    collectionIds={collectionIds}
-                    modal={{
-                      isInTheWrongNetwork,
-                      setToast,
-                    }}
-                  />
-                </Tabs.Content>
-                <Tabs.Content value="selling" className="col-span-full">
-                  <UserListingsTable
-                    isOwner={isOwner}
-                    collectionIds={collectionIds}
-                    modal={{
-                      isInTheWrongNetwork,
-                      setToast,
-                    }}
-                  />
-                </Tabs.Content>
-              </>
-            )}
-            <Tabs.Content value="listings" className="col-span-full">
-              <UserListingsTable
-                isOwner={isOwner}
-                collectionIds={collectionIds}
-                modal={{
-                  isInTheWrongNetwork,
-                  setToast,
-                }}
-                showActive
-              />
-            </Tabs.Content>
-            {isOwner && (
-              <Tabs.Content value="listings_inactive" className="col-span-full">
-                <UserListingsTable
-                  isOwner={isOwner}
-                  collectionIds={collectionIds}
-                  modal={{
-                    isInTheWrongNetwork,
-                    setToast,
-                  }}
-                />
-              </Tabs.Content>
-            )}
-            <Tabs.Content value="activity" className="col-span-full">
-              <UserActivityTab user={address} />
-            </Tabs.Content>
           </Tabs.Root>
         </div>
       </div>
