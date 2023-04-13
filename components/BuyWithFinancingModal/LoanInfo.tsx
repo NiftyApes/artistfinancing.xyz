@@ -2,6 +2,7 @@ import { FC, useMemo } from 'react'
 import InfoRow from './InfoRow'
 
 type Props = {
+  isDarkMode: boolean
   totalCost: string
   downPayment: string
   duration: string
@@ -9,15 +10,11 @@ type Props = {
 }
 
 const LoanInfo: FC<Props> = ({
+  isDarkMode,
   totalCost,
   downPayment,
   duration,
   APR,
-}: {
-  totalCost: string
-  downPayment: string
-  duration: string
-  APR: string
 }) => {
   const rows = useMemo(
     () => [
@@ -33,6 +30,7 @@ const LoanInfo: FC<Props> = ({
     <div style={{ fontFamily: 'Inter' }}>
       {rows.map((row, i) => (
         <InfoRow
+          isDarkMode={isDarkMode}
           key={i}
           rowName={row[0]}
           rowValue={row[1]}

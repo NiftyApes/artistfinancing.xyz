@@ -2,9 +2,10 @@ import { FC, useState } from 'react'
 
 type Props = {
   onSuccessfulPurchase: () => void
+  closeModal: () => void
 }
 
-const PrePurchaseFooter: FC<Props> = ({ onSuccessfulPurchase }) => {
+const PrePurchaseFooter: FC<Props> = ({ onSuccessfulPurchase, closeModal }) => {
   const [status, setStatus] = useState<'READY' | 'PENDING' | 'SUCCESS'>('READY')
 
   return (
@@ -14,7 +15,10 @@ const PrePurchaseFooter: FC<Props> = ({ onSuccessfulPurchase }) => {
           You&rsquo;ll be asked to approve this purchase from your wallet.
         </span>
         <div className="flex flex-wrap justify-center">
-          <button className="width-xl focus:outline-no whitespace-nowrap rounded-full px-14 py-3 font-bold hover:text-gray-400 sm:px-14 md:px-4 md:hover:bg-gray-200 md:hover:text-black lg:px-14">
+          <button
+            className="width-xl focus:outline-no whitespace-nowrap rounded-full px-14 py-3 font-bold hover:text-gray-400 sm:px-14 md:px-4 md:hover:bg-gray-200 md:hover:text-black lg:px-14"
+            onClick={closeModal}
+          >
             NEVER MIND
           </button>
           <button

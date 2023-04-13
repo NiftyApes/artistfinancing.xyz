@@ -16,6 +16,7 @@ type Props = {
   getDownPaymentInEthOfDurationSelectOption: (
     duration: DurationSelectOption
   ) => number
+  closeModal: () => void
 }
 
 const BuyWithFinancingModal: FC<Props> = ({
@@ -23,18 +24,23 @@ const BuyWithFinancingModal: FC<Props> = ({
   durationSelectOptions,
   getTotalCostInEthOfDurationSelectOption,
   getDownPaymentInEthOfDurationSelectOption,
+  closeModal,
 }) => {
   const [stage, setStage] = useState<'PRE' | 'POST'>('PRE')
 
   return (
     <div
-      className="relative p-4"
+      className="relative p-4 text-stone-950"
       style={{
         width: 'min(100vw, 960px)',
       }}
     >
       <div className="absolute right-2 top-2">
-        <Cross2Icon style={{ width: '32px', height: '32px', strokeWidth: 4 }} />
+        <Cross2Icon
+          style={{ width: '32px', height: '32px', strokeWidth: 4 }}
+          className="text-stone-950 hover:cursor-pointer hover:text-stone-500"
+          onClick={closeModal}
+        />
       </div>
       <div
         className="mb-6 text-center text-xl md:mb-12"
@@ -68,9 +74,12 @@ const BuyWithFinancingModal: FC<Props> = ({
 
       <div className="mt-8 w-full border-t border-gray-300 pt-8 md:border-none">
         {stage === 'PRE' ? (
-          <PrePurchaseFooter onSuccessfulPurchase={() => setStage('POST')} />
+          <PrePurchaseFooter
+            onSuccessfulPurchase={() => setStage('POST')}
+            closeModal={closeModal}
+          />
         ) : (
-          <PostPurchaseFooter />
+          <PostPurchaseFooter closeModal={closeModal} />
         )}
       </div>
     </div>
