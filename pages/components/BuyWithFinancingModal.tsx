@@ -11,7 +11,7 @@ const _90days = [90, 10] as [number, number]
 export default function BuyWithFinancingModalPage() {
   const [open, setOpen] = useState(false)
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center">
       <button onClick={() => setOpen(true)} className="mb-12">
         open
       </button>

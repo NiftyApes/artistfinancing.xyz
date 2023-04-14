@@ -22,7 +22,7 @@ const Section: FC<Props> = ({
   const [duration, setDuration] = useState(durationSelectOptions[0])
 
   return (
-    <div className="max-w-md text-slate-50">
+    <div className="max-w-md text-slate-50" style={{ minWidth: '320px' }}>
       <div className="flex justify-between">
         <div className="font-semibold" style={{ fontFamily: 'Mulish' }}>
           FINANCING
