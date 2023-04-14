@@ -1,15 +1,13 @@
 import FormField from './FormField'
-import NumberInput from './NumberInput'
+import SelectInput from './SelectInput'
 
-const NumberFormField = ({
+const SelectFormField = ({
   name,
-  descriptor,
   infoName,
   infoValue,
   tooltip,
 }: {
   name: string
-  descriptor: string
   infoName?: string
   infoValue?: string
   tooltip?: string
@@ -21,9 +19,9 @@ const NumberFormField = ({
       infoValue={infoValue}
       tooltip={tooltip}
     >
-      <NumberInput id={name} descriptor={descriptor} />
+      <SelectInput name={name} />
     </FormField>
   )
 }
 
-export default NumberFormField
+export default SelectFormField

@@ -1,9 +1,10 @@
 import React from 'react'
 import NumberFormField from './NumberFormField'
+import SelectFormField from './SelectFormField'
 
 const CustomListingForm = () => {
   return (
-    <div className="flex w-full flex-col gap-4 divide-y">
+    <div className="flex w-full flex-col space-y-4 divide-y">
       <NumberFormField
         name="Price"
         descriptor="ETH"
@@ -16,12 +17,19 @@ const CustomListingForm = () => {
         infoName="Due"
         infoValue="4.6893151"
       />
-      <NumberFormField
-        name="Duration"
-        descriptor="Days"
-        infoName="Payments"
-        infoValue="1.1733"
-      />
+      <div>
+        <NumberFormField
+          name="Duration"
+          descriptor="Days"
+          tooltip="Diddi diddi blah blah"
+        />
+        <SelectFormField
+          name="Payment Freq."
+          infoName="Payments"
+          infoValue="1.1733"
+          tooltip="Diddi diddi blah blah"
+        />
+      </div>
       <NumberFormField
         name="APR"
         descriptor="%"

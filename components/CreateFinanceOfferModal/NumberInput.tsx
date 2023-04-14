@@ -25,11 +25,11 @@ const NumberInput: React.FC<NumberInputProps> = ({ descriptor, ...props }) => {
 
   return (
     <div
-      className={`flex w-[170px] border-[1px] border-[#979797] bg-white ${focusClasses}`}
+      className={`flex h-[46px] w-[170px] border-[1px] border-gray-500 bg-white ${focusClasses}`}
     >
       <input
         type="number"
-        className="w-full py-2 px-4 font-bold text-black focus:outline-none"
+        className="w-full py-2 px-4 text-sm font-bold text-black focus:outline-none"
         onFocus={handleFocus}
         onBlur={handleBlur}
         {...props}
