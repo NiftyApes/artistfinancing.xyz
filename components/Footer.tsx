@@ -6,7 +6,7 @@ const Footer = () => {
   if (FOOTER_ENABLED)
     return (
       <footer
-        className='sm:flex-row col-span-full mt-20 flex flex-col justify-between bg-white pt-20 pb-20 text-black md:px-16'>
+        className='sm:flex-row col-span-full mt-20 bg-white pt-20 pb-20 text-black md:px-16'>
         <div className='mb-6 flex flex-row flex-wrap justify-between gap-x-6 text-xs sm:mb-0 sm:gap-x-8 sm:text-sm'>
           <div>
             <div className='text-xl font-bold'>
