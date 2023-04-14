@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { FC } from 'react'
-import TooltipDemo from './Tooltip'
+import Tooltip from './Tooltip'
 
 type Props = {
   isDarkMode: boolean
@@ -20,7 +20,12 @@ const InfoRow: FC<Props> = ({
       <div className="mb-1">
         <span className={clsx(!isDarkMode && 'text-gray-500')}>{rowName}</span>
         <span>
-          {rowTooltipText && <TooltipDemo tooltipText={rowTooltipText} />}
+          {rowTooltipText && (
+            <Tooltip
+              modeOverride={isDarkMode ? 'dark' : 'light'}
+              tooltipText={rowTooltipText}
+            />
+          )}
         </span>
       </div>
 

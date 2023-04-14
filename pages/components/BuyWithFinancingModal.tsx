@@ -1,5 +1,6 @@
 import BuyWithFinancingModal from 'components/BuyWithFinancingModal'
 import Section from 'components/BuyWithFinancingModal/Section'
+import { DurationSelectOption } from 'components/BuyWithFinancingModal/types'
 import Modal from 'components/Modal'
 import { useState } from 'react'
 
@@ -10,12 +11,16 @@ const _90days = [90, 10] as [number, number]
 
 export default function BuyWithFinancingModalPage() {
   const [open, setOpen] = useState(false)
+
+  const [selectedDuration, setSelectedDuration] =
+    useState<DurationSelectOption>(_30days)
+
   return (
-    <div className="flex flex-col items-center justify-center">
-      <button onClick={() => setOpen(true)} className="mb-12">
-        open
-      </button>
+    <div className="mt-24 flex flex-col items-center justify-center">
       <Section
+        setOpen={setOpen}
+        selectedDuration={selectedDuration}
+        setSelectedDuration={setSelectedDuration}
         durationSelectOptions={[buyNow, _30days, _60days, _90days]}
         getDownPaymentInEthOfDurationSelectOption={(duration) => {
           if (duration === buyNow) {
@@ -42,6 +47,8 @@ export default function BuyWithFinancingModalPage() {
       />
       <Modal open={open}>
         <BuyWithFinancingModal
+          selectedDuration={selectedDuration}
+          setSelectedDuration={setSelectedDuration}
           closeModal={() => setOpen(false)}
           nameOfWhatYouAreBuying="Creation and Chaos"
           durationSelectOptions={[buyNow, _30days, _60days, _90days]}

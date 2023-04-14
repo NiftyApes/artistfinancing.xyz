@@ -16,13 +16,13 @@ const PrePurchaseFooter: FC<Props> = ({ onSuccessfulPurchase, closeModal }) => {
         </span>
         <div className="flex flex-wrap justify-center">
           <button
-            className="width-xl focus:outline-no whitespace-nowrap rounded-full px-14 py-3 font-bold hover:text-gray-400 sm:px-14 md:px-4 md:hover:bg-gray-200 md:hover:text-black lg:px-14"
+            className="width-xl focus:outline-no whitespace-nowrap rounded-full px-14 py-4 font-bold hover:text-gray-400 sm:px-14 md:px-4 md:hover:bg-gray-200 md:hover:text-black lg:px-14"
             onClick={closeModal}
           >
             NEVER MIND
           </button>
           <button
-            className="rounded-full border-2 border-black px-14 py-3 font-bold hover:bg-black hover:text-white hover:text-white focus:outline-none sm:px-14 md:ml-4 md:px-4 lg:px-14"
+            className="rounded-full border-2 border-black px-14 py-4 font-bold hover:bg-black hover:text-white hover:text-white focus:outline-none sm:px-14 md:ml-4 md:px-4 lg:px-14"
             onClick={() => {
               setStatus('PENDING')
 

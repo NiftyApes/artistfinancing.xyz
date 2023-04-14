@@ -21,7 +21,7 @@ const LoanInfo: FC<Props> = ({
       ['Total Cost', totalCost],
       ['Down Payment', downPayment],
       ['Duration', duration, 'Tooltip explaining duration'],
-      ['APR', APR, 'Tooltip explaining API'],
+      ['APR', APR, 'Tooltip explaining APR'],
     ],
     [totalCost, downPayment, duration, APR]
   )

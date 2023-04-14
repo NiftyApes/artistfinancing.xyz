@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import DurationSelect from './DurationSelect'
 import InfoRow from './InfoRow'
 import LoanInfo from './LoanInfo'
@@ -12,17 +12,24 @@ type Props = {
   getDownPaymentInEthOfDurationSelectOption: (
     duration: DurationSelectOption
   ) => number
+  selectedDuration: DurationSelectOption
+  setSelectedDuration: (duration: DurationSelectOption) => void
+  setOpen: (open: boolean) => void
 }
 
 const Section: FC<Props> = ({
   durationSelectOptions,
   getTotalCostInEthOfDurationSelectOption,
   getDownPaymentInEthOfDurationSelectOption,
+  selectedDuration,
+  setSelectedDuration,
+  setOpen,
 }) => {
-  const [duration, setDuration] = useState(durationSelectOptions[0])
-
   return (
-    <div className="max-w-md text-slate-50" style={{ minWidth: '320px' }}>
+    <div
+      className="max-w-md p-1 text-slate-50"
+      style={{ minWidth: 'min(400px, 100vw)' }}
+    >
       <div className="flex justify-between">
         <div className="font-semibold" style={{ fontFamily: 'Mulish' }}>
           FINANCING
@@ -31,25 +38,25 @@ const Section: FC<Props> = ({
           <DurationSelect
             isDarkMode={process.env.NEXT_PUBLIC_DARK_MODE === 'true'}
             durationSelectOptions={durationSelectOptions}
-            duration={duration}
-            setDuration={setDuration}
+            duration={selectedDuration}
+            setDuration={setSelectedDuration}
           />
         </div>
       </div>
 
-      {typeof duration !== 'string' ? (
+      {typeof selectedDuration !== 'string' ? (
         <>
           <div className="mt-12">
             <LoanInfo
               isDarkMode={process.env.NEXT_PUBLIC_DARK_MODE === 'true'}
               totalCost={`${getTotalCostInEthOfDurationSelectOption(
-                duration
+                selectedDuration
               )} ETH`}
               downPayment={`~ ${getDownPaymentInEthOfDurationSelectOption(
-                duration
+                selectedDuration
               )} ETH`}
-              duration={`${duration[0]} Days`}
-              APR={`${duration[1]}%`}
+              duration={`${selectedDuration[0]} Days`}
+              APR={`${selectedDuration[1]}%`}
             />
           </div>
         </>
@@ -59,13 +66,16 @@ const Section: FC<Props> = ({
             isDarkMode={process.env.NEXT_PUBLIC_DARK_MODE === 'true'}
             rowName="Total Cost"
             rowValue={`${getTotalCostInEthOfDurationSelectOption(
-              duration
+              selectedDuration
             )} ETH`}
           />
         </div>
       )}
       <div className="mt-16 flex justify-center">
-        <button className="w-full max-w-sm rounded-full border-2 border-black bg-white py-3 font-bold text-black focus:outline-none">
+        <button
+          className="w-full max-w-sm rounded-full border-2 border-black bg-white py-4 font-bold text-black focus:outline-none"
+          onClick={() => setOpen(true)}
+        >
           PURCHASE
         </button>
       </div>

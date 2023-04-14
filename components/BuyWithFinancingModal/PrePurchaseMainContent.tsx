@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import DurationSelect from './DurationSelect'
 import ExplanationMsg from './ExplanationMsg'
 import InfoRow from './InfoRow'
@@ -15,6 +15,8 @@ type Props = {
   getDownPaymentInEthOfDurationSelectOption: (
     duration: DurationSelectOption
   ) => number
+  selectedDuration: DurationSelectOption
+  setSelectedDuration: (duration: DurationSelectOption) => void
 }
 
 const PrePurchaseMainContent: FC<Props> = ({
@@ -22,9 +24,9 @@ const PrePurchaseMainContent: FC<Props> = ({
   durationSelectOptions,
   getTotalCostInEthOfDurationSelectOption,
   getDownPaymentInEthOfDurationSelectOption,
+  selectedDuration,
+  setSelectedDuration,
 }) => {
-  const [duration, setDuration] = useState(durationSelectOptions[0])
-
   return (
     <div>
       <div className="flex justify-between">
@@ -38,25 +40,25 @@ const PrePurchaseMainContent: FC<Props> = ({
           <DurationSelect
             isDarkMode={false}
             durationSelectOptions={durationSelectOptions}
-            duration={duration}
-            setDuration={setDuration}
+            duration={selectedDuration}
+            setDuration={setSelectedDuration}
           />
         </div>
       </div>
 
-      {typeof duration !== 'string' ? (
+      {typeof selectedDuration !== 'string' ? (
         <>
           <div className="mt-4">
             <LoanInfo
               isDarkMode={false}
               totalCost={`${getTotalCostInEthOfDurationSelectOption(
-                duration
+                selectedDuration
               )} ETH`}
               downPayment={`~ ${getDownPaymentInEthOfDurationSelectOption(
-                duration
+                selectedDuration
               )} ETH`}
-              duration={`${duration[0]} Days`}
-              APR={`${duration[1]}%`}
+              duration={`${selectedDuration[0]} Days`}
+              APR={`${selectedDuration[1]}%`}
             />
           </div>
           <div className="mt-12">
@@ -72,7 +74,7 @@ const PrePurchaseMainContent: FC<Props> = ({
             isDarkMode={false}
             rowName="Total Cost"
             rowValue={`${getTotalCostInEthOfDurationSelectOption(
-              duration
+              selectedDuration
             )} ETH`}
           />
         </div>

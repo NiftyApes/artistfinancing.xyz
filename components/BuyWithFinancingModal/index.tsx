@@ -17,9 +17,13 @@ type Props = {
     duration: DurationSelectOption
   ) => number
   closeModal: () => void
+  selectedDuration: DurationSelectOption
+  setSelectedDuration: (duration: DurationSelectOption) => void
 }
 
 const BuyWithFinancingModal: FC<Props> = ({
+  selectedDuration,
+  setSelectedDuration,
   nameOfWhatYouAreBuying,
   durationSelectOptions,
   getTotalCostInEthOfDurationSelectOption,
@@ -43,7 +47,7 @@ const BuyWithFinancingModal: FC<Props> = ({
         />
       </div>
       <div
-        className="mb-6 text-center text-xl md:mb-12"
+        className="mb-8 text-center text-xl md:mb-12"
         style={{ fontFamily: 'Mulish' }}
       >
         Buy {nameOfWhatYouAreBuying}
@@ -57,6 +61,8 @@ const BuyWithFinancingModal: FC<Props> = ({
             <PrePurchaseMainContent
               nameOfWhatYouAreBuying={nameOfWhatYouAreBuying}
               durationSelectOptions={durationSelectOptions}
+              selectedDuration={selectedDuration}
+              setSelectedDuration={setSelectedDuration}
               getTotalCostInEthOfDurationSelectOption={
                 getTotalCostInEthOfDurationSelectOption
               }
