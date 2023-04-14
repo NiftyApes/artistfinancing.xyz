@@ -25,11 +25,11 @@ export default function CreateFinanceOfferModal({
       <Modal open={open} onOpenChange={setOpen}>
         <div className="h-[704px] w-[830px] px-6 pt-6 text-black">
           <Header
-            collectionName="Botfrens"
-            nftId="485"
+            collectionName={token?.token?.collection?.name}
+            nftId={token?.token?.tokenId}
             onClose={() => setOpen(false)}
           />
-          <div className="mt-2 flex space-x-4">
+          <div className="mt-6 flex space-x-4">
             <div className="flex flex-col space-y-2">
               <img
                 alt="Token Image"
@@ -37,7 +37,7 @@ export default function CreateFinanceOfferModal({
                 src={optimizeImage(token?.token?.image, 200)}
               />
               <div className="flex justify-between px-2">
-                <p className="text-sm text-gray-500">Previous Sale</p>
+                <p className="text-xs text-gray-500">Previous Sale</p>
                 <p className="text-sm font-bold text-gray-500">0.84 ETH</p>
               </div>
             </div>

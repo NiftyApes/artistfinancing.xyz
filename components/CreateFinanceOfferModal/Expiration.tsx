@@ -14,7 +14,7 @@ export default function Expiration() {
   return (
     <div className="flex space-x-1">
       <div className="flex h-[35px] items-center justify-center">
-        <em className="text-sm text-gray-600">Expires</em>
+        <em className="text-xs text-gray-500">Expires</em>
       </div>
 
       <Select.Root defaultValue={String(ExpirationEnum.OneMonth)}>

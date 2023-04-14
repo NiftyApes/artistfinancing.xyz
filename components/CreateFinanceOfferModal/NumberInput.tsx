@@ -35,7 +35,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ descriptor, ...props }) => {
         {...props}
       />
       {descriptor && (
-        <div className="py-2 px-4 font-bold text-black">{descriptor}</div>
+        <div className="py-2 px-4 text-gray-500">{descriptor}</div>
       )}
     </div>
   )

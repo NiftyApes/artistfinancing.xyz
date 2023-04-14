@@ -5,8 +5,8 @@ export default function Header({
   nftId,
   onClose,
 }: {
-  collectionName: string
-  nftId: string
+  collectionName?: string
+  nftId?: string
   onClose: () => void
 }) {
   return (

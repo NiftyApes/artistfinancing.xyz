@@ -29,7 +29,7 @@ const NumberFormField = ({
       </div>
       <div className="flex flex-grow items-center justify-between">
         <p className="text-xs text-gray-500">{infoName}</p>
-        <p className="text-sm">{infoValue} ETH</p>
+        <p className="text-sm font-bold text-gray-500">{infoValue} ETH</p>
       </div>
     </div>
   )
