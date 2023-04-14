@@ -23,21 +23,27 @@ export default function CreateFinanceOfferModal({
         Create offer
       </button>
       <Modal open={open} onOpenChange={setOpen}>
-        <div className="h-[704px] w-[830px] py-8 px-6 text-black">
+        <div className="h-[704px] w-[830px] px-6 pt-6 text-black">
           <Header
             collectionName="Botfrens"
             nftId="485"
             onClose={() => setOpen(false)}
           />
-          <div className="mt-6 flex gap-4">
-            <img
-              alt="Token Image"
-              className="h-[200px] w-[200px] object-contain"
-              src={optimizeImage(token?.token?.image, 200)}
-            />
+          <div className="mt-2 flex space-x-4">
+            <div className="flex flex-col space-y-2">
+              <img
+                alt="Token Image"
+                className="mt-[52px] h-[200px] w-[200px] object-contain"
+                src={optimizeImage(token?.token?.image, 200)}
+              />
+              <div className="flex justify-between px-2">
+                <p className="text-sm text-gray-500">Previous Sale</p>
+                <p className="text-sm font-bold text-gray-500">0.84 ETH</p>
+              </div>
+            </div>
             <div className="flex flex-grow justify-between">
               <Tabs.Root defaultValue="custom" className="w-full">
-                <Tabs.List className="flex justify-between gap-6">
+                <Tabs.List className="flex justify-between gap-6 border-b-[1px] py-2">
                   <div className="flex gap-8">
                     <Tabs.Trigger value="batch" className={tabTriggerStyles}>
                       List Art for Sale

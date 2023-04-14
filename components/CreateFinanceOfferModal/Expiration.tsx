@@ -1,4 +1,7 @@
 import * as Select from '@radix-ui/react-select'
+import expirationOptions, {
+  Expiration as ExpirationEnum,
+} from 'lib/niftyapes/expirationOptions'
 import React from 'react'
 import {
   IoCaretDownSharp,
@@ -9,12 +12,12 @@ import {
 
 export default function Expiration() {
   return (
-    <div className="flex gap-2">
+    <div className="flex space-x-1">
       <div className="flex h-[35px] items-center justify-center">
         <em className="text-sm text-gray-600">Expires</em>
       </div>
 
-      <Select.Root>
+      <Select.Root defaultValue={String(ExpirationEnum.OneMonth)}>
         <Select.Trigger
           className="inline-flex h-[35px] items-center justify-center gap-2 rounded bg-white px-[15px] text-sm font-semibold leading-none outline-none focus:shadow-[0_0_0_2px] focus:shadow-black"
           aria-label="Expiration"
@@ -30,15 +33,18 @@ export default function Expiration() {
               <IoChevronUp />
             </Select.ScrollUpButton>
             <Select.Viewport className="p-2">
-              <Select.Item
-                value="test"
-                className="relative flex h-[25px] select-none items-center rounded-sm px-[35px] pl-[25px] text-sm font-semibold text-black data-[highlighted]:bg-gray-200 data-[highlighted]:text-black data-[highlighted]:outline-none"
-              >
-                <Select.ItemText>30 Days</Select.ItemText>
-                <Select.ItemIndicator className="absolute left-0 inline-flex w-[25px] items-center justify-center">
-                  <IoCheckmark size={16} />
-                </Select.ItemIndicator>
-              </Select.Item>
+              {expirationOptions.map((expiration, idx) => (
+                <Select.Item
+                  key={idx}
+                  value={String(expiration.value)}
+                  className="relative flex h-[25px] select-none items-center rounded-sm px-[35px] pl-[25px] text-sm font-semibold text-black data-[highlighted]:bg-gray-200 data-[highlighted]:text-black data-[highlighted]:outline-none"
+                >
+                  <Select.ItemText>{expiration.label}</Select.ItemText>
+                  <Select.ItemIndicator className="absolute left-0 inline-flex w-[25px] items-center justify-center">
+                    <IoCheckmark size={16} />
+                  </Select.ItemIndicator>
+                </Select.Item>
+              ))}
             </Select.Viewport>
             <Select.ScrollDownButton className="flex h-[25px] cursor-default items-center justify-center bg-white text-violet11">
               <IoChevronDown />
