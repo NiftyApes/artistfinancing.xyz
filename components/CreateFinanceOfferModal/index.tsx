@@ -23,13 +23,13 @@ export default function CreateFinanceOfferModal({
         Create offer
       </button>
       <Modal open={open} onOpenChange={setOpen}>
-        <div className="h-[704px] w-[830px] px-6 pt-6 text-black">
+        <div className="w-[830px] p-6 text-black">
           <Header
             collectionName={token?.token?.collection?.name}
             nftId={token?.token?.tokenId}
             onClose={() => setOpen(false)}
           />
-          <div className="mt-6 flex space-x-4">
+          <div className="mt-6 flex space-x-6">
             <div className="flex flex-col space-y-2">
               <img
                 alt="Token Image"
