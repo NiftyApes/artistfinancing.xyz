@@ -1,4 +1,3 @@
-import { FaTwitter, FaDiscord } from 'react-icons/fa'
 import Link from 'next/link'
 
 const FOOTER_ENABLED = process.env.NEXT_PUBLIC_FOOTER_ENABLED == 'true'
@@ -6,39 +5,56 @@ const FOOTER_ENABLED = process.env.NEXT_PUBLIC_FOOTER_ENABLED == 'true'
 const Footer = () => {
   if (FOOTER_ENABLED)
     return (
-      <footer className="col-span-full flex flex-col items-center justify-between px-6 pb-12 sm:flex-row md:px-16">
-        <div className="mb-6 flex flex-row flex-wrap items-center justify-between gap-x-6 text-xs sm:mb-0 sm:gap-x-8 sm:text-sm">
-          <Link href="https://reservoir.tools/" legacyBehavior={true}>
-            <a className="" target="_blank" rel="noreferrer">
-              About
-            </a>
-          </Link>
-          <Link href="https://reservoir.tools/privacy" legacyBehavior={true}>
-            <a className="min-w-max" target="_blank" rel="noreferrer">
-              Privacy Policy
-            </a>
-          </Link>
-          <Link href="https://reservoir.tools/terms" legacyBehavior={true}>
-            <a className="min-w-max" target="_blank" rel="noreferrer">
-              Terms of Use
-            </a>
-          </Link>
-        </div>
-        <div className="flex flex-row items-center gap-x-6">
-          <Link href="https://twitter.com/reservoir0x" legacyBehavior={true}>
-            <a className="" target="_blank" rel="noreferrer">
-              <FaTwitter className="h-[20px] w-[25px]" />
-            </a>
-          </Link>
-          <Link
-            href="https://discord.gg/j5K9fESNwh"
-            className="ml-5"
-            legacyBehavior={true}
-          >
-            <a className="" target="_blank" rel="noreferrer">
-              <FaDiscord className="h-[19px] w-[25px]" />
-            </a>
-          </Link>
+      <footer
+        className='sm:flex-row col-span-full mt-20 flex flex-col justify-between bg-white pt-20 pb-20 text-black md:px-16'>
+        <div className='mb-6 flex flex-row flex-wrap justify-between gap-x-6 text-xs sm:mb-0 sm:gap-x-8 sm:text-sm'>
+          <div>
+            <div className='text-xl font-bold'>
+              SuperRare Underground by NiftyApes
+            </div>
+            <div>The future is rare bananas</div>
+          </div>
+
+          <div>
+            <div className='mb-1 font-bold uppercase'>Community</div>
+            <div>
+              <Link href='https://twitter.com/niftyapes' legacyBehavior={true}>
+                <a className='min-w-max' target='_blank' rel='noreferrer'>
+                  Twitter
+                </a>
+              </Link>
+            </div>
+            <div>
+              <Link
+                href='https://discord.com/invite/Ge8Zwy6syQ'
+                legacyBehavior={true}
+              >
+                <a className='min-w-max' target='_blank' rel='noreferrer'>
+                  Discord
+                </a>
+              </Link>
+            </div>
+          </div>
+          <div>
+            <div className='mb-1 font-bold uppercase'>Products</div>
+            <div>
+              <Link
+                href='https://www.niftyapes.money/#top'
+                legacyBehavior={true}
+              >
+                <a className='min-w-max' target='_blank' rel='noreferrer'>
+                  SDK
+                </a>
+              </Link>
+            </div>
+            <div>
+              <Link href='https://app.niftyapes.money/' legacyBehavior={true}>
+                <a className='min-w-max' target='_blank' rel='noreferrer'>
+                  Lending App
+                </a>
+              </Link>
+            </div>
+          </div>
         </div>
       </footer>
     )
