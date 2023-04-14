@@ -17,15 +17,21 @@ const Navbar: FC = () => {
 
   const renderNav = () => {
     if (account.isConnected) {
-      return <div className='flex ml-auto z-10 gap-11'>
-        <div className='text-white hover:underline'><a href={`/`}>Explore</a></div>
-        <div className='text-white hover:underline'>
-          <a href={`/address/${account.address}`}>Portfolio</a>
+      return (
+        <div className="z-10 ml-auto flex gap-11">
+          <div className="text-white hover:underline">
+            <a href={`/`}>Explore</a>
+          </div>
+          <div className="text-white hover:underline">
+            <a href={`/address/${account.address}`}>Portfolio</a>
+          </div>
+          <div className="text-white hover:underline">
+            <a href={`/address/${account.address}?tab=upcoming_payments`}>
+              Upcoming Payments
+            </a>
+          </div>
         </div>
-        <div className='text-white hover:underline'>
-          <a href={`/address/${account.address}?tab=upcoming_payments`}>Upcoming Payments</a>
-        </div>
-      </div>
+      )
     }
   }
 
@@ -36,11 +42,10 @@ const Navbar: FC = () => {
       let values = link.split('::')
       externalLinks.push({
         name: values[0],
-        url: values[1]
+        url: values[1],
       })
     })
   }
-
 
   if (!isMounted) {
     return null
@@ -48,18 +53,20 @@ const Navbar: FC = () => {
 
   return (
     <nav
-      className={`sticky top-0 z-[1000] col-span-full flex ${!account.isConnected ? 'justify-between' : 'justify-end'} items-center gap-2 border-b px-6 py-4 dark:border-neutral-600 dark:bg-black md:gap-3 md:px-16`}>
-      <NavbarLogo className='z-10 max-w-[300px]' />
+      className={`sticky top-0 z-[1000] col-span-full flex ${
+        !account.isConnected ? 'justify-between' : 'justify-end'
+      } items-center gap-2 border-b px-6 py-4 dark:border-neutral-600 dark:bg-black md:gap-3 md:px-16`}
+    >
+      <NavbarLogo className="z-10 max-w-[300px]" />
 
       {renderNav()}
 
       {isMobile ? (
-        <div className='ml-auto flex gap-x-5'>
+        <div className="ml-auto flex gap-x-5">
           <HamburgerMenu externalLinks={externalLinks} />
         </div>
       ) : (
-        <div
-          className='z-10 ml-6 shrink-0 gap-2 flex'>
+        <div className="z-10 ml-6 flex shrink-0 gap-2">
           <ConnectWallet />
         </div>
       )}
