@@ -1,5 +1,6 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { paths, setParams } from '@reservoir0x/reservoir-sdk'
+import Avatar from 'components/Avatar'
 import Layout from 'components/Layout'
 import UserActiveLoansTab from 'components/tables/UserActiveLoansTab'
 import UserFinancingOffersTab from 'components/tables/UserFinancingOffersTab'
@@ -39,6 +40,20 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
   if (!address) {
     throw 'No address set'
   }
+
+  const { data: ensAvatar } = useEnsAvatar({
+    address: address as Address,
+  })
+
+  const { data: ensName } = useEnsName({
+    address: address as Address,
+    onSettled(data, error) {
+      console.log('Settled', { data, error })
+    },
+    onError(error) {
+      console.log('Error', error)
+    },
+  })
 
   if (!CHAIN_ID) {
     console.debug({ CHAIN_ID })
