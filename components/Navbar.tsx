@@ -23,7 +23,7 @@ const Navbar: FC = () => {
             <a href={`/`}>Explore</a>
           </div>
           <div className="text-white hover:underline">
-            <a href={`/address/${account.address}`}>Portfolio</a>
+            <a href={`/address/${account.address}?tab=gallery`}>Portfolio</a>
           </div>
           <div className="text-white hover:underline">
             <a href={`/address/${account.address}?tab=upcoming_payments`}>
