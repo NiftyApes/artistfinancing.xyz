@@ -1,5 +1,7 @@
 import Modal from 'components/Modal'
+import { Timeline } from 'components/Timeline'
 import { useState } from 'react'
+import { FiClock } from 'react-icons/fi'
 
 export default function CreateFinanceOfferModal() {
   const [open, setOpen] = useState(false)
@@ -10,7 +12,24 @@ export default function CreateFinanceOfferModal() {
         Create offer
       </button>
       <Modal open={open} onOpenChange={setOpen}>
-        <p className="text-black">Put your content here</p>
+        <div className="flex h-[600px] w-[600px] items-center p-4">
+          <Timeline
+            events={[
+              {
+                icon: FiClock,
+                content: <p className="text-black">Event 1</p>,
+                reached: true,
+              },
+              {
+                icon: FiClock,
+                content: <p className="text-black">Event 2</p>,
+                reached: true,
+              },
+            ]}
+            orientation="horizontal"
+            contentPosition="below"
+          />
+        </div>
       </Modal>
     </>
   )
