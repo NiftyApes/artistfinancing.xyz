@@ -18,6 +18,7 @@ import {
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Address, useAccount, useEnsAvatar, useEnsName } from 'wagmi'
+import Footer from '../../components/Footer'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
@@ -66,13 +67,12 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
   const isOwner = address?.toLowerCase() === accountData?.address?.toLowerCase()
   const formattedAddress = truncateAddress(address as string)
 
-  let tabs = [{ name: 'My Portfolio', id: 'portfolio' }]
+  let tabs = [{ name: 'Gallery', id: 'galley' }]
 
   if (isOwner) {
     tabs = [
-      { name: 'My Portfolio', id: 'portfolio' },
-      { name: 'Upcoming Payments', id: 'upcoming_payments' },
-      { name: 'Financing Offers', id: 'financing_offers' },
+      { name: 'Gallery', id: 'gallery' },
+      { name: 'Manage Listings', id: 'manage_listings' },
       { name: 'Active Loans', id: 'active_loans' },
     ]
   }
@@ -80,26 +80,9 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
   return (
     <Layout navbar={{}}>
       <Head>{metadata.title(`${address} Profile`)}</Head>
-      <div className="col-span-full">
-        <div className="mt-4 mb-4 w-full px-4 md:px-16">
-          <div className="flex">
-            {address && (
-              <Avatar address={address} avatar={ensAvatar} size={80} />
-            )}
-            <div className="ml-4 flex flex-col justify-center">
-              <p className="reservoir-h6 text-xl font-semibold dark:text-white">
-                {ensName || formattedAddress}
-              </p>
-              {ensName && (
-                <p className="reservoir-label text-md font-semibold opacity-60">
-                  {formattedAddress}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-        <div className="px-4 md:px-16">
-          <Tabs.Root value={router.query?.tab?.toString() || 'portfolio'}>
+      <div className="col-span-full min-h-screen">
+        <div className="px-4 py-10 md:px-16">
+          <Tabs.Root value={router.query?.tab?.toString() || 'gallery'}>
             <Tabs.List className="no-scrollbar mb-4 ml-[-15px] flex w-[calc(100%_+_30px)] overflow-y-scroll border-b border-[rgba(0,0,0,0.05)] dark:border-[rgba(255,255,255,0.2)] md:ml-0 md:w-full">
               {tabs.map(({ name, id }) => (
                 <Tabs.Trigger
@@ -115,7 +98,7 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
                 </Tabs.Trigger>
               ))}
             </Tabs.List>
-            <Tabs.Content value="portfolio">
+            <Tabs.Content value="gallery">
               <div className="mt-6">
                 <UserTokensGrid fallback={fallback} owner={address || ''} />
               </div>
@@ -126,7 +109,7 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
               </Tabs.Content>
             )}
             {isOwner && (
-              <Tabs.Content value="financing_offers" className="col-span-full">
+              <Tabs.Content value="manage_listings" className="col-span-full">
                 <UserFinancingOffersTab />
               </Tabs.Content>
             )}
@@ -138,6 +121,7 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
           </Tabs.Root>
         </div>
       </div>
+      <Footer />
     </Layout>
   )
 }
