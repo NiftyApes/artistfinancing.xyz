@@ -17,18 +17,17 @@ const Tooltip = ({
   modeOverride,
   ...props
 }: Props) => {
-  let arrowStyles = 'fill-neutral-600 dark:fill-neutral-200'
-  let contentStyles =
-    'bg-neutral-600 text-white dark:bg-neutral-200 dark:text-black'
+  let arrowStyles = 'fill-black dark:fill-white'
+  let contentStyles = 'bg-black text-white dark:bg-white dark:text-black'
 
   if (modeOverride === 'light') {
-    arrowStyles = 'fill-neutral-600'
-    contentStyles = 'bg-neutral-600 text-white'
+    arrowStyles = 'fill-black'
+    contentStyles = 'bg-black text-white'
   }
 
   if (modeOverride === 'dark') {
-    arrowStyles = 'fill-neutral-200'
-    contentStyles = 'bg-neutral-200 text-black'
+    arrowStyles = 'fill-white'
+    contentStyles = 'bg-white text-black'
   }
 
   return (
