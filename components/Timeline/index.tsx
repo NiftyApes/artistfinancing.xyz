@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import Tooltip from 'components/Tooltip'
 import React from 'react'
 import { IconType } from 'react-icons'
 
@@ -6,6 +7,8 @@ type Event = {
   icon: IconType
   completedIcon?: IconType
   content: React.ReactNode
+  tooltipContent?: React.ReactNode
+  defaultTooltipOpen?: boolean
   current?: boolean
   completed?: boolean
 }
@@ -50,9 +53,8 @@ export const Timeline: React.FC<TimelineProps> = ({
         // reached represents items past and current
         const reached = event.completed || event.current
 
-        return (
+        const eventRender = (
           <div
-            key={index}
             className={clsx('flex flex-grow items-center', {
               'flex-col space-y-2': orientation === 'horizontal',
               'flex-row space-x-2': orientation === 'vertical',
@@ -98,6 +100,20 @@ export const Timeline: React.FC<TimelineProps> = ({
             </div>
             <div>{event.content}</div>
           </div>
+        )
+
+        return event.tooltipContent ? (
+          <Tooltip
+            key={index}
+            content={event.tooltipContent}
+            defaultOpen={event.defaultTooltipOpen}
+            side={orientation === 'horizontal' ? 'top' : 'left'}
+            modeOverride="light"
+          >
+            {eventRender}
+          </Tooltip>
+        ) : (
+          eventRender
         )
       })}
     </div>

@@ -18,6 +18,13 @@ export default function CreateFinanceOfferModal() {
               {
                 icon: FiClock,
                 content: <p className="text-xs text-gray-400">Purchase</p>,
+                tooltipContent: (
+                  <div
+                    className={`align-center bg-black p-2 text-center text-sm text-white`}
+                  >
+                    Womp
+                  </div>
+                ),
               },
               {
                 icon: FiClock,
