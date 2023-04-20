@@ -4,9 +4,10 @@ import { IconType } from 'react-icons'
 
 type Event = {
   icon: IconType
-  reachedIcon?: IconType
+  completedIcon?: IconType
   content: React.ReactNode
-  reached: boolean
+  current: boolean
+  completed: boolean
 }
 
 type TimelineProps = {
@@ -29,9 +30,10 @@ export const Timeline: React.FC<TimelineProps> = ({
       )}
     >
       {events.map((event, index) => {
-        const IconComponent = event.reached
-          ? event.reachedIcon || event.icon
+        const IconComponent = event.completed
+          ? event.completedIcon || event.icon
           : event.icon
+        const reached = event.completed || event.current
 
         return (
           <div
@@ -53,20 +55,20 @@ export const Timeline: React.FC<TimelineProps> = ({
                   '',
                   { 'h-full w-[2px]': orientation === 'vertical' },
                   { 'h-[2px] w-full flex-grow': orientation === 'horizontal' },
-                  { 'bg-gray-300': !event.reached },
-                  { 'bg-black': event.reached }
+                  { 'bg-gray-300': !reached },
+                  { 'bg-black': reached }
                 )}
               />
               <div
                 className={clsx('border border-black p-2', {
-                  'bg-black': event.reached,
-                  'bg-white': !event.reached,
+                  'bg-black': reached,
+                  'bg-white': !reached,
                 })}
               >
                 <IconComponent
                   className={clsx('h-4 w-4', {
-                    'text-white': event.reached,
-                    'text-black': !event.reached,
+                    'text-white': reached,
+                    'text-black': !reached,
                   })}
                 />
               </div>
@@ -75,8 +77,8 @@ export const Timeline: React.FC<TimelineProps> = ({
                   '',
                   { 'h-full w-[2px]': orientation === 'vertical' },
                   { 'h-[2px] w-full flex-grow': orientation === 'horizontal' },
-                  { 'bg-gray-300': !event.reached },
-                  { 'bg-black': event.reached }
+                  { 'bg-gray-300': !reached },
+                  { 'bg-black': reached }
                 )}
               />
             </div>
