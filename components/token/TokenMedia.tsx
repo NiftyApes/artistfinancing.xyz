@@ -21,7 +21,7 @@ const TokenMedia: FC<Props> = ({ token }) => {
       {token?.media === null || token?.media === undefined ? (
         <img
           alt="Token Image"
-          className="w-full rounded-2xl"
+          className="w-full"
           src={optimizeImage(token?.image, 533)}
         />
       ) : (
