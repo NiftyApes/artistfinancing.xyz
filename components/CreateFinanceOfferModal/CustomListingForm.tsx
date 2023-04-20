@@ -27,6 +27,7 @@ const CustomListingForm = () => {
         descriptor="%"
         infoName="Interest"
         infoValue="0.00"
+        tooltip="Lorem ipsum I don't missum"
       />
     </div>
   )
