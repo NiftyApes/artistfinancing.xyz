@@ -14,12 +14,16 @@ type TimelineProps = {
   events: Event[]
   orientation: 'horizontal' | 'vertical'
   contentPosition?: 'above' | 'below' | 'left' | 'right'
+  precedingLine?: boolean
+  succeedingLine?: boolean
 }
 
 export const Timeline: React.FC<TimelineProps> = ({
   events,
   orientation,
   contentPosition = orientation === 'horizontal' ? 'below' : 'right',
+  precedingLine = true,
+  succeedingLine = true,
 }) => {
   const currIndex = events.findIndex((event) => event.current)
 
@@ -32,10 +36,12 @@ export const Timeline: React.FC<TimelineProps> = ({
       )}
     >
       {events.map((event, index) => {
-        // Update current state for consistency
+        // Update current state for consistency. Ensures only one event can be
+        // the current event.
         event.current = index === currIndex ? true : false
 
-        // Update completed state for items previous to current
+        // Update completed state for items previous to current. Ensures only
+        // events previous to the current event can be completed.
         event.completed = index < currIndex ? true : false
 
         // Use completed icon if it exists
@@ -62,13 +68,13 @@ export const Timeline: React.FC<TimelineProps> = ({
           >
             <div className="flex w-full items-center">
               <div
-                className={clsx(
-                  '',
-                  { 'h-full w-[2px]': orientation === 'vertical' },
-                  { 'h-[2px] w-full flex-grow': orientation === 'horizontal' },
-                  { 'bg-gray-300': !reached },
-                  { 'bg-black': reached }
-                )}
+                className={clsx({
+                  invisible: index === 0 && !precedingLine,
+                  'h-full w-[2px]': orientation === 'vertical',
+                  'h-[2px] w-full': orientation === 'horizontal',
+                  'bg-gray-300': !reached,
+                  'bg-black': reached,
+                })}
               />
               <div
                 className={clsx('border border-black p-2', {
@@ -84,13 +90,13 @@ export const Timeline: React.FC<TimelineProps> = ({
                 />
               </div>
               <div
-                className={clsx(
-                  '',
-                  { 'h-full w-[2px]': orientation === 'vertical' },
-                  { 'h-[2px] w-full flex-grow': orientation === 'horizontal' },
-                  { 'bg-gray-300': !reached },
-                  { 'bg-black': reached }
-                )}
+                className={clsx({
+                  invisible: index === events.length - 1 && !succeedingLine,
+                  'h-full w-[2px]': orientation === 'vertical',
+                  'h-[2px] w-full': orientation === 'horizontal',
+                  'bg-gray-300': event.current || !reached,
+                  'bg-black': !event.current && reached,
+                })}
               />
             </div>
             <div>{event.content}</div>
