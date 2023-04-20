@@ -13,7 +13,6 @@ type Event = {
 type TimelineProps = {
   events: Event[]
   orientation: 'horizontal' | 'vertical'
-  contentPosition?: 'above' | 'below' | 'left' | 'right'
   precedingLine?: boolean
   succeedingLine?: boolean
 }
@@ -21,7 +20,6 @@ type TimelineProps = {
 export const Timeline: React.FC<TimelineProps> = ({
   events,
   orientation,
-  contentPosition = orientation === 'horizontal' ? 'below' : 'right',
   precedingLine = true,
   succeedingLine = true,
 }) => {
@@ -56,17 +54,16 @@ export const Timeline: React.FC<TimelineProps> = ({
           <div
             key={index}
             className={clsx('flex flex-grow items-center', {
-              'flex-col space-y-2':
-                orientation === 'horizontal' && contentPosition === 'below',
-              'flex-col-reverse space-y-2':
-                orientation === 'horizontal' && contentPosition === 'above',
-              'flex-row space-x-2':
-                orientation === 'vertical' && contentPosition === 'right',
-              'flex-row-reverse space-x-2':
-                orientation === 'vertical' && contentPosition === 'left',
+              'flex-col space-y-2': orientation === 'horizontal',
+              'flex-row space-x-2': orientation === 'vertical',
             })}
           >
-            <div className="flex w-full items-center">
+            <div
+              className={clsx('flex items-center', {
+                'w-full flex-row': orientation === 'horizontal',
+                'h-full flex-col': orientation === 'vertical',
+              })}
+            >
               <div
                 className={clsx({
                   invisible: index === 0 && !precedingLine,

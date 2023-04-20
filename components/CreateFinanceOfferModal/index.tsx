@@ -34,7 +34,6 @@ export default function CreateFinanceOfferModal() {
               },
             ]}
             orientation="horizontal"
-            contentPosition="below"
           />
         </div>
       </Modal>
