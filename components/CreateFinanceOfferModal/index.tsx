@@ -18,26 +18,19 @@ export default function CreateFinanceOfferModal() {
               {
                 icon: FiClock,
                 content: <p className="text-xs text-gray-400">Purchase</p>,
-                current: false,
-                completed: true,
               },
               {
                 icon: FiClock,
                 content: <p className="text-xs text-gray-400">7 days later</p>,
-                current: false,
-                completed: true,
               },
               {
                 icon: FiClock,
                 content: <p className="text-xs text-gray-400">14 days later</p>,
                 current: true,
-                completed: false,
               },
               {
                 icon: FiClock,
                 content: <p className="text-xs text-gray-400">21 days later</p>,
-                current: false,
-                completed: false,
               },
             ]}
             orientation="horizontal"

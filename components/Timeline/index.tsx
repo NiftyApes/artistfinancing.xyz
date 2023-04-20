@@ -6,8 +6,8 @@ type Event = {
   icon: IconType
   completedIcon?: IconType
   content: React.ReactNode
-  current: boolean
-  completed: boolean
+  current?: boolean
+  completed?: boolean
 }
 
 type TimelineProps = {
@@ -21,6 +21,8 @@ export const Timeline: React.FC<TimelineProps> = ({
   orientation,
   contentPosition = orientation === 'horizontal' ? 'below' : 'right',
 }) => {
+  const currIndex = events.findIndex((event) => event.current)
+
   return (
     <div
       className={clsx(
@@ -30,9 +32,18 @@ export const Timeline: React.FC<TimelineProps> = ({
       )}
     >
       {events.map((event, index) => {
+        // Update current state for consistency
+        event.current = index === currIndex ? true : false
+
+        // Update completed state for items previous to current
+        event.completed = index < currIndex ? true : false
+
+        // Use completed icon if it exists
         const IconComponent = event.completed
           ? event.completedIcon || event.icon
           : event.icon
+
+        // reached represents items past and current
         const reached = event.completed || event.current
 
         return (
