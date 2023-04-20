@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React from 'react'
 import { IconType } from 'react-icons'
 
@@ -21,60 +22,46 @@ export const Timeline: React.FC<TimelineProps> = ({
 }) => {
   return (
     <div
-      className={`flex ${orientation === 'horizontal' ? '' : 'flex-col'} ${
-        contentPosition === 'above' || contentPosition === 'below'
-          ? 'items-center'
-          : ''
-      }`}
+      className={clsx(
+        'flex h-full w-full justify-around',
+        { 'flex-row': orientation === 'horizontal' },
+        { 'flex-col': orientation === 'vertical' }
+      )}
     >
       {events.map((event, index) => {
-        const isLastEvent = index === events.length - 1
         const IconComponent = event.reached
           ? event.reachedIcon || event.icon
           : event.icon
-        const connectingLineStyle = event.reached
-          ? 'border-black'
-          : 'border-gray-400'
 
         return (
           <div
             key={index}
-            className={`flex ${
-              orientation === 'horizontal' ? 'flex-row' : 'flex-col'
-            } items-center ${
-              !isLastEvent && orientation === 'horizontal' ? 'mr-4' : ''
-            } ${!isLastEvent && orientation === 'vertical' ? 'mb-4' : ''}`}
+            className={clsx(
+              'flex flex-grow items-center',
+              { 'flex-row': orientation === 'horizontal' },
+              { 'flex-col': orientation === 'vertical' }
+            )}
           >
-            <div className="flex items-center">
-              <div
-                className={`border-solid ${connectingLineStyle} ${
-                  orientation === 'horizontal' ? 'h-px w-full' : 'h-full w-px'
-                } absolute top-1/2 left-1/2`}
-              />
-              <div
-                className={`border-2 p-1 ${
-                  event.reached ? 'border-black' : 'border-gray-300'
-                }`}
-              >
-                <IconComponent
-                  className={`h-4 w-4 ${
-                    event.reached ? 'text-black' : 'text-white'
-                  }`}
-                />
-              </div>
-            </div>
             <div
-              className={`${
-                orientation === 'horizontal'
-                  ? contentPosition === 'above'
-                    ? 'mb-4'
-                    : 'mt-4'
-                  : contentPosition === 'left'
-                  ? 'mr-4'
-                  : 'ml-4'
-              } ${orientation === 'horizontal' ? 'inline-block' : ''}`}
+              className={clsx(
+                { 'h-full w-[2px] flex-grow': orientation === 'vertical' },
+                { 'h-[2px] w-full flex-grow': orientation === 'horizontal' },
+                { 'bg-gray-300': !event.reached },
+                { 'bg-black': event.reached }
+              )}
+            />
+            <div
+              className={clsx('border border-black p-2', {
+                'bg-black': event.reached,
+                'bg-white': !event.reached,
+              })}
             >
-              {event.content}
+              <IconComponent
+                className={clsx('h-4 w-4', {
+                  'text-white': event.reached,
+                  'text-black': !event.reached,
+                })}
+              />
             </div>
           </div>
         )

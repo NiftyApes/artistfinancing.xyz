@@ -12,7 +12,7 @@ export default function CreateFinanceOfferModal() {
         Create offer
       </button>
       <Modal open={open} onOpenChange={setOpen}>
-        <div className="flex h-[600px] w-[600px] items-center p-4">
+        <div className="flex h-[600px] w-[600px] items-center justify-center p-4">
           <Timeline
             events={[
               {
@@ -24,6 +24,16 @@ export default function CreateFinanceOfferModal() {
                 icon: FiClock,
                 content: <p className="text-black">Event 2</p>,
                 reached: true,
+              },
+              {
+                icon: FiClock,
+                content: <p className="text-black">Event 3</p>,
+                reached: true,
+              },
+              {
+                icon: FiClock,
+                content: <p className="text-black">Event 4</p>,
+                reached: false,
               },
             ]}
             orientation="horizontal"
