@@ -1,80 +1,51 @@
-import React, {
-  ComponentPropsWithoutRef,
-  ElementRef,
-  forwardRef,
-  ReactNode,
-} from 'react'
+import React from 'react'
 import * as RadixTooltip from '@radix-ui/react-tooltip'
 
-const Arrow = forwardRef<
-  ElementRef<typeof RadixTooltip.Arrow>,
-  ComponentPropsWithoutRef<typeof RadixTooltip.Arrow>
->(({ className, ...contentProps }, forwardedRef) => (
-  <RadixTooltip.Arrow
-    ref={forwardedRef}
-    {...contentProps}
-    className={`h-[7px] w-[15px] fill-neutral-300 ${className}`}
-  />
-))
+export type Side = 'top' | 'bottom' | 'left' | 'right'
 
-Arrow.displayName = 'Popover Arrow'
+interface Props extends RadixTooltip.TooltipProps {
+  content: React.ReactNode
+  children: React.ReactNode
+  side?: Side
+  modeOverride?: 'light' | 'dark'
+}
 
-const Content = forwardRef<
-  ElementRef<typeof RadixTooltip.Content>,
-  ComponentPropsWithoutRef<typeof RadixTooltip.Content>
->(({ className, ...contentProps }, forwardedRef) => (
-  <RadixTooltip.Content
-    ref={forwardedRef}
-    {...contentProps}
-    className={`z-[1000] drop-shadow-[0_2px_16px_rgba(0,0,0,0.75)] ${className}`}
-  />
-))
-
-Content.displayName = 'Popover Content'
-
-type Props = {
-  content?: ReactNode
-  side?: any
-  width?: any
-} & RadixTooltip.TooltipProps
-
-const StyledTooltip = ({
-  children,
+const Tooltip = ({
   content,
-  side = 'bottom',
-  width = '100%',
+  children,
+  side,
+  modeOverride,
   ...props
 }: Props) => {
+  let arrowStyles = 'fill-black dark:fill-white'
+
+  if (modeOverride === 'light') {
+    arrowStyles = 'fill-black'
+  }
+
+  if (modeOverride === 'dark') {
+    arrowStyles = 'fill-white'
+  }
+
   return (
-    <RadixTooltip.Provider delayDuration={0}>
-      <RadixTooltip.Root {...props}>
-        <RadixTooltip.Trigger
-          style={{
-            backgroundColor: 'transparent',
-            borderWidth: 0,
-            cursor: 'pointer',
-            padding: 0,
-          }}
+    <RadixTooltip.Provider>
+      <RadixTooltip.Root delayDuration={300} {...props}>
+        <RadixTooltip.Trigger asChild>{children}</RadixTooltip.Trigger>
+        <RadixTooltip.Content
+          side={side}
+          sideOffset={5}
+          className="data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade"
         >
-          {children}
-        </RadixTooltip.Trigger>
-        <RadixTooltip.Content side={side}>
-          <RadixTooltip.Arrow />
-          <div
-            className={`max-h-[322px] max-w-[320px] overflow-y-auto p-3 w-${width} rounded-[10px] bg-neutral-800`}
-          >
-            {content}
-          </div>
+          {content}
+          <RadixTooltip.Arrow
+            width={16}
+            height={8}
+            className={`${arrowStyles}`}
+          />
         </RadixTooltip.Content>
       </RadixTooltip.Root>
     </RadixTooltip.Provider>
   )
 }
 
-StyledTooltip.Provider = RadixTooltip.Provider
-StyledTooltip.Root = RadixTooltip.Root
-StyledTooltip.Trigger = RadixTooltip.Trigger
-StyledTooltip.Arrow = Arrow
-StyledTooltip.Content = Content
-
-export default StyledTooltip
+export default Tooltip
