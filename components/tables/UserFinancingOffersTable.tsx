@@ -6,11 +6,12 @@ import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { useMediaQuery } from '@react-hookz/web'
 
 import { optimizeImage } from 'lib/optmizeImage'
-import useOffers, { Offer } from 'hooks/niftyapes/useOffers'
 import { processOffer } from 'lib/niftyapes/processOffer'
 import LoadingIcon from 'components/LoadingIcon'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { useWithdrawOfferSignature } from '../../hooks/niftyapes/useWithdrawOfferSignature'
+
+import { Offer, useOffers } from '@niftyapes/sdk'
 
 const UserFinancingOffersTable: FC = () => {
   const router = useRouter()
