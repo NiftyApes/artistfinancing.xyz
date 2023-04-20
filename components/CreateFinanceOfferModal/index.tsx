@@ -17,22 +17,22 @@ export default function CreateFinanceOfferModal() {
             events={[
               {
                 icon: FiClock,
-                content: <p className="text-black">Event 1</p>,
+                content: <p className="text-xs text-gray-400">Purchase</p>,
                 reached: true,
               },
               {
                 icon: FiClock,
-                content: <p className="text-black">Event 2</p>,
+                content: <p className="text-xs text-gray-400">7 days later</p>,
                 reached: true,
               },
               {
                 icon: FiClock,
-                content: <p className="text-black">Event 3</p>,
+                content: <p className="text-xs text-gray-400">14 days later</p>,
                 reached: true,
               },
               {
                 icon: FiClock,
-                content: <p className="text-black">Event 4</p>,
+                content: <p className="text-xs text-gray-400">21 days later</p>,
                 reached: false,
               },
             ]}
