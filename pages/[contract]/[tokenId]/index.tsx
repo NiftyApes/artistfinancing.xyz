@@ -16,7 +16,6 @@ import { useEffect } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 import EthAccount from '../../../components/niftyapes/EthAccount'
-// import Footer from '../../../components/Footer'
 import { optimizeImage } from '../../../lib/optmizeImage'
 import BuyNowPayLaterModal from '../../../components/niftyapes/bnpl/BuyNowPayLaterModal'
 
