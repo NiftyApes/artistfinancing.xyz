@@ -181,7 +181,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         </div>
         </div>
 
-      <div idName="contentColumn" className="col-span-full lg:col-span-4 lg:h-vh-minus-6rem overflow-auto lg:pr-12 flex lg:h-vh-minus-6rem relative">
+      <div className="col-span-full lg:col-span-4 lg:h-vh-minus-6rem overflow-auto lg:pr-12 flex lg:h-vh-minus-6rem relative">
         <div className="grid grid-flow-col gap-4 w-full lg:w-auto text-center lg:text-left">
           <div className="lg:col-span-3 resize-none">
             <div className="reservoir-h3 mb-8 font-semibold">
