@@ -22,7 +22,7 @@ const FormField = ({
             {name}
           </label>
           {tooltip && (
-            <InfoTooltip side="bottom" content={tooltip} modeOverride="light" />
+            <InfoTooltip side="top" content={tooltip} modeOverride="light" />
           )}
         </div>
         {children}
