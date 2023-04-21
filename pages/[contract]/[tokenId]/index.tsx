@@ -154,7 +154,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
 
   const renderBuyNowPayLater = () => {
     return (
-      <div className="max-w-80 rounded-lg p-5 mb-10">
+      <div className="max-w-80 mb-10 rounded-lg p-5">
         <button
           className={`flex h-[50px] w-full items-center justify-center whitespace-nowrap rounded-[40px] bg-white text-[14px] font-bold uppercase text-black focus:ring-0`}
         >
@@ -171,29 +171,28 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         {description}
         {image}
       </Head>
-      <div className="col-span-full lg:col-span-8 3xl:col-span-12 lg:pr-12">
-        <div  className="p-4 flex items-center justify-center lg:h-vh-minus-6rem" >
-              <img
-                alt={token?.token?.name || `#${token?.token?.tokenId}`}
-                className="lg:max-w-xl lg:max-h-xl object-cover"
-                src={optimizeImage(token?.token?.image, 533)}
-              />
+      <div className="col-span-full lg:col-span-8 lg:pr-12 3xl:col-span-12">
+        <div className="flex items-center justify-center p-4 lg:h-vh-minus-6rem">
+          <img
+            alt={token?.token?.name || `#${token?.token?.tokenId}`}
+            className="lg:max-h-xl object-cover lg:max-w-xl"
+            src={optimizeImage(token?.token?.image, 533)}
+          />
         </div>
-        </div>
+      </div>
 
-      <div className="col-span-full lg:col-span-4 lg:h-vh-minus-6rem overflow-auto lg:pr-12 flex lg:h-vh-minus-6rem relative">
-        <div className="grid grid-flow-col gap-4 w-full lg:w-auto text-center lg:text-left">
-          <div className="lg:col-span-3 resize-none">
+      <div className="relative col-span-full flex overflow-auto lg:col-span-4 lg:h-vh-minus-6rem lg:h-vh-minus-6rem lg:pr-12">
+        <div className="grid w-full grid-flow-col gap-4 text-center lg:w-auto lg:text-left">
+          <div className="resize-none lg:col-span-3">
             <div className="reservoir-h3 mb-8 font-semibold">
               {token?.token?.name || `#${token?.token?.tokenId}`}
             </div>
 
-            <div className="mb-8 grid grid-flow-col grid-col-2 ">
+            <div className="grid-col-2 mb-8 grid grid-flow-col">
               <EthAccount
                 side="left"
                 label="Artist"
                 address={token?.token?.owner}
-                
               />
               <EthAccount
                 side="left"
@@ -202,11 +201,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
               />
             </div>
 
-            <div 
-              className="ins-et-x-0 b-ottom-0 absolu-te"
-              >
-                {renderBuyNowPayLater()}
-            </div>
+            <div className="">{renderBuyNowPayLater()}</div>
 
             <div className="mb-14">
               <div className="reservoir-h3 mb-1 font-semibold">Description</div>
