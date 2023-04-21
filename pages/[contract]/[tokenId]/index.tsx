@@ -172,23 +172,19 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         {description}
         {image}
       </Head>
-      
-      {/* md:grid-cols-8 lg:grid-cols-12 3xl:grid-cols-16 4xl:grid-cols-21 */}
-      <div class="md:grid-span-8 lg:col-span-8 3xl:col-span-12 flex justify-center align-middle">
+      <div className="col-span-full lg:col-span-8 3xl:col-span-12 lg:pr-12">
+        <div  className="p-4 flex items-center justify-center lg:h-vh-minus-6rem" >
               <img
                 alt={token?.token?.name || `#${token?.token?.tokenId}`}
-                // className="max-h-600"
+                className="lg:max-w-xl lg:max-h-xl object-cover"
                 src={optimizeImage(token?.token?.image, 533)}
               />
-          {/* <div className="mb-14 flex justify-center align-middle">
-          </div> */}
+        </div>
         </div>
 
-      <div className="col-span-8 md:col-span-4 relative md:height-[100vh] overflow-auto">
-      <div 
-          className="grid grid-flow-col gap-4"
-          >
-          <div className="col-span-3 resize-none">
+      <div idName="contentColumn" className="col-span-full lg:col-span-4 lg:h-vh-minus-6rem overflow-auto lg:pr-12 flex lg:h-vh-minus-6rem relative">
+        <div className="grid grid-flow-col gap-4 w-full lg:w-auto text-center lg:text-left">
+          <div className="lg:col-span-3 resize-none">
             <div className="reservoir-h3 mb-8 font-semibold">
               {token?.token?.name || `#${token?.token?.tokenId}`}
             </div>
@@ -207,18 +203,17 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
               />
             </div>
 
+            <div 
+              className="ins-et-x-0 b-ottom-0 absolu-te"
+              >
+                {renderBuyNowPayLater()}
+            </div>
+
             <div className="mb-14">
               <div className="reservoir-h3 mb-1 font-semibold">Description</div>
               <div className="text-md text-gray-300">
                 {token?.token?.description}
               </div>
-            </div>
-
-            <div 
-              // className="mb-8 block lg:hidden"
-              className="ins-et-x-0 b-ottom-0 absolu-te"
-              >
-                {renderBuyNowPayLater()}
             </div>
 
             <div className="mb-14">
@@ -231,64 +226,6 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
           </div>
         </div>
       </div>
-
-      <div 
-        className="col-span-full col-start-1 px-2 pt-4 md:col-s-pan-full lg:col-span-10 lg:col-start-2 xl:col-span-8 xl:col-start-2 2xl:col-span-10 2xl:col-start-2 3xl:col-start-4"
-        >
-        {/* <div className="mb-14 flex justify-center">
-          <img
-            alt={token?.token?.name || `#${token?.token?.tokenId}`}
-            className="max-h-600"
-            src={optimizeImage(token?.token?.image, 533)}
-          />
-        </div> */}
-
-        {/* <div 
-          className="grid grid-flow-col gap-4"
-          >
-          <div className="col-span-3 resize-none">
-            <div className="reservoir-h3 mb-8 font-semibold">
-              {token?.token?.name || `#${token?.token?.tokenId}`}
-            </div>
-
-            <div className="mb-8 grid grid-flow-col grid-rows-1">
-              <EthAccount
-                side="left"
-                label="Artist"
-                address={token?.token?.owner}
-              />
-              <EthAccount
-                side="left"
-                label="Owner"
-                address={token?.token?.owner}
-              />
-            </div>
-
-            <div className="mb-8 block lg:hidden">{renderBuyNowPayLater()}</div>
-
-            <div className="mb-14">
-              <div className="reservoir-h3 mb-1 font-semibold">Description</div>
-              <div className="text-md text-gray-300">
-                {token?.token?.description}
-              </div>
-            </div>
-
-            <div className="mb-14">
-              <TokenInfo token={token.token} />
-            </div>
-
-            <div className="mb-10">
-              <TokenAttributes token={token?.token} />
-            </div>
-          </div>
-
-          <div className="col-span-1 hidden lg:block">
-            {renderBuyNowPayLater()}
-          </div>
-        </div> */}
-      </div>
-
-      {/* <Footer /> */}
     </Layout>
   )
 }
