@@ -55,7 +55,7 @@ const Navbar: FC = () => {
     <nav
       className={`sticky top-0 z-[1000] col-span-full flex ${
         !account.isConnected ? 'justify-between' : 'justify-end'
-      } items-center gap-2 border-b px-6 py-4 dark:border-neutral-600 dark:bg-black md:gap-3 md:px-16`}
+      } items-center gap-2 px-6 py-4 dark:bg-black md:gap-3 md:px-16`}
     >
       <NavbarLogo className="z-10 max-w-[300px]" />
 
