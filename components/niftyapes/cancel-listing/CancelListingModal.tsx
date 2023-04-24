@@ -18,6 +18,7 @@ import { useEffect } from 'react'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import { MdOutlineError } from 'react-icons/md'
 import LoadingDots from '../LoadingDots'
+import {cancelListing} from '@niftyapes/sdk';
 
 export default function CancelListingModal({
   offer,
@@ -30,6 +31,9 @@ export default function CancelListingModal({
   const onClose = () => {
     onModalClose()
   }
+
+
+
   const {
     write,
     isErrorTx,
@@ -41,6 +45,8 @@ export default function CancelListingModal({
     offer: offer.offer,
     signature: offer.signature,
   })
+
+
   const onCancel = () => {
     onOpen()
     write?.()
