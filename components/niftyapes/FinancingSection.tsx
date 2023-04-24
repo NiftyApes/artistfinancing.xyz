@@ -54,9 +54,8 @@ export default function FinancingSection({
   })
   // Get most recent active listing where offer creator and nft owner are the same
   const listing = offerData?.filter(
-    (offer) =>
-      offer.status === 'ACTIVE' &&
-      isEqualAddress(offer.offer.creator, token?.token?.owner)
+    (offer) => offer.status === 'ACTIVE' /* && */
+    // isEqualAddress(offer.offer.creator, token?.token?.owner)
   )[0]
   const terms = listing ? processOffer(listing.offer) : null
 
@@ -139,7 +138,7 @@ export default function FinancingSection({
               {listing && <CurrentListing terms={terms!} isOwner={isOwner} />}
               {isOwner ? (
                 <HStack>
-                  <CreateFinanceOfferModal />
+                  <CreateFinanceOfferModal token={token} />
                   {/* <ListFinancingModal
                     token={token}
                     collection={collection}
