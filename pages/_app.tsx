@@ -70,7 +70,6 @@ import chakraTheme from '../theme'
 import { useGoogleAnalytics } from '../hooks/niftyapes/useGoogleAnalytics'
 import { NiftyProvider } from '@niftyapes/sdk'
 
-
 const FEE_BPS = process.env.NEXT_PUBLIC_FEE_BPS
 const FEE_RECIPIENT = process.env.NEXT_PUBLIC_FEE_RECIPIENT
 const SOURCE_DOMAIN = process.env.NEXT_PUBLIC_SOURCE_DOMAIN
@@ -209,7 +208,7 @@ const App: FC<AppProps & { baseUrl: string }> = ({
   }
 
   return (
-    <NiftyProvider>
+    <NiftyProvider config={{ chainId: envChain?.id || allChains.mainnet.id }}>
       <ReservoirKitProvider options={options} theme={reservoirKitTheme}>
         <WagmiConfig client={wagmiClient}>
           <RainbowKitProvider
