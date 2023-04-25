@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { FC, useEffect } from 'react'
 import { useQueryClient } from 'react-query'
 import { useRouter } from 'next/router'
@@ -10,7 +9,8 @@ import useOffers, { Offer } from 'hooks/niftyapes/useOffers'
 import { processOffer } from 'lib/niftyapes/processOffer'
 import LoadingIcon from 'components/LoadingIcon'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
-import { useWithdrawOfferSignature } from '../../hooks/niftyapes/useWithdrawOfferSignature'
+import { useCancelListing } from '@niftyapes/sdk'
+import { useWaitForTransaction } from 'wagmi'
 
 const UserFinancingOffersTable: FC = () => {
   const router = useRouter()
@@ -137,13 +137,13 @@ const UserListingsTableRow = ({
     collectionName,
   } = processOffer(offer, token)
 
-  const {
-    write,
-    isLoadingTx: isLoading,
-    isSuccess,
-  } = useWithdrawOfferSignature({
+  const { data, write } = useCancelListing({
     offer,
     signature,
+  })
+
+  const { isSuccess, isLoading } = useWaitForTransaction({
+    hash: data?.hash,
   })
 
   useEffect(() => {

@@ -10,7 +10,7 @@ import {
   ModalOverlay,
   Text,
   useDisclosure,
-  VStack
+  VStack,
 } from '@chakra-ui/react'
 import { Offer } from 'hooks/niftyapes/useOffers'
 import { useEffect } from 'react'
@@ -20,11 +20,10 @@ import LoadingDots from '../LoadingDots'
 import { useWaitForTransaction } from 'wagmi'
 import { useCancelListing } from '@niftyapes/sdk'
 
-
 export default function CancelListingModal({
-                                             offer,
-                                             refetch
-                                           }: {
+  offer,
+  refetch,
+}: {
   offer: Offer
   refetch: () => void
 }) {
@@ -33,24 +32,18 @@ export default function CancelListingModal({
     onModalClose()
   }
 
-  const {
-    data,
-    isError,
-    isLoading,
-    write,
-  } = useCancelListing({
+  const { data, isError, isLoading, write } = useCancelListing({
     offer: offer.offer,
-    signature: offer.signature
+    signature: offer.signature,
   })
 
   const {
     isError: isErrorTxn,
-    isLoading:isLoadingTxn,
+    isLoading: isLoadingTxn,
     isSuccess,
   } = useWaitForTransaction({
-    hash: data?.hash
+    hash: data?.hash,
   })
-
 
   const onCancel = () => {
     onOpen()
@@ -64,27 +57,25 @@ export default function CancelListingModal({
   return (
     <>
       <Button
-        w='full'
+        w="full"
         onClick={onCancel}
-        variant='outline'
-        colorScheme='gray'
+        variant="outline"
+        colorScheme="gray"
         _hover={{ bg: 'gray.800' }}
       >
         Cancel finance listing
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose} size='xl'>
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader borderTopRadius='md' bg='gray.700'>
+          <ModalHeader borderTopRadius="md" bg="gray.700">
             Cancel your listing
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody p='12'>
+          <ModalBody p="12">
             {(isLoading || isLoadingTxn) && <CancellationInProgress />}
-            {(isError || isErrorTxn) && (
-              <CancellationError onClose={onClose} />
-            )}
+            {(isError || isErrorTxn) && <CancellationError onClose={onClose} />}
             {isSuccess && <CancellationSuccess onClose={onClose} />}
           </ModalBody>
         </ModalContent>
@@ -95,12 +86,12 @@ export default function CancelListingModal({
 
 function CancellationError({ onClose }: { onClose: () => void }) {
   return (
-    <VStack spacing='6'>
-      <VStack spacing='2'>
-        <Heading size='md'>Cancellation Error</Heading>
-        <Icon color='red.400' boxSize='20' as={MdOutlineError} />
+    <VStack spacing="6">
+      <VStack spacing="2">
+        <Heading size="md">Cancellation Error</Heading>
+        <Icon color="red.400" boxSize="20" as={MdOutlineError} />
       </VStack>
-      <Button onClick={onClose} colorScheme='blue' w='full'>
+      <Button onClick={onClose} colorScheme="blue" w="full">
         Close
       </Button>
     </VStack>
@@ -109,9 +100,9 @@ function CancellationError({ onClose }: { onClose: () => void }) {
 
 function CancellationInProgress() {
   return (
-    <VStack spacing='6'>
-      <VStack align='left' spacing='2'>
-        <Heading size='md'>Submit cancellation</Heading>
+    <VStack spacing="6">
+      <VStack align="left" spacing="2">
+        <Heading size="md">Submit cancellation</Heading>
         <Text>
           To cancel this listing you must confirm the transaction and pay the
           gas fee.
@@ -124,12 +115,12 @@ function CancellationInProgress() {
 
 function CancellationSuccess({ onClose }: { onClose: () => void }) {
   return (
-    <VStack spacing='6'>
-      <VStack spacing='2'>
-        <Heading size='md'>Cancellation Success</Heading>
-        <Icon color='green.400' boxSize='20' as={IoCheckmarkCircle} />
+    <VStack spacing="6">
+      <VStack spacing="2">
+        <Heading size="md">Cancellation Success</Heading>
+        <Icon color="green.400" boxSize="20" as={IoCheckmarkCircle} />
       </VStack>
-      <Button onClick={onClose} colorScheme='blue' w='full'>
+      <Button onClick={onClose} colorScheme="blue" w="full">
         Close
       </Button>
     </VStack>
