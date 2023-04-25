@@ -1,7 +1,7 @@
 import { Box, Button, Skeleton, VStack } from '@chakra-ui/react'
 import { useCollections, useTokens } from '@reservoir0x/reservoir-kit-ui'
 import TokenCard from 'components/TokenCard'
-import useOffers from 'hooks/niftyapes/useOffers'
+import { useOffers } from '@niftyapes/sdk'
 import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { sortBy, uniq, uniqBy } from 'lodash'
 import { useState } from 'react'

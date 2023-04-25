@@ -68,6 +68,7 @@ import presetColors from '../colors'
 import { ChakraProvider } from '@chakra-ui/react'
 import chakraTheme from '../theme'
 import { useGoogleAnalytics } from '../hooks/niftyapes/useGoogleAnalytics'
+import { NiftyApesProvider } from '@niftyapes/sdk'
 
 const FEE_BPS = process.env.NEXT_PUBLIC_FEE_BPS
 const FEE_RECIPIENT = process.env.NEXT_PUBLIC_FEE_RECIPIENT
@@ -207,19 +208,23 @@ const App: FC<AppProps & { baseUrl: string }> = ({
   }
 
   return (
-    <ReservoirKitProvider options={options} theme={reservoirKitTheme}>
-      <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider
-          chains={chains}
-          theme={rainbowKitTheme}
-          modalSize="compact"
-        >
-          <AnalyticsProvider>
-            <Component {...pageProps} />
-          </AnalyticsProvider>
-        </RainbowKitProvider>
-      </WagmiConfig>
-    </ReservoirKitProvider>
+    <NiftyApesProvider
+      config={{ chainId: envChain?.id || allChains.mainnet.id }}
+    >
+      <ReservoirKitProvider options={options} theme={reservoirKitTheme}>
+        <WagmiConfig client={wagmiClient}>
+          <RainbowKitProvider
+            chains={chains}
+            theme={rainbowKitTheme}
+            modalSize="compact"
+          >
+            <AnalyticsProvider>
+              <Component {...pageProps} />
+            </AnalyticsProvider>
+          </RainbowKitProvider>
+        </WagmiConfig>
+      </ReservoirKitProvider>
+    </NiftyApesProvider>
   )
 }
 

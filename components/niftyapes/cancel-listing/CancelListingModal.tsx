@@ -12,7 +12,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { Offer } from 'hooks/niftyapes/useOffers'
+import { Offer } from '@niftyapes/sdk'
 import { useWithdrawOfferSignature } from 'hooks/niftyapes/useWithdrawOfferSignature'
 import { useEffect } from 'react'
 import { IoCheckmarkCircle } from 'react-icons/io5'
