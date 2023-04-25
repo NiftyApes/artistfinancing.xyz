@@ -44,8 +44,6 @@ import { publicProvider } from 'wagmi/providers/public'
 import { QueryClientProvider, QueryClient } from 'react-query'
 import ReactGA from 'react-ga4'
 
-import { NiftyApesProvider } from '@niftyapes/sdk'
-
 const queryClient = new QueryClient()
 
 // Select a custom ether.js interface for connecting to a network
@@ -70,6 +68,7 @@ import presetColors from '../colors'
 import { ChakraProvider } from '@chakra-ui/react'
 import chakraTheme from '../theme'
 import { useGoogleAnalytics } from '../hooks/niftyapes/useGoogleAnalytics'
+import { NiftyApesProvider } from '@niftyapes/sdk'
 
 const FEE_BPS = process.env.NEXT_PUBLIC_FEE_BPS
 const FEE_RECIPIENT = process.env.NEXT_PUBLIC_FEE_RECIPIENT
@@ -209,7 +208,9 @@ const App: FC<AppProps & { baseUrl: string }> = ({
   }
 
   return (
-    <NiftyApesProvider>
+    <NiftyApesProvider
+      config={{ chainId: envChain?.id || allChains.mainnet.id }}
+    >
       <ReservoirKitProvider options={options} theme={reservoirKitTheme}>
         <WagmiConfig client={wagmiClient}>
           <RainbowKitProvider

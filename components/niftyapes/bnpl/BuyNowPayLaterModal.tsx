@@ -22,7 +22,7 @@ import {
 } from '@chakra-ui/react'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import useExecuteBuy from 'hooks/niftyapes/useExecuteBuy'
-import { Offer } from 'hooks/niftyapes/useOffers'
+import { Offer } from '@niftyapes/sdk'
 import useCoinConversion from 'hooks/useCoinConversion'
 import useTokens from 'hooks/useTokens'
 import { processOffer } from 'lib/niftyapes/processOffer'
