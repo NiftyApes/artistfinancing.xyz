@@ -18,8 +18,8 @@ const DurationSelect: FC<Props> = ({
   return (
     <Select
       isDarkMode={isDarkMode}
-      value={selectedOffer}
       options={offers}
+      value={selectedOffer}
       onSelect={setSelectedOffer}
     />
   )

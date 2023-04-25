@@ -18,10 +18,6 @@ type Props = {
   value: Offer
 }
 
-function getClassNames(isDarkMode: boolean, classes: string[]) {
-  return isDarkMode ? classes[1] : classes[0]
-}
-
 export default function Select({
   isDarkMode,
   options,

@@ -7,7 +7,7 @@ import LoanInfo from './LoanInfo'
 type Props = {
   setOpen: (open: boolean) => void
   offers: Offer[]
-  selectedOffer?: Offer
+  selectedOffer: Offer
   setSelectedOffer: (duration: Offer) => void
 }
 
@@ -38,26 +38,19 @@ const Section: FC<Props> = ({
         </div>
       </div>
 
-      {selectedOffer ? (
-        <>
-          <div className="mt-12">
-            <LoanInfo
-              isDarkMode={process.env.NEXT_PUBLIC_DARK_MODE === 'true'}
-              totalCost={processOffer(selectedOffer.offer).totalCost + ''}
-              downPayment={
-                processOffer(selectedOffer.offer).downPaymentAmount + ''
-              }
-              duration={`${
-                processOffer(selectedOffer.offer).numPayPeriods *
-                processOffer(selectedOffer.offer).payPeriodDays
-              } Days`}
-              APR={`${processOffer(selectedOffer.offer).apr}%`}
-            />
-          </div>
-        </>
-      ) : (
-        <div className="mt-4">No offer selected</div>
-      )}
+      <div className="mt-12">
+        <LoanInfo
+          isDarkMode={process.env.NEXT_PUBLIC_DARK_MODE === 'true'}
+          totalCost={processOffer(selectedOffer.offer).totalCost + ''}
+          downPayment={processOffer(selectedOffer.offer).downPaymentAmount + ''}
+          duration={`${
+            processOffer(selectedOffer.offer).numPayPeriods *
+            processOffer(selectedOffer.offer).payPeriodDays
+          } Days`}
+          APR={`${processOffer(selectedOffer.offer).apr}%`}
+        />
+      </div>
+
       <div className="mt-16 flex justify-center">
         <button
           className="w-full max-w-sm rounded-full border-2 border-black bg-white py-4 font-bold text-black focus:outline-none"

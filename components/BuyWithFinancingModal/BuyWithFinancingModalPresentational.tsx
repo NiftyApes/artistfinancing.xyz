@@ -9,20 +9,20 @@ import PrePurchaseMainContent from './PrePurchaseMainContent'
 
 type Props = {
   nameOfWhatYouAreBuying?: string
-  offers: Offer[]
+  tokenImgUrl?: string
   closeModal: () => void
+  offers: Offer[]
   selectedOffer: Offer
   setSelectedOffer: (duration: Offer) => void
-  tokenImgUrl?: string
 }
 
 const BuyWithFinancingModalPresentational: FC<Props> = ({
   nameOfWhatYouAreBuying,
+  tokenImgUrl,
+  closeModal,
   offers,
   selectedOffer,
   setSelectedOffer,
-  closeModal,
-  tokenImgUrl,
 }) => {
   const [stage, setStage] = useState<'PRE' | 'POST'>('PRE')
 

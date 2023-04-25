@@ -5,8 +5,6 @@ import Section from 'components/BuyWithFinancingModal/Section'
 import Modal from 'components/Modal'
 import { useEffect, useState } from 'react'
 
-const buyNow = 'Buy Now'
-
 type Props = {
   collection: string
   nftId: string
@@ -15,9 +13,9 @@ type Props = {
 export function BuyWithFinancingModal({ collection, nftId }: Props) {
   const [open, setOpen] = useState(false)
 
-  const [selectedOffer, setSelectedOffer] = useState<Offer>()
-
   const [offers, setOffers] = useState<Offer[]>([])
+
+  const [selectedOffer, setSelectedOffer] = useState<Offer>()
 
   const tokenData = useTokens({
     tokens: [`${collection}:${nftId}`],
@@ -52,28 +50,30 @@ export function BuyWithFinancingModal({ collection, nftId }: Props) {
   }
 
   if (!tokenData.isFetchingInitialData && !token) {
-    return null
+    return <div>Token not found</div>
   }
 
   return (
     <div className="mt-24 flex flex-col items-center justify-center">
-      <Section
-        setOpen={setOpen}
-        selectedOffer={selectedOffer}
-        setSelectedOffer={setSelectedOffer}
-        offers={offers}
-      />
       {selectedOffer && (
-        <Modal open={open}>
-          <BuyWithFinancingModalPresentational
-            tokenImgUrl={tokenImgUrl}
+        <>
+          <Section
+            setOpen={setOpen}
             selectedOffer={selectedOffer}
             setSelectedOffer={setSelectedOffer}
             offers={offers}
-            closeModal={() => setOpen(false)}
-            nameOfWhatYouAreBuying={tokenName}
           />
-        </Modal>
+          <Modal open={open}>
+            <BuyWithFinancingModalPresentational
+              tokenImgUrl={tokenImgUrl}
+              selectedOffer={selectedOffer}
+              setSelectedOffer={setSelectedOffer}
+              offers={offers}
+              closeModal={() => setOpen(false)}
+              nameOfWhatYouAreBuying={tokenName}
+            />
+          </Modal>
+        </>
       )}
     </div>
   )

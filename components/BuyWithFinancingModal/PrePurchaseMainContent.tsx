@@ -38,32 +38,26 @@ const PrePurchaseMainContent: FC<Props> = ({
         </div>
       </div>
 
-      {selectedOffer ? (
-        <>
-          <div className="mt-4">
-            <LoanInfo
-              isDarkMode={false}
-              totalCost={processOffer(selectedOffer.offer).totalCost + ''}
-              downPayment={
-                processOffer(selectedOffer.offer).downPaymentAmount + ''
-              }
-              duration={`${
-                processOffer(selectedOffer.offer).numPayPeriods *
-                processOffer(selectedOffer.offer).payPeriodDays
-              } Days`}
-              APR={`${processOffer(selectedOffer.offer).apr}%`}
-            />
-          </div>
-          <div className="mt-12">
-            <Timeline />
-          </div>
-          <div className="mt-12">
-            <ExplanationMsg />
-          </div>
-        </>
-      ) : (
-        <div className="mt-4">No offer selected</div>
-      )}
+      <div className="mt-4">
+        <LoanInfo
+          isDarkMode={false}
+          totalCost={processOffer(selectedOffer.offer).totalCost + ''}
+          downPayment={processOffer(selectedOffer.offer).downPaymentAmount + ''}
+          duration={`${
+            processOffer(selectedOffer.offer).numPayPeriods *
+            processOffer(selectedOffer.offer).payPeriodDays
+          } Days`}
+          APR={`${processOffer(selectedOffer.offer).apr}%`}
+        />
+      </div>
+
+      <div className="mt-12">
+        <Timeline />
+      </div>
+
+      <div className="mt-12">
+        <ExplanationMsg />
+      </div>
     </div>
   )
 }
