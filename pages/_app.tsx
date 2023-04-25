@@ -44,7 +44,7 @@ import { publicProvider } from 'wagmi/providers/public'
 import { QueryClientProvider, QueryClient } from 'react-query'
 import ReactGA from 'react-ga4'
 
-import { NiftyProvider } from '@niftyapes/sdk'
+import { NiftyApesProvider } from '@niftyapes/sdk'
 
 const queryClient = new QueryClient()
 
@@ -209,7 +209,7 @@ const App: FC<AppProps & { baseUrl: string }> = ({
   }
 
   return (
-    <NiftyProvider>
+    <NiftyApesProvider>
       <ReservoirKitProvider options={options} theme={reservoirKitTheme}>
         <WagmiConfig client={wagmiClient}>
           <RainbowKitProvider
@@ -223,7 +223,7 @@ const App: FC<AppProps & { baseUrl: string }> = ({
           </RainbowKitProvider>
         </WagmiConfig>
       </ReservoirKitProvider>
-    </NiftyProvider>
+    </NiftyApesProvider>
   )
 }
 
