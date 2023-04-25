@@ -20,7 +20,7 @@ export type FinancingTerms = {
   downPaymentAmount?: number
   remainingPrincipal?: number
   minPrincipalPerPeriod?: number
-  numPayPeriods?: number
+  numPayPeriods: number
   periodDuration?: number
   periodInterestRate?: number
   periodInterestRateBps?: number
@@ -93,6 +93,7 @@ export function processOffer(
       offerDetails.expiration
     ).toRelative()!,
     tokenHref: `/${contract}/${tokenId}`,
+    numPayPeriods,
   }
 }
 

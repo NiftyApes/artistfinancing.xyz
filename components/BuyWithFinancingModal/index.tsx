@@ -4,7 +4,8 @@ import BuyWithFinancingModalPresentational from 'components/BuyWithFinancingModa
 import Section from 'components/BuyWithFinancingModal/Section'
 import { DurationSelectOption } from 'components/BuyWithFinancingModal/types'
 import Modal from 'components/Modal'
-import { ethers } from 'ethers'
+import { processOffer } from 'lib/niftyapes/processOffer'
+import _ from 'lodash'
 import { useEffect, useState } from 'react'
 
 const buyNow = 'Buy Now'
@@ -40,14 +41,15 @@ export function BuyWithFinancingModal({ collection, nftId }: Props) {
     if (offersData.data && durationSelectOptions.length === 0) {
       const offers = offersData.data
 
-      const durations = offers.map((offer) => {
-        const duration = 10
+      const processedOffers = offers.map((offer) => processOffer(offer.offer))
 
-        const downPaymentAmount = Number(
-          ethers.utils.formatEther(offer.offer.downPaymentAmount)
-        )
+      const durations = _.sortBy(
+        processedOffers,
+        (offer) => offer.numPayPeriods
+      ).map((offer) => {
+        const duration = offer.payPeriodDays * offer.numPayPeriods
 
-        return [duration, downPaymentAmount] as [number, number]
+        return [duration, offer.apr] as [number, number]
       })
 
       setDurationSelectOptions([buyNow, ...durations])
@@ -60,8 +62,6 @@ export function BuyWithFinancingModal({ collection, nftId }: Props) {
   const tokenImgUrl = token?.token?.image
 
   const tokenName = token?.token?.name
-
-  const offers = offersData?.data
 
   if (tokenData.isFetchingInitialData) {
     return <div>Loading...</div>
