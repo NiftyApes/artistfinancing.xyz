@@ -1,14 +1,10 @@
 import { FC } from 'react'
 
 type Props = {
-  nameOfWhatYouAreBuying: string
+  nameOfWhatYouAreBuying?: string
 }
 
-const PostPurchaseMainContent: FC<Props> = ({
-  nameOfWhatYouAreBuying,
-}: {
-  nameOfWhatYouAreBuying: string
-}) => {
+const PostPurchaseMainContent: FC<Props> = ({ nameOfWhatYouAreBuying }) => {
   return (
     <div className="text-gray-600" style={{ fontFamily: 'Poppins' }}>
       <div className="mb-12">

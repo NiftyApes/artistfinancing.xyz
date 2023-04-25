@@ -1,48 +1,53 @@
-import 'styles/globals.css'
-import 'styles/inter.css'
-import 'styles/druk.css'
-import 'styles/montserrat.css'
-import 'styles/open-sans.css'
-import 'styles/playfair-display.css'
-import 'styles/roboto.css'
-import 'styles/chalkboard.css'
-import 'styles/frankruhllibre.css'
-import 'styles/gazpacho.css'
-import 'styles/editorialnew.css'
-import 'styles/lucidagrande.css'
-import 'styles/nunitosans.css'
-import 'styles/styreneb.css'
-import 'styles/gothicusroman.css'
-import 'styles/roobert.css'
-import 'styles/rodger.css'
-import 'styles/ingrammono.css'
-import type { AppContext, AppProps } from 'next/app'
-import { default as NextApp } from 'next/app'
-import { useRouter } from 'next/router'
-import { WagmiConfig, createClient, configureChains } from 'wagmi'
-import * as allChains from 'wagmi/chains'
-import AnalyticsProvider from 'components/AnalyticsProvider'
-import { ThemeProvider, useTheme } from 'next-themes'
+import { NiftyProvider } from '@niftyapes/sdk'
+import '@rainbow-me/rainbowkit/styles.css'
 import {
-  darkTheme,
-  lightTheme,
   ReservoirKitProvider,
   ReservoirKitProviderProps,
   ReservoirKitTheme,
+  darkTheme,
+  lightTheme,
 } from '@reservoir0x/reservoir-kit-ui'
+import AnalyticsProvider from 'components/AnalyticsProvider'
+import { ThemeProvider, useTheme } from 'next-themes'
+import type { AppContext, AppProps } from 'next/app'
+import { default as NextApp } from 'next/app'
+import { useRouter } from 'next/router'
 import { FC, useEffect, useState } from 'react'
-import '@rainbow-me/rainbowkit/styles.css'
+import 'styles/chalkboard.css'
+import 'styles/druk.css'
+import 'styles/editorialnew.css'
+import 'styles/frankruhllibre.css'
+import 'styles/gazpacho.css'
+import 'styles/globals.css'
+import 'styles/gothicusroman.css'
+import 'styles/ingrammono.css'
+import 'styles/inter.css'
+import 'styles/lucidagrande.css'
+import 'styles/montserrat.css'
+import 'styles/nunitosans.css'
+import 'styles/open-sans.css'
+import 'styles/playfair-display.css'
+import 'styles/roboto.css'
+import 'styles/rodger.css'
+import 'styles/roobert.css'
+import 'styles/styreneb.css'
+import { WagmiConfig, configureChains, createClient } from 'wagmi'
+import * as allChains from 'wagmi/chains'
 
+import { ChakraProvider } from '@chakra-ui/react'
 import {
-  getDefaultWallets,
   RainbowKitProvider,
+  getDefaultWallets,
   darkTheme as rainbowKitDarkTheme,
   lightTheme as rainbowKitLightTheme,
 } from '@rainbow-me/rainbowkit'
+import ReactGA from 'react-ga4'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
-import { QueryClientProvider, QueryClient } from 'react-query'
-import ReactGA from 'react-ga4'
+import presetColors from '../colors'
+import { useGoogleAnalytics } from '../hooks/niftyapes/useGoogleAnalytics'
+import chakraTheme from '../theme'
 
 const queryClient = new QueryClient()
 
@@ -64,10 +69,6 @@ const FONT_FAMILY = process.env.NEXT_PUBLIC_FONT_FAMILY || 'Inter'
 const PRIMARY_COLOR = process.env.NEXT_PUBLIC_PRIMARY_COLOR || 'default'
 const DISABLE_POWERED_BY_RESERVOIR =
   process.env.NEXT_PUBLIC_DISABLE_POWERED_BY_RESERVOIR
-import presetColors from '../colors'
-import { ChakraProvider } from '@chakra-ui/react'
-import chakraTheme from '../theme'
-import { useGoogleAnalytics } from '../hooks/niftyapes/useGoogleAnalytics'
 
 const FEE_BPS = process.env.NEXT_PUBLIC_FEE_BPS
 const FEE_RECIPIENT = process.env.NEXT_PUBLIC_FEE_RECIPIENT
@@ -103,15 +104,17 @@ function AppWrapper(props: AppProps & { baseUrl: string }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ChakraProvider theme={chakraTheme}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme={defaultTheme}
-          forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
-        >
-          <App {...props} />
-        </ThemeProvider>
-      </ChakraProvider>
+      <NiftyProvider>
+        <ChakraProvider theme={chakraTheme}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme={defaultTheme}
+            forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
+          >
+            <App {...props} />
+          </ThemeProvider>
+        </ChakraProvider>
+      </NiftyProvider>
     </QueryClientProvider>
   )
 }

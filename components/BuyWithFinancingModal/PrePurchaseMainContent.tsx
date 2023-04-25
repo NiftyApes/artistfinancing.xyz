@@ -7,7 +7,7 @@ import Timeline from './Timeline'
 import { DurationSelectOption } from './types'
 
 type Props = {
-  nameOfWhatYouAreBuying: string
+  nameOfWhatYouAreBuying?: string
   durationSelectOptions: DurationSelectOption[]
   getTotalCostInEthOfDurationSelectOption: (
     duration: DurationSelectOption

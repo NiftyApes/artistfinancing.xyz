@@ -8,7 +8,7 @@ import PrePurchaseMainContent from './PrePurchaseMainContent'
 import { DurationSelectOption } from './types'
 
 type Props = {
-  nameOfWhatYouAreBuying: string
+  nameOfWhatYouAreBuying?: string
   durationSelectOptions: DurationSelectOption[]
   getTotalCostInEthOfDurationSelectOption: (
     duration: DurationSelectOption
@@ -19,6 +19,7 @@ type Props = {
   closeModal: () => void
   selectedDuration: DurationSelectOption
   setSelectedDuration: (duration: DurationSelectOption) => void
+  tokenImgUrl?: string
 }
 
 const BuyWithFinancingModal: FC<Props> = ({
@@ -29,6 +30,7 @@ const BuyWithFinancingModal: FC<Props> = ({
   getTotalCostInEthOfDurationSelectOption,
   getDownPaymentInEthOfDurationSelectOption,
   closeModal,
+  tokenImgUrl,
 }) => {
   const [stage, setStage] = useState<'PRE' | 'POST'>('PRE')
 
@@ -54,7 +56,7 @@ const BuyWithFinancingModal: FC<Props> = ({
       </div>
       <div className="flex flex-wrap">
         <div className="w-full p-2  md:w-2/5">
-          <NFTImage imgSrc="https://ipfs.pixura.io/ipfs/QmYMW5cEt5HxCqiggN3PHSSLhF62Q5G7oNPar5BXyvC65Z/Mutateme.jpg" />
+          {tokenImgUrl && <NFTImage imgSrc={tokenImgUrl} />}
         </div>
         <div className="mt-4 w-full py-1 md:mt-0 md:w-3/5 md:pl-10">
           {stage === 'PRE' ? (
