@@ -1,26 +1,26 @@
+import { Offer } from '@niftyapes/sdk'
 import { FC } from 'react'
 import Select from './Select'
-import { DurationSelectOption } from './types'
 
 type Props = {
   isDarkMode: boolean
-  durationSelectOptions: DurationSelectOption[]
-  duration: DurationSelectOption
-  setDuration: (duration: DurationSelectOption) => void
+  offers: Offer[]
+  selectedOffer: Offer
+  setSelectedOffer: (duration: Offer) => void
 }
 
 const DurationSelect: FC<Props> = ({
   isDarkMode,
-  durationSelectOptions,
-  duration,
-  setDuration,
+  offers,
+  selectedOffer,
+  setSelectedOffer,
 }) => {
   return (
     <Select
       isDarkMode={isDarkMode}
-      value={duration}
-      options={durationSelectOptions}
-      onSelect={setDuration}
+      value={selectedOffer}
+      options={offers}
+      onSelect={setSelectedOffer}
     />
   )
 }

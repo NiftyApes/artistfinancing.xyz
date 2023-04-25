@@ -1,3 +1,4 @@
+import { Offer } from '@niftyapes/sdk'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { FC, useState } from 'react'
 import NFTImage from './NFTImage'
@@ -5,30 +6,21 @@ import PostPurchaseFooter from './PostPurchaseFooter'
 import PostPurchaseMainContent from './PostPurchaseMainContent'
 import PrePurchaseFooter from './PrePurchaseFooter'
 import PrePurchaseMainContent from './PrePurchaseMainContent'
-import { DurationSelectOption } from './types'
 
 type Props = {
   nameOfWhatYouAreBuying?: string
-  durationSelectOptions: DurationSelectOption[]
-  getTotalCostInEthOfDurationSelectOption: (
-    duration: DurationSelectOption
-  ) => number
-  getDownPaymentInEthOfDurationSelectOption: (
-    duration: DurationSelectOption
-  ) => number
+  offers: Offer[]
   closeModal: () => void
-  selectedDuration: DurationSelectOption
-  setSelectedDuration: (duration: DurationSelectOption) => void
+  selectedOffer: Offer
+  setSelectedOffer: (duration: Offer) => void
   tokenImgUrl?: string
 }
 
 const BuyWithFinancingModalPresentational: FC<Props> = ({
-  selectedDuration,
-  setSelectedDuration,
   nameOfWhatYouAreBuying,
-  durationSelectOptions,
-  getTotalCostInEthOfDurationSelectOption,
-  getDownPaymentInEthOfDurationSelectOption,
+  offers,
+  selectedOffer,
+  setSelectedOffer,
   closeModal,
   tokenImgUrl,
 }) => {
@@ -62,15 +54,9 @@ const BuyWithFinancingModalPresentational: FC<Props> = ({
           {stage === 'PRE' ? (
             <PrePurchaseMainContent
               nameOfWhatYouAreBuying={nameOfWhatYouAreBuying}
-              durationSelectOptions={durationSelectOptions}
-              selectedDuration={selectedDuration}
-              setSelectedDuration={setSelectedDuration}
-              getTotalCostInEthOfDurationSelectOption={
-                getTotalCostInEthOfDurationSelectOption
-              }
-              getDownPaymentInEthOfDurationSelectOption={
-                getDownPaymentInEthOfDurationSelectOption
-              }
+              offers={offers}
+              selectedOffer={selectedOffer}
+              setSelectedOffer={setSelectedOffer}
             />
           ) : (
             <PostPurchaseMainContent

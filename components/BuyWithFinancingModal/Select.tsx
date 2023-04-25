@@ -1,3 +1,4 @@
+import { Offer } from '@niftyapes/sdk'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,14 +8,14 @@ import {
 } from '@radix-ui/react-dropdown-menu'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
+import { processOffer } from 'lib/niftyapes/processOffer'
 import React from 'react'
-import { DurationSelectOption } from './types'
 
 type Props = {
   isDarkMode: boolean
-  options: DurationSelectOption[]
-  onSelect: (option: DurationSelectOption) => void
-  value: DurationSelectOption
+  options: Offer[]
+  onSelect: (option: Offer) => void
+  value: Offer
 }
 
 function getClassNames(isDarkMode: boolean, classes: string[]) {
@@ -27,6 +28,12 @@ export default function Select({
   onSelect,
   value,
 }: Props) {
+  const days =
+    processOffer(value.offer).payPeriodDays *
+    processOffer(value.offer).numPayPeriods
+
+  const apr = processOffer(value.offer).apr
+
   return (
     <div style={{ fontFamily: 'Inter' }}>
       <DropdownMenu>
@@ -39,7 +46,7 @@ export default function Select({
           )}
         >
           <span className="inline-flex select-none items-center justify-center rounded-md px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2">
-            {typeof value === 'string' ? value : `${value[0]} Days`}
+            {`${days} Days`}
             <ChevronDownIcon
               className={clsx(
                 'ml-2 h-5 w-5 stroke-2',
@@ -74,7 +81,7 @@ export default function Select({
                 )}
               >
                 <span className="font-bold">
-                  {typeof option === 'string' ? option : `${option[0]} Days`}
+                  {typeof option === 'string' ? option : `${days} Days`}
                 </span>
                 {typeof option !== 'string' && (
                   <span
@@ -82,7 +89,7 @@ export default function Select({
                       'ml-10',
                       !isDarkMode && 'text-gray-300 hover:text-white'
                     )}
-                  >{`${option[1]}%`}</span>
+                  >{`${apr}%`}</span>
                 )}
               </DropdownMenuItem>
             </React.Fragment>

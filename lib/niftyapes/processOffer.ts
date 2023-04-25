@@ -37,7 +37,7 @@ export type FinancingTerms = {
 export function processOffer(
   offerDetails: Offer['offer'],
   tokenContainer?: ReturnType<typeof useTokens>['data'][0]
-): FinancingTerms {
+): FinancingTerms & { totalCost: number; downPaymentAmount: number } {
   const token: Record<string, any> = tokenContainer?.token || {}
 
   let tokenId: any = offerDetails.nftId

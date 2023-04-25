@@ -1,31 +1,23 @@
+import { Offer } from '@niftyapes/sdk'
+import { processOffer } from 'lib/niftyapes/processOffer'
 import { FC } from 'react'
 import DurationSelect from './DurationSelect'
 import ExplanationMsg from './ExplanationMsg'
-import InfoRow from './InfoRow'
 import LoanInfo from './LoanInfo'
 import Timeline from './Timeline'
-import { DurationSelectOption } from './types'
 
 type Props = {
   nameOfWhatYouAreBuying?: string
-  durationSelectOptions: DurationSelectOption[]
-  getTotalCostInEthOfDurationSelectOption: (
-    duration: DurationSelectOption
-  ) => number
-  getDownPaymentInEthOfDurationSelectOption: (
-    duration: DurationSelectOption
-  ) => number
-  selectedDuration: DurationSelectOption
-  setSelectedDuration: (duration: DurationSelectOption) => void
+  offers: Offer[]
+  selectedOffer: Offer
+  setSelectedOffer: (duration: Offer) => void
 }
 
 const PrePurchaseMainContent: FC<Props> = ({
   nameOfWhatYouAreBuying,
-  durationSelectOptions,
-  getTotalCostInEthOfDurationSelectOption,
-  getDownPaymentInEthOfDurationSelectOption,
-  selectedDuration,
-  setSelectedDuration,
+  offers,
+  selectedOffer,
+  setSelectedOffer,
 }) => {
   return (
     <div>
@@ -39,26 +31,27 @@ const PrePurchaseMainContent: FC<Props> = ({
         <div style={{ marginTop: '-0.5rem' }}>
           <DurationSelect
             isDarkMode={false}
-            durationSelectOptions={durationSelectOptions}
-            duration={selectedDuration}
-            setDuration={setSelectedDuration}
+            offers={offers}
+            selectedOffer={selectedOffer}
+            setSelectedOffer={setSelectedOffer}
           />
         </div>
       </div>
 
-      {typeof selectedDuration !== 'string' ? (
+      {selectedOffer ? (
         <>
           <div className="mt-4">
             <LoanInfo
               isDarkMode={false}
-              totalCost={`${getTotalCostInEthOfDurationSelectOption(
-                selectedDuration
-              )} ETH`}
-              downPayment={`~ ${getDownPaymentInEthOfDurationSelectOption(
-                selectedDuration
-              )} ETH`}
-              duration={`${selectedDuration[0]} Days`}
-              APR={`${selectedDuration[1]}%`}
+              totalCost={processOffer(selectedOffer.offer).totalCost + ''}
+              downPayment={
+                processOffer(selectedOffer.offer).downPaymentAmount + ''
+              }
+              duration={`${
+                processOffer(selectedOffer.offer).numPayPeriods *
+                processOffer(selectedOffer.offer).payPeriodDays
+              } Days`}
+              APR={`${processOffer(selectedOffer.offer).apr}%`}
             />
           </div>
           <div className="mt-12">
@@ -69,15 +62,7 @@ const PrePurchaseMainContent: FC<Props> = ({
           </div>
         </>
       ) : (
-        <div className="mt-4">
-          <InfoRow
-            isDarkMode={false}
-            rowName="Total Cost"
-            rowValue={`${getTotalCostInEthOfDurationSelectOption(
-              selectedDuration
-            )} ETH`}
-          />
-        </div>
+        <div className="mt-4">No offer selected</div>
       )}
     </div>
   )

@@ -1,29 +1,21 @@
+import { Offer } from '@niftyapes/sdk'
+import { processOffer } from 'lib/niftyapes/processOffer'
 import { FC } from 'react'
 import DurationSelect from './DurationSelect'
-import InfoRow from './InfoRow'
 import LoanInfo from './LoanInfo'
-import { DurationSelectOption } from './types'
 
 type Props = {
-  durationSelectOptions: DurationSelectOption[]
-  getTotalCostInEthOfDurationSelectOption: (
-    duration: DurationSelectOption
-  ) => number
-  getDownPaymentInEthOfDurationSelectOption: (
-    duration: DurationSelectOption
-  ) => number
-  selectedDuration: DurationSelectOption
-  setSelectedDuration: (duration: DurationSelectOption) => void
   setOpen: (open: boolean) => void
+  offers: Offer[]
+  selectedOffer?: Offer
+  setSelectedOffer: (duration: Offer) => void
 }
 
 const Section: FC<Props> = ({
-  durationSelectOptions,
-  getTotalCostInEthOfDurationSelectOption,
-  getDownPaymentInEthOfDurationSelectOption,
-  selectedDuration,
-  setSelectedDuration,
   setOpen,
+  offers,
+  selectedOffer,
+  setSelectedOffer,
 }) => {
   return (
     <div
@@ -35,41 +27,36 @@ const Section: FC<Props> = ({
           FINANCING
         </div>
         <div style={{ marginTop: '-0.5rem' }}>
-          <DurationSelect
-            isDarkMode={process.env.NEXT_PUBLIC_DARK_MODE === 'true'}
-            durationSelectOptions={durationSelectOptions}
-            duration={selectedDuration}
-            setDuration={setSelectedDuration}
-          />
+          {selectedOffer && (
+            <DurationSelect
+              isDarkMode={process.env.NEXT_PUBLIC_DARK_MODE === 'true'}
+              offers={offers}
+              selectedOffer={selectedOffer}
+              setSelectedOffer={setSelectedOffer}
+            />
+          )}
         </div>
       </div>
 
-      {typeof selectedDuration !== 'string' ? (
+      {selectedOffer ? (
         <>
           <div className="mt-12">
             <LoanInfo
               isDarkMode={process.env.NEXT_PUBLIC_DARK_MODE === 'true'}
-              totalCost={`${getTotalCostInEthOfDurationSelectOption(
-                selectedDuration
-              )} ETH`}
-              downPayment={`~ ${getDownPaymentInEthOfDurationSelectOption(
-                selectedDuration
-              )} ETH`}
-              duration={`${selectedDuration[0]} Days`}
-              APR={`${selectedDuration[1]}%`}
+              totalCost={processOffer(selectedOffer.offer).totalCost + ''}
+              downPayment={
+                processOffer(selectedOffer.offer).downPaymentAmount + ''
+              }
+              duration={`${
+                processOffer(selectedOffer.offer).numPayPeriods *
+                processOffer(selectedOffer.offer).payPeriodDays
+              } Days`}
+              APR={`${processOffer(selectedOffer.offer).apr}%`}
             />
           </div>
         </>
       ) : (
-        <div className="mt-4">
-          <InfoRow
-            isDarkMode={process.env.NEXT_PUBLIC_DARK_MODE === 'true'}
-            rowName="Total Cost"
-            rowValue={`${getTotalCostInEthOfDurationSelectOption(
-              selectedDuration
-            )} ETH`}
-          />
-        </div>
+        <div className="mt-4">No offer selected</div>
       )}
       <div className="mt-16 flex justify-center">
         <button

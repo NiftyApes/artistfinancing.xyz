@@ -18,8 +18,8 @@ const LoanInfo: FC<Props> = ({
 }) => {
   const rows = useMemo(
     () => [
-      ['Total Cost', totalCost],
-      ['Down Payment', downPayment],
+      ['Total Cost', totalCost + ' Ξ'],
+      ['Down Payment', downPayment + ' Ξ'],
       ['Duration', duration, 'Tooltip explaining duration'],
       ['APR', APR, 'Tooltip explaining APR'],
     ],
