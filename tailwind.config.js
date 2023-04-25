@@ -18,6 +18,9 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      height: {
+        'vh-minus-6rem': 'calc(100vh - 6rem)',
+      },
       gridTemplateColumns: {
         16: 'repeat(16, minmax(0, 1fr))',
         21: 'repeat(21, minmax(0, 1fr))',
@@ -75,7 +78,6 @@ module.exports = {
         slideRightAndFade:
           'slideRightAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)',
       },
-
       colors: {
         ...mauve,
         ...violet,
