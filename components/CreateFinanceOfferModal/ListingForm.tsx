@@ -2,7 +2,7 @@ import React from 'react'
 import NumberFormField from './NumberFormField'
 import SelectFormField from './SelectFormField'
 
-const CustomListingForm = () => {
+const ListingForm = () => {
   return (
     <div className="flex flex-grow flex-col space-y-4 divide-y">
       <NumberFormField
@@ -41,4 +41,4 @@ const CustomListingForm = () => {
   )
 }
 
-export default CustomListingForm
+export default ListingForm
