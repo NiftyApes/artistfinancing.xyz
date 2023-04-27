@@ -45,20 +45,20 @@ const ListingsAccordion = () => (
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof Accordion.Item>,
   React.ComponentPropsWithoutRef<typeof Accordion.Item>
->(function AccordionItem({ children, className, ...props }, forwardedRef) {
-  return (
-    <Accordion.Item
-      className={clsx(
-        'mt-px overflow-hidden first:mt-0 first:rounded-t focus-within:relative focus-within:z-10 focus-within:shadow-[0_0_0_2px]',
-        className
-      )}
-      {...props}
-      ref={forwardedRef}
-    >
-      {children}
-    </Accordion.Item>
-  )
-})
+>(({ children, className, ...props }, forwardedRef) => (
+  <Accordion.Item
+    className={clsx(
+      'mt-px overflow-hidden first:mt-0 first:rounded-t focus-within:relative focus-within:z-10 focus-within:shadow-[0_0_0_2px]',
+      className
+    )}
+    {...props}
+    ref={forwardedRef}
+  >
+    {children}
+  </Accordion.Item>
+))
+
+AccordionItem.displayName = 'AccordionItem'
 
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof Accordion.Trigger>,
@@ -85,8 +85,8 @@ const AccordionTrigger = React.forwardRef<
 AccordionTrigger.displayName = 'AccordionTrigger'
 
 const AccordionContent = React.forwardRef<
-  HTMLDivElement,
-  Accordion.AccordionContentProps
+  React.ElementRef<typeof Accordion.Content>,
+  React.ComponentPropsWithoutRef<typeof Accordion.Content>
 >(({ children, className, ...props }, forwardedRef) => (
   <Accordion.Content
     className={clsx(
