@@ -1,8 +1,8 @@
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { Timeline } from 'components/Timeline'
-import { optimizeImage } from 'lib/optmizeImage'
 import { FiClock } from 'react-icons/fi'
 import ListingForm from './ListingForm'
+import TokenImage from './TokenImage'
 
 export default function CustomListing({
   token,
@@ -12,17 +12,7 @@ export default function CustomListing({
   return (
     <div className="flex flex-col space-y-12">
       <div className="flex items-start space-x-4">
-        <div className="flex flex-col space-y-2">
-          <img
-            alt="Token Image"
-            className="h-[200px] w-[200px] object-contain"
-            src={optimizeImage(token?.token?.image, 200)}
-          />
-          <div className="flex justify-between px-2">
-            <p className="text-xs text-gray-500">Previous Sale</p>
-            <p className="text-sm font-bold text-gray-500">0.84 ETH</p>
-          </div>
-        </div>
+        <TokenImage imageSrc={token?.token?.image} />
         <ListingForm />
       </div>
       <div className="ml-8">

@@ -2,7 +2,7 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import Modal from 'components/Modal'
 import { useState } from 'react'
-import AccordionDemo from './Accordion'
+import BatchListing from './BatchListing'
 import CustomListing from './CustomListing'
 import Expiration from './Expiration'
 import Header from './Header'
@@ -44,7 +44,7 @@ export default function CreateFinanceOfferModal({
                   <Expiration />
                 </Tabs.List>
                 <Tabs.Content value="batch">
-                  <AccordionDemo />
+                  <BatchListing token={token} />
                 </Tabs.Content>
                 <Tabs.Content value="custom">
                   <CustomListing token={token} />

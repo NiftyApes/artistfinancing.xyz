@@ -1,43 +1,47 @@
-import React, { MouseEventHandler } from 'react'
+import React from 'react'
 import clsx from 'clsx'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
+import ListingForm from './ListingForm'
 
-const AccordionDemo = () => (
+const ListingsAccordion = () => (
   <Accordion.Root
-    className="w-[300px] rounded-md bg-mauve6 shadow-[0_2px_10px] shadow-black/5"
+    className="rounded-md bg-mauve6 shadow-[0_2px_10px] shadow-black/5"
     type="single"
     defaultValue="item-1"
     collapsible
   >
     <AccordionItem value="item-1">
-      <AccordionTrigger>Is it accessible?</AccordionTrigger>
+      <AccordionTrigger>
+        <div className="flex space-x-4">
+          <div>30 Day Financing</div>
+          <div>4.51 Sale Price</div>
+        </div>
+      </AccordionTrigger>
       <AccordionContent>
-        Yes. It adheres to the WAI-ARIA design pattern.
+        <ListingForm />
       </AccordionContent>
     </AccordionItem>
 
     <AccordionItem value="item-2">
       <AccordionTrigger>Is it unstyled?</AccordionTrigger>
       <AccordionContent>
-        {
-          "Yes. It's unstyled by default, giving you freedom over the look and feel."
-        }
+        <ListingForm />
       </AccordionContent>
     </AccordionItem>
 
     <AccordionItem value="item-3">
-      <AccordionTrigger asChild>Can it be animated?</AccordionTrigger>
+      <AccordionTrigger>Can it be animated?</AccordionTrigger>
       <AccordionContent>
-        Yes! You can animate the Accordion with CSS or JavaScript.
+        <ListingForm />
       </AccordionContent>
     </AccordionItem>
   </Accordion.Root>
 )
 
 const AccordionItem = React.forwardRef<
-  HTMLDivElement,
-  Accordion.AccordionItemProps
+  React.ElementRef<typeof Accordion.Item>,
+  React.ComponentPropsWithoutRef<typeof Accordion.Item>
 >(function AccordionItem({ children, className, ...props }, forwardedRef) {
   return (
     <Accordion.Item
@@ -58,20 +62,19 @@ const AccordionTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof Accordion.Trigger>
 >(({ children, className, ...props }, forwardedRef) => (
   <Accordion.Header className="flex">
-    <Accordion.Trigger {...props}>
-      <button
-        className={clsx(
-          'group flex h-[45px] flex-1 cursor-default items-center justify-between bg-white px-5 text-[15px] leading-none text-violet11 shadow-[0_1px_0] shadow-mauve6 outline-none hover:bg-mauve2',
-          className
-        )}
-        ref={forwardedRef}
-      >
-        {children}
-        <ChevronDownIcon
-          className="text-violet10 transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=open]:rotate-180"
-          aria-hidden
-        />
-      </button>
+    <Accordion.Trigger
+      className={clsx(
+        'group flex h-[45px] flex-1 cursor-default items-center justify-between bg-white px-5 text-[15px] leading-none text-violet11 shadow-[0_1px_0] shadow-mauve6 outline-none hover:bg-mauve2',
+        className
+      )}
+      ref={forwardedRef}
+      {...props}
+    >
+      {children}
+      <ChevronDownIcon
+        className="text-violet10 transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=open]:rotate-180"
+        aria-hidden
+      />
     </Accordion.Trigger>
   </Accordion.Header>
 ))
@@ -84,7 +87,7 @@ const AccordionContent = React.forwardRef<
 >(({ children, className, ...props }, forwardedRef) => (
   <Accordion.Content
     className={clsx(
-      'data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden bg-mauve2 text-[15px] text-mauve11',
+      'overflow-hidden bg-mauve2 text-[15px] text-mauve11 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp',
       className
     )}
     {...props}
@@ -96,4 +99,4 @@ const AccordionContent = React.forwardRef<
 
 AccordionContent.displayName = 'AccordionContent'
 
-export default AccordionDemo
+export default ListingsAccordion
