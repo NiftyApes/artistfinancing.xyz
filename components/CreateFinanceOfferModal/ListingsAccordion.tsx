@@ -1,7 +1,7 @@
 import React from 'react'
 import clsx from 'clsx'
 import * as Accordion from '@radix-ui/react-accordion'
-import { ChevronDownIcon } from '@radix-ui/react-icons'
+import { IoChevronDown } from 'react-icons/io5'
 import ListingForm from './ListingForm'
 
 const ListingsAccordion = () => (
@@ -13,9 +13,12 @@ const ListingsAccordion = () => (
   >
     <AccordionItem value="item-1">
       <AccordionTrigger>
-        <div className="flex space-x-4">
+        <div className="flex items-center space-x-4">
           <div>30 Day Financing</div>
-          <div>4.51 Sale Price</div>
+          <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
+            <p className="font-semibold">4.51</p>
+            <p className="text-gray-600">Sale Price</p>
+          </div>
         </div>
       </AccordionTrigger>
       <AccordionContent>
@@ -46,7 +49,7 @@ const AccordionItem = React.forwardRef<
   return (
     <Accordion.Item
       className={clsx(
-        'mt-px overflow-hidden first:mt-0 first:rounded-t last:rounded-b focus-within:relative focus-within:z-10 focus-within:shadow-[0_0_0_2px] focus-within:shadow-mauve12',
+        'mt-px overflow-hidden first:mt-0 first:rounded-t focus-within:relative focus-within:z-10 focus-within:shadow-[0_0_0_2px]',
         className
       )}
       {...props}
@@ -64,15 +67,15 @@ const AccordionTrigger = React.forwardRef<
   <Accordion.Header className="flex">
     <Accordion.Trigger
       className={clsx(
-        'group flex h-[45px] flex-1 cursor-default items-center justify-between bg-white px-5 text-[15px] leading-none text-violet11 shadow-[0_1px_0] shadow-mauve6 outline-none hover:bg-mauve2',
+        'group flex flex-1 cursor-default items-center justify-between bg-white px-5 py-10 leading-none shadow-[0_1px_0] outline-none',
         className
       )}
       ref={forwardedRef}
       {...props}
     >
       {children}
-      <ChevronDownIcon
-        className="text-violet10 transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=open]:rotate-180"
+      <IoChevronDown
+        className="h-6 w-6 transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=open]:rotate-180"
         aria-hidden
       />
     </Accordion.Trigger>
