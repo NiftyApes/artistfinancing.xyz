@@ -5,6 +5,7 @@ import NFTImage from './NFTImage'
 import PostPurchaseFooter from './PostPurchaseFooter'
 import PostPurchaseMainContent from './PostPurchaseMainContent'
 import PrePurchaseFooter from './PrePurchaseFooter'
+
 import PrePurchaseMainContent from './PrePurchaseMainContent'
 
 type Props = {

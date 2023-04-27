@@ -52,7 +52,7 @@ const PrePurchaseMainContent: FC<Props> = ({
       </div>
 
       <div className="mt-12">
-        <Timeline />
+        <Timeline offer={selectedOffer} />
       </div>
 
       <div className="mt-12">
