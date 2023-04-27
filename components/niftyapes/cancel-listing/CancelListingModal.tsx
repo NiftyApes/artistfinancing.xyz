@@ -12,13 +12,12 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { Offer } from 'hooks/niftyapes/useOffers'
 import { useEffect } from 'react'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import { MdOutlineError } from 'react-icons/md'
 import LoadingDots from '../LoadingDots'
 import { useWaitForTransaction } from 'wagmi'
-import { useCancelListing } from '@niftyapes/sdk'
+import { Offer, useCancelListing } from '@niftyapes/sdk'
 
 export default function CancelListingModal({
   offer,

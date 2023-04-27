@@ -3,15 +3,12 @@ import { useQueryClient } from 'react-query'
 import { useRouter } from 'next/router'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { useMediaQuery } from '@react-hookz/web'
-
 import { optimizeImage } from 'lib/optmizeImage'
 import { processOffer } from 'lib/niftyapes/processOffer'
 import LoadingIcon from 'components/LoadingIcon'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
-import { useCancelListing } from '@niftyapes/sdk'
 import { useWaitForTransaction } from 'wagmi'
-
-import { Offer, useOffers } from '@niftyapes/sdk'
+import { Offer, useOffers, useCancelListing } from '@niftyapes/sdk'
 
 const UserFinancingOffersTable: FC = () => {
   const router = useRouter()
