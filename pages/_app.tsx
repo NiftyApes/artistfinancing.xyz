@@ -1,4 +1,4 @@
-import { NiftyProvider } from '@niftyapes/sdk'
+import { NiftyApesProvider } from '@niftyapes/sdk'
 import '@rainbow-me/rainbowkit/styles.css'
 import {
   ReservoirKitProvider,
@@ -69,11 +69,6 @@ const FONT_FAMILY = process.env.NEXT_PUBLIC_FONT_FAMILY || 'Inter'
 const PRIMARY_COLOR = process.env.NEXT_PUBLIC_PRIMARY_COLOR || 'default'
 const DISABLE_POWERED_BY_RESERVOIR =
   process.env.NEXT_PUBLIC_DISABLE_POWERED_BY_RESERVOIR
-import presetColors from '../colors'
-import { ChakraProvider } from '@chakra-ui/react'
-import chakraTheme from '../theme'
-import { useGoogleAnalytics } from '../hooks/niftyapes/useGoogleAnalytics'
-import { NiftyApesProvider } from '@niftyapes/sdk'
 
 const FEE_BPS = process.env.NEXT_PUBLIC_FEE_BPS
 const FEE_RECIPIENT = process.env.NEXT_PUBLIC_FEE_RECIPIENT
@@ -109,17 +104,15 @@ function AppWrapper(props: AppProps & { baseUrl: string }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <NiftyProvider>
-        <ChakraProvider theme={chakraTheme}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme={defaultTheme}
-            forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
-          >
-            <App {...props} />
-          </ThemeProvider>
-        </ChakraProvider>
-      </NiftyProvider>
+      <ChakraProvider theme={chakraTheme}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme={defaultTheme}
+          forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
+        >
+          <App {...props} />
+        </ThemeProvider>
+      </ChakraProvider>
     </QueryClientProvider>
   )
 }

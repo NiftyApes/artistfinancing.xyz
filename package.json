@@ -35,6 +35,7 @@
     "@wagmi/core": "^0.10.8",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
+    "detective": "^5.2.1",
     "ethers": "^5.7.1",
     "framer-motion": "^8.5.0",
     "lodash.debounce": "^4.0.8",

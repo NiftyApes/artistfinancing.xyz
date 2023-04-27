@@ -28,7 +28,7 @@ const BuyWithFinancingModal: FC<Props> = ({
 
   return (
     <div
-      className="relative p-4 text-stone-950"
+      className="relative p-4 text-black"
       style={{
         width: 'min(100vw, 960px)',
       }}
