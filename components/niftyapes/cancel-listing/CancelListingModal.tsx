@@ -12,12 +12,12 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { Offer } from 'hooks/niftyapes/useOffers'
-import { useWithdrawOfferSignature } from 'hooks/niftyapes/useWithdrawOfferSignature'
 import { useEffect } from 'react'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import { MdOutlineError } from 'react-icons/md'
 import LoadingDots from '../LoadingDots'
+import { useWaitForTransaction } from 'wagmi'
+import { Offer, useCancelListing } from '@niftyapes/sdk'
 
 export default function CancelListingModal({
   offer,
@@ -30,17 +30,20 @@ export default function CancelListingModal({
   const onClose = () => {
     onModalClose()
   }
-  const {
-    write,
-    isErrorTx,
-    isErrorWrite,
-    isSuccess,
-    isLoadingTx,
-    isLoadingWrite,
-  } = useWithdrawOfferSignature({
+
+  const { data, isError, isLoading, write } = useCancelListing({
     offer: offer.offer,
     signature: offer.signature,
   })
+
+  const {
+    isError: isErrorTxn,
+    isLoading: isLoadingTxn,
+    isSuccess,
+  } = useWaitForTransaction({
+    hash: data?.hash,
+  })
+
   const onCancel = () => {
     onOpen()
     write?.()
@@ -70,10 +73,8 @@ export default function CancelListingModal({
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody p="12">
-            {(isLoadingWrite || isLoadingTx) && <CancellationInProgress />}
-            {(isErrorWrite || isErrorTx) && (
-              <CancellationError onClose={onClose} />
-            )}
+            {(isLoading || isLoadingTxn) && <CancellationInProgress />}
+            {(isError || isErrorTxn) && <CancellationError onClose={onClose} />}
             {isSuccess && <CancellationSuccess onClose={onClose} />}
           </ModalBody>
         </ModalContent>

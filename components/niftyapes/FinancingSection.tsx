@@ -18,7 +18,7 @@ import EthAccount from 'components/EthAccount'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { setToast } from 'components/token/setToast'
 import { useNftOwnership } from 'hooks/niftyapes/useNftOwnership'
-import useOffers from 'hooks/niftyapes/useOffers'
+import { useOffers } from '@niftyapes/sdk'
 import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { FinancingTerms, processOffer } from 'lib/niftyapes/processOffer'
 import Link from 'next/link'
@@ -54,9 +54,8 @@ export default function FinancingSection({
   })
   // Get most recent active listing where offer creator and nft owner are the same
   const listing = offerData?.filter(
-    (offer) =>
-      offer.status === 'ACTIVE' &&
-      isEqualAddress(offer.offer.creator, token?.token?.owner)
+    (offer) => offer.status === 'ACTIVE' /* && */
+    // isEqualAddress(offer.offer.creator, token?.token?.owner)
   )[0]
   const terms = listing ? processOffer(listing.offer) : null
 
@@ -139,7 +138,7 @@ export default function FinancingSection({
               {listing && <CurrentListing terms={terms!} isOwner={isOwner} />}
               {isOwner ? (
                 <HStack>
-                  <CreateFinanceOfferModal />
+                  <CreateFinanceOfferModal token={token} />
                   {/* <ListFinancingModal
                     token={token}
                     collection={collection}

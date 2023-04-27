@@ -16,7 +16,8 @@ import { useEffect } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 import EthAccount from '../../../components/niftyapes/EthAccount'
-import Footer from '../../../components/Footer'
+import { optimizeImage } from '../../../lib/optmizeImage'
+import BuyNowPayLaterModal from '../../../components/niftyapes/bnpl/BuyNowPayLaterModal'
 
 // Environment variables
 // For more information about these variables
@@ -151,6 +152,18 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       ? true
       : token?.token?.owner?.toLowerCase() === account?.address?.toLowerCase()
 
+  const renderBuyNowPayLater = () => {
+    return (
+      <div className="max-w-80 mb-10 rounded-lg p-5">
+        <button
+          className={`flex h-[50px] w-full items-center justify-center whitespace-nowrap rounded-[40px] bg-white text-[14px] font-bold uppercase text-black focus:ring-0`}
+        >
+          Buy Now, Pay Later
+        </button>
+      </div>
+    )
+  }
+
   return (
     <Layout navbar={{}}>
       <Head>
@@ -158,65 +171,55 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         {description}
         {image}
       </Head>
-
-      <div className="col-span-full col-start-1 px-2 pt-4 md:col-span-full lg:col-span-7 lg:col-start-2 xl:col-span-7 xl:col-start-2 2xl:col-span-7 2xl:col-start-2 3xl:col-start-4">
-        <div className="mb-14">
-          <TokenMedia token={token?.token} />
-        </div>
-
-        <div className="block lg:hidden">
-          <div className="reservoir-h3 mb-8 font-semibold">
-            {token?.token?.name || `#${token?.token?.tokenId}`}
-          </div>
-          <div className="mb-8 grid grid-flow-col grid-rows-1">
-            <EthAccount
-              side="left"
-              label="Artist"
-              address={token?.token?.owner}
-            />
-            <EthAccount
-              side="left"
-              label="Owner"
-              address={token?.token?.owner}
-            />
-          </div>
-        </div>
-
-        <div className="mb-14">
-          <div className="reservoir-h3 mb-1 font-semibold">Description</div>
-          <div className="text-md text-gray-300">
-            {token?.token?.description}
-          </div>
-        </div>
-
-        <div className="mb-14">
-          <TokenInfo token={token.token} />
-        </div>
-
-        <div className="mb-10">
-          <TokenAttributes token={token?.token} />
-        </div>
-      </div>
-
-      <div className="col-span-full mb-4 hidden space-y-4 px-2 pt-2 md:col-span-3 md:col-start-8 lg:col-start-9 lg:block 2xl:col-start-9 3xl:col-start-11">
-        <div className="reservoir-h3 mb-8 font-semibold">
-          {token?.token?.name || `#${token?.token?.tokenId}`}
-        </div>
-        <div className="mb-8 grid grid-flow-col grid-rows-1">
-          <EthAccount
-            side="left"
-            label="Artist"
-            address={token?.token?.owner}
+      <div className="col-span-full lg:col-span-8 lg:pr-12 3xl:col-span-12">
+        <div className="flex items-center justify-center p-4 lg:h-vh-minus-6rem">
+          <img
+            alt={token?.token?.name || `#${token?.token?.tokenId}`}
+            className="lg:max-h-xl object-cover lg:max-w-xl"
+            src={optimizeImage(token?.token?.image, 533)}
           />
-          <EthAccount side="left" label="Owner" address={token?.token?.owner} />
         </div>
-        <FinancingSection
-          token={token}
-          collection={collection}
-          isOwner={isOwner}
-        />
       </div>
-      <Footer />
+
+      <div className="relative col-span-full flex overflow-auto lg:col-span-4 lg:h-vh-minus-6rem lg:h-vh-minus-6rem lg:pr-12">
+        <div className="grid w-full grid-flow-col gap-4 text-center lg:w-auto lg:text-left">
+          <div className="resize-none lg:col-span-3">
+            <div className="reservoir-h3 mb-8 font-semibold">
+              {token?.token?.name || `#${token?.token?.tokenId}`}
+            </div>
+
+            <div className="grid-col-2 mb-8 grid grid-flow-col">
+              <EthAccount
+                side="left"
+                label="Artist"
+                address={token?.token?.owner}
+              />
+              <EthAccount
+                side="left"
+                label="Owner"
+                address={token?.token?.owner}
+              />
+            </div>
+
+            <div className="">{renderBuyNowPayLater()}</div>
+
+            <div className="mb-14">
+              <div className="reservoir-h3 mb-1 font-semibold">Description</div>
+              <div className="text-md text-gray-300">
+                {token?.token?.description}
+              </div>
+            </div>
+
+            <div className="mb-14">
+              <TokenInfo token={token.token} />
+            </div>
+
+            <div className="mb-10">
+              <TokenAttributes token={token?.token} />
+            </div>
+          </div>
+        </div>
+      </div>
     </Layout>
   )
 }

@@ -28,8 +28,8 @@ export const useNftOwnership = () => {
     isLoadingLoans,
     isLoadingTokens: isFetchingPage || isFetchingInitialData,
     entitledTokens,
-    isEntitledToNft(contract: Address, tokenId?: string) {
-      if (!address || !activeLoans) return false
+    isEntitledToNft(contract?: Address, tokenId?: string) {
+      if (!address || !activeLoans || !contract || !tokenId) return false
 
       // Find active loan matching this contract and tokenId
       return activeLoans.some(
@@ -38,8 +38,8 @@ export const useNftOwnership = () => {
           offer.offer.nftId === tokenId
       )
     },
-    activeLoanforNft(contract: Address, tokenId?: string) {
-      if (!address || !activeLoans) return undefined
+    activeLoanforNft(contract?: Address, tokenId?: string) {
+      if (!address || !activeLoans || !contract || !tokenId) return undefined
 
       // Find active loan matching this contract and tokenId
       return activeLoans.find(

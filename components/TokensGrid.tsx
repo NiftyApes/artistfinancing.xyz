@@ -1,4 +1,4 @@
-import useOffers from 'hooks/niftyapes/useOffers'
+import { useOffers } from '@niftyapes/sdk'
 import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { FC } from 'react'
 import { useInView } from 'react-intersection-observer'

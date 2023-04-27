@@ -5,12 +5,12 @@ import { optimizeImage } from 'lib/optmizeImage'
 import Image from 'next/legacy/image'
 import Link from 'next/link'
 import NiftyApesOfferDetails from 'components/niftyapes/TokeCardOfferDetails'
-import { ComponentPropsWithoutRef, Dispatch, FC, SetStateAction } from 'react'
+import { ComponentPropsWithoutRef, FC } from 'react'
 
 import { MutatorCallback } from 'swr'
 import { Collection } from 'types/reservoir'
 import { useAccount } from 'wagmi'
-import { Offer } from 'hooks/niftyapes/useOffers'
+import { Offer } from '@niftyapes/sdk'
 import TokenCardOwner from './niftyapes/TokenCardOwner'
 import BuyNowPayLaterModal from './niftyapes/bnpl/BuyNowPayLaterModal'
 import ListFinancingModal from './niftyapes/list-financing/ListFinancingModal'
@@ -59,50 +59,61 @@ const TokenCard: FC<Props> = ({
       key={`${token?.token?.contract}${token?.token?.tokenId}`}
       className="group relative mb-6 grid self-start border-[#D4D4D4] bg-white dark:border-0 dark:bg-neutral-800 dark:ring-1 dark:ring-neutral-600"
     >
-      <Link
-        key={`${token?.token?.contract}:${token?.token?.tokenId}`}
-        href={`/${token?.token?.contract}/${token?.token?.tokenId}`}
-        legacyBehavior={true}
-      >
-        <a>
-          {token?.token?.image ? (
-            <Image
-              loader={({ src }) => src}
-              src={optimizeImage(token?.token?.image, imageSize)}
-              alt={`${token?.token?.name}`}
-              className="w-full"
-              width={imageSize}
-              height={imageSize}
-              objectFit="cover"
-              layout="responsive"
-            />
-          ) : (
-            <div className="relative w-full">
-              <div className="absolute inset-0 grid place-items-center backdrop-blur-lg">
-                <div>
+      <div>
+        <div className="flow-row absolute z-10 ml-2 mt-2 flex">
+          {financeOffer && (
+            <div className="rounded-full bg-black bg-opacity-70 pl-2 pr-2 pt-1 pb-1 text-xs">
+              1 Listing
+            </div>
+          )}
+        </div>
+        <div>
+          <Link
+            key={`${token?.token?.contract}:${token?.token?.tokenId}`}
+            href={`/${token?.token?.contract}/${token?.token?.tokenId}`}
+            legacyBehavior={true}
+          >
+            <a>
+              {token?.token?.image ? (
+                <Image
+                  loader={({ src }) => src}
+                  src={optimizeImage(token?.token?.image, imageSize)}
+                  alt={`${token?.token?.name}`}
+                  className="w-full"
+                  width={imageSize}
+                  height={imageSize}
+                  objectFit="cover"
+                  layout="responsive"
+                />
+              ) : (
+                <div className="relative w-full">
+                  <div className="absolute inset-0 grid place-items-center backdrop-blur-lg">
+                    <div>
+                      <img
+                        src={optimizeImage(collectionImage, imageSize)}
+                        alt={`${token?.token?.collection?.name}`}
+                        className="mx-auto mb-4 h-16 w-16 overflow-hidden rounded-full border-2 border-white"
+                        width="64"
+                        height="64"
+                      />
+                      <div className="reservoir-h6 text-white">
+                        No Content Available
+                      </div>
+                    </div>
+                  </div>
                   <img
                     src={optimizeImage(collectionImage, imageSize)}
                     alt={`${token?.token?.collection?.name}`}
-                    className="mx-auto mb-4 h-16 w-16 overflow-hidden rounded-full border-2 border-white"
-                    width="64"
-                    height="64"
+                    className="aspect-square w-full object-cover"
+                    width="250"
+                    height="250"
                   />
-                  <div className="reservoir-h6 text-white">
-                    No Content Available
-                  </div>
                 </div>
-              </div>
-              <img
-                src={optimizeImage(collectionImage, imageSize)}
-                alt={`${token?.token?.collection?.name}`}
-                className="aspect-square w-full object-cover"
-                width="250"
-                height="250"
-              />
-            </div>
-          )}
-        </a>
-      </Link>
+              )}
+            </a>
+          </Link>
+        </div>
+      </div>
 
       <div className="dark-bg-neutral-800 md-bottom-[41px] bottom-[0px] w-full">
         <div className="mb-2 ml-4 mr-4 border-b border-gray-500 pb-4">

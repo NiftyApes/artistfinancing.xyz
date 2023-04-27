@@ -4,7 +4,7 @@ import * as RadixTooltip from '@radix-ui/react-tooltip'
 export type Side = 'top' | 'bottom' | 'left' | 'right'
 
 interface Props extends RadixTooltip.TooltipProps {
-  content: string
+  content: React.ReactNode
   children: React.ReactNode
   side?: Side
   modeOverride?: 'light' | 'dark'
@@ -17,18 +17,14 @@ const Tooltip = ({
   modeOverride,
   ...props
 }: Props) => {
-  let arrowStyles = 'fill-neutral-600 dark:fill-neutral-200'
-  let contentStyles =
-    'bg-neutral-600 text-white dark:bg-neutral-200 dark:text-black'
+  let arrowStyles = 'fill-black dark:fill-white'
 
   if (modeOverride === 'light') {
-    arrowStyles = 'fill-neutral-600'
-    contentStyles = 'bg-neutral-600 text-white'
+    arrowStyles = 'fill-black'
   }
 
   if (modeOverride === 'dark') {
-    arrowStyles = 'fill-neutral-200'
-    contentStyles = 'bg-neutral-200 text-black'
+    arrowStyles = 'fill-white'
   }
 
   return (
@@ -37,14 +33,15 @@ const Tooltip = ({
         <RadixTooltip.Trigger asChild>{children}</RadixTooltip.Trigger>
         <RadixTooltip.Content
           side={side}
+          sideOffset={5}
           className="data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade"
         >
-          <div
-            className={`align-center p-2 text-center text-sm ${contentStyles}`}
-          >
-            {content}
-          </div>
-          <RadixTooltip.Arrow className={`${arrowStyles}`} />
+          {content}
+          <RadixTooltip.Arrow
+            width={16}
+            height={8}
+            className={`${arrowStyles}`}
+          />
         </RadixTooltip.Content>
       </RadixTooltip.Root>
     </RadixTooltip.Provider>
