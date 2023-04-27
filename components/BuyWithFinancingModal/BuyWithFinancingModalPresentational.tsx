@@ -16,7 +16,7 @@ type Props = {
   setSelectedOffer: (duration: Offer) => void
 }
 
-const BuyWithFinancingModalPresentational: FC<Props> = ({
+const BuyWithFinancingModal: FC<Props> = ({
   nameOfWhatYouAreBuying,
   tokenImgUrl,
   closeModal,
@@ -80,4 +80,4 @@ const BuyWithFinancingModalPresentational: FC<Props> = ({
   )
 }
 
-export default BuyWithFinancingModalPresentational
+export default BuyWithFinancingModal

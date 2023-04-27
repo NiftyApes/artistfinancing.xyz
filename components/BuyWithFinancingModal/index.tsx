@@ -1,6 +1,6 @@
 import { Offer, useOffers } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
-import BuyWithFinancingModalPresentational from 'components/BuyWithFinancingModal/BuyWithFinancingModalPresentational'
+import BuyWithFinancingModal from 'components/BuyWithFinancingModal/BuyWithFinancingModalPresentational'
 import Section from 'components/BuyWithFinancingModal/Section'
 import Modal from 'components/Modal'
 import { useEffect, useState } from 'react'
@@ -10,7 +10,7 @@ type Props = {
   nftId: string
 }
 
-export function BuyWithFinancingModal({ collection, nftId }: Props) {
+export function BuyWithFinancing({ collection, nftId }: Props) {
   const [open, setOpen] = useState(false)
 
   const [offers, setOffers] = useState<Offer[]>([])
@@ -64,7 +64,7 @@ export function BuyWithFinancingModal({ collection, nftId }: Props) {
             offers={offers}
           />
           <Modal open={open}>
-            <BuyWithFinancingModalPresentational
+            <BuyWithFinancingModal
               tokenImgUrl={tokenImgUrl}
               selectedOffer={selectedOffer}
               setSelectedOffer={setSelectedOffer}
