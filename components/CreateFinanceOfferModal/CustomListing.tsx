@@ -13,7 +13,9 @@ export default function CustomListing({
     <div className="flex flex-col space-y-12">
       <div className="flex items-start space-x-4">
         <TokenImage imageSrc={token?.token?.image} />
-        <ListingForm />
+        <div className="py-4">
+          <ListingForm />
+        </div>
       </div>
       <div className="ml-8">
         <Timeline

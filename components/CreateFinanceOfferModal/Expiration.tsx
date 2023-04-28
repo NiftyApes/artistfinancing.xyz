@@ -19,7 +19,7 @@ export default function Expiration() {
 
       <Select.Root defaultValue={String(ExpirationEnum.OneMonth)}>
         <Select.Trigger
-          className="inline-flex h-[35px] items-center justify-center gap-2 rounded bg-white px-[15px] text-sm font-semibold leading-none outline-none focus:shadow-[0_0_0_2px] focus:shadow-black"
+          className="inline-flex h-[35px] items-center justify-center gap-2 rounded bg-white px-[15px] text-sm font-semibold leading-none outline-none focus:shadow-[0_0_0_1px] focus:shadow-black"
           aria-label="Expiration"
         >
           <Select.Value />

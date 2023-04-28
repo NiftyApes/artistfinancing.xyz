@@ -5,44 +5,74 @@ import { IoChevronDown } from 'react-icons/io5'
 import ListingForm from './ListingForm'
 import Checkbox from 'components/Checkbox'
 
-const ListingsAccordion = () => (
-  <Accordion.Root
-    className="m-[1px] bg-mauve6"
-    type="single"
-    defaultValue="item-1"
-    collapsible
-  >
-    <AccordionItem value="item-1">
-      <AccordionTrigger>
-        <div className="flex items-center space-x-4">
-          <Checkbox />
-          <div>30 Day Financing</div>
-          <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
-            <p className="font-semibold">4.51</p>
-            <p className="text-gray-600">Sale Price</p>
+const ListingsAccordion = () => {
+  const handleCheck = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+  }
+
+  return (
+    <Accordion.Root
+      className="m-[1px] bg-mauve6"
+      type="single"
+      defaultValue="item-1"
+      collapsible
+    >
+      <AccordionItem value="item-1">
+        <AccordionTrigger>
+          <div className="flex items-center space-x-16">
+            <div className="flex w-[180px] items-center space-x-4">
+              <Checkbox onClick={handleCheck} />
+              <p className="text-gray-600">30 Day Financing</p>
+            </div>
+            <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
+              <p className="font-semibold">4.51</p>
+              <p className="text-gray-600">Sale Price</p>
+            </div>
           </div>
-        </div>
-      </AccordionTrigger>
-      <AccordionContent>
-        <ListingForm />
-      </AccordionContent>
-    </AccordionItem>
+        </AccordionTrigger>
+        <AccordionContent>
+          <ListingForm />
+        </AccordionContent>
+      </AccordionItem>
 
-    <AccordionItem value="item-2">
-      <AccordionTrigger>Is it unstyled?</AccordionTrigger>
-      <AccordionContent>
-        <ListingForm />
-      </AccordionContent>
-    </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>
+          <div className="flex items-center space-x-16">
+            <div className="flex w-[180px] items-center space-x-4">
+              <Checkbox onClick={handleCheck} />
+              <p className="text-gray-600">3 Month Financing</p>
+            </div>
+            <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
+              <p className="font-semibold">4.554</p>
+              <p className="text-gray-600">Sale Price</p>
+            </div>
+          </div>
+        </AccordionTrigger>
+        <AccordionContent>
+          <ListingForm />
+        </AccordionContent>
+      </AccordionItem>
 
-    <AccordionItem value="item-3">
-      <AccordionTrigger>Can it be animated?</AccordionTrigger>
-      <AccordionContent>
-        <ListingForm />
-      </AccordionContent>
-    </AccordionItem>
-  </Accordion.Root>
-)
+      <AccordionItem value="item-3">
+        <AccordionTrigger>
+          <div className="flex items-center space-x-16">
+            <div className="flex w-[180px] items-center space-x-4">
+              <Checkbox onClick={handleCheck} />
+              <p className="text-gray-600">6 Month Financing</p>
+            </div>
+            <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
+              <p className="font-semibold">4.774</p>
+              <p className="text-gray-600">Sale Price</p>
+            </div>
+          </div>
+        </AccordionTrigger>
+        <AccordionContent>
+          <ListingForm />
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion.Root>
+  )
+}
 
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof Accordion.Item>,

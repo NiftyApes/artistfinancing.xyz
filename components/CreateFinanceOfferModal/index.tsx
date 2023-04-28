@@ -23,7 +23,7 @@ export default function CreateFinanceOfferModal({
         Create offer
       </button>
       <Modal open={open} onOpenChange={setOpen}>
-        <div className="w-[830px] py-6 px-4 text-black">
+        <div className="h-[730px] w-[830px] py-6 px-4 text-black">
           <Header
             collectionName={token?.token?.collection?.name}
             nftId={token?.token?.tokenId}
