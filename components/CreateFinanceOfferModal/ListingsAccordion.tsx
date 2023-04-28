@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import * as Accordion from '@radix-ui/react-accordion'
 import { IoChevronDown } from 'react-icons/io5'
 import ListingForm from './ListingForm'
+import Checkbox from 'components/Checkbox'
 
 const ListingsAccordion = () => (
   <Accordion.Root
@@ -14,6 +15,7 @@ const ListingsAccordion = () => (
     <AccordionItem value="item-1">
       <AccordionTrigger>
         <div className="flex items-center space-x-4">
+          <Checkbox />
           <div>30 Day Financing</div>
           <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
             <p className="font-semibold">4.51</p>
