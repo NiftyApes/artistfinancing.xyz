@@ -7,7 +7,7 @@ import Checkbox from 'components/Checkbox'
 
 const ListingsAccordion = () => (
   <Accordion.Root
-    className="rounded-md bg-mauve6 shadow-[0_2px_10px] shadow-black/5"
+    className="m-[1px] bg-mauve6"
     type="single"
     defaultValue="item-1"
     collapsible
@@ -50,7 +50,7 @@ const AccordionItem = React.forwardRef<
 >(({ children, className, ...props }, forwardedRef) => (
   <Accordion.Item
     className={clsx(
-      'mt-px overflow-hidden first:mt-0 first:rounded-t focus-within:relative focus-within:z-10 focus-within:shadow-[0_0_0_2px]',
+      'mt-px overflow-hidden first:mt-0 focus-within:relative focus-within:z-10 focus-within:shadow-[0_0_0_1px]',
       className
     )}
     {...props}
@@ -92,13 +92,13 @@ const AccordionContent = React.forwardRef<
 >(({ children, className, ...props }, forwardedRef) => (
   <Accordion.Content
     className={clsx(
-      'overflow-hidden bg-mauve2 text-[15px] text-mauve11 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp',
+      'bg-white data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp',
       className
     )}
     {...props}
     ref={forwardedRef}
   >
-    <div className="py-[15px] px-5">{children}</div>
+    <div className="px-5 py-4">{children}</div>
   </Accordion.Content>
 ))
 

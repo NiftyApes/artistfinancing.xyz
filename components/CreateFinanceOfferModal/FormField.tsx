@@ -15,7 +15,7 @@ const FormField = ({
   tooltip?: string
 }) => {
   return (
-    <div className="flex justify-between gap-6 pt-4">
+    <div className="flex gap-6">
       <div className="flex w-[350px] items-center justify-between">
         <div className="flex items-center gap-2">
           <label htmlFor={name} className="text-sm text-gray-500">
