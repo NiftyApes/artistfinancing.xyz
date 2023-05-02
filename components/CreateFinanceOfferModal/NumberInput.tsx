@@ -21,7 +21,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ descriptor, ...props }) => {
     }
   }
 
-  const focusClasses = isFocused ? 'ring-2 ring-black border-transparent' : ''
+  const focusClasses = isFocused ? 'ring-1 ring-black border-transparent' : ''
 
   return (
     <div
