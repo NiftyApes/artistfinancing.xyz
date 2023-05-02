@@ -16,6 +16,7 @@ export default function CreateFinanceOfferModal({
 
   const tabTriggerStyles =
     'h-[35px] text-sm font-semibold text-gray-400 data-[state=active]:text-black'
+  const tabContentStyles = 'h-[580px]'
 
   return (
     <>
@@ -23,35 +24,31 @@ export default function CreateFinanceOfferModal({
         Create offer
       </button>
       <Modal open={open} onOpenChange={setOpen}>
-        <div className="h-[730px] w-[830px] py-6 px-4 text-black">
+        <div className="flex w-[830px] flex-col py-6 px-4 text-black">
           <Header
             collectionName={token?.token?.collection?.name}
             nftId={token?.token?.tokenId}
             onClose={() => setOpen(false)}
           />
-          <div className="mt-6 flex space-x-6">
-            <div className="flex flex-grow justify-between">
-              <Tabs.Root defaultValue="custom" className="w-full">
-                <Tabs.List className="ml-[216px] flex justify-between gap-6 border-b-[1px] py-2">
-                  <div className="flex gap-8">
-                    <Tabs.Trigger value="batch" className={tabTriggerStyles}>
-                      List Art for Sale
-                    </Tabs.Trigger>
-                    <Tabs.Trigger value="custom" className={tabTriggerStyles}>
-                      Custom Listing
-                    </Tabs.Trigger>
-                  </div>
-                  <Expiration />
-                </Tabs.List>
-                <Tabs.Content value="batch">
-                  <BatchListing token={token} />
-                </Tabs.Content>
-                <Tabs.Content value="custom">
-                  <CustomListing token={token} />
-                </Tabs.Content>
-              </Tabs.Root>
-            </div>
-          </div>
+          <Tabs.Root defaultValue="custom">
+            <Tabs.List className="ml-[216px] flex justify-between gap-6 border-b-[1px] py-2">
+              <div className="flex gap-8">
+                <Tabs.Trigger value="batch" className={tabTriggerStyles}>
+                  List Art for Sale
+                </Tabs.Trigger>
+                <Tabs.Trigger value="custom" className={tabTriggerStyles}>
+                  Custom Listing
+                </Tabs.Trigger>
+              </div>
+              <Expiration />
+            </Tabs.List>
+            <Tabs.Content value="batch" className={tabContentStyles}>
+              <BatchListing token={token} />
+            </Tabs.Content>
+            <Tabs.Content value="custom" className={tabContentStyles}>
+              <CustomListing token={token} />
+            </Tabs.Content>
+          </Tabs.Root>
         </div>
       </Modal>
     </>

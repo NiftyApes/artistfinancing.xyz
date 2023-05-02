@@ -10,7 +10,7 @@ export default function CustomListing({
   token: ReturnType<typeof useTokens>['data'][0]
 }) {
   return (
-    <div className="flex flex-col space-y-12">
+    <div className="flex h-full flex-col justify-between">
       <div className="flex items-start space-x-4">
         <TokenImage imageSrc={token?.token?.image} />
         <div className="py-4">
