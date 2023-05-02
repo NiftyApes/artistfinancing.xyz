@@ -4,6 +4,7 @@ import Checkbox from 'components/Checkbox'
 import React from 'react'
 import { IoAddSharp, IoChevronDown } from 'react-icons/io5'
 import ListingForm from './ListingForm'
+import NumberInput from './NumberInput'
 
 const ListingsAccordion = () => {
   const handleCheck = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -18,19 +19,17 @@ const ListingsAccordion = () => {
       collapsible
     >
       <AccordionItem value="buy-now">
-        <AccordionTrigger>
+        <AccordionTrigger noContent={true}>
           <div className="flex items-center space-x-16">
             <div className="flex w-[180px] items-center space-x-4">
-              <Checkbox onClick={handleCheck} />
-              {/* TODO: Make this <p> an input */}
-              <p className="text-gray-600">30 Day Financing</p>
+              <Checkbox className="flex-shrink-0" onClick={handleCheck} />
+              <div className="w-[150px]">
+                <NumberInput descriptor="ETH" />
+              </div>
             </div>
             <p className="text-gray-600">Buy Now Price</p>
           </div>
         </AccordionTrigger>
-        <AccordionContent>
-          <ListingForm />
-        </AccordionContent>
       </AccordionItem>
 
       <AccordionItem value="item-1">
@@ -88,7 +87,7 @@ const ListingsAccordion = () => {
       </AccordionItem>
 
       <AccordionItem value="add" isButton={true}>
-        <AccordionTrigger isButton={true}>
+        <AccordionTrigger noContent={true} isButton={true}>
           <div className="flex w-[180px] items-center space-x-4">
             <div className="flex h-5 w-5 items-center justify-center border border-black">
               <IoAddSharp />
@@ -125,8 +124,9 @@ const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof Accordion.Trigger>,
   React.ComponentPropsWithoutRef<typeof Accordion.Trigger> & {
     isButton?: Boolean
+    noContent?: Boolean
   }
->(({ children, className, isButton, ...props }, forwardedRef) => (
+>(({ children, className, noContent, isButton, ...props }, forwardedRef) => (
   <Accordion.Header className="flex">
     <Accordion.Trigger
       className={clsx(
@@ -139,7 +139,7 @@ const AccordionTrigger = React.forwardRef<
       {...props}
     >
       {children}
-      {!isButton && (
+      {!noContent && (
         <IoChevronDown
           className="h-6 w-6 transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=open]:rotate-180"
           aria-hidden

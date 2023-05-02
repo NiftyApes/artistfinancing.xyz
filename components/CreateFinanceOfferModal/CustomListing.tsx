@@ -13,7 +13,7 @@ export default function CustomListing({
     <div className="flex h-full flex-col justify-between">
       <div className="flex items-start space-x-4">
         <TokenImage imageSrc={token?.token?.image} />
-        <div className="py-4">
+        <div className="flex-grow py-4 px-2">
           <ListingForm />
         </div>
       </div>
