@@ -1,6 +1,7 @@
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { Timeline } from 'components/Timeline'
 import { FiClock } from 'react-icons/fi'
+import Footer from './Footer'
 import ListingForm from './ListingForm'
 import TokenImage from './TokenImage'
 
@@ -53,14 +54,7 @@ export default function CustomListing({
           succeedingLine={false}
         />
       </div>
-      <div className="flex space-x-8 self-end">
-        <button className="rounded-full text-sm font-bold uppercase">
-          Nevermind
-        </button>
-        <button className="rounded-full border-2 border-black px-8 py-3 text-sm font-bold uppercase">
-          Create Listing
-        </button>
-      </div>
+      <Footer />
     </div>
   )
 }

@@ -6,6 +6,7 @@ import BatchListing from './BatchListing'
 import CustomListing from './CustomListing'
 import Expiration from './Expiration'
 import Header from './Header'
+import ListingTransactions from './ListingTransactions'
 
 export default function CreateFinanceOfferModal({
   token,
@@ -24,13 +25,14 @@ export default function CreateFinanceOfferModal({
         Create offer
       </button>
       <Modal open={open} onOpenChange={setOpen}>
-        <div className="flex w-[830px] flex-col py-6 px-4 text-black">
+        <div className="flex h-[700px] w-[830px] flex-col py-6 px-4 text-black">
           <Header
             collectionName={token?.token?.collection?.name}
             nftId={token?.token?.tokenId}
             onClose={() => setOpen(false)}
           />
-          <Tabs.Root defaultValue="custom">
+          <ListingTransactions token={token} />
+          {/* <Tabs.Root defaultValue="custom">
             <Tabs.List className="ml-[216px] flex justify-between gap-6 border-b-[1px] py-2">
               <div className="flex gap-8">
                 <Tabs.Trigger value="batch" className={tabTriggerStyles}>
@@ -48,7 +50,7 @@ export default function CreateFinanceOfferModal({
             <Tabs.Content value="custom" className={tabContentStyles}>
               <CustomListing token={token} />
             </Tabs.Content>
-          </Tabs.Root>
+          </Tabs.Root> */}
         </div>
       </Modal>
     </>
