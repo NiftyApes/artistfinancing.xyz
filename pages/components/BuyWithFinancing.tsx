@@ -1,4 +1,4 @@
-import { BuyWithFinancing } from 'components/BuyWithFinancingModal'
+import { BuyWithFinancing } from 'components/BuyWithFinancing'
 
 export default function BuyWithFinancingModalPage() {
   return (
