@@ -1,5 +1,5 @@
 import { Offer, useBuyWithFinancing } from '@niftyapes/sdk'
-import BuyWithFinancingModal from 'components/BuyWithFinancing/BuyWithFinancingModalPresentational'
+import BuyWithFinancingModal from 'components/BuyWithFinancing/BuyWithFinancingModal'
 import Section from 'components/BuyWithFinancing/Section'
 import Modal from 'components/Modal'
 
