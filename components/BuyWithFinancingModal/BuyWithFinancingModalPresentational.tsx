@@ -15,6 +15,7 @@ type Props = {
   offers: Offer[]
   selectedOffer: Offer
   setSelectedOffer: (duration: Offer) => void
+  buyWithFinancing: () => void
 }
 
 const BuyWithFinancingModal: FC<Props> = ({
@@ -24,6 +25,7 @@ const BuyWithFinancingModal: FC<Props> = ({
   offers,
   selectedOffer,
   setSelectedOffer,
+  buyWithFinancing,
 }) => {
   const [stage, setStage] = useState<'PRE' | 'POST'>('PRE')
 
@@ -70,6 +72,7 @@ const BuyWithFinancingModal: FC<Props> = ({
       <div className="mt-8 w-full border-t border-gray-300 pt-8 md:border-none">
         {stage === 'PRE' ? (
           <PrePurchaseFooter
+            buyWithFinancing={buyWithFinancing}
             onSuccessfulPurchase={() => setStage('POST')}
             closeModal={closeModal}
           />

@@ -1,11 +1,17 @@
 import { FC, useState } from 'react'
+import { BeatLoader } from 'react-spinners'
 
 type Props = {
+  buyWithFinancing: () => void
   onSuccessfulPurchase: () => void
   closeModal: () => void
 }
 
-const PrePurchaseFooter: FC<Props> = ({ onSuccessfulPurchase, closeModal }) => {
+const PrePurchaseFooter: FC<Props> = ({
+  buyWithFinancing,
+  onSuccessfulPurchase,
+  closeModal,
+}) => {
   const [status, setStatus] = useState<'READY' | 'PENDING' | 'SUCCESS'>('READY')
 
   return (
@@ -25,7 +31,7 @@ const PrePurchaseFooter: FC<Props> = ({ onSuccessfulPurchase, closeModal }) => {
             className="rounded-full border-2 border-black px-14 py-4 font-bold hover:bg-black hover:text-white hover:text-white focus:outline-none sm:px-14 md:ml-4 md:px-4 lg:px-14"
             onClick={() => {
               setStatus('PENDING')
-
+              buyWithFinancing()
               setTimeout(() => {
                 setStatus('SUCCESS')
                 setTimeout(() => {
@@ -35,11 +41,20 @@ const PrePurchaseFooter: FC<Props> = ({ onSuccessfulPurchase, closeModal }) => {
               }, 1000)
             }}
           >
-            {status === 'READY'
-              ? 'PURCHASE'
-              : status === 'PENDING'
-              ? 'PENDING'
-              : 'SUCCESS'}
+            {status === 'READY' ? (
+              'PURCHASE'
+            ) : status === 'PENDING' ? (
+              <span>
+                PENDING{' '}
+                <span
+                  style={{ position: 'relative', top: 1, marginLeft: '2px' }}
+                >
+                  <BeatLoader color="#fff" size={10} />
+                </span>
+              </span>
+            ) : (
+              'SUCCESS'
+            )}
           </button>
         </div>
       </div>

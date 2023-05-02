@@ -1,9 +1,8 @@
 import { Offer, useOffers } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
-import BuyWithFinancingModal from 'components/BuyWithFinancingModal/BuyWithFinancingModalPresentational'
-import Section from 'components/BuyWithFinancingModal/Section'
-import Modal from 'components/Modal'
 import { useEffect, useState } from 'react'
+import { useAccount } from 'wagmi'
+import { BuyWithFinancingHookContainer } from './BuyWithFinancingHookContainer'
 
 type Props = {
   collection: string
@@ -28,6 +27,8 @@ export function BuyWithFinancing({ collection, nftId }: Props) {
     collection,
     nftId,
   })
+
+  const { address } = useAccount()
 
   useEffect(() => {
     if (offersData.data && offers.length === 0) {
@@ -55,25 +56,21 @@ export function BuyWithFinancing({ collection, nftId }: Props) {
 
   return (
     <div className="mt-24 flex flex-col items-center justify-center">
-      {selectedOffer && (
-        <>
-          <Section
-            setOpen={setOpen}
-            selectedOffer={selectedOffer}
-            setSelectedOffer={setSelectedOffer}
-            offers={offers}
-          />
-          <Modal open={open}>
-            <BuyWithFinancingModal
-              tokenImgUrl={tokenImgUrl}
-              selectedOffer={selectedOffer}
-              setSelectedOffer={setSelectedOffer}
-              offers={offers}
-              closeModal={() => setOpen(false)}
-              nameOfWhatYouAreBuying={tokenName}
-            />
-          </Modal>
-        </>
+      {selectedOffer && address ? (
+        <BuyWithFinancingHookContainer
+          address={address}
+          selectedOffer={selectedOffer}
+          setSelectedOffer={setSelectedOffer}
+          offers={offers}
+          setOpen={setOpen}
+          open={open}
+          tokenImgUrl={tokenImgUrl}
+          tokenName={tokenName}
+        />
+      ) : !selectedOffer ? (
+        'no selected offer'
+      ) : (
+        'no wallet address'
       )}
     </div>
   )
