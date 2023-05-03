@@ -11,47 +11,60 @@ const ListingTransactions = ({
   const imageSrc = token?.token?.image
 
   return (
-    <div className="flex space-x-4">
+    <div className="flex h-full space-x-12 px-4 pt-8">
       <img
         alt="Token Image"
-        className="h-[400px] w-[400px] object-contain"
+        className="w-2/5 self-start object-contain"
         src={optimizeImage(imageSrc, 400)}
       />
-      <Timeline
-        events={[
-          {
-            icon: FiClock,
-            content: <p className="text-xs text-gray-400">Purchase</p>,
-            tooltipContent: (
-              <div
-                className={`align-center bg-black px-6 py-4 text-center text-sm text-white`}
-              >
-                0.88 ETH
-              </div>
-            ),
-            current: true,
-          },
-          {
-            icon: FiClock,
-            content: <p className="text-xs text-gray-400">7 days later</p>,
-          },
-          {
-            icon: FiClock,
-            content: <p className="text-xs text-gray-400">14 days later</p>,
-          },
-          {
-            icon: FiClock,
-            content: <p className="text-xs text-gray-400">21 days later</p>,
-          },
-          {
-            icon: FiClock,
-            content: <p className="text-xs text-gray-400">30 days later</p>,
-          },
-        ]}
-        orientation="vertical"
-        succeedingLine={false}
-        precedingLine={false}
-      />
+      <div className="w-3/5">
+        <Timeline
+          events={[
+            {
+              icon: FiClock,
+              content: (
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm text-black">
+                    Approve SuperRare Underground to access your NFTs
+                  </p>
+                  <p className="text-xs underline">Transaction Complete</p>
+                </div>
+              ),
+              current: true,
+            },
+            {
+              icon: FiClock,
+              content: (
+                <p className="text-sm text-black">
+                  Sign Buy-Now Offer for <b>4.4 ETH</b>
+                </p>
+              ),
+            },
+            {
+              icon: FiClock,
+              content: (
+                <p className="text-sm text-black">
+                  Sign Financing Offer for <b>4.51 ETH</b> over <b>30 days</b>
+                </p>
+              ),
+            },
+            {
+              icon: FiClock,
+              content: (
+                <p className="text-sm text-black">
+                  Sign Financing Offer for <b>4.554 ETH</b> over <b>90 days</b>
+                </p>
+              ),
+            },
+            {
+              icon: FiClock,
+              content: <p className="text-sm text-black">Listings Completed</p>,
+            },
+          ]}
+          orientation="vertical"
+          succeedingLine={false}
+        />
+      </div>
     </div>
   )
 }
