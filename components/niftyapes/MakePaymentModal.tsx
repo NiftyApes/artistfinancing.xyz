@@ -236,9 +236,7 @@ export default function MakePaymentModal({
                         />
                         <button
                           className="btn-purple-fill ml-auto"
-                          onClick={() => {
-                            write?.()
-                          }}
+                          onClick={() => write?.()}
                         >
                           Make Payment
                         </button>
