@@ -16,6 +16,8 @@ export function BuyWithFinancing({ collection, nftId }: Props) {
 
   const [selectedOffer, setSelectedOffer] = useState<Offer>()
 
+  const [hasInitialized, setHasInitialized] = useState(false)
+
   const tokenData = useTokens({
     tokens: [`${collection}:${nftId}`],
     includeTopBid: true,
@@ -31,12 +33,16 @@ export function BuyWithFinancing({ collection, nftId }: Props) {
   const { address } = useAccount()
 
   useEffect(() => {
-    if (offersData.data && offers.length === 0) {
-      const offers = offersData.data
+    if (offersData.data && !hasInitialized) {
+      const offers = offersData.data.filter(
+        (offer) => offer.status === 'ACTIVE'
+      )
 
       setOffers(offers)
 
       setSelectedOffer(offers[0])
+
+      setHasInitialized(true)
     }
   }, [offersData])
 
@@ -47,7 +53,7 @@ export function BuyWithFinancing({ collection, nftId }: Props) {
   const tokenName = token?.token?.name
 
   if (tokenData.isFetchingInitialData) {
-    return <div>Loading...</div>
+    return <div>Loading token data...</div>
   }
 
   if (!tokenData.isFetchingInitialData && !token) {
@@ -68,9 +74,9 @@ export function BuyWithFinancing({ collection, nftId }: Props) {
           tokenName={tokenName}
         />
       ) : !selectedOffer ? (
-        'no selected offer'
+        'No offers'
       ) : (
-        'no wallet address'
+        'No wallet connected'
       )}
     </div>
   )

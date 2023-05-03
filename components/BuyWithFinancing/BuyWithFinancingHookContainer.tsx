@@ -33,22 +33,23 @@ export function BuyWithFinancingHookContainer({
   return (
     <div>
       <Section
-        setOpen={setOpen}
+        offers={offers}
         selectedOffer={selectedOffer}
         setSelectedOffer={setSelectedOffer}
-        offers={offers}
+        setOpen={setOpen}
       />
       <Modal open={open}>
         {/* TODO: surface errors if data.write is undefined due to error in usePrepareContractWrite */}
         {data && data.write && (
           <BuyWithFinancingModal
+            nameOfWhatYouAreBuying={tokenName}
             tokenImgUrl={tokenImgUrl}
+            offers={offers}
             selectedOffer={selectedOffer}
             setSelectedOffer={setSelectedOffer}
-            offers={offers}
-            closeModal={() => setOpen(false)}
-            nameOfWhatYouAreBuying={tokenName}
             buyWithFinancing={data.write}
+            didBuyWithFinancingSucceed={data.isError}
+            closeModal={() => setOpen(false)}
           />
         )}
       </Modal>

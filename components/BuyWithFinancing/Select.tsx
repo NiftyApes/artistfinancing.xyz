@@ -24,12 +24,6 @@ export default function Select({
   onSelect,
   value,
 }: Props) {
-  const days =
-    processOffer(value.offer).payPeriodDays *
-    processOffer(value.offer).numPayPeriods
-
-  const apr = processOffer(value.offer).apr
-
   return (
     <div style={{ fontFamily: 'Inter' }}>
       <DropdownMenu>
@@ -42,7 +36,10 @@ export default function Select({
           )}
         >
           <span className="inline-flex select-none items-center justify-center rounded-md px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2">
-            {`${days} Days`}
+            {`${
+              processOffer(value.offer).payPeriodDays *
+              processOffer(value.offer).numPayPeriods
+            } Days`}
             <ChevronDownIcon
               className={clsx(
                 'ml-2 h-5 w-5 stroke-2',
@@ -77,7 +74,9 @@ export default function Select({
                 )}
               >
                 <span className="font-bold">
-                  {typeof option === 'string' ? option : `${days} Days`}
+                  {processOffer(option.offer).payPeriodDays *
+                    processOffer(option.offer).numPayPeriods}{' '}
+                  Days
                 </span>
                 {typeof option !== 'string' && (
                   <span
@@ -85,7 +84,9 @@ export default function Select({
                       'ml-10',
                       !isDarkMode && 'text-gray-300 hover:text-white'
                     )}
-                  >{`${apr}%`}</span>
+                  >
+                    {processOffer(option.offer).apr}%
+                  </span>
                 )}
               </DropdownMenuItem>
             </React.Fragment>

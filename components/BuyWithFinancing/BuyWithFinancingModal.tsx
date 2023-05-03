@@ -11,21 +11,23 @@ import PrePurchaseMainContent from './PrePurchaseMainContent'
 type Props = {
   nameOfWhatYouAreBuying?: string
   tokenImgUrl?: string
-  closeModal: () => void
   offers: Offer[]
   selectedOffer: Offer
   setSelectedOffer: (duration: Offer) => void
   buyWithFinancing: () => void
+  didBuyWithFinancingSucceed: boolean
+  closeModal: () => void
 }
 
 const BuyWithFinancingModal: FC<Props> = ({
   nameOfWhatYouAreBuying,
   tokenImgUrl,
-  closeModal,
   offers,
   selectedOffer,
   setSelectedOffer,
   buyWithFinancing,
+  didBuyWithFinancingSucceed,
+  closeModal,
 }) => {
   const [stage, setStage] = useState<'PRE' | 'POST'>('PRE')
 
@@ -73,6 +75,7 @@ const BuyWithFinancingModal: FC<Props> = ({
         {stage === 'PRE' ? (
           <PrePurchaseFooter
             buyWithFinancing={buyWithFinancing}
+            didBuyWithFinancingSucceed={didBuyWithFinancingSucceed}
             onSuccessfulPurchase={() => setStage('POST')}
             closeModal={closeModal}
           />
