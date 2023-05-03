@@ -25,7 +25,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ descriptor, ...props }) => {
 
   return (
     <div
-      className={`flex h-[46px] w-[170px] border-[1px] border-gray-500 bg-white ${focusClasses}`}
+      className={`flex border-[1px] border-gray-500 bg-white ${focusClasses}`}
     >
       <input
         type="number"

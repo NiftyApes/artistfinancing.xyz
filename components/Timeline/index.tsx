@@ -58,7 +58,7 @@ export const Timeline: React.FC<TimelineProps> = ({
             key={index}
             className={clsx('flex flex-grow items-center', {
               'flex-col space-y-2': orientation === 'horizontal',
-              'flex-row space-x-2': orientation === 'vertical',
+              'flex-row space-x-4': orientation === 'vertical',
             })}
           >
             <div
