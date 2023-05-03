@@ -48,7 +48,7 @@ export function BuyWithFinancingHookContainer({
             selectedOffer={selectedOffer}
             setSelectedOffer={setSelectedOffer}
             buyWithFinancing={data.write}
-            didBuyWithFinancingSucceed={data.isError}
+            didBuyWithFinancingSucceed={data.isSuccess}
             closeModal={() => setOpen(false)}
           />
         )}
