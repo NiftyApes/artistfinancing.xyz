@@ -72,10 +72,8 @@ export default function MakePaymentModal({
   }
 
   const {
-    error,
     data: paymentTxn,
     isError,
-    status,
     write,
   } = useMakePayment({
     nftContractAddress: offer.nftContractAddress,
