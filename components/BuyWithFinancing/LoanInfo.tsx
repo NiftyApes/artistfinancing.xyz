@@ -20,8 +20,12 @@ const LoanInfo: FC<Props> = ({
     () => [
       ['Total Cost', totalCost + ' Ξ'],
       ['Down Payment', downPayment + ' Ξ'],
-      ['Duration', duration, 'Tooltip explaining duration'],
-      ['APR', APR, 'Tooltip explaining APR'],
+      [
+        'Duration',
+        duration,
+        'Length of financing, shorter means less interest.',
+      ],
+      ['APR', APR, 'Annual cost of borrowing, lower is better.'],
     ],
     [totalCost, downPayment, duration, APR]
   )
