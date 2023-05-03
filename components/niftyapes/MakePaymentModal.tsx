@@ -19,16 +19,17 @@ import { AiOutlineArrowRight } from 'react-icons/ai'
 import { SiEthereum } from 'react-icons/si'
 import PaymentModalTermStats from './PaymentModalTermStats'
 import { BigNumber } from 'ethers'
-import { useMakePayment } from '../../hooks/niftyapes/useMakePayment'
 import { OfferDetails } from '@niftyapes/sdk'
 import { useEtherscanUri } from '../../hooks/niftyapes/useEtherscan'
 import { processOffer } from '../../lib/niftyapes/processOffer'
-import { formatEther } from 'ethers/lib/utils'
+import { formatEther, parseEther } from 'ethers/lib/utils'
 import FormatNativeCrypto from '../FormatNativeCrypto'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useQueryClient } from 'react-query'
 import { useRouter } from 'next/router'
 import { LoanDetails } from 'hooks/niftyapes/useLoans'
+import { useMakePayment } from '@niftyapes/sdk'
+import { useWaitForTransaction } from 'wagmi'
 
 export default function MakePaymentModal({
   data,
@@ -43,21 +44,24 @@ export default function MakePaymentModal({
   const router = useRouter()
   const { address } = router.query
   const parentTableQuery = `/loans?buyer=${address as string}`
-
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure()
   const etherscanUri: string = useEtherscanUri()
+
+  const minPayment: BigNumber = BigNumber.from(
+    loan.minimumPrincipalPerPeriod
+  ).add(
+    BigNumber.from(loan.remainingPrincipal)
+      .mul(BigNumber.from(loan.periodInterestRateBps))
+      .div(BigNumber.from('10000'))
+  )
+
+  const [payment, setPayment] = useState<BigNumber>(minPayment)
 
   const { apr, payPeriodDays, loanDurMos } = processOffer(offer)
 
   const onClose = () => {
     onModalClose()
   }
-
-  const payment: BigNumber = BigNumber.from(loan.minimumPrincipalPerPeriod).add(
-    BigNumber.from(loan.remainingPrincipal)
-      .mul(BigNumber.from(loan.periodInterestRateBps))
-      .div(BigNumber.from('10000'))
-  )
 
   const terms = {
     apr: apr,
@@ -68,9 +72,7 @@ export default function MakePaymentModal({
   }
 
   const {
-    data: paymentTransaction,
-    isLoading,
-    isSuccess,
+    data: paymentTxn,
     isError,
     write,
   } = useMakePayment({
@@ -79,14 +81,22 @@ export default function MakePaymentModal({
     paymentAmount: payment,
   })
 
+  const {
+    isLoading: isLoadingTxn,
+    isSuccess: isSuccessTxn,
+    isError: isErrorTxn,
+  } = useWaitForTransaction({
+    hash: paymentTxn?.hash,
+  })
+
   useEffect(() => {
     // Invalidates parent table query three seconds after the transaction
-    if (isSuccess) {
+    if (isSuccessTxn) {
       setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: [parentTableQuery] })
       }, 3000)
     }
-  }, [isSuccess])
+  }, [isSuccessTxn])
 
   return (
     <>
@@ -129,26 +139,25 @@ export default function MakePaymentModal({
                 <PaymentModalTermStats terms={terms} />
               </VStack>
               <Box p="6" w="full">
-                {paymentTransaction &&
-                  isSuccess &&
-                  `Thanks for your payment. Transaction processed successfully. `}
-                {paymentTransaction &&
-                  isLoading &&
-                  `Processing transaction... `}
-                {paymentTransaction &&
-                  isError &&
-                  `Unable to process transaction... `}
-                {paymentTransaction && (
+                {isError && 'We have an error here...'}
+
+                {paymentTxn && (
                   <Box>
+                    {isSuccessTxn &&
+                      `Thanks for your payment. Transaction processed successfully. `}
+                    {isLoadingTxn && `Processing transaction... `}
+                    {isErrorTxn && `Unable to process transaction... `}
+
                     <Link
-                      href={`${etherscanUri}/tx/${paymentTransaction.hash}`}
+                      href={`${etherscanUri}/tx/${paymentTxn?.hash}`}
                       isExternal
                     >
                       View Transaction
                     </Link>
                   </Box>
                 )}
-                {!paymentTransaction && (
+
+                {!paymentTxn && (
                   <VStack
                     align="start"
                     width="full"
@@ -158,13 +167,12 @@ export default function MakePaymentModal({
                     <div className="flex w-full flex-row items-center justify-between rounded-md bg-gray-700 p-4">
                       <div className="flex flex-col items-center gap-2">
                         <div className="flex flex-row items-center gap-2 text-xl font-semibold">
-                          <p>
-                            {Number(
-                              formatEther(loan.remainingPrincipal)
-                            ).toFixed(4)}
-                          </p>
+                          {Number(formatEther(loan.remainingPrincipal)).toFixed(
+                            4
+                          )}
+
                           <AiOutlineArrowRight />
-                          <p className="text-green-400">
+                          <span className="text-green-400">
                             {Number(
                               formatEther(
                                 BigNumber.from(loan.remainingPrincipal).sub(
@@ -172,7 +180,7 @@ export default function MakePaymentModal({
                                 )
                               )
                             ).toFixed(4)}
-                          </p>
+                          </span>
                         </div>
                         <p className="text-sm text-gray-300">
                           Principal Change
@@ -180,12 +188,10 @@ export default function MakePaymentModal({
                       </div>
                       <div className="flex flex-col items-center gap-2">
                         <div className="flex flex-row items-center gap-2 text-xl font-semibold">
-                          <p>
-                            <FormatNativeCrypto
-                              maximumFractionDigits={4}
-                              amount={payment}
-                            />
-                          </p>
+                          <FormatNativeCrypto
+                            maximumFractionDigits={4}
+                            amount={payment}
+                          />
                         </div>
                         <p className="text-sm text-gray-300">Payment Due Now</p>
                       </div>
@@ -213,7 +219,16 @@ export default function MakePaymentModal({
                         <input
                           value={formatEther(payment)}
                           type="number"
-                          className="reservoir-label-l input-primary-outline dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:ring-primary-900 dark:placeholder:text-neutral-400  dark:focus:ring-4"
+                          onChange={(event) => {
+                            const newPayment: BigNumber = parseEther(
+                              event.target.value
+                            )
+                            if (newPayment.gt(minPayment)) {
+                              setPayment(newPayment)
+                            }
+                          }}
+                          className="reservoir-label-l input-primary-outline dark:border-neutral-600 dark:bg-neutral-800
+                        dark:text-white dark:ring-primary-900 dark:placeholder:text-neutral-400 dark:focus:ring-4"
                         />
                         <button
                           className="btn-purple-fill ml-auto"
