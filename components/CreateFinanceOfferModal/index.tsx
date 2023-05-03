@@ -31,8 +31,8 @@ export default function CreateFinanceOfferModal({
             nftId={token?.token?.tokenId}
             onClose={() => setOpen(false)}
           />
-          <ListingTransactions token={token} />
-          {/* <Tabs.Root defaultValue="custom">
+          {/* <ListingTransactions token={token} /> */}
+          <Tabs.Root defaultValue="custom">
             <Tabs.List className="ml-[216px] flex justify-between gap-6 border-b-[1px] py-2">
               <div className="flex gap-8">
                 <Tabs.Trigger value="batch" className={tabTriggerStyles}>
@@ -50,7 +50,7 @@ export default function CreateFinanceOfferModal({
             <Tabs.Content value="custom" className={tabContentStyles}>
               <CustomListing token={token} />
             </Tabs.Content>
-          </Tabs.Root> */}
+          </Tabs.Root>
         </div>
       </Modal>
     </>
