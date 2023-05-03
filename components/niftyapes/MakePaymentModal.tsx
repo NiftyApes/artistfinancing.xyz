@@ -227,7 +227,7 @@ export default function MakePaymentModal({
                                 setPayment(newPayment)
                               }
                             } catch (error) {
-                              console.log(error.message)
+                              console.log(error)
                             }
                           }}
                           className="reservoir-label-l input-primary-outline dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:ring-primary-900 dark:placeholder:text-neutral-400  dark:focus:ring-4"
