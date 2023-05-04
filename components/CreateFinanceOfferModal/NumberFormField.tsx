@@ -21,7 +21,9 @@ const NumberFormField = ({
       infoValue={infoValue}
       tooltip={tooltip}
     >
-      <NumberInput id={name} descriptor={descriptor} />
+      <div className="h-[46px] w-[170px]">
+        <NumberInput id={name} descriptor={descriptor} />
+      </div>
     </FormField>
   )
 }
