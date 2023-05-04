@@ -6,15 +6,15 @@ import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
 import { FiAlertCircle } from 'react-icons/fi'
 import useLoans, { Loan } from '../../hooks/niftyapes/useLoans'
 
+import { OfferDetails } from '@niftyapes/sdk'
+import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { format } from 'date-fns'
+import { processLoan } from 'lib/niftyapes/processLoan'
+import { optimizeImage } from 'lib/optmizeImage'
 import { useAccount } from 'wagmi'
 import { useNiftyApesContract } from '../../hooks/niftyapes/useNiftyApesContract'
-import { OfferDetails } from '@niftyapes/sdk'
 import { processOffer } from '../../lib/niftyapes/processOffer'
 import FormatNativeCrypto from '../FormatNativeCrypto'
-import { processLoan } from 'lib/niftyapes/processLoan'
-import { useTokens } from '@reservoir0x/reservoir-kit-ui'
-import { optimizeImage } from 'lib/optmizeImage'
 
 type Props = {
   isOwner: boolean
@@ -35,7 +35,9 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
   const { address } = useAccount()
   const { data: loans, isLoading } = useLoans({ buyer: address })
 
-  const tokensQueryArr = loans?.map(
+  const activeLoans = loans?.filter((loan) => loan.status === 'ACTIVE')
+
+  const tokensQueryArr = activeLoans?.map(
     (item) => `${item.offer.offer.nftContractAddress}:${item.offer.offer.nftId}`
   )
   const tokens = useTokens({
@@ -62,8 +64,8 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
           </span>
         </div>
       )}
-      {!loans ||
-        (loans.length === 0 && (
+      {!activeLoans ||
+        (activeLoans.length === 0 && (
           <div className="mt-14 flex flex-col items-center justify-center text-[#525252] dark:text-white">
             <img
               src="/icons/listing-icon.svg"
@@ -78,7 +80,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
             No {showActive ? 'active' : 'inactive'} loans yet
           </div>
         ))}
-      {loans && loans.length > 0 && (
+      {activeLoans && activeLoans.length > 0 && (
         <table className="min-w-full table-auto dark:divide-neutral-600">
           <thead className="bg-white dark:bg-black">
             <tr>
@@ -106,7 +108,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
             </tr>
           </thead>
           <tbody>
-            {loans.map((item: Loan, index) => {
+            {activeLoans.map((item: Loan, index) => {
               return (
                 <UpcomingPaymentsTableRow
                   buyerNft={item.buyerNft}

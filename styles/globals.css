@@ -82,3 +82,11 @@ model-viewer {
 .markdown-support a {
   text-decoration: underline;
 }
+
+.group:hover .hover-gray-400-to-white {
+  @apply text-white;
+}
+
+.hover-gray-400-to-white {
+  @apply text-gray-400;
+}

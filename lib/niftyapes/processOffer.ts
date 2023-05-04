@@ -1,7 +1,7 @@
+import { Offer } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { FinancingFormFields } from 'components/niftyapes/list-financing/FinancingTermsForm'
 import { formatEther } from 'ethers/lib/utils.js'
-import { Offer } from '@niftyapes/sdk'
 import { DateTime, Duration } from 'luxon'
 import { Address } from 'wagmi'
 import expirationOptions, { Expiration } from './expirationOptions'
@@ -20,7 +20,7 @@ export type FinancingTerms = {
   downPaymentAmount?: number
   remainingPrincipal?: number
   minPrincipalPerPeriod?: number
-  numPayPeriods?: number
+  numPayPeriods: number
   periodDuration?: number
   periodInterestRate?: number
   periodInterestRateBps?: number
@@ -37,7 +37,13 @@ export type FinancingTerms = {
 export function processOffer(
   offerDetails: Offer['offer'],
   tokenContainer?: ReturnType<typeof useTokens>['data'][0]
-): FinancingTerms {
+): FinancingTerms & {
+  totalCost: number
+  downPaymentAmount: number
+  remainingPrincipal: number
+  periodInterestRate: number
+  minPrincipalPerPeriod: number
+} {
   const token: Record<string, any> = tokenContainer?.token || {}
 
   let tokenId: any = offerDetails.nftId
@@ -93,6 +99,9 @@ export function processOffer(
       offerDetails.expiration
     ).toRelative()!,
     tokenHref: `/${contract}/${tokenId}`,
+    numPayPeriods,
+    remainingPrincipal,
+    periodInterestRate,
   }
 }
 
