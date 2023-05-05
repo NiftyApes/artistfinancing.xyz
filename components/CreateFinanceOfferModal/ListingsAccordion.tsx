@@ -15,7 +15,6 @@ const ListingsAccordion = () => {
     <Accordion.Root
       className="m-[1px] bg-mauve6"
       type="single"
-      defaultValue="item-1"
       collapsible
     >
       <AccordionItem value="buy-now">
