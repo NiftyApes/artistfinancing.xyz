@@ -1,9 +1,22 @@
 import clsx from 'clsx'
-import React from 'react'
+import { FC } from 'react'
 import NumberFormField from './NumberFormField'
 import SelectFormField from './SelectFormField'
 
-const ListingForm = () => {
+type FinancingTerms = {
+  price: string
+  downPayment: string
+  duration: string
+  payFreq: unknown // TODO
+  apr: string
+}
+
+type Props = {
+  defaultTerms?: FinancingTerms
+  handleFormChange: (key: string, value: string) => void
+}
+
+const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
   const formFieldStyles = 'pt-4 first:pt-0'
 
   return (
@@ -14,6 +27,9 @@ const ListingForm = () => {
           descriptor="ETH"
           infoName="Total Profit"
           infoValue="4.689"
+          onChange={(value) => {
+            handleFormChange('price', value)
+          }}
         />
       </div>
       <div className={formFieldStyles}>
@@ -22,19 +38,25 @@ const ListingForm = () => {
           descriptor="%"
           infoName="Due"
           infoValue="4.6893151"
+          onChange={(value) => {
+            handleFormChange('downPayment', value)
+          }}
         />
       </div>
       <div className={clsx(formFieldStyles, 'flex flex-col space-y-4')}>
         <NumberFormField
           name="Duration"
           descriptor="Days"
-          tooltip="Diddi diddi blah blah"
+          tooltip="Length of financing, shorter means less interest."
+          onChange={(value) => {
+            handleFormChange('duration', value)
+          }}
         />
         <SelectFormField
           name="Payment Freq."
           infoName="Payments"
           infoValue="1.1733"
-          tooltip="Diddi diddi blah blah"
+          tooltip="How often payments are due from the buyer."
         />
       </div>
       <div className={formFieldStyles}>
@@ -43,7 +65,10 @@ const ListingForm = () => {
           descriptor="%"
           infoName="Interest"
           infoValue="0.00"
-          tooltip="Lorem ipsum I don't missum"
+          tooltip="Annual cost of borrowing, lower is more attractive for buyers."
+          onChange={(value) => {
+            handleFormChange('apr', value)
+          }}
         />
       </div>
     </form>

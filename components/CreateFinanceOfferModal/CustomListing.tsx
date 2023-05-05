@@ -1,5 +1,6 @@
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { Timeline } from 'components/Timeline'
+import { useState } from 'react'
 import { FiClock } from 'react-icons/fi'
 import Footer from './Footer'
 import ListingForm from './ListingForm'
@@ -10,6 +11,23 @@ export default function CustomListing({
 }: {
   token: ReturnType<typeof useTokens>['data'][0]
 }) {
+  const [formValues, setFormValues] = useState({
+    price: '',
+    downPayment: '',
+    duration: '',
+    payFreq: '',
+    apr: '',
+  })
+
+  const handleFormChange = (key: string, value: string) => {
+    setFormValues((prevFormValues) => ({
+      ...prevFormValues,
+      [key]: value,
+    }))
+  }
+
+  console.log('formValues', formValues)
+
   return (
     <div className="flex h-full flex-col justify-between">
       <div className="flex items-start space-x-4">
@@ -18,7 +36,7 @@ export default function CustomListing({
           previousSale={token?.token?.lastSell?.value}
         />
         <div className="flex-grow py-4 px-2">
-          <ListingForm />
+          <ListingForm handleFormChange={handleFormChange} />
         </div>
       </div>
       <div className="ml-8">

@@ -1,20 +1,23 @@
+import { ChangeEvent, FC } from 'react'
 import FormField from './FormField'
 import NumberInput from './NumberInput'
 
-const NumberFormField = ({
+type Props = {
+  name: string
+  descriptor: string
+  infoName?: string
+  infoValue?: string
+  tooltip?: string
+  onChange?: (value: string) => void
+}
+
+const NumberFormField: FC<Props> = ({
   name,
   descriptor,
   infoName,
   infoValue,
   tooltip,
   onChange,
-}: {
-  name: string
-  descriptor: string
-  infoName?: string
-  infoValue?: string
-  tooltip?: string
-  onChange?: () => void
 }) => {
   return (
     <FormField

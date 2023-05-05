@@ -1,7 +1,9 @@
 import React, { InputHTMLAttributes, useState } from 'react'
 
-interface NumberInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface NumberInputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   descriptor?: string
+  onChange?: (valueAsString: string, valueAsNumber: number) => void
 }
 
 const NumberInput: React.FC<NumberInputProps> = ({
@@ -29,26 +31,14 @@ const NumberInput: React.FC<NumberInputProps> = ({
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (
-      !(
-        [
-          'ArrowUp',
-          'ArrowDown',
-          'ArrowLeft',
-          'ArrowRight',
-          'Delete',
-          'Backspace',
-        ].includes(e.key) || /[0-9.]/g.test(e.key)
-      )
-    )
-      e.preventDefault()
+    if (e.key.length === 1 && /[a-zA-Z]/g.test(e.key)) e.preventDefault()
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInternalValue(e.target.value)
 
     if (onChange) {
-      onChange(e)
+      onChange(String(e.target.value), Number(e.target.value))
     }
   }
 

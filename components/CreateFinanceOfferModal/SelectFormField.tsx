@@ -11,6 +11,7 @@ const SelectFormField = ({
   infoName?: string
   infoValue?: string
   tooltip?: string
+  onChange?: (value: string) => void
 }) => {
   return (
     <FormField
