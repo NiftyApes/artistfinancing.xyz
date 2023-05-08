@@ -7,6 +7,7 @@ import CustomListing from './CustomListing'
 import Expiration from './Expiration'
 import Header from './Header'
 import ListingTransactions from './ListingTransactions'
+import { CreateListingsStoreProvider } from './state'
 
 export default function CreateFinanceOfferModal({
   token,
@@ -25,6 +26,7 @@ export default function CreateFinanceOfferModal({
         Create offer
       </button>
       <Modal open={open} onOpenChange={setOpen}>
+        {/* <CreateListingsStoreProvider> */}
         <div className="flex h-[700px] w-[830px] flex-col py-6 px-4 text-black">
           <Header
             collectionName={token?.token?.collection?.name}
@@ -52,6 +54,7 @@ export default function CreateFinanceOfferModal({
             </Tabs.Content>
           </Tabs.Root>
         </div>
+        {/* </CreateListingsStoreProvider> */}
       </Modal>
     </>
   )

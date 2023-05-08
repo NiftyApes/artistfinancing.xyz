@@ -1,9 +1,10 @@
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { Timeline } from 'components/Timeline'
-import { useState } from 'react'
+import { useContext } from 'react'
 import { FiClock } from 'react-icons/fi'
 import Footer from './Footer'
 import ListingForm from './ListingForm'
+import { CreateListingsStore } from './state'
 import TokenImage from './TokenImage'
 
 export default function CustomListing({
@@ -11,22 +12,13 @@ export default function CustomListing({
 }: {
   token: ReturnType<typeof useTokens>['data'][0]
 }) {
-  const [formValues, setFormValues] = useState({
-    price: '',
-    downPayment: '',
-    duration: '',
-    payFreq: '',
-    apr: '',
-  })
+  const { state, dispatch } = useContext(CreateListingsStore)
 
   const handleFormChange = (key: string, value: string) => {
-    setFormValues((prevFormValues) => ({
-      ...prevFormValues,
-      [key]: value,
-    }))
+    dispatch({ type: 'update_custom_form_values', payload: { key, value } })
   }
 
-  console.log('formValues', formValues)
+  console.log('formValues', state)
 
   return (
     <div className="flex h-full flex-col justify-between">
