@@ -1,3 +1,5 @@
+import { Expiration } from 'lib/niftyapes/expirationOptions'
+
 export interface State {
   custom: {
     price: string
@@ -7,7 +9,7 @@ export interface State {
     apr: string
   }
   batch: Array<any>
-  expiration: string
+  expiration: Expiration
 }
 
 type ActionTypes =
@@ -17,7 +19,7 @@ type ActionTypes =
 
 export interface Action {
   type: ActionTypes
-  payload: any
+  payload: any // TODO
 }
 
 export const initialState: State = {
@@ -29,7 +31,7 @@ export const initialState: State = {
     apr: '',
   },
   batch: [],
-  expiration: '',
+  expiration: Expiration.OneMonth,
 }
 
 export function createListingsReducer(state: State, action: Action) {
@@ -37,12 +39,18 @@ export function createListingsReducer(state: State, action: Action) {
     case 'update_custom_form_values':
       return {
         ...state,
-        [action.payload.key]: action.payload.value,
+        custom: {
+          ...state.custom,
+          [action.payload.key]: action.payload.value,
+        },
       }
     case 'update_batch_form_values':
       return initialState
     case 'update_expiration':
-      return initialState
+      return {
+        ...state,
+        expiration: action.payload,
+      }
     default:
       throw new Error(`Unhandled action type: ${action.type}`)
   }

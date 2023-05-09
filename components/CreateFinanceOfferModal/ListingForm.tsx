@@ -57,6 +57,11 @@ const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
           infoName="Payments"
           infoValue="1.1733"
           tooltip="How often payments are due from the buyer."
+          defaultValue="weekly"
+          options={[
+            { value: 'weekly', label: 'Weekly' },
+            { value: 'monthly', label: 'Monthly' },
+          ]}
         />
       </div>
       <div className={formFieldStyles}>

@@ -1,57 +1,38 @@
-import * as Select from '@radix-ui/react-select'
-import expirationOptions, {
-  Expiration as ExpirationEnum,
-} from 'lib/niftyapes/expirationOptions'
-import React from 'react'
-import {
-  IoCaretDownSharp,
-  IoCheckmark,
-  IoChevronDown,
-  IoChevronUp,
-} from 'react-icons/io5'
+import expirationOptions from 'lib/niftyapes/expirationOptions'
+import { useContext } from 'react'
+import { Select, SelectItem } from './Select'
+import { CreateListingsStore } from './state'
 
 export default function Expiration() {
+  const { state, dispatch } = useContext(CreateListingsStore)
+
+  const handleSelect = (value: string) => {
+    const selectedExpiration = expirationOptions.find(
+      (option) => String(option.value) === value
+    )
+
+    if (selectedExpiration) {
+      dispatch({ type: 'update_expiration', payload: selectedExpiration.value })
+    }
+  }
+
   return (
     <div className="flex space-x-1">
       <div className="flex h-[35px] items-center justify-center">
         <em className="text-xs text-gray-500">Expires</em>
       </div>
 
-      <Select.Root defaultValue={String(ExpirationEnum.OneMonth)}>
-        <Select.Trigger
-          className="inline-flex h-[35px] items-center justify-center gap-2 rounded bg-white px-[15px] text-sm font-semibold leading-none outline-none focus:shadow-[0_0_0_1px] focus:shadow-black"
-          aria-label="Expiration"
-        >
-          <Select.Value />
-          <Select.Icon>
-            <IoCaretDownSharp />
-          </Select.Icon>
-        </Select.Trigger>
-        <Select.Portal className="z-[1002]">
-          <Select.Content className="overflow-hidden rounded-md bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
-            <Select.ScrollUpButton className="flex h-[25px] cursor-default items-center justify-center bg-white text-violet11">
-              <IoChevronUp />
-            </Select.ScrollUpButton>
-            <Select.Viewport className="p-2">
-              {expirationOptions.map((expiration, idx) => (
-                <Select.Item
-                  key={idx}
-                  value={String(expiration.value)}
-                  className="relative flex h-[25px] select-none items-center rounded-sm px-[35px] pl-[25px] text-sm font-semibold text-black data-[highlighted]:bg-gray-200 data-[highlighted]:text-black data-[highlighted]:outline-none"
-                >
-                  <Select.ItemText>{expiration.label}</Select.ItemText>
-                  <Select.ItemIndicator className="absolute left-0 inline-flex w-[25px] items-center justify-center">
-                    <IoCheckmark size={16} />
-                  </Select.ItemIndicator>
-                </Select.Item>
-              ))}
-            </Select.Viewport>
-            <Select.ScrollDownButton className="flex h-[25px] cursor-default items-center justify-center bg-white text-violet11">
-              <IoChevronDown />
-            </Select.ScrollDownButton>
-          </Select.Content>
-        </Select.Portal>
-      </Select.Root>
+      <Select
+        defaultValue={String(state.expiration)}
+        onValueChange={handleSelect}
+        triggerClassName="inline-flex h-[35px] items-center justify-center gap-2 rounded bg-white px-[15px] text-sm font-semibold leading-none outline-none focus:shadow-[0_0_0_1px] focus:shadow-black"
+      >
+        {expirationOptions.map((expiration, idx) => (
+          <SelectItem key={idx} value={String(expiration.value)}>
+            {expiration.label}
+          </SelectItem>
+        ))}
+      </Select>
     </div>
   )
 }
