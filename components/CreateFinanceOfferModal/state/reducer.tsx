@@ -8,7 +8,7 @@ export interface State {
     payFreq: string
     apr: string
   }
-  batch: Array<any>
+  batch: any // TODO
   expiration: Expiration
 }
 
@@ -30,12 +30,22 @@ export const initialState: State = {
     payFreq: '',
     apr: '',
   },
-  batch: [],
+  batch: {
+    buyNow: {
+      price: '',
+      enabled: false,
+    },
+  },
   expiration: Expiration.OneMonth,
 }
 
 export function createListingsReducer(state: State, action: Action) {
   switch (action.type) {
+    case 'update_expiration':
+      return {
+        ...state,
+        expiration: action.payload,
+      }
     case 'update_custom_form_values':
       return {
         ...state,
@@ -46,11 +56,6 @@ export function createListingsReducer(state: State, action: Action) {
       }
     case 'update_batch_form_values':
       return initialState
-    case 'update_expiration':
-      return {
-        ...state,
-        expiration: action.payload,
-      }
     default:
       throw new Error(`Unhandled action type: ${action.type}`)
   }
