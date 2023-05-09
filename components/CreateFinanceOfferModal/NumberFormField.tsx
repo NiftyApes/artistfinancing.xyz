@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from 'react'
+import { FC } from 'react'
 import FormField from './FormField'
 import NumberInput from './NumberInput'
 
@@ -8,6 +8,7 @@ type Props = {
   infoName?: string
   infoValue?: string
   tooltip?: string
+  defaultValue?: string
   onChange?: (value: string) => void
 }
 
@@ -17,6 +18,7 @@ const NumberFormField: FC<Props> = ({
   infoName,
   infoValue,
   tooltip,
+  defaultValue,
   onChange,
 }) => {
   return (
@@ -27,7 +29,12 @@ const NumberFormField: FC<Props> = ({
       tooltip={tooltip}
     >
       <div className="h-[46px] w-[170px]">
-        <NumberInput id={name} descriptor={descriptor} onChange={onChange} />
+        <NumberInput
+          id={name}
+          descriptor={descriptor}
+          onChange={onChange}
+          defaultValue={defaultValue}
+        />
       </div>
     </FormField>
   )

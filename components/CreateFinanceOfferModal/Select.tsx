@@ -8,7 +8,7 @@ import {
 } from 'react-icons/io5'
 
 interface Props extends SelectPrimitive.SelectProps {
-  triggerClassName: string
+  triggerClassName?: string
 }
 
 export const Select = React.forwardRef<

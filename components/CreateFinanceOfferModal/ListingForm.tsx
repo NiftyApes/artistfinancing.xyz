@@ -7,7 +7,7 @@ type FinancingTerms = {
   price: string
   downPayment: string
   duration: string
-  payFreq: unknown // TODO
+  payFreq: string
   apr: string
 }
 
@@ -27,6 +27,7 @@ const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
           descriptor="ETH"
           infoName="Total Profit"
           infoValue="4.689"
+          defaultValue={defaultTerms?.price}
           onChange={(value) => {
             handleFormChange('price', value)
           }}
@@ -38,6 +39,7 @@ const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
           descriptor="%"
           infoName="Due"
           infoValue="4.6893151"
+          defaultValue={defaultTerms?.downPayment}
           onChange={(value) => {
             handleFormChange('downPayment', value)
           }}
@@ -48,6 +50,7 @@ const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
           name="Duration"
           descriptor="Days"
           tooltip="Length of financing, shorter means less interest."
+          defaultValue={defaultTerms?.duration}
           onChange={(value) => {
             handleFormChange('duration', value)
           }}
@@ -57,11 +60,14 @@ const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
           infoName="Payments"
           infoValue="1.1733"
           tooltip="How often payments are due from the buyer."
-          defaultValue="weekly"
+          defaultValue={defaultTerms?.payFreq}
           options={[
             { value: 'weekly', label: 'Weekly' },
             { value: 'monthly', label: 'Monthly' },
           ]}
+          onChange={(value) => {
+            handleFormChange('payFreq', value)
+          }}
         />
       </div>
       <div className={formFieldStyles}>
@@ -71,6 +77,7 @@ const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
           infoName="Interest"
           infoValue="0.00"
           tooltip="Annual cost of borrowing, lower is more attractive for buyers."
+          defaultValue={defaultTerms?.apr}
           onChange={(value) => {
             handleFormChange('apr', value)
           }}

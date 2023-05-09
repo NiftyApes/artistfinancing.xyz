@@ -24,6 +24,7 @@ const SelectFormField: FC<Props> = ({
   infoName,
   infoValue,
   tooltip,
+  onChange,
 }) => {
   return (
     <FormField
@@ -32,7 +33,7 @@ const SelectFormField: FC<Props> = ({
       infoValue={infoValue}
       tooltip={tooltip}
     >
-      <Select defaultValue={defaultValue}>
+      <Select defaultValue={defaultValue} onValueChange={onChange}>
         {options.map((option, idx) => (
           <SelectItem key={idx} value={option.value}>
             {option.label}

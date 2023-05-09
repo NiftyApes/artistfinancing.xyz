@@ -28,7 +28,10 @@ export default function CustomListing({
           previousSale={token?.token?.lastSell?.value}
         />
         <div className="flex-grow py-4 px-2">
-          <ListingForm handleFormChange={handleFormChange} />
+          <ListingForm
+            defaultTerms={state.custom}
+            handleFormChange={handleFormChange}
+          />
         </div>
       </div>
       <div className="ml-8">
