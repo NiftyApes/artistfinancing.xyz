@@ -8,6 +8,10 @@ export interface State {
     payFreq: string
     apr: string
   }
+  buyNow: {
+    enabled: boolean
+    price: string
+  }
   batch: any // TODO
   expiration: Expiration
 }
@@ -16,6 +20,7 @@ type ActionTypes =
   | 'update_custom_form_values'
   | 'update_batch_form_values'
   | 'update_expiration'
+  | 'update_buy_now'
 
 export interface Action {
   type: ActionTypes
@@ -30,12 +35,11 @@ export const initialState: State = {
     payFreq: '',
     apr: '',
   },
-  batch: {
-    buyNow: {
-      price: '',
-      enabled: false,
-    },
+  buyNow: {
+    price: '',
+    enabled: false,
   },
+  batch: {},
   expiration: Expiration.OneMonth,
 }
 
@@ -51,6 +55,14 @@ export function createListingsReducer(state: State, action: Action) {
         ...state,
         custom: {
           ...state.custom,
+          [action.payload.key]: action.payload.value,
+        },
+      }
+    case 'update_buy_now':
+      return {
+        ...state,
+        buyNow: {
+          ...state.buyNow,
           [action.payload.key]: action.payload.value,
         },
       }

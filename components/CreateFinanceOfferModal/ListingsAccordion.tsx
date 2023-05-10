@@ -1,29 +1,53 @@
 import * as Accordion from '@radix-ui/react-accordion'
 import clsx from 'clsx'
 import Checkbox from 'components/Checkbox'
-import React from 'react'
+import React, { useContext } from 'react'
 import { IoAddSharp, IoChevronDown } from 'react-icons/io5'
 import ListingForm from './ListingForm'
 import NumberInput from './NumberInput'
+import { CreateListingsStore } from './state'
 
 const ListingsAccordion = () => {
-  const handleCheck = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const { state, dispatch } = useContext(CreateListingsStore)
+
+  const preventAccordionTrigger = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.stopPropagation()
   }
 
+  console.log(state)
+
   return (
-    <Accordion.Root
-      className="m-[1px] bg-mauve6"
-      type="single"
-      collapsible
-    >
+    <Accordion.Root className="m-[1px] bg-mauve6" type="single" collapsible>
       <AccordionItem value="buy-now">
         <AccordionTrigger noContent={true}>
           <div className="flex items-center space-x-16">
             <div className="flex w-[180px] items-center space-x-4">
-              <Checkbox className="flex-shrink-0" onClick={handleCheck} />
+              <Checkbox
+                className="flex-shrink-0"
+                onClick={preventAccordionTrigger}
+                defaultChecked={state.buyNow.enabled}
+                onCheckedChange={(checked: boolean | 'indeterminate') => {
+                  if (checked !== 'indeterminate') {
+                    dispatch({
+                      type: 'update_buy_now',
+                      payload: { key: 'enabled', value: checked },
+                    })
+                  }
+                }}
+              />
               <div className="w-[150px]">
-                <NumberInput descriptor="ETH" />
+                <NumberInput
+                  descriptor="ETH"
+                  defaultValue={state.buyNow.price}
+                  onChange={(valueAsString) => {
+                    dispatch({
+                      type: 'update_buy_now',
+                      payload: { key: 'price', value: valueAsString },
+                    })
+                  }}
+                />
               </div>
             </div>
             <p className="text-gray-600">Buy Now Price</p>
@@ -35,7 +59,7 @@ const ListingsAccordion = () => {
         <AccordionTrigger>
           <div className="flex items-center space-x-16">
             <div className="flex w-[180px] items-center space-x-4">
-              <Checkbox onClick={handleCheck} />
+              <Checkbox onClick={preventAccordionTrigger} />
               <p className="text-gray-600">30 Day Financing</p>
             </div>
             <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
@@ -53,7 +77,7 @@ const ListingsAccordion = () => {
         <AccordionTrigger>
           <div className="flex items-center space-x-16">
             <div className="flex w-[180px] items-center space-x-4">
-              <Checkbox onClick={handleCheck} />
+              <Checkbox onClick={preventAccordionTrigger} />
               <p className="text-gray-600">3 Month Financing</p>
             </div>
             <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
@@ -71,7 +95,7 @@ const ListingsAccordion = () => {
         <AccordionTrigger>
           <div className="flex items-center space-x-16">
             <div className="flex w-[180px] items-center space-x-4">
-              <Checkbox onClick={handleCheck} />
+              <Checkbox onClick={preventAccordionTrigger} />
               <p className="text-gray-600">6 Month Financing</p>
             </div>
             <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
