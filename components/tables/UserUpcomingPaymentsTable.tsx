@@ -4,7 +4,8 @@ import { ComponentProps, FC } from 'react'
 
 import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
 import { FiAlertCircle } from 'react-icons/fi'
-import useLoans, { Loan } from '../../hooks/niftyapes/useLoans'
+
+import { Loan, useLoans } from '@niftyapes/sdk'
 
 import { OfferDetails } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'

@@ -27,8 +27,7 @@ import FormatNativeCrypto from '../FormatNativeCrypto'
 import { useEffect, useState } from 'react'
 import { useQueryClient } from 'react-query'
 import { useRouter } from 'next/router'
-import { LoanDetails } from 'hooks/niftyapes/useLoans'
-import { useMakePayment } from '@niftyapes/sdk'
+import { useMakePayment, LoanDetails } from '@niftyapes/sdk'
 import { useWaitForTransaction } from 'wagmi'
 
 export default function MakePaymentModal({
