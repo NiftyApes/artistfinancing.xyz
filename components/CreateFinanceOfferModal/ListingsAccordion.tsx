@@ -3,9 +3,10 @@ import clsx from 'clsx'
 import Checkbox from 'components/Checkbox'
 import React, { useContext } from 'react'
 import { IoAddSharp, IoChevronDown } from 'react-icons/io5'
+import { processTerms } from './lib/processTerms'
 import ListingForm from './ListingForm'
 import NumberInput from './NumberInput'
-import { CreateListingsStore } from './state'
+import { CreateListingsStore } from './store'
 
 /** 
   TODO: Refactor components so that the <Checkbox> <button>
@@ -70,6 +71,8 @@ const ListingsAccordion = () => {
           })
         }
 
+        const processedTerms = processTerms(listing)
+
         return (
           <AccordionItem key={idx} value={`batch-listing-${idx}`}>
             <AccordionTrigger>
@@ -84,10 +87,12 @@ const ListingsAccordion = () => {
                       }
                     }}
                   />
-                  <p className="text-gray-600">30 Day Financing</p>
+                  <p className="text-gray-600">
+                    {processedTerms.duration || '-'} Day Financing
+                  </p>
                 </div>
                 <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
-                  <p className="font-semibold">4.51</p>
+                  <p className="font-semibold">{processedTerms.profit}</p>
                   <p className="text-gray-600">Sale Price</p>
                 </div>
               </div>
