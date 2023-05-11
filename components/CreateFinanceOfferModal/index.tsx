@@ -26,7 +26,7 @@ export default function CreateFinanceOfferModal({
         Create offer
       </button>
       <Modal open={open} onOpenChange={setOpen}>
-        <CreateListingsStoreProvider token={token}>
+        <CreateListingsStoreProvider>
           <div className="flex h-[700px] w-[830px] flex-col py-6 px-4 text-black">
             <Header
               collectionName={token?.token?.collection?.name}

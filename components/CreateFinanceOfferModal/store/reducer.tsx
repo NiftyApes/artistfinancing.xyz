@@ -1,4 +1,3 @@
-import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { Expiration } from 'lib/niftyapes/expirationOptions'
 
 export interface State {
@@ -36,50 +35,45 @@ export interface Action {
   payload?: any // TODO
 }
 
-// TODO (?): Use information from token to determine base price
-export const getInitialState = (
-  token?: ReturnType<typeof useTokens>['data'][0]
-): State => {
-  return {
-    custom: {
-      price: '',
-      downPayment: '',
-      duration: '',
-      payFreq: '',
-      apr: '',
-    },
-    buyNow: {
+export const initialState: State = {
+  custom: {
+    price: '',
+    downPayment: '',
+    duration: '',
+    payFreq: '',
+    apr: '',
+  },
+  buyNow: {
+    enabled: false,
+    price: '',
+  },
+  batch: [
+    {
       enabled: false,
       price: '',
+      downPayment: '25',
+      duration: '30',
+      payFreq: 'weekly',
+      apr: '0',
     },
-    batch: [
-      {
-        enabled: false,
-        price: '',
-        downPayment: '25',
-        duration: '30',
-        payFreq: 'weekly',
-        apr: '0',
-      },
-      {
-        enabled: false,
-        price: '',
-        downPayment: '33',
-        duration: '90',
-        payFreq: 'monthly',
-        apr: '3',
-      },
-      {
-        enabled: false,
-        price: '',
-        downPayment: '25',
-        duration: '180',
-        payFreq: 'monthly',
-        apr: '8',
-      },
-    ],
-    expiration: Expiration.OneMonth,
-  }
+    {
+      enabled: false,
+      price: '',
+      downPayment: '33',
+      duration: '90',
+      payFreq: 'monthly',
+      apr: '3',
+    },
+    {
+      enabled: false,
+      price: '',
+      downPayment: '25',
+      duration: '180',
+      payFreq: 'monthly',
+      apr: '8',
+    },
+  ],
+  expiration: Expiration.OneMonth,
 }
 
 export function createListingsReducer(state: State, action: Action) {
