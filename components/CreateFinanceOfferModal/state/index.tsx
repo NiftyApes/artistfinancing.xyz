@@ -1,5 +1,11 @@
+import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { createContext, Dispatch, ReactNode, useReducer } from 'react'
-import { Action, createListingsReducer, initialState, State } from './reducer'
+import {
+  Action,
+  createListingsReducer,
+  getInitialState,
+  State,
+} from './reducer'
 
 interface Store {
   state: State
@@ -7,7 +13,7 @@ interface Store {
 }
 
 export const CreateListingsStore = createContext<Store>({
-  state: initialState,
+  state: getInitialState(),
   dispatch: () => {
     console.warn(
       'Default dispatch is a no-op. Components requiring the store must be wrapped in the CreateListingsStoreProvider'
@@ -16,10 +22,13 @@ export const CreateListingsStore = createContext<Store>({
 })
 
 export const CreateListingsStoreProvider = ({
+  token,
   children,
 }: {
+  token: ReturnType<typeof useTokens>['data'][0]
   children: ReactNode
 }) => {
+  const initialState = getInitialState(token)
   const [state, dispatch] = useReducer(createListingsReducer, initialState)
 
   return (

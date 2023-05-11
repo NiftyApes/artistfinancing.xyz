@@ -15,7 +15,7 @@ export default function CustomListing({
   const { state, dispatch } = useContext(CreateListingsStore)
 
   const handleFormChange = (key: string, value: string) => {
-    dispatch({ type: 'update_custom_form_values', payload: { key, value } })
+    dispatch({ type: 'update_custom_form_value', payload: { key, value } })
   }
 
   console.log('formValues', state)

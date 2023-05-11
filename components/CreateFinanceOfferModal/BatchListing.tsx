@@ -1,13 +1,14 @@
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
+import { FC } from 'react'
 import Footer from './Footer'
 import ListingsAccordion from './ListingsAccordion'
 import TokenImage from './TokenImage'
 
-export default function BatchListing({
-  token,
-}: {
+type Props = {
   token: ReturnType<typeof useTokens>['data'][0]
-}) {
+}
+
+const BatchListing: FC<Props> = ({ token }) => {
   return (
     <div className="flex h-full flex-col justify-between">
       <div className="flex items-start space-x-4">
@@ -23,3 +24,5 @@ export default function BatchListing({
     </div>
   )
 }
+
+export default BatchListing
