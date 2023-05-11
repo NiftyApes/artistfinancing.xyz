@@ -1,4 +1,6 @@
 import clsx from 'clsx'
+import { calculateTotalInterest } from 'lib/niftyapes/processOffer'
+import { formatNumber } from 'lib/numbers'
 import { FC } from 'react'
 import NumberFormField from './NumberFormField'
 import SelectFormField from './SelectFormField'
@@ -11,12 +13,21 @@ type FinancingTerms = {
   apr: string
 }
 
+type ProcessedTerms = FinancingTerms & {
+  profit: string
+  onSale: string
+  payments: string
+  interest: string
+}
+
 type Props = {
-  defaultTerms?: FinancingTerms
+  terms: FinancingTerms
   handleFormChange: (key: string, value: string) => void
 }
 
-const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
+const ListingForm: FC<Props> = ({ terms, handleFormChange }) => {
+  const processedTerms = processTerms(terms)
+
   const formFieldStyles = 'pt-4 first:pt-0'
 
   return (
@@ -26,8 +37,8 @@ const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
           name="Price"
           descriptor="ETH"
           infoName="Total Profit"
-          infoValue="4.689"
-          defaultValue={defaultTerms?.price}
+          infoValue={processedTerms.profit}
+          defaultValue={processedTerms.price}
           onChange={(value) => {
             handleFormChange('price', value)
           }}
@@ -37,9 +48,9 @@ const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
         <NumberFormField
           name="Down Payment"
           descriptor="%"
-          infoName="Due"
-          infoValue="4.6893151"
-          defaultValue={defaultTerms?.downPayment}
+          infoName="On Sale"
+          infoValue={processedTerms.onSale}
+          defaultValue={processedTerms.downPayment}
           onChange={(value) => {
             handleFormChange('downPayment', value)
           }}
@@ -50,7 +61,7 @@ const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
           name="Duration"
           descriptor="Days"
           tooltip="Length of financing, shorter means less interest."
-          defaultValue={defaultTerms?.duration}
+          defaultValue={processedTerms.duration}
           onChange={(value) => {
             handleFormChange('duration', value)
           }}
@@ -58,9 +69,9 @@ const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
         <SelectFormField
           name="Payment Freq."
           infoName="Payments"
-          infoValue="1.1733"
+          infoValue={processedTerms.payments}
           tooltip="How often payments are due from the buyer."
-          defaultValue={defaultTerms?.payFreq}
+          defaultValue={processedTerms.payFreq}
           options={[
             { value: 'weekly', label: 'Weekly' },
             { value: 'monthly', label: 'Monthly' },
@@ -75,9 +86,9 @@ const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
           name="APR"
           descriptor="%"
           infoName="Interest"
-          infoValue="0.00"
+          infoValue={processedTerms.interest}
           tooltip="Annual cost of borrowing, lower is more attractive for buyers."
-          defaultValue={defaultTerms?.apr}
+          defaultValue={processedTerms.apr}
           onChange={(value) => {
             handleFormChange('apr', value)
           }}
@@ -85,6 +96,47 @@ const ListingForm: FC<Props> = ({ defaultTerms, handleFormChange }) => {
       </div>
     </form>
   )
+}
+
+function processTerms(terms: FinancingTerms): ProcessedTerms {
+  const termsAsNums = {
+    price: Number(terms.price),
+    downPayment: Number(terms.downPayment),
+    apr: Number(terms.apr),
+    payFreq: terms.payFreq === 'weekly' ? 7 : 30, // Convert to explicit days
+    duration: Number(terms.duration), // days
+  }
+
+  const onSale = (termsAsNums.downPayment / 100) * termsAsNums.price
+  const remainingPrincipal = termsAsNums.price - onSale
+  const numPayPeriods = Math.ceil(termsAsNums.duration / termsAsNums.payFreq)
+  const minPrincipalPerPeriod = remainingPrincipal / numPayPeriods
+
+  // Calculate interest per period.
+  // NOTE: If the payment frequency is greater than the duration, we calculate the
+  // interest using the duration.
+  const periodDuration =
+    Math.min(termsAsNums.payFreq, termsAsNums.duration) * 86400 // in seconds
+  const interestRatePerSecond = termsAsNums.apr / (365 * 86400)
+  const periodInterestRate = interestRatePerSecond * periodDuration
+  const totalIntEarned = calculateTotalInterest(
+    periodInterestRate,
+    remainingPrincipal,
+    minPrincipalPerPeriod,
+    numPayPeriods
+  )
+  const intPerPeriod = totalIntEarned / numPayPeriods
+
+  // TODO: Subtract royalties and marketplace fees
+  const profit = termsAsNums.price + totalIntEarned
+
+  return {
+    ...terms,
+    profit: String(formatNumber(profit)),
+    onSale: String(formatNumber(onSale)),
+    payments: String(formatNumber(minPrincipalPerPeriod)),
+    interest: String(formatNumber(intPerPeriod)),
+  }
 }
 
 export default ListingForm

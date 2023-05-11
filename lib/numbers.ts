@@ -32,7 +32,7 @@ const truncateFractionAndFormat = (
 
 function formatNumber(
   amount: number | null | undefined,
-  maximumFractionDigits: number = 2
+  maximumFractionDigits: number = 4
 ) {
   if (!amount) {
     return '-'

@@ -94,7 +94,7 @@ const ListingsAccordion = () => {
             </AccordionTrigger>
             <AccordionContent>
               <ListingForm
-                defaultTerms={listing}
+                terms={listing}
                 handleFormChange={handleFormChange}
               />
             </AccordionContent>

@@ -27,7 +27,7 @@ export default function CustomListing({
         />
         <div className="flex-grow py-4 px-2">
           <ListingForm
-            defaultTerms={state.custom}
+            terms={state.custom}
             handleFormChange={handleFormChange}
           />
         </div>
