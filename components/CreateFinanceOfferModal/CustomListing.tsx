@@ -18,8 +18,6 @@ export default function CustomListing({
     dispatch({ type: 'update_custom_form_value', payload: { key, value } })
   }
 
-  console.log('formValues', state)
-
   return (
     <div className="flex h-full flex-col justify-between">
       <div className="flex items-start space-x-4">
