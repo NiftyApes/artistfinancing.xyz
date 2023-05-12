@@ -13,7 +13,8 @@ const Timeline: FC<Props> = ({ offer }) => {
   const events = useMemo(() => {
     let remainingPrincipal = processOffer(offer.offer).totalCost
 
-    return _.times(processOffer(offer.offer).numPayPeriods, (i) => {
+    // Add 1 to the number of pay periods to include down payment on purchase.
+    return _.times(processOffer(offer.offer).numPayPeriods + 1, (i) => {
       if (i === 0) {
         remainingPrincipal -= processOffer(offer.offer).downPaymentAmount
       } else {

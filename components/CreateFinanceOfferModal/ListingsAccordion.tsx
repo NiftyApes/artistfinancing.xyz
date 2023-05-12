@@ -92,8 +92,8 @@ const ListingsAccordion = () => {
                   </p>
                 </div>
                 <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
-                  <p className="font-semibold">{processedTerms.profit}</p>
-                  <p className="text-gray-600">Sale Price</p>
+                  <p className="font-semibold">{processedTerms.saleTotal}</p>
+                  <p className="text-gray-600">Sale Total</p>
                 </div>
               </div>
             </AccordionTrigger>

@@ -20,8 +20,8 @@ const ListingForm: FC<Props> = ({ terms, handleFormChange }) => {
         <NumberFormField
           name="Price"
           descriptor="ETH"
-          infoName="Total Profit"
-          infoValue={processedTerms.profit}
+          infoName="Sale Total"
+          infoValue={processedTerms.saleTotal}
           defaultValue={processedTerms.price}
           onChange={(value) => {
             handleFormChange('price', value)
