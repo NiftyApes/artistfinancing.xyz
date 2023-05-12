@@ -105,6 +105,7 @@ export function processOffer(
   }
 }
 
+// TODO: Delete me once new create listing modal is complete.
 export function processFormValues(
   formFields: FinancingFormFields
 ): FinancingTerms {
@@ -171,7 +172,7 @@ export function processFormValues(
   }
 }
 
-function calculateTotalInterest(
+export function calculateTotalInterest(
   periodInterestRate: number,
   remainingPrincipal: number,
   minPrincipalPerPeriod: number,

@@ -1,9 +1,17 @@
 import clsx from 'clsx'
-import React from 'react'
+import { FC } from 'react'
+import { FinancingTerms, processTerms } from './lib/processTerms'
 import NumberFormField from './NumberFormField'
 import SelectFormField from './SelectFormField'
 
-const ListingForm = () => {
+type Props = {
+  terms: FinancingTerms
+  handleFormChange: (key: string, value: string) => void
+}
+
+const ListingForm: FC<Props> = ({ terms, handleFormChange }) => {
+  const processedTerms = processTerms(terms)
+
   const formFieldStyles = 'pt-4 first:pt-0'
 
   return (
@@ -12,29 +20,49 @@ const ListingForm = () => {
         <NumberFormField
           name="Price"
           descriptor="ETH"
-          infoName="Total Profit"
-          infoValue="4.689"
+          infoName="Sale Total"
+          infoValue={processedTerms.saleTotal}
+          defaultValue={processedTerms.price}
+          onChange={(value) => {
+            handleFormChange('price', value)
+          }}
         />
       </div>
       <div className={formFieldStyles}>
         <NumberFormField
           name="Down Payment"
           descriptor="%"
-          infoName="Due"
-          infoValue="4.6893151"
+          infoName="On Sale"
+          infoValue={processedTerms.onSale}
+          defaultValue={processedTerms.downPayment}
+          onChange={(value) => {
+            handleFormChange('downPayment', value)
+          }}
         />
       </div>
       <div className={clsx(formFieldStyles, 'flex flex-col space-y-4')}>
         <NumberFormField
           name="Duration"
           descriptor="Days"
-          tooltip="Diddi diddi blah blah"
+          tooltip="Length of financing, shorter means less interest."
+          defaultValue={processedTerms.duration}
+          onChange={(value) => {
+            handleFormChange('duration', value)
+          }}
         />
         <SelectFormField
           name="Payment Freq."
           infoName="Payments"
-          infoValue="1.1733"
-          tooltip="Diddi diddi blah blah"
+          infoValue={processedTerms.payments}
+          tooltip="How often payments are due from the buyer."
+          defaultValue={processedTerms.payFreq}
+          options={[
+            { value: 'weekly', label: 'Weekly' },
+            { value: 'monthly', label: 'Monthly' },
+          ]}
+          onChange={(value) => {
+            handleFormChange('payFreq', value)
+          }}
         />
       </div>
       <div className={formFieldStyles}>
@@ -42,8 +70,12 @@ const ListingForm = () => {
           name="APR"
           descriptor="%"
           infoName="Interest"
-          infoValue="0.00"
-          tooltip="Lorem ipsum I don't missum"
+          infoValue={processedTerms.interest}
+          tooltip="Annual cost of borrowing, lower is more attractive for buyers."
+          defaultValue={processedTerms.apr}
+          onChange={(value) => {
+            handleFormChange('apr', value)
+          }}
         />
       </div>
     </form>

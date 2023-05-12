@@ -1,18 +1,25 @@
+import { FC } from 'react'
 import FormField from './FormField'
 import NumberInput from './NumberInput'
 
-const NumberFormField = ({
-  name,
-  descriptor,
-  infoName,
-  infoValue,
-  tooltip,
-}: {
+type Props = {
   name: string
   descriptor: string
   infoName?: string
   infoValue?: string
   tooltip?: string
+  defaultValue?: string
+  onChange?: (value: string) => void
+}
+
+const NumberFormField: FC<Props> = ({
+  name,
+  descriptor,
+  infoName,
+  infoValue,
+  tooltip,
+  defaultValue,
+  onChange,
 }) => {
   return (
     <FormField
@@ -22,7 +29,12 @@ const NumberFormField = ({
       tooltip={tooltip}
     >
       <div className="h-[46px] w-[170px]">
-        <NumberInput id={name} descriptor={descriptor} />
+        <NumberInput
+          id={name}
+          descriptor={descriptor}
+          onChange={onChange}
+          defaultValue={defaultValue}
+        />
       </div>
     </FormField>
   )
