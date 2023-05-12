@@ -1,4 +1,6 @@
 import { Expiration } from 'lib/niftyapes/expirationOptions'
+import { formatNumber } from 'lib/numbers'
+import { Action } from './actions'
 
 export interface State {
   custom: {
@@ -14,6 +16,7 @@ export interface State {
   }
   batch: {
     enabled: boolean
+    isDefault: boolean
     price: string
     downPayment: string
     duration: string
@@ -21,18 +24,6 @@ export interface State {
     apr: string
   }[]
   expiration: Expiration
-}
-
-type ActionTypes =
-  | 'update_expiration'
-  | 'update_custom_form_value'
-  | 'update_buy_now'
-  | 'update_batch_form_value'
-  | 'add_new_batch_listing'
-
-export interface Action {
-  type: ActionTypes
-  payload?: any // TODO
 }
 
 export const initialState: State = {
@@ -50,6 +41,7 @@ export const initialState: State = {
   batch: [
     {
       enabled: false,
+      isDefault: true,
       price: '',
       downPayment: '25',
       duration: '30',
@@ -58,6 +50,7 @@ export const initialState: State = {
     },
     {
       enabled: false,
+      isDefault: true,
       price: '',
       downPayment: '33',
       duration: '90',
@@ -66,6 +59,7 @@ export const initialState: State = {
     },
     {
       enabled: false,
+      isDefault: true,
       price: '',
       downPayment: '25',
       duration: '180',
@@ -76,7 +70,7 @@ export const initialState: State = {
   expiration: Expiration.OneMonth,
 }
 
-export function createListingsReducer(state: State, action: Action) {
+export function createListingsReducer(state: State, action: Action): State {
   switch (action.type) {
     case 'update_expiration':
       return {
@@ -98,6 +92,36 @@ export function createListingsReducer(state: State, action: Action) {
           ...state.buyNow,
           [action.payload.key]: action.payload.value,
         },
+        // Update all default listings to follow the buy now price as it changes
+        // and add a default markup.
+        batch: state.batch.map((listing) => {
+          if (!listing.isDefault || action.payload.key !== 'price')
+            return listing
+
+          let price = Number(action.payload.value)
+          switch (listing.duration) {
+            case '30':
+              return {
+                ...listing,
+                // 0.5% markup for 30 day listing
+                price: formatNumber(price + 0.005 * price),
+              }
+            case '90':
+              return {
+                ...listing,
+                // 2.5% markup for 30 day listing
+                price: formatNumber(price + 0.025 * price),
+              }
+            case '180':
+              return {
+                ...listing,
+                // 10% markup for 30 day listing
+                price: formatNumber(price + 0.1 * price),
+              }
+            default:
+              return listing
+          }
+        }),
       }
     case 'update_batch_form_value':
       const { idx, key, value } = action.payload
@@ -105,6 +129,9 @@ export function createListingsReducer(state: State, action: Action) {
       batch[idx] = {
         ...batch[idx],
         [key]: value,
+        // Once edited a listing becomes custom and is no longer
+        // updated alongside the buy now price.
+        isDefault: false,
       }
 
       return { ...state, batch }
@@ -115,6 +142,7 @@ export function createListingsReducer(state: State, action: Action) {
           ...state.batch,
           {
             enabled: false,
+            isDefault: false,
             price: '',
             downPayment: '',
             duration: '',
@@ -124,6 +152,6 @@ export function createListingsReducer(state: State, action: Action) {
         ],
       }
     default:
-      throw new Error(`Unhandled action type: ${action.type}`)
+      throw new Error(`Unhandled action type: ${action}`)
   }
 }

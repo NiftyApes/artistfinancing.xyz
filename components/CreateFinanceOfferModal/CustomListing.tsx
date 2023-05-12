@@ -26,16 +26,14 @@ export default function CustomListing({
     let remainingPrincipal = processedTerms.remainingPrincipal
     let valueReceived = 0
 
-    console.log('numPayPeriods', processedTerms.numPayPeriods)
-
     // Add 1 to the number of pay periods to include down payment on purchase.
     return times(processedTerms.numPayPeriods + 1, (i) => {
       if (i === 0) {
         valueReceived += Number(processedTerms.onSale)
       } else {
         valueReceived +=
-          processedTerms.minPrincipalPerPeriod + processedTerms.intPerPeriod
-        // (remainingPrincipal * processedTerms.periodInterestRate) / 100
+          processedTerms.minPrincipalPerPeriod +
+          remainingPrincipal * (processedTerms.periodInterestRate / 100)
         remainingPrincipal -= processedTerms.minPrincipalPerPeriod
       }
 
@@ -77,36 +75,6 @@ export default function CustomListing({
       <div className="ml-8">
         <Timeline
           events={events}
-          // events={[
-          //   {
-          //     icon: FiClock,
-          //     content: <p className="text-xs text-gray-400">Purchase</p>,
-          //     tooltipContent: (
-          //       <div
-          //         className={`align-center bg-black px-6 py-4 text-center text-sm text-white`}
-          //       >
-          //         0.88 ETH
-          //       </div>
-          //     ),
-          //     current: true,
-          //   },
-          //   {
-          //     icon: FiClock,
-          //     content: <p className="text-xs text-gray-400">7 days later</p>,
-          //   },
-          //   {
-          //     icon: FiClock,
-          //     content: <p className="text-xs text-gray-400">14 days later</p>,
-          //   },
-          //   {
-          //     icon: FiClock,
-          //     content: <p className="text-xs text-gray-400">21 days later</p>,
-          //   },
-          //   {
-          //     icon: FiClock,
-          //     content: <p className="text-xs text-gray-400">30 days later</p>,
-          //   },
-          // ]}
           orientation="horizontal"
           succeedingLine={false}
         />
