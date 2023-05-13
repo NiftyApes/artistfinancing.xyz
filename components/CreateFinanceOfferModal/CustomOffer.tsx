@@ -22,12 +22,13 @@ const CustomOffer: FC<Props> = ({ token }) => {
   }
 
   const validateForm = () => {
-    const errorKeys = validateTerms(state.custom)
+    const formErrors = validateTerms(state.custom)
 
-    if (errorKeys.length === 0) {
+    if (Object.keys(formErrors).length === 0) {
+      dispatch({ type: 'update_custom_form_errors', payload: {} })
       console.log('Valid terms. Submitting...')
     } else {
-      dispatch({ type: 'update_custom_error_keys', payload: errorKeys })
+      dispatch({ type: 'update_custom_form_errors', payload: formErrors })
     }
   }
 
@@ -76,7 +77,11 @@ const CustomOffer: FC<Props> = ({ token }) => {
           previousSale={token?.token?.lastSell?.value}
         />
         <div className="flex-grow py-4 px-2">
-          <OfferForm terms={state.custom} handleFormChange={handleFormChange} />
+          <OfferForm
+            terms={state.custom}
+            handleFormChange={handleFormChange}
+            formErrors={state.custom.formErrors}
+          />
         </div>
       </div>
       <div className="ml-8">
@@ -86,7 +91,11 @@ const CustomOffer: FC<Props> = ({ token }) => {
           succeedingLine={false}
         />
       </div>
-      <Footer type="custom" onSubmit={validateForm} />
+      <Footer
+        type="custom"
+        onSubmit={validateForm}
+        formErrors={state.custom.formErrors}
+      />
     </div>
   )
 }

@@ -1,15 +1,16 @@
 import clsx from 'clsx'
 import { FC } from 'react'
-import { FinancingTerms, processTerms } from './lib/processTerms'
+import { FormErrors, FinancingTerms, processTerms } from './lib/processTerms'
 import NumberFormField from './NumberFormField'
 import SelectFormField from './SelectFormField'
 
 type Props = {
   terms: FinancingTerms
   handleFormChange: (key: string, value: string) => void
+  formErrors: FormErrors
 }
 
-const OfferForm: FC<Props> = ({ terms, handleFormChange }) => {
+const OfferForm: FC<Props> = ({ terms, handleFormChange, formErrors }) => {
   const processedTerms = processTerms(terms)
 
   const formFieldStyles = 'pt-4 first:pt-0'
@@ -23,6 +24,7 @@ const OfferForm: FC<Props> = ({ terms, handleFormChange }) => {
           infoName="Sale Total"
           infoValue={processedTerms.saleTotal}
           defaultValue={processedTerms.price}
+          formError={formErrors['price']}
           onChange={(value) => {
             handleFormChange('price', value)
           }}
@@ -35,6 +37,7 @@ const OfferForm: FC<Props> = ({ terms, handleFormChange }) => {
           infoName="On Sale"
           infoValue={processedTerms.onSale}
           defaultValue={processedTerms.downPayment}
+          formError={formErrors['downPayment']}
           onChange={(value) => {
             handleFormChange('downPayment', value)
           }}
@@ -46,6 +49,7 @@ const OfferForm: FC<Props> = ({ terms, handleFormChange }) => {
           descriptor="Days"
           tooltip="Length of financing, shorter means less interest."
           defaultValue={processedTerms.duration}
+          formError={formErrors['duration']}
           onChange={(value) => {
             handleFormChange('duration', value)
           }}
@@ -56,6 +60,7 @@ const OfferForm: FC<Props> = ({ terms, handleFormChange }) => {
           infoValue={processedTerms.payments}
           tooltip="How often payments are due from the buyer."
           defaultValue={processedTerms.payFreq}
+          formError={formErrors['payFreq']}
           options={[
             { value: 'weekly', label: 'Weekly' },
             { value: 'monthly', label: 'Monthly' },
@@ -73,6 +78,7 @@ const OfferForm: FC<Props> = ({ terms, handleFormChange }) => {
           infoValue={processedTerms.interest}
           tooltip="Annual cost of borrowing, lower is more attractive for buyers."
           defaultValue={processedTerms.apr}
+          formError={formErrors['apr']}
           onChange={(value) => {
             handleFormChange('apr', value)
           }}

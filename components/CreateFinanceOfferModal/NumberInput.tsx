@@ -1,15 +1,18 @@
+import clsx from 'clsx'
 import React, { InputHTMLAttributes, useState } from 'react'
 
 interface NumberInputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   descriptor?: string
   onChange?: (valueAsString: string, valueAsNumber: number) => void
+  formError?: string
 }
 
 const NumberInput: React.FC<NumberInputProps> = ({
   descriptor,
   onChange,
   defaultValue,
+  formError,
   ...props
 }) => {
   const [internalValue, setInternalValue] = useState(defaultValue || '')
@@ -42,11 +45,13 @@ const NumberInput: React.FC<NumberInputProps> = ({
     }
   }
 
-  const focusClasses = isFocused ? 'ring-1 ring-black border-transparent' : ''
-
   return (
     <div
-      className={`flex h-full w-full items-center border-[1px] border-gray-500 bg-white ${focusClasses}`}
+      className={clsx(
+        'flex h-full w-full items-center border-[1px] border-gray-500 bg-white',
+        { 'border-transparent ring-1 ring-black': isFocused },
+        { 'border-red-500 ring-1 ring-red-500': formError }
+      )}
     >
       <input
         type="number"

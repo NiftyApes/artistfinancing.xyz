@@ -15,6 +15,7 @@ type Props = {
   infoName?: string
   infoValue?: string
   tooltip?: string
+  formError?: string
   onChange?: (value: string) => void
 }
 
@@ -26,6 +27,7 @@ const SelectFormField: FC<Props> = ({
   infoValue,
   tooltip,
   onChange,
+  formError,
 }) => {
   return (
     <FormField
@@ -34,7 +36,11 @@ const SelectFormField: FC<Props> = ({
       infoValue={infoValue}
       tooltip={tooltip}
     >
-      <Select defaultValue={defaultValue} onValueChange={onChange}>
+      <Select
+        defaultValue={defaultValue}
+        onValueChange={onChange}
+        formError={formError}
+      >
         {options.map((option, idx) => (
           <SelectItem key={idx} value={option.value}>
             {option.label}

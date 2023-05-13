@@ -23,7 +23,8 @@ const BatchOffer: FC<Props> = ({ token }) => {
       <Footer
         type="batch"
         onSubmit={() => {}} // TODO
-        footerText="You'll be asked to sign each offer from your wallet."
+        infoText="You'll be asked to sign each offer from your wallet."
+        formErrors={{}}
       />
     </div>
   )

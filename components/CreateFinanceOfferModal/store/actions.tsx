@@ -1,5 +1,5 @@
 import { Expiration } from 'lib/niftyapes/expirationOptions'
-import { ErrorKey } from '../lib/processTerms'
+import { FormErrors } from '../lib/processTerms'
 
 export type Action =
   | {
@@ -14,8 +14,8 @@ export type Action =
       }
     }
   | {
-      type: 'update_custom_error_keys'
-      payload: ErrorKey[]
+      type: 'update_custom_form_errors'
+      payload: FormErrors
     }
   | {
       type: 'update_buy_now'
