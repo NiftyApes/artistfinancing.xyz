@@ -5,7 +5,7 @@ import { times } from 'lodash'
 import { FC, useContext, useMemo } from 'react'
 import { FiClock } from 'react-icons/fi'
 import Footer from './Footer'
-import { processTerms } from './lib/processTerms'
+import { processTerms, validateTerms } from './lib/processTerms'
 import OfferForm from './OfferForm'
 import { CreateOffersStore } from './store'
 import TokenImage from './TokenImage'
@@ -19,6 +19,16 @@ const CustomOffer: FC<Props> = ({ token }) => {
 
   const handleFormChange = (key: string, value: string) => {
     dispatch({ type: 'update_custom_form_value', payload: { key, value } })
+  }
+
+  const validateForm = () => {
+    const errorKeys = validateTerms(state.custom)
+
+    if (errorKeys.length === 0) {
+      console.log('Valid terms. Submitting...')
+    } else {
+      dispatch({ type: 'update_custom_error_keys', payload: errorKeys })
+    }
   }
 
   const events = useMemo(() => {
@@ -76,7 +86,7 @@ const CustomOffer: FC<Props> = ({ token }) => {
           succeedingLine={false}
         />
       </div>
-      <Footer type="custom" />
+      <Footer type="custom" onSubmit={validateForm} />
     </div>
   )
 }

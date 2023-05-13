@@ -1,5 +1,6 @@
 import { Expiration } from 'lib/niftyapes/expirationOptions'
 import { formatNumber } from 'lib/numbers'
+import { ErrorKey } from '../lib/processTerms'
 import { Action } from './actions'
 
 export interface State {
@@ -9,6 +10,7 @@ export interface State {
     duration: string
     payFreq: string
     apr: string
+    errorKeys: ErrorKey[]
   }
   buyNow: {
     enabled: boolean
@@ -33,6 +35,7 @@ export const initialState: State = {
     duration: '',
     payFreq: '',
     apr: '',
+    errorKeys: [],
   },
   buyNow: {
     enabled: false,
@@ -83,6 +86,14 @@ export function createOffersReducer(state: State, action: Action): State {
         custom: {
           ...state.custom,
           [action.payload.key]: action.payload.value,
+        },
+      }
+    case 'update_custom_error_keys':
+      return {
+        ...state,
+        custom: {
+          ...state.custom,
+          errorKeys: action.payload,
         },
       }
     case 'update_buy_now':
