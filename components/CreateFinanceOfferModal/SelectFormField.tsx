@@ -1,6 +1,7 @@
 import FormField from './FormField'
 import { Select, SelectItem } from './Select'
 import { FC } from 'react'
+import NumberInput from './NumberInput'
 
 type Option = {
   label: string

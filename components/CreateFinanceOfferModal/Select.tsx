@@ -22,7 +22,7 @@ export const Select = React.forwardRef<
         className={
           triggerClassName
             ? triggerClassName
-            : 'inline-flex h-[46px] w-[170px] items-center justify-between gap-2 border-[1px] border-gray-500 bg-white px-[15px] text-sm font-bold leading-none outline-none focus:shadow-[0_0_0_1px] focus:shadow-black'
+            : 'inline-flex h-full w-full items-center justify-between gap-2 border-[1px] border-gray-500 bg-white px-[15px] text-sm font-bold leading-none outline-none focus:shadow-[0_0_0_1px] focus:shadow-black'
         }
       >
         <SelectPrimitive.Value />

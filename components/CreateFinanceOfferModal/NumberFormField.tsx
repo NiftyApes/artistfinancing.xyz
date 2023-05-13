@@ -28,14 +28,12 @@ const NumberFormField: FC<Props> = ({
       infoValue={infoValue}
       tooltip={tooltip}
     >
-      <div className="h-[46px] w-[170px]">
-        <NumberInput
-          id={name}
-          descriptor={descriptor}
-          onChange={onChange}
-          defaultValue={defaultValue}
-        />
-      </div>
+      <NumberInput
+        id={name}
+        descriptor={descriptor}
+        onChange={onChange}
+        defaultValue={defaultValue}
+      />
     </FormField>
   )
 }

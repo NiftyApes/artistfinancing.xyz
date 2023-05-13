@@ -41,7 +41,7 @@ const OffersAccordion = () => {
                   }
                 }}
               />
-              <div className="w-[150px]">
+              <div className="h-[46px] w-[150px]">
                 <NumberInput
                   descriptor="ETH"
                   defaultValue={state.buyNow.price}
