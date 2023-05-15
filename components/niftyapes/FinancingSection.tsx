@@ -19,7 +19,6 @@ import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { setToast } from 'components/token/setToast'
 import { useNftOwnership } from 'hooks/niftyapes/useNftOwnership'
 import { useOffers } from '@niftyapes/sdk'
-import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { FinancingTerms, processOffer } from 'lib/niftyapes/processOffer'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -28,7 +27,6 @@ import { Collection } from 'types/reservoir'
 import { Address, useAccount } from 'wagmi'
 import BuyNowPayLaterModal from './bnpl/BuyNowPayLaterModal'
 import CancelListingModal from './cancel-listing/CancelListingModal'
-import ListFinancingModal from './list-financing/ListFinancingModal'
 
 export default function FinancingSection({
   token,
@@ -68,7 +66,7 @@ export default function FinancingSection({
   }
 
   const { address } = useAccount()
-  const { isEntitledToNft, isLoadingLoans: isLoadingOwnershipCheck } =
+  const { isEntitledToNft, isLoadingTokens: isLoadingOwnershipCheck } =
     useNftOwnership()
   const isNiftyApesOwned = isEntitledToNft(
     token?.token?.contract as Address,
