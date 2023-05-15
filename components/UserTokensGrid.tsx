@@ -6,7 +6,7 @@ import TokenCard from './TokenCard'
 import { paths } from '@reservoir0x/reservoir-sdk'
 import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
 import { useNftOwnership } from 'hooks/niftyapes/useNftOwnership'
-import useOffers from '../hooks/niftyapes/useOffers'
+import { useOffers } from '@niftyapes/sdk'
 
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
 const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
