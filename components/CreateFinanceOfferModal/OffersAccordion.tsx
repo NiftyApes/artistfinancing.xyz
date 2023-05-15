@@ -45,6 +45,7 @@ const OffersAccordion = () => {
                 <NumberInput
                   descriptor="ETH"
                   defaultValue={state.buyNow.price}
+                  formError={state.buyNow.formErrors['price']}
                   onChange={(valueAsString) => {
                     dispatch({
                       type: 'update_buy_now',
@@ -101,6 +102,7 @@ const OffersAccordion = () => {
               <OfferForm
                 terms={offerTerms}
                 handleFormChange={handleFormChange}
+                formErrors={offerTerms.formErrors}
               />
             </AccordionContent>
           </AccordionItem>

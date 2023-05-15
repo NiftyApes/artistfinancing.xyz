@@ -25,12 +25,20 @@ export type Action =
       }
     }
   | {
+      type: 'update_buy_now_form_errors'
+      payload: FormErrors
+    }
+  | {
       type: 'update_batch_form_value'
       payload: {
         idx: number
         key: string
         value: string | boolean
       }
+    }
+  | {
+      type: 'update_batch_form_errors'
+      payload: { idx: number; formErrors: FormErrors }
     }
   | {
       type: 'add_new_batch_offer'

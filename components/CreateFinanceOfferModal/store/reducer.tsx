@@ -15,6 +15,7 @@ export interface State {
   buyNow: {
     enabled: boolean
     price: string
+    formErrors: FormErrors
   }
   batch: {
     enabled: boolean
@@ -24,6 +25,7 @@ export interface State {
     duration: string
     payFreq: string
     apr: string
+    formErrors: FormErrors
   }[]
   expiration: Expiration
 }
@@ -40,6 +42,7 @@ export const initialState: State = {
   buyNow: {
     enabled: false,
     price: '',
+    formErrors: {},
   },
   batch: [
     {
@@ -50,6 +53,7 @@ export const initialState: State = {
       duration: '30',
       payFreq: 'weekly',
       apr: '0',
+      formErrors: {},
     },
     {
       enabled: false,
@@ -59,6 +63,7 @@ export const initialState: State = {
       duration: '90',
       payFreq: 'monthly',
       apr: '3',
+      formErrors: {},
     },
     {
       enabled: false,
@@ -68,12 +73,15 @@ export const initialState: State = {
       duration: '180',
       payFreq: 'monthly',
       apr: '8',
+      formErrors: {},
     },
   ],
   expiration: Expiration.OneMonth,
 }
 
 export function createOffersReducer(state: State, action: Action): State {
+  let batch
+
   switch (action.type) {
     case 'update_expiration':
       return {
@@ -133,15 +141,30 @@ export function createOffersReducer(state: State, action: Action): State {
           }
         }),
       }
+    case 'update_buy_now_form_errors':
+      return {
+        ...state,
+        buyNow: {
+          ...state.buyNow,
+          formErrors: action.payload,
+        },
+      }
     case 'update_batch_form_value':
-      const { idx, key, value } = action.payload
-      const batch = [...state.batch]
-      batch[idx] = {
-        ...batch[idx],
-        [key]: value,
+      batch = [...state.batch]
+      batch[action.payload.idx] = {
+        ...batch[action.payload.idx],
+        [action.payload.key]: action.payload.value,
         // Once edited a offer becomes custom and is no longer
         // updated alongside the buy now price.
         isDefault: false,
+      }
+
+      return { ...state, batch }
+    case 'update_batch_form_errors':
+      batch = [...state.batch]
+      batch[action.payload.idx] = {
+        ...batch[action.payload.idx],
+        formErrors: action.payload.formErrors,
       }
 
       return { ...state, batch }
@@ -158,6 +181,7 @@ export function createOffersReducer(state: State, action: Action): State {
             duration: '',
             payFreq: '',
             apr: '',
+            formErrors: {},
           },
         ],
       }
