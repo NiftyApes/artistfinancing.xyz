@@ -2,7 +2,7 @@ import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { Timeline } from 'components/Timeline'
 import { formatNumber } from 'lib/numbers'
 import { times } from 'lodash'
-import { FC, useContext, useMemo } from 'react'
+import { FC, useContext, useMemo, useState } from 'react'
 import { FiClock } from 'react-icons/fi'
 import Footer from './Footer'
 import { processTerms, validateTerms } from './lib/processTerms'
@@ -12,10 +12,12 @@ import TokenImage from './TokenImage'
 
 type Props = {
   token: ReturnType<typeof useTokens>['data'][0]
+  onClose: () => void
 }
 
-const CustomOffer: FC<Props> = ({ token }) => {
+const CustomOffer: FC<Props> = ({ token, onClose }) => {
   const { state, dispatch } = useContext(CreateOffersStore)
+  const [errorText, setErrorText] = useState('')
 
   const handleFormChange = (key: string, value: string) => {
     dispatch({ type: 'update_custom_form_value', payload: { key, value } })
@@ -25,9 +27,15 @@ const CustomOffer: FC<Props> = ({ token }) => {
     const formErrors = validateTerms(state.custom)
 
     if (Object.keys(formErrors).length === 0) {
+      setErrorText('')
       dispatch({ type: 'update_custom_form_errors', payload: {} })
       console.log('Valid terms. Submitting...')
     } else {
+      setErrorText(
+        `Please check the following fields: ${Object.keys(formErrors)
+          .map((key) => formErrors[key])
+          .join(', ')}`
+      )
       dispatch({ type: 'update_custom_form_errors', payload: formErrors })
     }
   }
@@ -94,7 +102,8 @@ const CustomOffer: FC<Props> = ({ token }) => {
       <Footer
         type="custom"
         onSubmit={validateForm}
-        formErrors={state.custom.formErrors}
+        errorText={errorText}
+        onClose={onClose}
       />
     </div>
   )

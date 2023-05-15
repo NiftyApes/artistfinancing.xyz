@@ -1,34 +1,41 @@
 import clsx from 'clsx'
 import { FC } from 'react'
-import { FormErrors } from './lib/processTerms'
 
 type Props = {
   type: 'custom' | 'batch'
   infoText?: string
   onSubmit: () => void
-  formErrors: FormErrors
+  onClose: () => void
+  errorText?: string
 }
 
-const Footer: FC<Props> = ({ type, infoText, onSubmit, formErrors }) => {
+const Footer: FC<Props> = ({
+  type,
+  infoText,
+  onSubmit,
+  onClose,
+  errorText,
+}) => {
   let footerText = infoText
 
-  if (Object.keys(formErrors).length > 0) {
-    footerText = `Please check the following fields: ${Object.keys(formErrors)
-      .map((key) => formErrors[key])
-      .join(', ')}`
+  if (errorText) {
+    footerText = errorText
   }
 
   return (
     <div className="flex items-center justify-between">
       <i
         className={clsx('text-sm', {
-          'text-red-500': Object.keys(formErrors).length > 0,
+          'text-red-500': errorText,
         })}
       >
         {footerText}
       </i>
       <div className="flex flex-shrink-0 space-x-8 self-end">
-        <button className="rounded-full text-sm font-bold uppercase hover:underline hover:underline-offset-4">
+        <button
+          onClick={onClose}
+          className="rounded-full text-sm font-bold uppercase hover:underline hover:underline-offset-4"
+        >
           Nevermind
         </button>
         <button

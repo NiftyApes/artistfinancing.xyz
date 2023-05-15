@@ -46,10 +46,10 @@ export default function CreateFinanceOfferModal({
                 <Expiration />
               </Tabs.List>
               <Tabs.Content value="batch" className={tabContentStyles}>
-                <BatchOffer token={token} />
+                <BatchOffer token={token} onClose={() => setOpen(false)} />
               </Tabs.Content>
               <Tabs.Content value="custom" className={tabContentStyles}>
-                <CustomOffer token={token} />
+                <CustomOffer token={token} onClose={() => setOpen(false)} />
               </Tabs.Content>
             </Tabs.Root>
           </div>

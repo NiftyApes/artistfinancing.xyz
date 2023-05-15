@@ -76,7 +76,9 @@ const OffersAccordion = () => {
 
         return (
           <AccordionItem key={idx} value={`batch-offer-${idx}`}>
-            <AccordionTrigger>
+            <AccordionTrigger
+              containsError={Object.keys(offerTerms.formErrors).length !== 0}
+            >
               <div className="flex items-center space-x-16">
                 <div className="flex w-[180px] items-center space-x-4">
                   <Checkbox
@@ -154,29 +156,36 @@ const AccordionTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof Accordion.Trigger> & {
     isButton?: Boolean
     noContent?: Boolean
+    containsError?: Boolean
   }
->(({ children, className, noContent, isButton, ...props }, forwardedRef) => (
-  <Accordion.Header className="flex">
-    <Accordion.Trigger
-      className={clsx(
-        'group flex flex-1 items-center justify-between bg-white px-5 py-8 leading-none shadow-[0_1px_0] outline-none',
-        className,
-        !isButton && 'cursor-default',
-        isButton && 'cursor-pointer hover:bg-gray-100'
-      )}
-      ref={forwardedRef}
-      {...props}
-    >
-      {children}
-      {!noContent && (
-        <IoChevronDown
-          className="h-6 w-6 transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=open]:rotate-180"
-          aria-hidden
-        />
-      )}
-    </Accordion.Trigger>
-  </Accordion.Header>
-))
+>(
+  (
+    { children, className, noContent, isButton, containsError, ...props },
+    forwardedRef
+  ) => (
+    <Accordion.Header className="flex">
+      <Accordion.Trigger
+        className={clsx(
+          'group flex flex-1 items-center justify-between bg-white px-5 py-8 leading-none shadow-[0_1px_0] outline-none',
+          className,
+          !isButton && 'cursor-default',
+          isButton && 'cursor-pointer hover:bg-gray-100',
+          containsError && 'border-l-2 border-red-500'
+        )}
+        ref={forwardedRef}
+        {...props}
+      >
+        {children}
+        {!noContent && (
+          <IoChevronDown
+            className="h-6 w-6 transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=open]:rotate-180"
+            aria-hidden
+          />
+        )}
+      </Accordion.Trigger>
+    </Accordion.Header>
+  )
+)
 
 AccordionTrigger.displayName = 'AccordionTrigger'
 

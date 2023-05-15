@@ -1,5 +1,5 @@
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
-import { FC, useContext } from 'react'
+import { FC, useContext, useState } from 'react'
 import Footer from './Footer'
 import { validateTerms } from './lib/processTerms'
 import OffersAccordion from './OffersAccordion'
@@ -8,15 +8,17 @@ import TokenImage from './TokenImage'
 
 type Props = {
   token: ReturnType<typeof useTokens>['data'][0]
+  onClose: () => void
 }
 
-const BatchOffer: FC<Props> = ({ token }) => {
+const BatchOffer: FC<Props> = ({ token, onClose }) => {
   const { state, dispatch } = useContext(CreateOffersStore)
-
-  let formErrorsExist = false
+  const [errorText, setErrorText] = useState('')
 
   // Checks enabled offers for any form errors before submitting.
   const validateForms = () => {
+    let formErrorsExist = false
+
     // Check Buy Now errors
     if (
       state.buyNow.enabled &&
@@ -36,27 +38,28 @@ const BatchOffer: FC<Props> = ({ token }) => {
 
     // Check batch errors
     state.batch.forEach((batchOffer, idx) => {
-      if (!batchOffer.enabled) {
-        dispatch({
-          type: 'update_batch_form_errors',
-          payload: { idx, formErrors: {} },
-        })
-
-        return
-      }
-
       const formErrors = validateTerms(batchOffer)
 
-      if (Object.keys(formErrors).length > 0) {
+      if (batchOffer.enabled && Object.keys(formErrors).length > 0) {
         formErrorsExist = true
         dispatch({
           type: 'update_batch_form_errors',
           payload: { idx, formErrors },
         })
+      } else {
+        dispatch({
+          type: 'update_batch_form_errors',
+          payload: { idx, formErrors: {} },
+        })
       }
     })
 
-    if (!formErrorsExist) {
+    if (!state.buyNow.enabled && !state.batch.some((offer) => offer.enabled)) {
+      setErrorText('No offers selected.')
+    } else if (formErrorsExist) {
+      setErrorText('Please enter valid terms for the selected offers.')
+    } else {
+      setErrorText('')
       console.log('Valid batch terms. Submitting...')
     }
   }
@@ -75,8 +78,9 @@ const BatchOffer: FC<Props> = ({ token }) => {
       <Footer
         type="batch"
         onSubmit={validateForms}
+        onClose={onClose}
         infoText="You'll be asked to sign each offer from your wallet."
-        formErrors={{}}
+        errorText={errorText}
       />
     </div>
   )
