@@ -1,3 +1,1 @@
-type Days = number
-
-type APR = number
+export type APR = number
