@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { FC } from 'react'
-import { FormErrors, FinancingTerms, processTerms } from './lib/processTerms'
+import { FinancingTerms, FormErrors, processTerms } from './lib/processTerms'
 import NumberFormField from './NumberFormField'
 import SelectFormField from './SelectFormField'
 
