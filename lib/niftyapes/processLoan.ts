@@ -1,6 +1,6 @@
 import { isAfter } from 'date-fns'
 import { formatEther } from 'ethers/lib/utils.js'
-import { LoanDetails } from 'hooks/niftyapes/useLoans'
+import { LoanDetails } from '@niftyapes/sdk'
 
 export type ProcessedLoan = LoanDetails & {
   minimumPayment: number

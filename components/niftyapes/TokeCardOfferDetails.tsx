@@ -1,4 +1,4 @@
-import { Offer } from 'hooks/niftyapes/useOffers'
+import { Offer } from '@niftyapes/sdk'
 import { processOffer } from 'lib/niftyapes/processOffer'
 
 export default function TokeCardOfferDetails({ offer }: { offer: Offer }) {

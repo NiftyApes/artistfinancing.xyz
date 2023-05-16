@@ -2,11 +2,11 @@ import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { uniq } from 'lodash'
 import { Address, useAccount } from 'wagmi'
-import useLoans from './useLoans'
+import { useLoans } from '@niftyapes/sdk'
 
 export const useNftOwnership = () => {
   const { address } = useAccount()
-  const { data: loans, isLoading: isLoadingLoans } = useLoans({
+  const { data: loans, isLoading } = useLoans({
     buyer: address,
   })
   const activeLoans = loans?.filter((loan) => loan.status === 'ACTIVE')
@@ -25,7 +25,7 @@ export const useNftOwnership = () => {
   })
 
   return {
-    isLoadingLoans,
+    isLoading,
     isLoadingTokens: isFetchingPage || isFetchingInitialData,
     entitledTokens,
     isEntitledToNft(contract?: Address, tokenId?: string) {

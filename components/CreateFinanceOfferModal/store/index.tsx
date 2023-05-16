@@ -1,5 +1,6 @@
 import { createContext, Dispatch, ReactNode, useReducer } from 'react'
-import { Action, createListingsReducer, initialState, State } from './reducer'
+import { createListingsReducer, initialState, State } from './reducer'
+import { Action } from './actions'
 
 interface Store {
   state: State

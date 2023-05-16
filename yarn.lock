@@ -1773,10 +1773,10 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-13.1.2.tgz#c7e75033e8b8f497768c7b462ac642830141bb00"
   integrity sha512-avsyveEvcvH42PvKjR4Pb8JlLttuGURr2H3ZhS2b85pHOiZ7yjH3rMUoGnNzuLMApyxYaCvd4MedPrLhnNhkog==
 
-"@niftyapes/sdk@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@niftyapes/sdk/-/sdk-1.0.7.tgz#ade773528e154e50b5c1ea725c868888f8d9953d"
-  integrity sha512-geqySkE17mNAlfRIjp90Zsd7DsuDHfC4+KvYmn8+It7tqUSBu8X9kJSRNJzyuIj1CzZkL4G5fMl+v3AQ6PJu2w==
+"@niftyapes/sdk@1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@niftyapes/sdk/-/sdk-1.0.9.tgz#6e37d5fafe3b88bbf0d9fc6e572e2bf0f1d331ba"
+  integrity sha512-orGA3+zBBFKjy0jo2gqXe0XHyAilLg5FuRJEgRl097n0aWuQ74C51BSAVX6aMamYhmUZpeOGYIRlTMIWKXrJ7w==
   dependencies:
     ethers "5.7.1"
     lodash "^4.17.21"

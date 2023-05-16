@@ -60,13 +60,14 @@ export default function ListFinancingModal({
 
   const attributeFloor = getAttributeFloor(token?.token?.attributes)
   const defaultTerms = {
+    apr: 20,
+    downPaymentPercent: 20,
+    expiration: Expiration.OneMonth,
     listPrice:
       attributeFloor || collection?.floorAsk?.price?.amount?.native || 0,
-    downPaymentPercent: 20,
-    apr: 20,
-    payPeriodDays: 30,
     loanDurMos: 6,
-    expiration: Expiration.OneMonth,
+    numPayPeriods: 4,
+    payPeriodDays: 30,
   }
   const [terms, setTerms] = useState<FinancingTerms>(defaultTerms)
   const [listingErr, setListingErr] = useState(false)

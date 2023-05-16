@@ -25,9 +25,8 @@ export function BuyWithFinancingHookContainer({
   tokenName,
 }: Props) {
   const data = useBuyWithFinancing({
-    offer: selectedOffer.offer,
+    offer: selectedOffer,
     signature: selectedOffer.signature,
-    buyer: address,
   })
 
   return (
