@@ -1,10 +1,10 @@
 import expirationOptions from 'lib/niftyapes/expirationOptions'
 import { useContext } from 'react'
 import { Select, SelectItem } from './Select'
-import { CreateListingsStore } from './store'
+import { CreateOffersStore } from './store'
 
 export default function Expiration() {
-  const { state, dispatch } = useContext(CreateListingsStore)
+  const { state, dispatch } = useContext(CreateOffersStore)
 
   const handleSelect = (value: string) => {
     const selectedExpiration = expirationOptions.find(

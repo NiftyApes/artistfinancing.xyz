@@ -6,24 +6,27 @@ import {
   IoChevronDown,
   IoChevronUp,
 } from 'react-icons/io5'
+import clsx from 'clsx'
 
 interface Props extends SelectPrimitive.SelectProps {
   triggerClassName?: string
+  formError?: string
 }
 
 export const Select = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<FC<Props>>
->(({ children, triggerClassName, ...props }, forwardedRef) => {
+>(({ children, triggerClassName, formError, ...props }, forwardedRef) => {
   return (
     <SelectPrimitive.Root {...props}>
       <SelectPrimitive.Trigger
         ref={forwardedRef}
-        className={
-          triggerClassName
-            ? triggerClassName
-            : 'inline-flex h-[46px] w-[170px] items-center justify-between gap-2 border-[1px] border-gray-500 bg-white px-[15px] text-sm font-bold leading-none outline-none focus:shadow-[0_0_0_1px] focus:shadow-black'
-        }
+        className={clsx({
+          'inline-flex h-full w-full items-center justify-between gap-2 border-[1px] border-gray-500 bg-white px-[15px] text-sm font-bold leading-none outline-none focus:shadow-[0_0_0_1px] focus:shadow-black':
+            !triggerClassName,
+          [`${triggerClassName}`]: triggerClassName,
+          'border-red-500 shadow-[0_0_0_1px] shadow-red-500': formError,
+        })}
       >
         <SelectPrimitive.Value />
         <SelectPrimitive.Icon>

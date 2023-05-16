@@ -1,5 +1,6 @@
 import { Expiration } from 'lib/niftyapes/expirationOptions'
 import { formatNumber } from 'lib/numbers'
+import { FormErrors } from '../lib/processTerms'
 import { Action } from './actions'
 
 export interface State {
@@ -9,10 +10,12 @@ export interface State {
     duration: string
     payFreq: string
     apr: string
+    formErrors: FormErrors
   }
   buyNow: {
     enabled: boolean
     price: string
+    formErrors: FormErrors
   }
   batch: {
     enabled: boolean
@@ -22,6 +25,7 @@ export interface State {
     duration: string
     payFreq: string
     apr: string
+    formErrors: FormErrors
   }[]
   expiration: Expiration
 }
@@ -33,10 +37,12 @@ export const initialState: State = {
     duration: '',
     payFreq: '',
     apr: '',
+    formErrors: {},
   },
   buyNow: {
     enabled: false,
     price: '',
+    formErrors: {},
   },
   batch: [
     {
@@ -47,6 +53,7 @@ export const initialState: State = {
       duration: '30',
       payFreq: 'weekly',
       apr: '0',
+      formErrors: {},
     },
     {
       enabled: false,
@@ -56,6 +63,7 @@ export const initialState: State = {
       duration: '90',
       payFreq: 'monthly',
       apr: '3',
+      formErrors: {},
     },
     {
       enabled: false,
@@ -65,12 +73,15 @@ export const initialState: State = {
       duration: '180',
       payFreq: 'monthly',
       apr: '8',
+      formErrors: {},
     },
   ],
   expiration: Expiration.OneMonth,
 }
 
-export function createListingsReducer(state: State, action: Action): State {
+export function createOffersReducer(state: State, action: Action): State {
+  let batch
+
   switch (action.type) {
     case 'update_expiration':
       return {
@@ -85,6 +96,14 @@ export function createListingsReducer(state: State, action: Action): State {
           [action.payload.key]: action.payload.value,
         },
       }
+    case 'update_custom_form_errors':
+      return {
+        ...state,
+        custom: {
+          ...state.custom,
+          formErrors: action.payload,
+        },
+      }
     case 'update_buy_now':
       return {
         ...state,
@@ -92,50 +111,64 @@ export function createListingsReducer(state: State, action: Action): State {
           ...state.buyNow,
           [action.payload.key]: action.payload.value,
         },
-        // Update all default listings to follow the buy now price as it changes
+        // Update all default offers to follow the buy now price as it changes
         // and add a default markup.
-        batch: state.batch.map((listing) => {
-          if (!listing.isDefault || action.payload.key !== 'price')
-            return listing
+        batch: state.batch.map((offer) => {
+          if (!offer.isDefault || action.payload.key !== 'price') return offer
 
           let price = Number(action.payload.value)
-          switch (listing.duration) {
+          switch (offer.duration) {
             case '30':
               return {
-                ...listing,
-                // 0.5% markup for 30 day listing
+                ...offer,
+                // 0.5% markup for 30 day offer
                 price: formatNumber(price + 0.005 * price),
               }
             case '90':
               return {
-                ...listing,
-                // 2.5% markup for 30 day listing
+                ...offer,
+                // 2.5% markup for 30 day offer
                 price: formatNumber(price + 0.025 * price),
               }
             case '180':
               return {
-                ...listing,
-                // 10% markup for 30 day listing
+                ...offer,
+                // 10% markup for 30 day offer
                 price: formatNumber(price + 0.1 * price),
               }
             default:
-              return listing
+              return offer
           }
         }),
       }
+    case 'update_buy_now_form_errors':
+      return {
+        ...state,
+        buyNow: {
+          ...state.buyNow,
+          formErrors: action.payload,
+        },
+      }
     case 'update_batch_form_value':
-      const { idx, key, value } = action.payload
-      const batch = [...state.batch]
-      batch[idx] = {
-        ...batch[idx],
-        [key]: value,
-        // Once edited a listing becomes custom and is no longer
+      batch = [...state.batch]
+      batch[action.payload.idx] = {
+        ...batch[action.payload.idx],
+        [action.payload.key]: action.payload.value,
+        // Once edited a offer becomes custom and is no longer
         // updated alongside the buy now price.
         isDefault: false,
       }
 
       return { ...state, batch }
-    case 'add_new_batch_listing':
+    case 'update_batch_form_errors':
+      batch = [...state.batch]
+      batch[action.payload.idx] = {
+        ...batch[action.payload.idx],
+        formErrors: action.payload.formErrors,
+      }
+
+      return { ...state, batch }
+    case 'add_new_batch_offer':
       return {
         ...state,
         batch: [
@@ -148,6 +181,7 @@ export function createListingsReducer(state: State, action: Action): State {
             duration: '',
             payFreq: '',
             apr: '',
+            formErrors: {},
           },
         ],
       }

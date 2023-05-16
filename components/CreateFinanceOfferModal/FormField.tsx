@@ -27,7 +27,7 @@ const FormField: FC<Props> = ({
             <InfoTooltip side="top" content={tooltip} modeOverride="light" />
           )}
         </div>
-        {children}
+        <div className="h-[46px] w-[170px]">{children}</div>
       </div>
       {infoName && infoValue && (
         <div className="flex flex-grow items-center justify-between">

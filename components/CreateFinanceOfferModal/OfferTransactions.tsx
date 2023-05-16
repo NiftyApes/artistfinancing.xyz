@@ -3,7 +3,7 @@ import { Timeline } from 'components/Timeline'
 import { optimizeImage } from 'lib/optmizeImage'
 import { FiClock } from 'react-icons/fi'
 
-const ListingTransactions = ({
+const OfferTransactions = ({
   token,
 }: {
   token: ReturnType<typeof useTokens>['data'][0]
@@ -58,7 +58,7 @@ const ListingTransactions = ({
             },
             {
               icon: FiClock,
-              content: <p className="text-sm text-black">Listings Completed</p>,
+              content: <p className="text-sm text-black">Offers Completed</p>,
             },
           ]}
           orientation="vertical"
@@ -69,4 +69,4 @@ const ListingTransactions = ({
   )
 }
 
-export default ListingTransactions
+export default OfferTransactions

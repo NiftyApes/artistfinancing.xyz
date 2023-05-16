@@ -4,17 +4,17 @@ import Checkbox from 'components/Checkbox'
 import React, { useContext } from 'react'
 import { IoAddSharp, IoChevronDown } from 'react-icons/io5'
 import { processTerms } from './lib/processTerms'
-import ListingForm from './ListingForm'
+import OfferForm from './OfferForm'
 import NumberInput from './NumberInput'
-import { CreateListingsStore } from './store'
+import { CreateOffersStore } from './store'
 
 /** 
   TODO: Refactor components so that the <Checkbox> <button>
   component is not a descendant of the <AccordionTrigger> <button>
   which creates a warning in the console.
 **/
-const ListingsAccordion = () => {
-  const { state, dispatch } = useContext(CreateListingsStore)
+const OffersAccordion = () => {
+  const { state, dispatch } = useContext(CreateOffersStore)
 
   const preventAccordionTrigger = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -41,10 +41,11 @@ const ListingsAccordion = () => {
                   }
                 }}
               />
-              <div className="w-[150px]">
+              <div className="h-[46px] w-[150px]">
                 <NumberInput
                   descriptor="ETH"
                   defaultValue={state.buyNow.price}
+                  formError={state.buyNow.formErrors['price']}
                   onChange={(valueAsString) => {
                     dispatch({
                       type: 'update_buy_now',
@@ -59,7 +60,7 @@ const ListingsAccordion = () => {
         </AccordionTrigger>
       </AccordionItem>
 
-      {state.batch.map((listing, idx) => {
+      {state.batch.map((offerTerms, idx) => {
         const handleFormChange = (key: string, value: string | boolean) => {
           dispatch({
             type: 'update_batch_form_value',
@@ -71,11 +72,13 @@ const ListingsAccordion = () => {
           })
         }
 
-        const processedTerms = processTerms(listing)
+        const processedTerms = processTerms(offerTerms)
 
         return (
-          <AccordionItem key={idx} value={`batch-listing-${idx}`}>
-            <AccordionTrigger>
+          <AccordionItem key={idx} value={`batch-offer-${idx}`}>
+            <AccordionTrigger
+              containsError={Object.keys(offerTerms.formErrors).length !== 0}
+            >
               <div className="flex items-center space-x-16">
                 <div className="flex w-[180px] items-center space-x-4">
                   <Checkbox
@@ -98,9 +101,10 @@ const ListingsAccordion = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <ListingForm
-                terms={listing}
+              <OfferForm
+                terms={offerTerms}
                 handleFormChange={handleFormChange}
+                formErrors={offerTerms.formErrors}
               />
             </AccordionContent>
           </AccordionItem>
@@ -112,14 +116,14 @@ const ListingsAccordion = () => {
           noContent={true}
           isButton={true}
           onClick={() => {
-            dispatch({ type: 'add_new_batch_listing' })
+            dispatch({ type: 'add_new_batch_offer' })
           }}
         >
           <div className="flex w-[180px] items-center space-x-4">
             <div className="flex h-5 w-5 items-center justify-center border border-black">
               <IoAddSharp />
             </div>
-            <p className="text-gray-600">Add Listing Offer</p>
+            <p className="text-gray-600">Add Custom Offer</p>
           </div>
         </AccordionTrigger>
       </AccordionItem>
@@ -152,29 +156,36 @@ const AccordionTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof Accordion.Trigger> & {
     isButton?: Boolean
     noContent?: Boolean
+    containsError?: Boolean
   }
->(({ children, className, noContent, isButton, ...props }, forwardedRef) => (
-  <Accordion.Header className="flex">
-    <Accordion.Trigger
-      className={clsx(
-        'group flex flex-1 items-center justify-between bg-white px-5 py-8 leading-none shadow-[0_1px_0] outline-none',
-        className,
-        !isButton && 'cursor-default',
-        isButton && 'cursor-pointer hover:bg-gray-100'
-      )}
-      ref={forwardedRef}
-      {...props}
-    >
-      {children}
-      {!noContent && (
-        <IoChevronDown
-          className="h-6 w-6 transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=open]:rotate-180"
-          aria-hidden
-        />
-      )}
-    </Accordion.Trigger>
-  </Accordion.Header>
-))
+>(
+  (
+    { children, className, noContent, isButton, containsError, ...props },
+    forwardedRef
+  ) => (
+    <Accordion.Header className="flex">
+      <Accordion.Trigger
+        className={clsx(
+          'group flex flex-1 items-center justify-between bg-white px-5 py-8 leading-none shadow-[0_1px_0] outline-none',
+          className,
+          !isButton && 'cursor-default',
+          isButton && 'cursor-pointer hover:bg-gray-100',
+          containsError && 'border-l-2 border-red-500'
+        )}
+        ref={forwardedRef}
+        {...props}
+      >
+        {children}
+        {!noContent && (
+          <IoChevronDown
+            className="h-6 w-6 transition-transform duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] group-data-[state=open]:rotate-180"
+            aria-hidden
+          />
+        )}
+      </Accordion.Trigger>
+    </Accordion.Header>
+  )
+)
 
 AccordionTrigger.displayName = 'AccordionTrigger'
 
@@ -196,4 +207,4 @@ const AccordionContent = React.forwardRef<
 
 AccordionContent.displayName = 'AccordionContent'
 
-export default ListingsAccordion
+export default OffersAccordion

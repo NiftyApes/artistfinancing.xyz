@@ -68,3 +68,36 @@ export function processTerms(terms: FinancingTerms): ProcessedTerms {
     payFreqDays: termsAsNums.payFreqDays,
   }
 }
+
+export type FormErrors = { [key: string]: string }
+
+// validateTerms returns an array of field keys that are invalid
+export function validateTerms(terms: FinancingTerms): FormErrors {
+  let formErrors: FormErrors = {}
+
+  if (!terms.price || Number(terms.price) <= 0) {
+    formErrors['price'] = 'Price'
+  }
+
+  if (
+    !terms.downPayment ||
+    Number(terms.downPayment) < 0 ||
+    Number(terms.downPayment) > 100
+  ) {
+    formErrors['downPayment'] = 'Down Payment'
+  }
+
+  if (!terms.duration || Number(terms.duration) <= 0) {
+    formErrors['duration'] = 'Duration'
+  }
+
+  if (!terms.payFreq) {
+    formErrors['payFreq'] = 'Payment Freq.'
+  }
+
+  if (!terms.apr || Number(terms.apr) < 0) {
+    formErrors['apr'] = 'APR'
+  }
+
+  return formErrors
+}

@@ -9,6 +9,7 @@ type Props = {
   infoValue?: string
   tooltip?: string
   defaultValue?: string
+  formError?: string
   onChange?: (value: string) => void
 }
 
@@ -19,6 +20,7 @@ const NumberFormField: FC<Props> = ({
   infoValue,
   tooltip,
   defaultValue,
+  formError,
   onChange,
 }) => {
   return (
@@ -28,14 +30,13 @@ const NumberFormField: FC<Props> = ({
       infoValue={infoValue}
       tooltip={tooltip}
     >
-      <div className="h-[46px] w-[170px]">
-        <NumberInput
-          id={name}
-          descriptor={descriptor}
-          onChange={onChange}
-          defaultValue={defaultValue}
-        />
-      </div>
+      <NumberInput
+        id={name}
+        descriptor={descriptor}
+        onChange={onChange}
+        defaultValue={defaultValue}
+        formError={formError}
+      />
     </FormField>
   )
 }
