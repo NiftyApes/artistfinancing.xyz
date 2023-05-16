@@ -4,17 +4,17 @@ import Checkbox from 'components/Checkbox'
 import React, { useContext } from 'react'
 import { IoAddSharp, IoChevronDown } from 'react-icons/io5'
 import { processTerms } from './lib/processTerms'
-import ListingForm from './ListingForm'
+import OfferForm from './OfferForm'
 import NumberInput from './NumberInput'
-import { CreateListingsStore } from './store'
+import { CreateOffersStore } from './store'
 
 /** 
   TODO: Refactor components so that the <Checkbox> <button>
   component is not a descendant of the <AccordionTrigger> <button>
   which creates a warning in the console.
 **/
-const ListingsAccordion = () => {
-  const { state, dispatch } = useContext(CreateListingsStore)
+const OffersAccordion = () => {
+  const { state, dispatch } = useContext(CreateOffersStore)
 
   const preventAccordionTrigger = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -59,7 +59,7 @@ const ListingsAccordion = () => {
         </AccordionTrigger>
       </AccordionItem>
 
-      {state.batch.map((listing, idx) => {
+      {state.batch.map((offerTerms, idx) => {
         const handleFormChange = (key: string, value: string | boolean) => {
           dispatch({
             type: 'update_batch_form_value',
@@ -71,10 +71,10 @@ const ListingsAccordion = () => {
           })
         }
 
-        const processedTerms = processTerms(listing)
+        const processedTerms = processTerms(offerTerms)
 
         return (
-          <AccordionItem key={idx} value={`batch-listing-${idx}`}>
+          <AccordionItem key={idx} value={`batch-offer-${idx}`}>
             <AccordionTrigger>
               <div className="flex items-center space-x-16">
                 <div className="flex w-[180px] items-center space-x-4">
@@ -98,8 +98,8 @@ const ListingsAccordion = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <ListingForm
-                terms={listing}
+              <OfferForm
+                terms={offerTerms}
                 handleFormChange={handleFormChange}
               />
             </AccordionContent>
@@ -112,14 +112,14 @@ const ListingsAccordion = () => {
           noContent={true}
           isButton={true}
           onClick={() => {
-            dispatch({ type: 'add_new_batch_listing' })
+            dispatch({ type: 'add_new_batch_offer' })
           }}
         >
           <div className="flex w-[180px] items-center space-x-4">
             <div className="flex h-5 w-5 items-center justify-center border border-black">
               <IoAddSharp />
             </div>
-            <p className="text-gray-600">Add Listing Offer</p>
+            <p className="text-gray-600">Add Custom Offer</p>
           </div>
         </AccordionTrigger>
       </AccordionItem>
@@ -196,4 +196,4 @@ const AccordionContent = React.forwardRef<
 
 AccordionContent.displayName = 'AccordionContent'
 
-export default ListingsAccordion
+export default OffersAccordion

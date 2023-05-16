@@ -9,7 +9,7 @@ type Props = {
   handleFormChange: (key: string, value: string) => void
 }
 
-const ListingForm: FC<Props> = ({ terms, handleFormChange }) => {
+const OfferForm: FC<Props> = ({ terms, handleFormChange }) => {
   const processedTerms = processTerms(terms)
 
   const formFieldStyles = 'pt-4 first:pt-0'
@@ -82,4 +82,4 @@ const ListingForm: FC<Props> = ({ terms, handleFormChange }) => {
   )
 }
 
-export default ListingForm
+export default OfferForm

@@ -2,12 +2,12 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import Modal from 'components/Modal'
 import { useState } from 'react'
-import BatchListing from './BatchListing'
-import CustomListing from './CustomListing'
+import BatchOffer from './BatchOffer'
+import CustomOffer from './CustomOffer'
 import Expiration from './Expiration'
 import Header from './Header'
-import ListingTransactions from './ListingTransactions'
-import { CreateListingsStoreProvider } from './store'
+import OfferTransactions from './OfferTransactions'
+import { CreateOffersStoreProvider } from './store'
 
 export default function CreateFinanceOfferModal({
   token,
@@ -26,14 +26,13 @@ export default function CreateFinanceOfferModal({
         Create offer
       </button>
       <Modal open={open} onOpenChange={setOpen}>
-        <CreateListingsStoreProvider>
+        <CreateOffersStoreProvider>
           <div className="flex h-[700px] w-[830px] flex-col py-6 px-4 text-black">
             <Header
               collectionName={token?.token?.collection?.name}
               nftId={token?.token?.tokenId}
               onClose={() => setOpen(false)}
             />
-            {/* <ListingTransactions token={token} /> */}
             <Tabs.Root defaultValue="custom">
               <Tabs.List className="ml-[216px] flex justify-between gap-6 border-b-[1px] py-2">
                 <div className="flex gap-8">
@@ -41,20 +40,20 @@ export default function CreateFinanceOfferModal({
                     List Art for Sale
                   </Tabs.Trigger>
                   <Tabs.Trigger value="custom" className={tabTriggerStyles}>
-                    Custom Listing
+                    Custom Offer
                   </Tabs.Trigger>
                 </div>
                 <Expiration />
               </Tabs.List>
               <Tabs.Content value="batch" className={tabContentStyles}>
-                <BatchListing token={token} />
+                <BatchOffer token={token} />
               </Tabs.Content>
               <Tabs.Content value="custom" className={tabContentStyles}>
-                <CustomListing token={token} />
+                <CustomOffer token={token} />
               </Tabs.Content>
             </Tabs.Root>
           </div>
-        </CreateListingsStoreProvider>
+        </CreateOffersStoreProvider>
       </Modal>
     </>
   )

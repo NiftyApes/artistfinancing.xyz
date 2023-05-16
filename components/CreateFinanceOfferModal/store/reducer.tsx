@@ -70,7 +70,7 @@ export const initialState: State = {
   expiration: Expiration.OneMonth,
 }
 
-export function createListingsReducer(state: State, action: Action): State {
+export function createOffersReducer(state: State, action: Action): State {
   switch (action.type) {
     case 'update_expiration':
       return {
@@ -92,34 +92,33 @@ export function createListingsReducer(state: State, action: Action): State {
           ...state.buyNow,
           [action.payload.key]: action.payload.value,
         },
-        // Update all default listings to follow the buy now price as it changes
+        // Update all default offers to follow the buy now price as it changes
         // and add a default markup.
-        batch: state.batch.map((listing) => {
-          if (!listing.isDefault || action.payload.key !== 'price')
-            return listing
+        batch: state.batch.map((offer) => {
+          if (!offer.isDefault || action.payload.key !== 'price') return offer
 
           let price = Number(action.payload.value)
-          switch (listing.duration) {
+          switch (offer.duration) {
             case '30':
               return {
-                ...listing,
-                // 0.5% markup for 30 day listing
+                ...offer,
+                // 0.5% markup for 30 day offer
                 price: formatNumber(price + 0.005 * price),
               }
             case '90':
               return {
-                ...listing,
-                // 2.5% markup for 30 day listing
+                ...offer,
+                // 2.5% markup for 30 day offer
                 price: formatNumber(price + 0.025 * price),
               }
             case '180':
               return {
-                ...listing,
-                // 10% markup for 30 day listing
+                ...offer,
+                // 10% markup for 30 day offer
                 price: formatNumber(price + 0.1 * price),
               }
             default:
-              return listing
+              return offer
           }
         }),
       }
@@ -129,13 +128,13 @@ export function createListingsReducer(state: State, action: Action): State {
       batch[idx] = {
         ...batch[idx],
         [key]: value,
-        // Once edited a listing becomes custom and is no longer
+        // Once edited a offer becomes custom and is no longer
         // updated alongside the buy now price.
         isDefault: false,
       }
 
       return { ...state, batch }
-    case 'add_new_batch_listing':
+    case 'add_new_batch_offer':
       return {
         ...state,
         batch: [

@@ -1,4 +1,11 @@
-const Footer = ({ footerText }: { footerText?: string }) => {
+import { FC } from 'react'
+
+type Props = {
+  type: 'custom' | 'batch'
+  footerText?: string
+}
+
+const Footer: FC<Props> = ({ type, footerText }) => {
   return (
     <div className="flex items-center justify-between">
       <i className="text-sm">{footerText}</i>
@@ -7,7 +14,7 @@ const Footer = ({ footerText }: { footerText?: string }) => {
           Nevermind
         </button>
         <button className="rounded-full border-2 border-black px-8 py-3 text-sm font-bold uppercase hover:bg-black hover:text-white">
-          Create Listing
+          {type === 'custom' ? 'Create Offer' : 'Create Offers'}
         </button>
       </div>
     </div>

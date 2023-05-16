@@ -28,5 +28,5 @@ export type Action =
       }
     }
   | {
-      type: 'add_new_batch_listing'
+      type: 'add_new_batch_offer'
     }
