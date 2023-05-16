@@ -16,7 +16,7 @@ export type Action =
       type: 'update_buy_now'
       payload: {
         key: string
-        value: string
+        value: string | boolean
       }
     }
   | {
@@ -24,7 +24,7 @@ export type Action =
       payload: {
         idx: number
         key: string
-        value: string
+        value: string | boolean
       }
     }
   | {

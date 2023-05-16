@@ -1,4 +1,4 @@
-import {NiftyApesProvider} from "@niftyapes/sdk"
+import { NiftyApesProvider } from '@niftyapes/sdk'
 import '@rainbow-me/rainbowkit/styles.css'
 import {
   ReservoirKitProvider,

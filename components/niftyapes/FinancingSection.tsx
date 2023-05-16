@@ -65,7 +65,8 @@ export default function FinancingSection({
   }
 
   const { address } = useAccount()
-  const { isEntitledToNft, isLoadingLoans: isLoadingOwnershipCheck } =    useNftOwnership()
+  const { isEntitledToNft, isLoadingLoans: isLoadingOwnershipCheck } =
+    useNftOwnership()
   const isNiftyApesOwned = isEntitledToNft(
     token?.token?.contract as Address,
     token?.token?.tokenId

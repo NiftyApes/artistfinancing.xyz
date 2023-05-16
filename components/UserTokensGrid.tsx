@@ -67,9 +67,9 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
     isFetchingInitialData: isFetchingInitialDataTokens,
   } = useTokens({
     tokens: ownedNftTokens,
-  });
+  })
 
-  const isLoadingTokens = isFetchingPageTokens || isFetchingInitialDataTokens;
+  const isLoadingTokens = isFetchingPageTokens || isFetchingInitialDataTokens
 
   useEffect(() => {
     if (inView && hasNextPage) {
