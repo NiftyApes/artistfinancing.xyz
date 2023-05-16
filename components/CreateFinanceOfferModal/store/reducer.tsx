@@ -3,7 +3,10 @@ import { formatNumber } from 'lib/numbers'
 import { FormErrors } from '../lib/processTerms'
 import { Action } from './actions'
 
+export type Stage = 'form_input' | 'custom_submitted' | 'batch_submitted'
+
 export interface State {
+  stage: Stage
   custom: {
     price: string
     downPayment: string
@@ -31,6 +34,7 @@ export interface State {
 }
 
 export const initialState: State = {
+  stage: 'form_input',
   custom: {
     price: '',
     downPayment: '',
@@ -83,6 +87,11 @@ export function createOffersReducer(state: State, action: Action): State {
   let batch
 
   switch (action.type) {
+    case 'update_stage':
+      return {
+        ...state,
+        stage: action.payload,
+      }
     case 'update_expiration':
       return {
         ...state,

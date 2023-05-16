@@ -1,7 +1,12 @@
 import { Expiration } from 'lib/niftyapes/expirationOptions'
 import { FormErrors } from '../lib/processTerms'
+import { Stage } from './reducer'
 
 export type Action =
+  | {
+      type: 'update_stage'
+      payload: Stage
+    }
   | {
       type: 'update_expiration'
       payload: Expiration

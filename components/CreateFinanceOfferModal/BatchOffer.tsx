@@ -60,7 +60,10 @@ const BatchOffer: FC<Props> = ({ token, onClose }) => {
       setErrorText('Please enter valid terms for the selected offers.')
     } else {
       setErrorText('')
-      console.log('Valid batch terms. Submitting...')
+      dispatch({
+        type: 'update_stage',
+        payload: 'batch_submitted',
+      })
     }
   }
 

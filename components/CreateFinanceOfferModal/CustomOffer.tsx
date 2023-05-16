@@ -26,17 +26,20 @@ const CustomOffer: FC<Props> = ({ token, onClose }) => {
   const validateForm = () => {
     const formErrors = validateTerms(state.custom)
 
-    if (Object.keys(formErrors).length === 0) {
-      setErrorText('')
-      dispatch({ type: 'update_custom_form_errors', payload: {} })
-      console.log('Valid terms. Submitting...')
-    } else {
+    if (Object.keys(formErrors).length > 0) {
       setErrorText(
         `Please check the following fields: ${Object.keys(formErrors)
           .map((key) => formErrors[key])
           .join(', ')}`
       )
       dispatch({ type: 'update_custom_form_errors', payload: formErrors })
+    } else {
+      setErrorText('')
+      dispatch({ type: 'update_custom_form_errors', payload: {} })
+      dispatch({
+        type: 'update_stage',
+        payload: 'custom_submitted',
+      })
     }
   }
 
