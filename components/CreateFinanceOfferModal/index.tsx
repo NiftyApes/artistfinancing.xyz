@@ -1,7 +1,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import Modal from 'components/Modal'
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import BatchOffer from './BatchOffer'
 import CustomOffer from './CustomOffer'
 import Expiration from './Expiration'
@@ -9,11 +9,11 @@ import Header from './Header'
 import OfferTransactions from './OfferTransactions'
 import { CreateOffersStoreProvider } from './store'
 
-export default function CreateFinanceOfferModal({
-  token,
-}: {
+type Props = {
   token: ReturnType<typeof useTokens>['data'][0]
-}) {
+}
+
+const CreateFinanceOfferModal: FC<Props> = ({ token }) => {
   const [open, setOpen] = useState(false)
 
   const tabTriggerStyles =
@@ -22,8 +22,11 @@ export default function CreateFinanceOfferModal({
 
   return (
     <>
-      <button onClick={() => setOpen(true)} className="btn-primary-fill">
-        Create offer
+      <button
+        onClick={() => setOpen(true)}
+        className="w-full rounded-full border-2 bg-white px-8 py-3 text-sm font-bold uppercase text-black hover:bg-white hover:text-black"
+      >
+        Create Offers
       </button>
       <Modal open={open} onOpenChange={setOpen}>
         <CreateOffersStoreProvider>
@@ -58,3 +61,5 @@ export default function CreateFinanceOfferModal({
     </>
   )
 }
+
+export default CreateFinanceOfferModal

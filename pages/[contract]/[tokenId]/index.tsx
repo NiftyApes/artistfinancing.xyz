@@ -3,10 +3,9 @@ import {
   useTokens,
   useUserTokens,
 } from '@reservoir0x/reservoir-kit-ui'
+import CreateFinanceOfferModal from 'components/CreateFinanceOfferModal'
 import Layout from 'components/Layout'
-import FinancingSection from 'components/niftyapes/FinancingSection'
 import TokenInfo from 'components/token/TokenInfo'
-import TokenMedia from 'components/token/TokenMedia'
 import TokenAttributes from 'components/TokenAttributes'
 import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
 import { NextPage } from 'next'
@@ -17,7 +16,6 @@ import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 import EthAccount from '../../../components/niftyapes/EthAccount'
 import { optimizeImage } from '../../../lib/optmizeImage'
-import BuyNowPayLaterModal from '../../../components/niftyapes/bnpl/BuyNowPayLaterModal'
 
 // Environment variables
 // For more information about these variables
@@ -152,17 +150,15 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       ? true
       : token?.token?.owner?.toLowerCase() === account?.address?.toLowerCase()
 
-  const renderBuyNowPayLater = () => {
-    return (
-      <div className="max-w-80 mb-10 rounded-lg p-5">
-        <button
-          className={`flex h-[50px] w-full items-center justify-center whitespace-nowrap rounded-[40px] bg-white text-[14px] font-bold uppercase text-black focus:ring-0`}
-        >
-          Buy Now, Pay Later
-        </button>
-      </div>
-    )
-  }
+  const renderBuyNowPayLater = isOwner ? (
+    <CreateFinanceOfferModal token={token} />
+  ) : (
+    <button
+      className={`flex h-[50px] w-full items-center justify-center whitespace-nowrap rounded-[40px] bg-white text-[14px] font-bold uppercase text-black focus:ring-0`}
+    >
+      Buy Now, Pay Later
+    </button>
+  )
 
   return (
     <Layout navbar={{}}>
@@ -181,7 +177,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         </div>
       </div>
 
-      <div className="relative col-span-full flex overflow-auto lg:col-span-4 lg:h-vh-minus-6rem lg:h-vh-minus-6rem lg:pr-12">
+      <div className="relative col-span-full flex overflow-auto lg:col-span-4 lg:h-vh-minus-6rem lg:pr-12">
         <div className="grid w-full grid-flow-col gap-4 text-center lg:w-auto lg:text-left">
           <div className="resize-none lg:col-span-3">
             <div className="reservoir-h3 mb-8 font-semibold">
@@ -201,7 +197,9 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
               />
             </div>
 
-            <div className="">{renderBuyNowPayLater()}</div>
+            <div className="max-w-80 mb-10 rounded-lg p-5">
+              {renderBuyNowPayLater}
+            </div>
 
             <div className="mb-14">
               <div className="reservoir-h3 mb-1 font-semibold">Description</div>
