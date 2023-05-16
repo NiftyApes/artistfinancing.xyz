@@ -7,10 +7,15 @@ import LoadingIcon from 'components/LoadingIcon'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { Address } from 'wagmi'
 import { processOffer } from 'lib/niftyapes/processOffer'
-import { OfferDetails, Loan, LoanDetails, useLoans } from '@niftyapes/sdk'
+import {
+  OfferDetails,
+  Loan,
+  LoanDetails,
+  useLoans,
+  useSeizeAsset,
+} from '@niftyapes/sdk'
 import { useNiftyApesContract } from 'hooks/niftyapes/useNiftyApesContract'
 import { format } from 'date-fns'
-import { useSeizeAsset } from 'hooks/niftyapes/useSeizeAsset'
 import { BigNumber } from 'ethers'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { optimizeImage } from 'lib/optmizeImage'
@@ -139,11 +144,7 @@ const UserListingsTableRow = ({
   const { periodEndTimestamp, remainingPrincipal, inDefault } =
     processLoan(loan)
 
-  const {
-    isLoading: isLoadingSeizeAsset,
-    isError,
-    write,
-  } = useSeizeAsset({
+  const { isLoading: isLoadingSeizeAsset, write } = useSeizeAsset({
     nftContractAddress: offer.nftContractAddress,
     nftId: BigNumber.from(offer.nftId),
   })
