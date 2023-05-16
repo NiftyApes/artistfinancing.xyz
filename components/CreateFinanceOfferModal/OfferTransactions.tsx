@@ -1,21 +1,23 @@
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { Timeline } from 'components/Timeline'
 import { optimizeImage } from 'lib/optmizeImage'
+import { useContext } from 'react'
 import { FiClock } from 'react-icons/fi'
+import { CreateOffersStore } from './store'
 
 const OfferTransactions = ({
   token,
 }: {
   token: ReturnType<typeof useTokens>['data'][0]
 }) => {
-  const imageSrc = token?.token?.image
+  const { state } = useContext(CreateOffersStore)
 
   return (
     <div className="flex h-full space-x-12 px-4 pt-8">
       <img
         alt="Token Image"
         className="w-2/5 self-start object-contain"
-        src={optimizeImage(imageSrc, 400)}
+        src={optimizeImage(token?.token?.image, 400)}
       />
       <div className="w-3/5">
         <Timeline
