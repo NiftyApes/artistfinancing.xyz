@@ -17,8 +17,7 @@ import CreateFinanceOfferModal from 'components/CreateFinanceOfferModal'
 import EthAccount from 'components/EthAccount'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { setToast } from 'components/token/setToast'
-import { useNftOwnership } from 'hooks/niftyapes/useNftOwnership'
-import { useOffers } from '@niftyapes/sdk'
+import { useOffers, useNftOwnership } from '@niftyapes/sdk'
 import { FinancingTerms, processOffer } from 'lib/niftyapes/processOffer'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -66,8 +65,7 @@ export default function FinancingSection({
   }
 
   const { address } = useAccount()
-  const { isEntitledToNft, isLoadingTokens: isLoadingOwnershipCheck } =
-    useNftOwnership()
+  const { isEntitledToNft, isLoadingLoans: isLoadingOwnershipCheck } =    useNftOwnership()
   const isNiftyApesOwned = isEntitledToNft(
     token?.token?.contract as Address,
     token?.token?.tokenId

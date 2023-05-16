@@ -1,12 +1,11 @@
 import { FC, useEffect } from 'react'
 import LoadingCard from './LoadingCard'
-import { useUserTokens } from '@reservoir0x/reservoir-kit-ui'
+import { useTokens, useUserTokens } from '@reservoir0x/reservoir-kit-ui'
 import { useInView } from 'react-intersection-observer'
 import TokenCard from './TokenCard'
 import { paths } from '@reservoir0x/reservoir-sdk'
+import { useNftOwnership, useOffers } from '@niftyapes/sdk'
 import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
-import { useNftOwnership } from 'hooks/niftyapes/useNftOwnership'
-import { useOffers } from '@niftyapes/sdk'
 
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
 const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
@@ -60,7 +59,17 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
   addNiftyApesTokenImages(tokens)
   const { ref, inView } = useInView()
 
-  const { entitledTokens, isLoadingTokens } = useNftOwnership()
+  const { ownedNftTokens } = useNftOwnership()
+
+  const {
+    data: entitledTokens,
+    isFetchingPage: isFetchingPageTokens,
+    isFetchingInitialData: isFetchingInitialDataTokens,
+  } = useTokens({
+    tokens: ownedNftTokens,
+  });
+
+  const isLoadingTokens = isFetchingPageTokens || isFetchingInitialDataTokens;
 
   useEffect(() => {
     if (inView && hasNextPage) {

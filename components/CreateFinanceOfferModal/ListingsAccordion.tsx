@@ -1,30 +1,57 @@
 import * as Accordion from '@radix-ui/react-accordion'
 import clsx from 'clsx'
 import Checkbox from 'components/Checkbox'
-import React from 'react'
+import React, { useContext } from 'react'
 import { IoAddSharp, IoChevronDown } from 'react-icons/io5'
+import { processTerms } from './lib/processTerms'
 import ListingForm from './ListingForm'
 import NumberInput from './NumberInput'
+import { CreateListingsStore } from './store'
 
+/** 
+  TODO: Refactor components so that the <Checkbox> <button>
+  component is not a descendant of the <AccordionTrigger> <button>
+  which creates a warning in the console.
+**/
 const ListingsAccordion = () => {
-  const handleCheck = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const { state, dispatch } = useContext(CreateListingsStore)
+
+  const preventAccordionTrigger = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.stopPropagation()
   }
 
   return (
-    <Accordion.Root
-      className="m-[1px] bg-mauve6"
-      type="single"
-      defaultValue="item-1"
-      collapsible
-    >
+    <Accordion.Root className="m-[1px] bg-mauve6" type="single" collapsible>
       <AccordionItem value="buy-now">
         <AccordionTrigger noContent={true}>
           <div className="flex items-center space-x-16">
             <div className="flex w-[180px] items-center space-x-4">
-              <Checkbox className="flex-shrink-0" onClick={handleCheck} />
+              <Checkbox
+                className="flex-shrink-0"
+                onClick={preventAccordionTrigger}
+                defaultChecked={state.buyNow.enabled}
+                onCheckedChange={(checked: boolean | 'indeterminate') => {
+                  if (checked !== 'indeterminate') {
+                    dispatch({
+                      type: 'update_buy_now',
+                      payload: { key: 'enabled', value: checked },
+                    })
+                  }
+                }}
+              />
               <div className="w-[150px]">
-                <NumberInput descriptor="ETH" />
+                <NumberInput
+                  descriptor="ETH"
+                  defaultValue={state.buyNow.price}
+                  onChange={(valueAsString) => {
+                    dispatch({
+                      type: 'update_buy_now',
+                      payload: { key: 'price', value: valueAsString },
+                    })
+                  }}
+                />
               </div>
             </div>
             <p className="text-gray-600">Buy Now Price</p>
@@ -32,62 +59,62 @@ const ListingsAccordion = () => {
         </AccordionTrigger>
       </AccordionItem>
 
-      <AccordionItem value="item-1">
-        <AccordionTrigger>
-          <div className="flex items-center space-x-16">
-            <div className="flex w-[180px] items-center space-x-4">
-              <Checkbox onClick={handleCheck} />
-              <p className="text-gray-600">30 Day Financing</p>
-            </div>
-            <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
-              <p className="font-semibold">4.51</p>
-              <p className="text-gray-600">Sale Price</p>
-            </div>
-          </div>
-        </AccordionTrigger>
-        <AccordionContent>
-          <ListingForm />
-        </AccordionContent>
-      </AccordionItem>
+      {state.batch.map((listing, idx) => {
+        const handleFormChange = (key: string, value: string | boolean) => {
+          dispatch({
+            type: 'update_batch_form_value',
+            payload: {
+              idx,
+              key,
+              value,
+            },
+          })
+        }
 
-      <AccordionItem value="item-2">
-        <AccordionTrigger>
-          <div className="flex items-center space-x-16">
-            <div className="flex w-[180px] items-center space-x-4">
-              <Checkbox onClick={handleCheck} />
-              <p className="text-gray-600">3 Month Financing</p>
-            </div>
-            <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
-              <p className="font-semibold">4.554</p>
-              <p className="text-gray-600">Sale Price</p>
-            </div>
-          </div>
-        </AccordionTrigger>
-        <AccordionContent>
-          <ListingForm />
-        </AccordionContent>
-      </AccordionItem>
+        const processedTerms = processTerms(listing)
 
-      <AccordionItem value="item-3">
-        <AccordionTrigger>
-          <div className="flex items-center space-x-16">
-            <div className="flex w-[180px] items-center space-x-4">
-              <Checkbox onClick={handleCheck} />
-              <p className="text-gray-600">6 Month Financing</p>
-            </div>
-            <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
-              <p className="font-semibold">4.774</p>
-              <p className="text-gray-600">Sale Price</p>
-            </div>
-          </div>
-        </AccordionTrigger>
-        <AccordionContent>
-          <ListingForm />
-        </AccordionContent>
-      </AccordionItem>
+        return (
+          <AccordionItem key={idx} value={`batch-listing-${idx}`}>
+            <AccordionTrigger>
+              <div className="flex items-center space-x-16">
+                <div className="flex w-[180px] items-center space-x-4">
+                  <Checkbox
+                    onClick={preventAccordionTrigger}
+                    defaultChecked={state.batch[idx].enabled}
+                    onCheckedChange={(checked: boolean | 'indeterminate') => {
+                      if (checked !== 'indeterminate') {
+                        handleFormChange('enabled', checked)
+                      }
+                    }}
+                  />
+                  <p className="text-gray-600">
+                    {processedTerms.duration || '-'} Day Financing
+                  </p>
+                </div>
+                <div className="flex space-x-2 rounded-full border border-black px-3 py-2">
+                  <p className="font-semibold">{processedTerms.saleTotal}</p>
+                  <p className="text-gray-600">Sale Total</p>
+                </div>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <ListingForm
+                terms={listing}
+                handleFormChange={handleFormChange}
+              />
+            </AccordionContent>
+          </AccordionItem>
+        )
+      })}
 
       <AccordionItem value="add" isButton={true}>
-        <AccordionTrigger noContent={true} isButton={true}>
+        <AccordionTrigger
+          noContent={true}
+          isButton={true}
+          onClick={() => {
+            dispatch({ type: 'add_new_batch_listing' })
+          }}
+        >
           <div className="flex w-[180px] items-center space-x-4">
             <div className="flex h-5 w-5 items-center justify-center border border-black">
               <IoAddSharp />

@@ -1,18 +1,20 @@
 import InfoTooltip from 'components/InfoTooltip'
-import { ReactNode } from 'react'
+import { FC, ReactNode } from 'react'
 
-const FormField = ({
-  name,
-  children,
-  infoName,
-  infoValue,
-  tooltip,
-}: {
+type Props = {
   name: string
   children: ReactNode
   infoName?: string
   infoValue?: string
   tooltip?: string
+}
+
+const FormField: FC<Props> = ({
+  name,
+  children,
+  infoName,
+  infoValue,
+  tooltip,
 }) => {
   return (
     <div className="flex gap-6">
