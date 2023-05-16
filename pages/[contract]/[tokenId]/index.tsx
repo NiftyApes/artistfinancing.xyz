@@ -3,25 +3,30 @@ import {
   useTokens,
   useUserTokens,
 } from '@reservoir0x/reservoir-kit-ui'
-import CreateFinanceOfferModal from 'components/CreateFinanceOfferModal'
+import { paths } from '@reservoir0x/reservoir-sdk'
 import Layout from 'components/Layout'
+import EthAccount from 'components/niftyapes/EthAccount'
+import OfferSection from 'components/OfferSection'
 import TokenInfo from 'components/token/TokenInfo'
 import TokenAttributes from 'components/TokenAttributes'
+import { useNiftyApesContract } from 'hooks/niftyapes/useNiftyApesContract'
 import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
-import { NextPage } from 'next'
+import { optimizeImage } from 'lib/optmizeImage'
+import setParams from 'lib/params'
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
-import EthAccount from '../../../components/niftyapes/EthAccount'
-import { optimizeImage } from '../../../lib/optmizeImage'
 
 // Environment variables
 // For more information about these variables
 // refer to the README.md file on this repository
 // Reference: https://nextjs.org/docs/basic-features/environment-variables#exposing-environment-variables-to-the-browser
 // REQUIRED
+const RESERVOIR_API_BASE = process.env.NEXT_PUBLIC_RESERVOIR_API_BASE
+const RESERVOIR_API_KEY = process.env.NEXT_PUBLIC_RESERVOIR_API_KEY
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
 // OPTIONAL
@@ -29,6 +34,9 @@ const META_TITLE = process.env.NEXT_PUBLIC_META_TITLE
 const META_DESCRIPTION = process.env.NEXT_PUBLIC_META_DESCRIPTION
 const META_OG_IMAGE = process.env.NEXT_PUBLIC_META_OG_IMAGE
 
+const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
+const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
+const COLLECTION_SET_ID = process.env.NEXT_PUBLIC_COLLECTION_SET_ID
 const PROXY_API_BASE = process.env.NEXT_PUBLIC_PROXY_API_BASE
 
 type Props = {
@@ -66,6 +74,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
   const account = useAccount()
   const router = useRouter()
 
+  const { address: sellerFinancingContract } = useNiftyApesContract()
   const { addNiftyApesTokenImages, addNiftyApesCollectionImage } =
     useNiftyApesImages()
   const collectionResponse = useCollections({ id: collectionId })
@@ -150,16 +159,6 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       ? true
       : token?.token?.owner?.toLowerCase() === account?.address?.toLowerCase()
 
-  const renderBuyNowPayLater = isOwner ? (
-    <CreateFinanceOfferModal token={token} />
-  ) : (
-    <button
-      className={`flex h-[50px] w-full items-center justify-center whitespace-nowrap rounded-[40px] bg-white text-[14px] font-bold uppercase text-black focus:ring-0`}
-    >
-      Buy Now, Pay Later
-    </button>
-  )
-
   return (
     <Layout navbar={{}}>
       <Head>
@@ -198,7 +197,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
             </div>
 
             <div className="max-w-80 mb-10 rounded-lg p-5">
-              {renderBuyNowPayLater}
+              <OfferSection token={token} isOwner={isOwner} />
             </div>
 
             <div className="mb-14">
@@ -223,3 +222,69 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
 }
 
 export default Index
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [],
+    fallback: 'blocking',
+  }
+}
+
+export const getStaticProps: GetStaticProps<{
+  collectionId: string
+  communityId?: string
+}> = async ({ params }) => {
+  const contract = params?.contract?.toString()
+  const tokenId = params?.tokenId?.toString()
+  const collectionAddress = COLLECTION ? COLLECTION.split(':')[0] : COLLECTION
+
+  if (
+    collectionAddress &&
+    !COMMUNITY &&
+    !COLLECTION_SET_ID &&
+    collectionAddress.toLowerCase() !== contract?.toLowerCase()
+  ) {
+    return {
+      notFound: true,
+      revalidate: 10,
+    }
+  }
+
+  const options: RequestInit | undefined = {}
+
+  if (RESERVOIR_API_KEY) {
+    options.headers = {
+      'x-api-key': RESERVOIR_API_KEY,
+    }
+  }
+
+  const url = new URL('/tokens/v5', RESERVOIR_API_BASE)
+
+  const query: paths['/tokens/v5']['get']['parameters']['query'] = {
+    tokens: [`${contract}:${tokenId}`],
+    includeTopBid: true,
+    includeAttributes: true,
+    includeDynamicPricing: true,
+    normalizeRoyalties: true,
+  }
+
+  const href = setParams(url, query)
+
+  const res = await fetch(href, options)
+
+  const data =
+    (await res.json()) as paths['/tokens/v5']['get']['responses']['200']['schema']
+
+  const collectionId = data.tokens?.[0]?.token?.collection?.id
+
+  if (!collectionId) {
+    return {
+      notFound: true,
+      revalidate: 10,
+    }
+  }
+
+  return {
+    props: { collectionId, tokenDetails: data?.tokens?.[0]?.token },
+  }
+}
