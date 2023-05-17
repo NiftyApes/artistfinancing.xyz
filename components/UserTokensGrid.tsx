@@ -4,7 +4,7 @@ import { useTokens, useUserTokens } from '@reservoir0x/reservoir-kit-ui'
 import { useInView } from 'react-intersection-observer'
 import TokenCard from './TokenCard'
 import { paths } from '@reservoir0x/reservoir-sdk'
-import { useNftOwnership, useOffers } from '@niftyapes/sdk'
+import { useUnderlyingNFTOwner, useOffers } from '@niftyapes/sdk'
 import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
 
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
@@ -59,7 +59,7 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
   addNiftyApesTokenImages(tokens)
   const { ref, inView } = useInView()
 
-  const { ownedNftTokens } = useNftOwnership()
+  const { ownedNftTokens } = useUnderlyingNFTOwner()
 
   const {
     data: entitledTokens,

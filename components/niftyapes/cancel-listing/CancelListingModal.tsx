@@ -17,7 +17,7 @@ import { IoCheckmarkCircle } from 'react-icons/io5'
 import { MdOutlineError } from 'react-icons/md'
 import LoadingDots from '../LoadingDots'
 import { useWaitForTransaction } from 'wagmi'
-import { Offer, useCancelListing } from '@niftyapes/sdk'
+import { Offer, useCancelOffer } from '@niftyapes/sdk'
 
 export default function CancelListingModal({
   offer,
@@ -31,7 +31,7 @@ export default function CancelListingModal({
     onModalClose()
   }
 
-  const { data, isError, isLoading, write } = useCancelListing({
+  const { data, isError, isLoading, write } = useCancelOffer({
     offer: offer.offer,
     signature: offer.signature,
   })
