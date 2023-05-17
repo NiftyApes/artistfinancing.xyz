@@ -1,15 +1,16 @@
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { Timeline } from 'components/Timeline'
 import { optimizeImage } from 'lib/optmizeImage'
-import { useContext } from 'react'
+import { FC, useContext } from 'react'
 import { FiClock } from 'react-icons/fi'
+import ApproveNFTStep from './steps/ApproveNFTStep'
 import { CreateOffersStore } from './store'
 
-const OfferTransactions = ({
-  token,
-}: {
+type Props = {
   token: ReturnType<typeof useTokens>['data'][0]
-}) => {
+}
+
+const OfferTransactions: FC<Props> = ({ token }) => {
   const { state } = useContext(CreateOffersStore)
 
   return (
@@ -24,43 +25,8 @@ const OfferTransactions = ({
           events={[
             {
               icon: FiClock,
-              content: (
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm text-black">
-                    Approve SuperRare Underground to access your NFTs
-                  </p>
-                  <p className="text-xs underline">Transaction Complete</p>
-                </div>
-              ),
+              content: <ApproveNFTStep token={token} />,
               current: true,
-            },
-            {
-              icon: FiClock,
-              content: (
-                <p className="text-sm text-black">
-                  Sign Buy-Now Offer for <b>4.4 ETH</b>
-                </p>
-              ),
-            },
-            {
-              icon: FiClock,
-              content: (
-                <p className="text-sm text-black">
-                  Sign Financing Offer for <b>4.51 ETH</b> over <b>30 days</b>
-                </p>
-              ),
-            },
-            {
-              icon: FiClock,
-              content: (
-                <p className="text-sm text-black">
-                  Sign Financing Offer for <b>4.554 ETH</b> over <b>90 days</b>
-                </p>
-              ),
-            },
-            {
-              icon: FiClock,
-              content: <p className="text-sm text-black">Offers Completed</p>,
             },
           ]}
           orientation="vertical"
@@ -70,5 +36,52 @@ const OfferTransactions = ({
     </div>
   )
 }
+
+// <Timeline
+//   events={[
+//     {
+//       icon: FiClock,
+//       content: (
+//         <div className="flex flex-col space-y-1">
+//           <p className="text-sm text-black">
+//             Approve SuperRare Underground to access your NFTs
+//           </p>
+//           <p className="text-xs underline">Transaction Complete</p>
+//         </div>
+//       ),
+//       current: true,
+//     },
+//     {
+//       icon: FiClock,
+//       content: (
+//         <p className="text-sm text-black">
+//           Sign Buy-Now Offer for <b>4.4 ETH</b>
+//         </p>
+//       ),
+//     },
+//     {
+//       icon: FiClock,
+//       content: (
+//         <p className="text-sm text-black">
+//           Sign Financing Offer for <b>4.51 ETH</b> over <b>30 days</b>
+//         </p>
+//       ),
+//     },
+//     {
+//       icon: FiClock,
+//       content: (
+//         <p className="text-sm text-black">
+//           Sign Financing Offer for <b>4.554 ETH</b> over <b>90 days</b>
+//         </p>
+//       ),
+//     },
+//     {
+//       icon: FiClock,
+//       content: <p className="text-sm text-black">Offers Completed</p>,
+//     },
+//   ]}
+//   orientation="vertical"
+//   succeedingLine={false}
+// />
 
 export default OfferTransactions
