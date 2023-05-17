@@ -8,7 +8,7 @@ import { processOffer } from 'lib/niftyapes/processOffer'
 import LoadingIcon from 'components/LoadingIcon'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { useWaitForTransaction } from 'wagmi'
-import { Offer, useOffers, useCancelListing } from '@niftyapes/sdk'
+import { Offer, useOffers, useCancelOffer } from '@niftyapes/sdk'
 
 const UserFinancingOffersTable: FC = () => {
   const router = useRouter()
@@ -135,7 +135,7 @@ const UserListingsTableRow = ({
     collectionName,
   } = processOffer(offer, token)
 
-  const { data, write } = useCancelListing({
+  const { data, write } = useCancelOffer({
     offer,
     signature,
   })

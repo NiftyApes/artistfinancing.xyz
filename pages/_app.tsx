@@ -209,7 +209,10 @@ const App: FC<AppProps & { baseUrl: string }> = ({
 
   return (
     <NiftyApesProvider
-      config={{ chainId: envChain?.id || allChains.mainnet.id }}
+      config={{
+        chainId: envChain?.id || allChains.mainnet.id,
+        alchemyApiKey: alchemyId,
+      }}
     >
       <ReservoirKitProvider options={options} theme={reservoirKitTheme}>
         <WagmiConfig client={wagmiClient}>
