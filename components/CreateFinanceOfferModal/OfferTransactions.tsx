@@ -15,8 +15,6 @@ type Props = {
 const OfferTransactions: FC<Props> = ({ token }) => {
   const { state, dispatch } = useContext(CreateOffersStore)
 
-  console.log('currentStep', state.currentStep)
-
   const eventSteps: Event[] = useMemo(() => {
     // First step is always to approve the NFT for transfer
     const steps: Event[] = [

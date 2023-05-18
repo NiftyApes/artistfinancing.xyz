@@ -14,7 +14,8 @@ const ApproveNFTStep: FC<Props> = ({ token }) => {
   const { dispatch } = useContext(CreateOffersStore)
 
   const {
-    approvalRequired,
+    hasCheckedApproval,
+    hasApproval,
     approvalCheckErr,
     data,
     write,
@@ -32,10 +33,10 @@ const ApproveNFTStep: FC<Props> = ({ token }) => {
   } = useWaitForTransaction({ hash: data?.hash })
 
   useEffect(() => {
-    if (approvalRequired) {
+    if (hasCheckedApproval && !hasApproval) {
       write?.()
     }
-  }, [approvalRequired])
+  }, [hasCheckedApproval, hasApproval])
 
   const stepComplete = useRef(false)
 
@@ -45,11 +46,13 @@ const ApproveNFTStep: FC<Props> = ({ token }) => {
       return
     }
 
-    if ((!approvalRequired && !approvalCheckErr) || isTxSuccess) {
+    if ((hasApproval && !approvalCheckErr) || isTxSuccess) {
       stepComplete.current = true
       dispatch({ type: 'next_step' })
     }
-  }, [approvalRequired, approvalCheckErr, isTxSuccess])
+  }, [hasApproval, approvalCheckErr, isTxSuccess])
+
+  const approvalRequired = hasCheckedApproval && !hasApproval
 
   return (
     <div className="flex flex-col space-y-1">
@@ -81,7 +84,7 @@ const ApproveNFTStep: FC<Props> = ({ token }) => {
         )}
         {isTxLoading && (
           <>
-            <p className="text-xs underline">Waiting transaction</p>
+            <p className="text-xs underline">Waiting for transaction</p>
             <BeatLoader size={5} color="#36d7b7" />
           </>
         )}
