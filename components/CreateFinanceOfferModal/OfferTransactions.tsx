@@ -1,9 +1,11 @@
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
-import { Timeline } from 'components/Timeline'
+import { Event, Timeline } from 'components/Timeline'
 import { optimizeImage } from 'lib/optmizeImage'
-import { FC, useContext } from 'react'
+import { FC, useContext, useMemo } from 'react'
 import { FiClock } from 'react-icons/fi'
+import { IoCheckmark } from 'react-icons/io5'
 import ApproveNFTStep from './steps/ApproveNFTStep'
+import SignOfferStep from './steps/SignOfferStep'
 import { CreateOffersStore } from './store'
 
 type Props = {
@@ -11,7 +13,61 @@ type Props = {
 }
 
 const OfferTransactions: FC<Props> = ({ token }) => {
-  const { state } = useContext(CreateOffersStore)
+  const { state, dispatch } = useContext(CreateOffersStore)
+
+  console.log('currentStep', state.currentStep)
+
+  const eventSteps: Event[] = useMemo(() => {
+    // First step is always to approve the NFT for transfer
+    const steps: Event[] = [
+      {
+        icon: FiClock,
+        completedIcon: IoCheckmark,
+        content: <ApproveNFTStep token={token} />,
+        current: state.currentStep === 0,
+        completed: state.currentStep > 0,
+      },
+    ]
+
+    if (state.stage === 'custom_submitted') {
+      steps.push({
+        icon: FiClock,
+        completedIcon: IoCheckmark,
+        content: <SignOfferStep terms={state.custom} />,
+        current: state.currentStep === 1,
+        completed: state.currentStep > 1,
+      })
+    }
+
+    // TODO: Include "BuyNow" offer when it makes sense.
+    // Loops through batch offers and adds steps for each enabled offer.
+    if (state.stage === 'batch_submitted') {
+      state.batch.forEach((batchOffer, idx) => {
+        if (!batchOffer.enabled) {
+          return
+        }
+
+        steps.push({
+          icon: FiClock,
+          completedIcon: IoCheckmark,
+          content: <SignOfferStep terms={batchOffer} />,
+          current: state.currentStep === idx + 1,
+          completed: state.currentStep > idx + 1,
+        })
+      })
+    }
+
+    // Last step is always "Offers Complete"
+    steps.push({
+      icon: FiClock,
+      completedIcon: IoCheckmark,
+      content: <p className="text-sm text-black">Offers Completed</p>,
+      // current: state.currentStep === steps.length + 1,
+      // completed: state.currentStep === steps.length,
+    })
+
+    return steps
+  }, [state.currentStep])
 
   return (
     <div className="flex h-full space-x-12 px-4 pt-8">
@@ -22,13 +78,7 @@ const OfferTransactions: FC<Props> = ({ token }) => {
       />
       <div className="w-3/5">
         <Timeline
-          events={[
-            {
-              icon: FiClock,
-              content: <ApproveNFTStep token={token} />,
-              current: true,
-            },
-          ]}
+          events={eventSteps}
           orientation="vertical"
           succeedingLine={false}
         />
@@ -36,52 +86,5 @@ const OfferTransactions: FC<Props> = ({ token }) => {
     </div>
   )
 }
-
-// <Timeline
-//   events={[
-//     {
-//       icon: FiClock,
-//       content: (
-//         <div className="flex flex-col space-y-1">
-//           <p className="text-sm text-black">
-//             Approve SuperRare Underground to access your NFTs
-//           </p>
-//           <p className="text-xs underline">Transaction Complete</p>
-//         </div>
-//       ),
-//       current: true,
-//     },
-//     {
-//       icon: FiClock,
-//       content: (
-//         <p className="text-sm text-black">
-//           Sign Buy-Now Offer for <b>4.4 ETH</b>
-//         </p>
-//       ),
-//     },
-//     {
-//       icon: FiClock,
-//       content: (
-//         <p className="text-sm text-black">
-//           Sign Financing Offer for <b>4.51 ETH</b> over <b>30 days</b>
-//         </p>
-//       ),
-//     },
-//     {
-//       icon: FiClock,
-//       content: (
-//         <p className="text-sm text-black">
-//           Sign Financing Offer for <b>4.554 ETH</b> over <b>90 days</b>
-//         </p>
-//       ),
-//     },
-//     {
-//       icon: FiClock,
-//       content: <p className="text-sm text-black">Offers Completed</p>,
-//     },
-//   ]}
-//   orientation="vertical"
-//   succeedingLine={false}
-// />
 
 export default OfferTransactions

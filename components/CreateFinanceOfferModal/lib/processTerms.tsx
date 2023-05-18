@@ -1,7 +1,7 @@
 import { calculateTotalInterest } from 'lib/niftyapes/processOffer'
 import { formatNumber } from 'lib/numbers'
 
-export type FinancingTerms = {
+export type OfferTerms = {
   price: string
   downPayment: string
   duration: string
@@ -10,7 +10,7 @@ export type FinancingTerms = {
 }
 
 // TODO: Perhaps choose either `string` or `number`.
-export type ProcessedTerms = FinancingTerms & {
+export type ProcessedTerms = OfferTerms & {
   saleTotal: string
   onSale: string
   payments: string
@@ -23,7 +23,7 @@ export type ProcessedTerms = FinancingTerms & {
   payFreqDays: number
 }
 
-export function processTerms(terms: FinancingTerms): ProcessedTerms {
+export function processTerms(terms: OfferTerms): ProcessedTerms {
   const termsAsNums = {
     price: Number(terms.price),
     downPayment: Number(terms.downPayment),
@@ -72,7 +72,7 @@ export function processTerms(terms: FinancingTerms): ProcessedTerms {
 export type FormErrors = { [key: string]: string }
 
 // validateTerms returns an array of field keys that are invalid
-export function validateTerms(terms: FinancingTerms): FormErrors {
+export function validateTerms(terms: OfferTerms): FormErrors {
   let formErrors: FormErrors = {}
 
   if (!terms.price || Number(terms.price) <= 0) {

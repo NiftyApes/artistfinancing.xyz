@@ -7,6 +7,7 @@ export type Stage = 'form_input' | 'custom_submitted' | 'batch_submitted'
 
 export interface State {
   stage: Stage
+  currentStep: number
   custom: {
     price: string
     downPayment: string
@@ -35,6 +36,7 @@ export interface State {
 
 export const initialState: State = {
   stage: 'form_input',
+  currentStep: 0,
   custom: {
     price: '',
     downPayment: '',
@@ -193,6 +195,11 @@ export function createOffersReducer(state: State, action: Action): State {
             formErrors: {},
           },
         ],
+      }
+    case 'next_step':
+      return {
+        ...state,
+        currentStep: state.currentStep + 1,
       }
     default:
       throw new Error(`Unhandled action type: ${action}`)

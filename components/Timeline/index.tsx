@@ -3,7 +3,7 @@ import Tooltip from 'components/Tooltip'
 import React from 'react'
 import { IconType } from 'react-icons'
 
-type Event = {
+export type Event = {
   icon: IconType
   completedIcon?: IconType
   content: React.ReactNode

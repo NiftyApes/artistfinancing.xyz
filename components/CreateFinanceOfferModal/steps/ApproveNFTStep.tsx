@@ -1,15 +1,18 @@
 import { Address, useERC721Approve } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
-import { FC, useEffect } from 'react'
+import { FC, useContext, useEffect, useRef } from 'react'
 import { IoReload } from 'react-icons/io5'
 import { BeatLoader } from 'react-spinners'
 import { useWaitForTransaction } from 'wagmi'
+import { CreateOffersStore } from '../store'
 
 type Props = {
   token: ReturnType<typeof useTokens>['data'][0]
 }
 
 const ApproveNFTStep: FC<Props> = ({ token }) => {
+  const { dispatch } = useContext(CreateOffersStore)
+
   const {
     approvalRequired,
     approvalCheckErr,
@@ -33,6 +36,20 @@ const ApproveNFTStep: FC<Props> = ({ token }) => {
       write?.()
     }
   }, [approvalRequired])
+
+  const stepComplete = useRef(false)
+
+  useEffect(() => {
+    // No-op if we've already completed this step
+    if (stepComplete.current) {
+      return
+    }
+
+    if ((!approvalRequired && !approvalCheckErr) || isTxSuccess) {
+      stepComplete.current = true
+      dispatch({ type: 'next_step' })
+    }
+  }, [approvalRequired, approvalCheckErr, isTxSuccess])
 
   return (
     <div className="flex flex-col space-y-1">

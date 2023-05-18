@@ -48,3 +48,6 @@ export type Action =
   | {
       type: 'add_new_batch_offer'
     }
+  | {
+      type: 'next_step'
+    }
