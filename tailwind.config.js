@@ -1,8 +1,8 @@
 const { violet, blackA, mauve, green } = require('@radix-ui/colors')
 const defaultTheme = require('tailwindcss/defaultTheme')
 
-const FONT_FAMILY = process.env.NEXT_PUBLIC_FONT_FAMILY || 'Inter'
-const BODY_FONT_FAMILY = process.env.NEXT_PUBLIC_BODY_FONT_FAMILY || 'Inter'
+const FONT_FAMILY = process.env.NEXT_PUBLIC_FONT_FAMILY || 'Work Sans'
+const BODY_FONT_FAMILY = process.env.NEXT_PUBLIC_BODY_FONT_FAMILY || 'Mulish'
 const MONO_FONT_FAMILY =
   process.env.NEXT_PUBLIC_BODY_FONT_FAMILY || 'ui-monospace'
 const PRIMARY_COLOR = process.env.NEXT_PUBLIC_PRIMARY_COLOR || 'default'

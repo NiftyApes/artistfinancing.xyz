@@ -43,7 +43,7 @@ const Button: React.FC<ButtonProps> = ({
   <button
     type={type}
     className={twMerge(
-      'flex w-full items-center justify-center whitespace-nowrap rounded-[40px] font-bold focus:ring-0',
+      'flex w-full items-center justify-center whitespace-nowrap rounded-[40px] font-bold focus:ring-0 px-4 hover:opacity-75 transition-opacity',
       (isLoading || disabled) && 'cursor-not-allowed opacity-75',
       variantStyles[variant],
       sizeStyles[size],

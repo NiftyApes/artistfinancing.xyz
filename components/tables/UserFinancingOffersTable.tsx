@@ -9,6 +9,7 @@ import LoadingIcon from 'components/LoadingIcon'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { useWaitForTransaction } from 'wagmi'
 import { Offer, useOffers, useCancelOffer } from '@niftyapes/sdk'
+import Button from 'components/Button'
 
 const UserFinancingOffersTable: FC = () => {
   const router = useRouter()
@@ -223,13 +224,12 @@ const UserListingsTableRow = ({
         {status === 'CANCELLED' && 'Cancelled'}
         {status === 'USED_TO_EXECUTE_LOAN' && 'Active Loan'}
         {status === 'ACTIVE' && (
-          <button
-            className="btn-primary-fill gap-2 disabled:opacity-50 dark:ring-primary-900 dark:focus:ring-4"
-            disabled={isLoading}
+          <Button
+            isLoading={isLoading}
             onClick={() => write?.()}
           >
             Cancel Offer
-          </button>
+          </Button>
         )}
       </td>
     </tr>
