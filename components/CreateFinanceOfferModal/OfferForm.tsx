@@ -1,11 +1,11 @@
 import clsx from 'clsx'
 import { FC } from 'react'
-import { FormErrors, FinancingTerms, processTerms } from './lib/processTerms'
+import { OfferTerms, FormErrors, processTerms } from './lib/processTerms'
 import NumberFormField from './NumberFormField'
 import SelectFormField from './SelectFormField'
 
 type Props = {
-  terms: FinancingTerms
+  terms: OfferTerms
   handleFormChange: (key: string, value: string) => void
   formErrors: FormErrors
 }
