@@ -28,6 +28,7 @@ import FinancingTermsForm from './FinancingTermsForm'
 import ListingSuccess from './ListingSuccess'
 import TokenStats from './TokenStats'
 import WalletApproval from './WalletApproval'
+import Button from 'components/Button'
 
 export enum ListFinancingSteps {
   SetTerms,
@@ -143,19 +144,16 @@ export default function ListFinancingModal({
 
   return (
     <>
-      <button
+      <Button
         onClick={() => {
           onOpen()
           setTerms(defaultTerms)
         }}
-        className={
-          'flex h-[40px] w-full items-center justify-center whitespace-nowrap rounded-[21px] bg-white text-[14px] font-bold uppercase text-black focus:ring-0'
-        }
       >
         {currListingExists
           ? 'Create new finance listing'
           : 'Create finance listing'}
-      </button>
+      </Button>
 
       <Modal isOpen={isOpen} onClose={onClose} size="5xl">
         <ModalOverlay />
@@ -203,13 +201,13 @@ export default function ListFinancingModal({
                   ListFinancingSteps.SignOffer,
                   ListFinancingSteps.Success,
                 ].includes(step) && (
-                  <Progress
-                    rounded="md"
-                    w="full"
-                    colorScheme="blue"
-                    value={progressValue}
-                  />
-                )}
+                    <Progress
+                      rounded="md"
+                      w="full"
+                      colorScheme="blue"
+                      value={progressValue}
+                    />
+                  )}
                 {step === ListFinancingSteps.SetTerms && (
                   <FinancingTermsForm
                     onSubmit={onSubmit}
@@ -221,18 +219,18 @@ export default function ListFinancingModal({
                   ListFinancingSteps.ApproveContract,
                   ListFinancingSteps.SignOffer,
                 ].includes(step) && (
-                  <WalletApproval
-                    imageSrc={token?.token?.image}
-                    tokenName={token?.token?.name}
-                    isError={listingErr}
-                    backToEdit={() => {
-                      setListingErr(false)
-                      setStep(ListFinancingSteps.SetTerms)
-                    }}
-                    retry={onSubmit}
-                    step={step}
-                  />
-                )}
+                    <WalletApproval
+                      imageSrc={token?.token?.image}
+                      tokenName={token?.token?.name}
+                      isError={listingErr}
+                      backToEdit={() => {
+                        setListingErr(false)
+                        setStep(ListFinancingSteps.SetTerms)
+                      }}
+                      retry={onSubmit}
+                      step={step}
+                    />
+                  )}
                 {step === ListFinancingSteps.Success && (
                   <ListingSuccess
                     tokenName={token?.token?.name}

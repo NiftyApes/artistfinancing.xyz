@@ -96,17 +96,17 @@ const HamburgerMenu: FC<Props> = ({ externalLinks }) => {
               legacyBehavior={true}
             >
               <a
-                className="group flex w-full cursor-pointer items-center justify-between rounded border-b border-neutral-300 p-4 text-[#4B5563] outline-none transition hover:bg-neutral-100 hover:text-[#1F2937] focus:bg-neutral-100 dark:border-neutral-600 dark:text-white dark:hover:bg-neutral-600"
+                className="group flex w-full cursor-pointer items-center justify-between border-b border-neutral-300 p-4 text-[#4B5563] outline-none transition hover:bg-neutral-100 hover:text-[#1F2937] focus:bg-neutral-100 dark:border-neutral-600 dark:text-white dark:hover:bg-neutral-600"
                 onClick={() => setOpen(false)}
               >
-                Portfolio
+                Portfolio2
               </a>
             </Link>
 
             <button
               key={wallet.id}
               onClick={() => disconnect()}
-              className="group flex w-full cursor-pointer items-center justify-between gap-3 rounded border-b border-neutral-300 p-4 text-[#4B5563] outline-none transition hover:bg-neutral-100 hover:text-[#1F2937] focus:bg-neutral-100 dark:border-neutral-600 dark:text-white dark:hover:bg-neutral-600"
+              className="group flex w-full cursor-pointer items-center justify-between gap-3 border-b border-neutral-300 p-4 text-[#4B5563] outline-none transition hover:bg-neutral-100 hover:text-[#1F2937] focus:bg-neutral-100 dark:border-neutral-600 dark:text-white dark:hover:bg-neutral-600"
             >
               <span>Disconnect</span>
               <HiOutlineLogout className="h-6 w-7" />
