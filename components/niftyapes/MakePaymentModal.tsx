@@ -29,6 +29,7 @@ import { useQueryClient } from 'react-query'
 import { useRouter } from 'next/router'
 import { useMakePayment, LoanDetails } from '@niftyapes/sdk'
 import { useWaitForTransaction } from 'wagmi'
+import Button from 'components/Button'
 
 export default function MakePaymentModal({
   data,
@@ -99,12 +100,9 @@ export default function MakePaymentModal({
 
   return (
     <>
-      <button
-        onClick={onOpen}
-        className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
-      >
+      <Button onClick={onOpen}>
         Make Payment
-      </button>
+      </Button>
       <Modal isOpen={isOpen} onClose={onClose} size="4xl">
         <ModalOverlay />
         <ModalContent>

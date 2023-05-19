@@ -154,11 +154,11 @@ const primaryColors = {
     900: '#111827',
   },
   default: {
-    100: '#F1E5FF',
-    300: '#E2CCFF',
-    500: '#A966FF',
-    700: '#7000FF',
-    900: '#430099',
+    100: '#FFFFFF',
+    300: '#FFFFFF',
+    500: '#FFFFFF',
+    700: '#FFFFFF',
+    900: '#FFFFFF',
   },
 }
 

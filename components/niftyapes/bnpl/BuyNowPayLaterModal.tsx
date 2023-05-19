@@ -2,7 +2,7 @@ import {
   Alert,
   AlertIcon,
   Box,
-  Button,
+  Button as ChakraButton,
   Flex,
   Grid,
   GridItem,
@@ -31,6 +31,7 @@ import { useState } from 'react'
 import { IoCheckmarkCircle, IoWallet } from 'react-icons/io5'
 import LoadingDots from '../LoadingDots'
 import TermsStats from '../TermStats'
+import Button from 'components/Button'
 
 enum Step {
   Checkout,
@@ -80,12 +81,9 @@ export default function BuyNowPayLaterModal({
 
   return (
     <>
-      <button
-        onClick={onOpen}
-        className={`flex h-[40px] w-full items-center justify-center whitespace-nowrap rounded-[21px] bg-white text-[14px] font-bold uppercase text-black focus:ring-0`}
-      >
+      <Button onClick={onOpen}>
         Buy Now, Pay Later
-      </button>
+      </Button>
 
       <Modal isOpen={isOpen} onClose={onClose} size="4xl">
         <ModalOverlay />
@@ -222,9 +220,9 @@ export default function BuyNowPayLaterModal({
                       </VStack>
                     </HStack>
 
-                    <Button colorScheme={'blue'} onClick={onCheckout}>
+                    <ChakraButton colorScheme={'blue'} onClick={onCheckout}>
                       Checkout
-                    </Button>
+                    </ChakraButton>
                   </VStack>
                 )}
 
@@ -245,12 +243,12 @@ export default function BuyNowPayLaterModal({
                         <Icon as={IoWallet} boxSize="24" />
                       </HStack>
                     </VStack>
-                    <Button
+                    <ChakraButton
                       isLoading
                       loadingText="Waiting for Approval"
                       colorScheme="blue"
                       w="full"
-                    ></Button>
+                    ></ChakraButton>
                   </VStack>
                 )}
 
@@ -287,9 +285,9 @@ export default function BuyNowPayLaterModal({
                         />
                       </VStack>
                     </VStack>
-                    <Button onClick={onClose} colorScheme="blue" w="full">
+                    <ChakraButton onClick={onClose} colorScheme="blue" w="full">
                       Close
-                    </Button>
+                    </ChakraButton>
                   </VStack>
                 )}
               </Box>

@@ -1,4 +1,5 @@
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
+import Button from 'components/Button'
 import CreateFinanceOfferModal from 'components/CreateFinanceOfferModal'
 import useMounted from 'hooks/useMounted'
 import { FC } from 'react'
@@ -22,11 +23,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
       {isOwner === true ? (
         <CreateFinanceOfferModal token={token} />
       ) : (
-        <button
-          className={`flex h-[50px] w-full items-center justify-center whitespace-nowrap rounded-[40px] bg-white text-[14px] font-bold uppercase text-black focus:ring-0`}
-        >
-          Buy Now, Pay Later
-        </button>
+        <Button>Buy Now, Pay Later</Button>
       )}
     </>
   )
