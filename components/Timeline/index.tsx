@@ -41,10 +41,6 @@ export const Timeline: React.FC<TimelineProps> = ({
         // the current event.
         event.current = index === currIndex ? true : false
 
-        // Update completed state for items previous to current. Ensures only
-        // events previous to the current event can be completed.
-        event.completed = index < currIndex ? true : false
-
         // Use completed icon if it exists
         const IconComponent = event.completed
           ? event.completedIcon || event.icon

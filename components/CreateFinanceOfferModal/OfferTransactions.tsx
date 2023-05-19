@@ -31,7 +31,9 @@ const OfferTransactions: FC<Props> = ({ token }) => {
       steps.push({
         icon: FiClock,
         completedIcon: IoCheckmark,
-        content: <SignOfferStep terms={state.custom} />,
+        content: (
+          <SignOfferStep assignedStep={1} token={token} terms={state.custom} />
+        ),
         current: state.currentStep === 1,
         completed: state.currentStep > 1,
       })
@@ -48,7 +50,13 @@ const OfferTransactions: FC<Props> = ({ token }) => {
         steps.push({
           icon: FiClock,
           completedIcon: IoCheckmark,
-          content: <SignOfferStep terms={batchOffer} />,
+          content: (
+            <SignOfferStep
+              assignedStep={idx + 1}
+              token={token}
+              terms={batchOffer}
+            />
+          ),
           current: state.currentStep === idx + 1,
           completed: state.currentStep > idx + 1,
         })
@@ -60,9 +68,10 @@ const OfferTransactions: FC<Props> = ({ token }) => {
       icon: FiClock,
       completedIcon: IoCheckmark,
       content: <p className="text-sm text-black">Offers Completed</p>,
-      // current: state.currentStep === steps.length + 1,
-      // completed: state.currentStep === steps.length,
     })
+    // Adjust the last step current and completed state
+    steps[steps.length - 1].current = state.currentStep === steps.length - 1
+    steps[steps.length - 1].completed = state.currentStep === steps.length - 1
 
     return steps
   }, [state.currentStep])
