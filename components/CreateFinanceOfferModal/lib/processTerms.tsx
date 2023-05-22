@@ -1,5 +1,7 @@
+import expirationOptions, { Expiration } from 'lib/niftyapes/expirationOptions'
 import { calculateTotalInterest } from 'lib/niftyapes/processOffer'
 import { formatNumber } from 'lib/numbers'
+import { DateTime } from 'luxon'
 
 export type OfferTerms = {
   price: string
@@ -19,11 +21,17 @@ export type ProcessedTerms = OfferTerms & {
   numPayPeriods: number
   intPerPeriod: number
   minPrincipalPerPeriod: number
+  loanDurationSeconds: number
+  expirationSeconds: number
+  periodDuration: number
   periodInterestRate: number
   payFreqDays: number
 }
 
-export function processTerms(terms: OfferTerms): ProcessedTerms {
+export function processTerms(
+  terms: OfferTerms,
+  expiration?: Expiration
+): ProcessedTerms {
   const termsAsNums = {
     price: Number(terms.price),
     downPayment: Number(terms.downPayment),
@@ -34,6 +42,7 @@ export function processTerms(terms: OfferTerms): ProcessedTerms {
 
   const onSale = (termsAsNums.downPayment / 100) * termsAsNums.price
   const remainingPrincipal = termsAsNums.price - onSale
+  const loanDurationSeconds = termsAsNums.duration * 86400
   const numPayPeriods = Math.ceil(
     termsAsNums.duration / termsAsNums.payFreqDays
   )
@@ -54,12 +63,29 @@ export function processTerms(terms: OfferTerms): ProcessedTerms {
   // TODO: Subtract royalties and marketplace fees
   const saleTotal = termsAsNums.price + totalIntEarned
 
+  // Calculate expiration in seconds
+  const expirationOption =
+    expirationOptions.find((option) => option.value === expiration) ||
+    expirationOptions[5]
+
+  const expirationSeconds = Math.round(
+    DateTime.now()
+      .plus({
+        [expirationOption.relativeTimeUnit as string]:
+          expirationOption.relativeTime,
+      })
+      .toSeconds()
+  )
+
   return {
     ...terms,
     saleTotal: String(formatNumber(saleTotal)),
     onSale: String(formatNumber(onSale)),
     payments: String(formatNumber(minPrincipalPerPeriod)),
     interest: String(formatNumber(intPerPeriod)),
+    loanDurationSeconds,
+    expirationSeconds,
+    periodDuration,
     remainingPrincipal,
     numPayPeriods,
     intPerPeriod,
