@@ -13,7 +13,7 @@ type Props = {
 }
 
 const OfferTransactions: FC<Props> = ({ token }) => {
-  const { state, dispatch } = useContext(CreateOffersStore)
+  const { state } = useContext(CreateOffersStore)
 
   const eventSteps: Event[] = useMemo(() => {
     // First step is always to approve the NFT for transfer
@@ -42,25 +42,23 @@ const OfferTransactions: FC<Props> = ({ token }) => {
     // TODO: Include "BuyNow" offer when it makes sense.
     // Loops through batch offers and adds steps for each enabled offer.
     if (state.stage === 'batch_submitted') {
-      state.batch.forEach((batchOffer, idx) => {
-        if (!batchOffer.enabled) {
-          return
-        }
-
-        steps.push({
-          icon: FiClock,
-          completedIcon: IoCheckmark,
-          content: (
-            <SignOfferStep
-              assignedStep={idx + 1}
-              token={token}
-              terms={batchOffer}
-            />
-          ),
-          current: state.currentStep === idx + 1,
-          completed: state.currentStep > idx + 1,
+      state.batch
+        .filter((batchOffer) => batchOffer.enabled)
+        .forEach((batchOffer, idx) => {
+          steps.push({
+            icon: FiClock,
+            completedIcon: IoCheckmark,
+            content: (
+              <SignOfferStep
+                assignedStep={idx + 1}
+                token={token}
+                terms={batchOffer}
+              />
+            ),
+            current: state.currentStep === idx + 1,
+            completed: state.currentStep > idx + 1,
+          })
         })
-      })
     }
 
     // Last step is always "Offers Complete"
