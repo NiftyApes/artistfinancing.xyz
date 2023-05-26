@@ -1692,18 +1692,27 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-13.1.2.tgz#c7e75033e8b8f497768c7b462ac642830141bb00"
   integrity sha512-avsyveEvcvH42PvKjR4Pb8JlLttuGURr2H3ZhS2b85pHOiZ7yjH3rMUoGnNzuLMApyxYaCvd4MedPrLhnNhkog==
 
-"@niftyapes/sdk@^1.0.15":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@niftyapes/sdk/-/sdk-1.0.17.tgz#f26d7786fd0d8cb6cb8e829b1535fa57ca8644cb"
-  integrity sha512-Goktw+fkI/+DnfTiiyiiBmmHNJ46QkRW3aZbkBXwhZtSF/Uac/vDv8i4iEqzVfrtY7bRHwmGyhWAm3ynaABLHA==
+"@niftyapes/sdk@^1.0.21":
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/@niftyapes/sdk/-/sdk-1.0.21.tgz#268c3566d1daa55b5cd2e81e5daebf98291710c3"
+  integrity sha512-ZWQff9VAOSGZe6KzgS29SgAHMbmHLw96wLUGhqSzOWY6O84deFB/qMOd/JdEgCptzzIbL029xYPy+sAkuQSvkw==
   dependencies:
+    "@radix-ui/react-accordion" "^1.1.1"
+    "@radix-ui/react-checkbox" "^1.0.3"
+    "@radix-ui/react-dialog" "^1.0.3"
+    "@radix-ui/react-select" "^1.2.1"
+    "@radix-ui/react-tabs" "^1.0.3"
+    "@radix-ui/react-tooltip" "^1.0.5"
     "@wagmi/core" "^0.10.11"
+    clsx "^1.2.1"
     ethers "5.7.1"
     lodash "^4.17.21"
     luxon "^3.3.0"
     query-string "^8.1.0"
     react "^18.2.0"
+    react-icons "^4.8.0"
     react-query "^3.39.3"
+    react-spinners "^0.13.8"
     typescript "^5.0.3"
     wagmi "^0.12.13"
 
@@ -6854,6 +6863,11 @@ react-icons@^4.3.1:
   version "4.7.1"
   resolved "https://registry.npmjs.org/react-icons/-/react-icons-4.7.1.tgz"
   integrity sha512-yHd3oKGMgm7zxo3EA7H2n7vxSoiGmHk5t6Ou4bXsfcgWyhfDKMpyKfhHR6Bjnn63c+YXBLBPUql9H4wPJM6sXw==
+
+react-icons@^4.8.0:
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.8.0.tgz#621e900caa23b912f737e41be57f27f6b2bff445"
+  integrity sha512-N6+kOLcihDiAnj5Czu637waJqSnwlMNROzVZMhfX68V/9bu9qHaMIJC4UdozWoOk57gahFCNHwVvWzm0MTzRjg==
 
 react-intersection-observer@^8.33.1:
   version "8.34.0"
