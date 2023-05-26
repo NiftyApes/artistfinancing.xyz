@@ -1692,10 +1692,10 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-13.1.2.tgz#c7e75033e8b8f497768c7b462ac642830141bb00"
   integrity sha512-avsyveEvcvH42PvKjR4Pb8JlLttuGURr2H3ZhS2b85pHOiZ7yjH3rMUoGnNzuLMApyxYaCvd4MedPrLhnNhkog==
 
-"@niftyapes/sdk@^1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@niftyapes/sdk/-/sdk-1.0.13.tgz#d4fc95a4625f80effe49b86476b94733b60bbb22"
-  integrity sha512-rKZ4TxagZ/PN7BwE3RZmyOW5rdwtAE++VVNLJblZOXPwKDGUpyi2iHwuHHL+pmxWNSWbBfCHz5chv6Ps2hJuqA==
+"@niftyapes/sdk@^1.0.15":
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@niftyapes/sdk/-/sdk-1.0.17.tgz#f26d7786fd0d8cb6cb8e829b1535fa57ca8644cb"
+  integrity sha512-Goktw+fkI/+DnfTiiyiiBmmHNJ46QkRW3aZbkBXwhZtSF/Uac/vDv8i4iEqzVfrtY7bRHwmGyhWAm3ynaABLHA==
   dependencies:
     "@wagmi/core" "^0.10.11"
     ethers "5.7.1"
