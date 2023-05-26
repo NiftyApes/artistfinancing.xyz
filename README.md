@@ -1,1 +1,1 @@
-<h3 align="center">SuperRare Underground</h3>
+<h2 align="center">SuperRare Underground</h2>
