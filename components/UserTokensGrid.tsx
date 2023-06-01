@@ -4,7 +4,7 @@ import { useTokens, useUserTokens } from '@reservoir0x/reservoir-kit-ui'
 import { useInView } from 'react-intersection-observer'
 import TokenCard from './TokenCard'
 import { paths } from '@reservoir0x/reservoir-sdk'
-import { useUnderlyingNFTOwner, useOffers } from '@niftyapes/sdk'
+import { useUnderlyingNFTOwner, useOffers, useBuyWithFinancingBatch } from '@niftyapes/sdk'
 import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
 
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
@@ -34,6 +34,13 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
   }
 
   const { data: offersData, isLoading: isLoadingOffers } = useOffers({})
+
+  const testBatch = useBuyWithFinancingBatch({
+    MarketplaceIntegrationContractAddress: '0x00',
+    financingOffers: [],
+    offerSignatures: [],
+    nftIds: [],
+  });
 
   const userTokens = useUserTokens(owner, userTokensParams, {
     fallbackData: [fallback.tokens],
