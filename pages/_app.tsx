@@ -211,7 +211,6 @@ const App: FC<AppProps & { baseUrl: string }> = ({
     <NiftyApesProvider
       config={{
         chainId: envChain?.id || allChains.mainnet.id,
-        alchemyApiKey: alchemyId,
       }}
     >
       <ReservoirKitProvider options={options} theme={reservoirKitTheme}>
