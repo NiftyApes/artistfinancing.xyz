@@ -1,5 +1,5 @@
 import { truncateAddress, truncateEns } from 'lib/truncateText'
-import { FC, forwardRef } from 'react'
+import { ComponentPropsWithoutRef, FC, forwardRef } from 'react'
 import Avatar from '../Avatar'
 
 type Props = {
@@ -13,11 +13,14 @@ type Props = {
   hideIcon?: boolean
 }
 
-const TokenCardEthAccount: FC<Props> = forwardRef(
-  ({ address, ens, title, side = 'right', hideIcon }, ref) => {
-    const icon = !hideIcon && <Avatar address={address} avatar={ens?.avatar} />
+const TokenCardEthAccount: FC<Props> = forwardRef<
+  HTMLAnchorElement,
+  ComponentPropsWithoutRef<FC<Props>>
+>(({ address, ens, title, side = 'right', hideIcon }, ref) => {
+  const icon = !hideIcon && <Avatar address={address} avatar={ens?.avatar} />
 
-    return (
+  return (
+    <a ref={ref}>
       <div className="flex items-center gap-2">
         {title && (
           <p className="text-[13px] capitalize text-gray-400 ">{title}</p>
@@ -37,9 +40,9 @@ const TokenCardEthAccount: FC<Props> = forwardRef(
         )}
         {side === 'right' && icon}
       </div>
-    )
-  }
-)
+    </a>
+  )
+})
 
 TokenCardEthAccount.displayName = 'TokenCardEthAccount'
 
