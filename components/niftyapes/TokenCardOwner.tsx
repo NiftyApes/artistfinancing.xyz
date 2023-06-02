@@ -19,7 +19,7 @@ const TokenCardOwner: FC<Props> = ({ details }) => {
     <div>
       <div className="my-2 text-[10px] text-gray-400">Owner</div>
       {owner && (
-        <Link href={`/address/${owner}`} legacyBehavior={true} passHref>
+        <Link href={`/address/${owner}`} legacyBehavior passHref>
           <TokenCardEthAccount address={owner} side="left" />
         </Link>
       )}

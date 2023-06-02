@@ -33,10 +33,10 @@ const ApproveNFTStep: FC<Props> = ({ token }) => {
   } = useWaitForTransaction({ hash: data?.hash })
 
   useEffect(() => {
-    if (hasCheckedApproval && !hasApproval) {
+    if (hasCheckedApproval && !hasApproval && !approvalCheckErr) {
       write?.()
     }
-  }, [hasCheckedApproval, hasApproval])
+  }, [hasCheckedApproval, hasApproval, approvalCheckErr])
 
   const stepComplete = useRef(false)
 

@@ -57,7 +57,7 @@ const TokenCard: FC<Props> = ({
   return (
     <div
       key={`${token?.token?.contract}${token?.token?.tokenId}`}
-      className="group relative mb-6 grid self-start border-[#D4D4D4] bg-white dark:border-0 dark:bg-neutral-800 dark:ring-1 dark:ring-neutral-600"
+      className="group relative mb-6 grid self-start border-[#D4D4D4] bg-white dark:border-0 dark:bg-black dark:ring-1 dark:ring-neutral-600"
     >
       <div>
         <div className="flow-row absolute z-10 ml-2 mt-2 flex">
@@ -115,7 +115,7 @@ const TokenCard: FC<Props> = ({
         </div>
       </div>
 
-      <div className="dark-bg-neutral-800 md-bottom-[41px] bottom-[0px] w-full">
+      <div className="md-bottom-[41px] bottom-[0px] w-full dark:bg-black">
         <div className="mb-2 ml-4 mr-4 border-b border-gray-500 pb-4">
           <div className="flex items-center justify-between">
             <div
@@ -129,7 +129,7 @@ const TokenCard: FC<Props> = ({
           {financeOffer && <NiftyApesOfferDetails offer={financeOffer} />}
         </div>
 
-        <div className="border-1 group mb-4 ml-4 mr-4 transform-gpu overflow-hidden overflow-hidden">
+        <div className="border-1 group mb-4 ml-4 mr-4 transform-gpu overflow-hidden">
           <div
             className={
               !financeOffer && !isOwner
