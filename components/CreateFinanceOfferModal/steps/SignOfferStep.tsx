@@ -27,6 +27,7 @@ const SignOfferStep: FC<Props> = ({ token, terms, assignedStep }) => {
       payPeriodSeconds: processedTerms.periodDuration,
       expirationSeconds: processedTerms.expirationSeconds,
       apr: Number(terms.apr),
+      collectionOfferLimit: 0, // Defaults to 0 in the context of this modal's flow
     },
   })
 
