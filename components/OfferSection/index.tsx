@@ -1,6 +1,9 @@
+import {
+  Address,
+  BuyWithFinancingModal,
+  CreateOfferModal,
+} from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
-import { BuyWithFinancing } from 'components/BuyWithFinancing'
-import CreateFinanceOfferModal from 'components/CreateFinanceOfferModal'
 import useMounted from 'hooks/useMounted'
 import { FC } from 'react'
 
@@ -18,15 +21,21 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
     return null
   }
 
+  const formattedToken = {
+    id: token?.token?.tokenId!,
+    name: token.token?.name!,
+    imageSrc: token.token?.image!,
+    lastSellValue: String(token.token?.lastSell?.value!),
+    contractAddress: token.token?.contract! as Address,
+    collectionName: token.token?.collection?.name!,
+  }
+
   return (
     <>
       {isOwner === true ? (
-        <CreateFinanceOfferModal token={token} />
+        <CreateOfferModal token={formattedToken} />
       ) : (
-        <BuyWithFinancing
-          collection={token?.token?.contract!}
-          nftId={token.token?.tokenId!}
-        />
+        <BuyWithFinancingModal token={formattedToken} />
       )}
     </>
   )
