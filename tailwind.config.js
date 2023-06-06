@@ -108,11 +108,4 @@ module.exports = {
       },
     }),
   ],
-  // purge: {
-  //   content: [
-  //     './pages/**/*.tsx',
-  //     './components/**/*.tsx',
-  //     './node_modules/@niftyapes/sdk/**/*.tsx',
-  //   ],
-  // },
 }
