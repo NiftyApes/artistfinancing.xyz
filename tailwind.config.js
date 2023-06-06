@@ -14,6 +14,7 @@ module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@niftyapes/sdk/src/components/**/*.{js,ts,jsx,tsx}',
   ],
   darkMode: 'class',
   theme: {
@@ -107,4 +108,11 @@ module.exports = {
       },
     }),
   ],
+  // purge: {
+  //   content: [
+  //     './pages/**/*.tsx',
+  //     './components/**/*.tsx',
+  //     './node_modules/@niftyapes/sdk/**/*.tsx',
+  //   ],
+  // },
 }
