@@ -1,4 +1,4 @@
-import { NiftyApesProvider } from '@niftyapes/sdk'
+import { Address, NiftyApesProvider } from '@niftyapes/sdk'
 import '@rainbow-me/rainbowkit/styles.css'
 import {
   ReservoirKitProvider,
@@ -77,6 +77,8 @@ const API_BASE = process.env.NEXT_PUBLIC_RESERVOIR_API_BASE
 const SOURCE_NAME = process.env.NEXT_PUBLIC_SOURCE_NAME
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
+const INTEGRATION_CONTRACT_ADDRESS =
+  process.env.NEXT_PUBLIC_INTEGRATION_CONTRACT_ADDRESS
 ReactGA.initialize('G-WSYXEQ3MFP')
 
 const envChain = Object.values(allChains).find(
@@ -211,6 +213,7 @@ const App: FC<AppProps & { baseUrl: string }> = ({
     <NiftyApesProvider
       config={{
         chainId: envChain?.id || allChains.mainnet.id,
+        integrationContractAddress: INTEGRATION_CONTRACT_ADDRESS as Address,
       }}
     >
       <ReservoirKitProvider options={options} theme={reservoirKitTheme}>

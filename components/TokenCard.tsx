@@ -1,19 +1,21 @@
+import {
+  Address,
+  BuyWithFinancingModal,
+  CreateOfferModal,
+  Offer,
+} from '@niftyapes/sdk'
 import { useMediaQuery } from '@react-hookz/web'
 import { ListModal } from '@reservoir0x/reservoir-kit-ui'
+import NiftyApesOfferDetails from 'components/niftyapes/TokeCardOfferDetails'
 import useTokens from 'hooks/useTokens'
 import { optimizeImage } from 'lib/optmizeImage'
 import Image from 'next/legacy/image'
 import Link from 'next/link'
-import NiftyApesOfferDetails from 'components/niftyapes/TokeCardOfferDetails'
 import { ComponentPropsWithoutRef, FC } from 'react'
-
 import { MutatorCallback } from 'swr'
 import { Collection } from 'types/reservoir'
 import { useAccount } from 'wagmi'
-import { Offer } from '@niftyapes/sdk'
 import TokenCardOwner from './niftyapes/TokenCardOwner'
-import BuyNowPayLaterModal from './niftyapes/bnpl/BuyNowPayLaterModal'
-import ListFinancingModal from './niftyapes/list-financing/ListFinancingModal'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 const CURRENCIES = process.env.NEXT_PUBLIC_LISTING_CURRENCIES
@@ -53,6 +55,15 @@ const TokenCard: FC<Props> = ({
   const isOwner =
     token?.token?.owner?.toLowerCase() === account?.address?.toLowerCase()
   const imageSize = singleColumnBreakpoint ? 533 : 250
+
+  const formattedToken = {
+    id: token?.token?.tokenId!,
+    name: token.token?.name!,
+    imageSrc: token.token?.image!,
+    lastSellValue: String(token.token?.lastSell?.value!),
+    contractAddress: token.token?.contract! as Address,
+    collectionName: token.token?.collection?.name!,
+  }
 
   return (
     <div
@@ -146,11 +157,7 @@ const TokenCard: FC<Props> = ({
                 'absolute bottom-[-40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
               }
             >
-              <BuyNowPayLaterModal
-                token={token}
-                roundedButton={true}
-                offer={financeOffer}
-              />
+              <BuyWithFinancingModal token={formattedToken} />
             </div>
           )}
 
@@ -160,12 +167,7 @@ const TokenCard: FC<Props> = ({
                 'absolute bottom-[-40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
               }
             >
-              <ListFinancingModal
-                token={token}
-                collection={collection}
-                roundedButton={true}
-                currListingExists={false}
-              />
+              <CreateOfferModal token={formattedToken} />
             </div>
           )}
         </div>
