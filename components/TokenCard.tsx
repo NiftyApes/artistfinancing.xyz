@@ -151,17 +151,20 @@ const TokenCard: FC<Props> = ({
             <TokenCardOwner details={token} />
           </div>
 
-          {financeOffer && (
+          {financeOffer && !isOwner && (
             <div
               className={
                 'absolute bottom-[-40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
               }
             >
-              <BuyWithFinancingModal token={formattedToken} />
+              <BuyWithFinancingModal
+                token={formattedToken}
+                hideSection={true}
+              />
             </div>
           )}
 
-          {!financeOffer && isOwner && (
+          {isOwner && (
             <div
               className={
                 'absolute bottom-[-40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
