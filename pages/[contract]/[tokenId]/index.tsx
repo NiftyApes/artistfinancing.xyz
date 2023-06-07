@@ -196,7 +196,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
               />
             </div>
 
-            <div className="max-w-80 mb-10 rounded-lg p-5">
+            <div className="mb-10">
               <OfferSection token={token} isOwner={isOwner} />
             </div>
 

@@ -29,17 +29,17 @@ const EthAccount: FC<Props> = ({
     <div className="flex items-center">
       {side === 'left' && icon}
       <div>
-        <div className="ml-2 text-xs text-gray-300">{label}</div>
+        <div className="ml-3 text-xs text-gray-300">{label}</div>
         {ens?.name ? (
           <div
-            className="ml-2 whitespace-nowrap text-base text-gray-200"
+            className="ml-3 whitespace-nowrap text-base text-gray-200"
             title={address}
           >
             {truncateEns(ens.name)}
           </div>
         ) : (
           <div
-            className="ml-2 whitespace-nowrap text-base text-gray-200"
+            className="ml-3 whitespace-nowrap text-base text-gray-200"
             title={address}
           >
             {truncateAddress(address || '')}
