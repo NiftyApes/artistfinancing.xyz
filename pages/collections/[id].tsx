@@ -13,8 +13,6 @@ import Sweep from 'components/Sweep'
 import CollectionActivityTab from 'components/tables/CollectionActivityTab'
 import { setToast } from 'components/token/setToast'
 import TokensGrid from 'components/TokensGrid'
-import { useNiftyApesContract } from 'hooks/niftyapes/useNiftyApesContract'
-import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
 import useCollectionStats from 'hooks/useCollectionStats'
 import useTokens from 'hooks/useTokens'
 import { formatNumber } from 'lib/numbers'
@@ -58,7 +56,6 @@ const Home: NextPage<Props> = ({ fallback, id }) => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const scrollRef = useRef<HTMLDivElement | null>(null)
-  const { address: niftyapesContractAddress } = useNiftyApesContract()
 
   const scrollToTop = () => {
     let top = (scrollRef.current?.offsetTop || 0) - 91 //Offset from parent element minus height of navbar
@@ -75,8 +72,6 @@ const Home: NextPage<Props> = ({ fallback, id }) => {
     collectionResponse.data && collectionResponse.data[0]
       ? collectionResponse.data[0]
       : undefined
-  const { addNiftyApesCollectionImage } = useNiftyApesImages()
-  addNiftyApesCollectionImage(collection)
 
   const stats = useCollectionStats(router, id)
 

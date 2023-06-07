@@ -9,7 +9,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useLocalStorage } from 'hooks/niftyapes/useLocalStorage'
+import { useLocalStorage } from 'hooks/useLocalStorage'
 
 interface GlobalModalProps {
   storageKey: string

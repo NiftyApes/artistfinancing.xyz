@@ -1,16 +1,10 @@
-import {
-  useCollections,
-  useTokens,
-  useUserTokens,
-} from '@reservoir0x/reservoir-kit-ui'
+import { useTokens, useUserTokens } from '@reservoir0x/reservoir-kit-ui'
 import { paths } from '@reservoir0x/reservoir-sdk'
 import Layout from 'components/Layout'
 import EthAccount from 'components/niftyapes/EthAccount'
 import OfferSection from 'components/OfferSection'
 import TokenInfo from 'components/token/TokenInfo'
 import TokenAttributes from 'components/TokenAttributes'
-import { useNiftyApesContract } from 'hooks/niftyapes/useNiftyApesContract'
-import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
 import { optimizeImage } from 'lib/optmizeImage'
 import setParams from 'lib/params'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
@@ -74,16 +68,6 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
   const account = useAccount()
   const router = useRouter()
 
-  const { address: sellerFinancingContract } = useNiftyApesContract()
-  const { addNiftyApesTokenImages, addNiftyApesCollectionImage } =
-    useNiftyApesImages()
-  const collectionResponse = useCollections({ id: collectionId })
-  const collection =
-    collectionResponse.data && collectionResponse.data[0]
-      ? collectionResponse.data[0]
-      : undefined
-  addNiftyApesCollectionImage(collection)
-
   const tokenData = useTokens({
     tokens: [
       `${router.query?.contract?.toString()}:${router.query?.tokenId?.toString()}`,
@@ -94,7 +78,6 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
   })
 
   const tokens = tokenData.data
-  addNiftyApesTokenImages(tokens)
   const token = tokens?.[0] || { token: tokenDetails }
   const checkUserOwnership = token.token?.kind === 'erc1155'
   const { data: userTokens } = useUserTokens(

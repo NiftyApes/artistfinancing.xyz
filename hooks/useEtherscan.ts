@@ -1,6 +1,6 @@
 import { goerli } from 'wagmi'
 
-import useEnvChain from '../useEnvChain'
+import useEnvChain from 'hooks/useEnvChain'
 
 const isGoerli = (cid?: number): boolean => {
   return cid === goerli.id

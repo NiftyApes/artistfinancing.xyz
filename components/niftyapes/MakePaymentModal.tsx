@@ -20,7 +20,7 @@ import { SiEthereum } from 'react-icons/si'
 import PaymentModalTermStats from './PaymentModalTermStats'
 import { BigNumber } from 'ethers'
 import { OfferDetails } from '@niftyapes/sdk'
-import { useEtherscanUri } from '../../hooks/niftyapes/useEtherscan'
+import { useEtherscanUri } from '../../hooks/useEtherscan'
 import { processOffer } from '../../lib/niftyapes/processOffer'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import FormatNativeCrypto from '../FormatNativeCrypto'
@@ -100,9 +100,7 @@ export default function MakePaymentModal({
 
   return (
     <>
-      <Button onClick={onOpen}>
-        Make Payment
-      </Button>
+      <Button onClick={onOpen}>Make Payment</Button>
       <Modal isOpen={isOpen} onClose={onClose} size="4xl">
         <ModalOverlay />
         <ModalContent>

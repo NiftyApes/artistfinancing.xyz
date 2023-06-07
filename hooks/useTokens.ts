@@ -6,7 +6,6 @@ import { paths } from '@reservoir0x/reservoir-sdk'
 import { NextRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
-import { useNiftyApesImages } from './niftyapes/useNiftyApesImages'
 
 const PROXY_API_BASE = process.env.NEXT_PUBLIC_PROXY_API_BASE
 
@@ -21,7 +20,6 @@ export default function useTokens(
 ) {
   const { ref, inView } = useInView()
   const reservoirClient = useReservoirClient()
-  const { addNiftyApesTokenImages } = useNiftyApesImages()
 
   const query: Parameters<typeof useTokensRk>['0'] = {
     limit: 20,
@@ -60,8 +58,6 @@ export default function useTokens(
     revalidateFirstPage: false,
     fallbackData,
   })
-
-  addNiftyApesTokenImages(tokens.data)
 
   // Fetch more data when component is visible
   useEffect(() => {
