@@ -46,7 +46,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 import presetColors from '../colors'
-import { useGoogleAnalytics } from '../hooks/niftyapes/useGoogleAnalytics'
+import { useGoogleAnalytics } from 'hooks/useGoogleAnalytics'
 import chakraTheme from '../theme'
 
 const queryClient = new QueryClient()

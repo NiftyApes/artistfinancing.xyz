@@ -6,7 +6,6 @@ import HeroBackground from 'components/hero/HeroBackground'
 import HeroSocialLinks from 'components/hero/HeroSocialLinks'
 import HeroStats from 'components/hero/HeroStats'
 import Toast from 'components/Toast'
-import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
 import useCollectionStats from 'hooks/useCollectionStats'
 import useTokens from 'hooks/useTokens'
 import { useRouter } from 'next/router'
@@ -37,7 +36,6 @@ type Props = {
 
 const Hero: FC<Props> = ({ fallback, collectionId }) => {
   const { data: signer } = useSigner()
-  const { addNiftyApesCollectionImage } = useNiftyApesImages()
   const collectionResponse = useCollections({
     id: collectionId,
     includeTopBid: true,
@@ -46,7 +44,6 @@ const Hero: FC<Props> = ({ fallback, collectionId }) => {
     collectionResponse.data && collectionResponse.data[0]
       ? collectionResponse.data[0]
       : undefined
-  addNiftyApesCollectionImage(collection)
 
   const router = useRouter()
   const stats = useCollectionStats(router, collectionId)

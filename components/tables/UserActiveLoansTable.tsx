@@ -14,7 +14,6 @@ import {
   useLoans,
   useSeizeAsset,
 } from '@niftyapes/sdk'
-import { useNiftyApesContract } from 'hooks/niftyapes/useNiftyApesContract'
 import { format } from 'date-fns'
 import { BigNumber } from 'ethers'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
@@ -139,8 +138,6 @@ const UserListingsTableRow = ({
     token
   )
 
-  const { address } = useNiftyApesContract()
-
   const { periodEndTimestamp, remainingPrincipal, inDefault } =
     processLoan(loan)
 
@@ -220,7 +217,8 @@ const UserListingsTableRow = ({
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         <button
           onClick={() => {
-            window.location.href = `/${address}/${sellerNft.tokenId}`
+            // TODO: We need to add the contract address here.
+            // window.location.href = `/${address}/${sellerNft.tokenId}`
           }}
           className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
         >

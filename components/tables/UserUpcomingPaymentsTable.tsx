@@ -13,7 +13,6 @@ import { format } from 'date-fns'
 import { processLoan } from 'lib/niftyapes/processLoan'
 import { optimizeImage } from 'lib/optmizeImage'
 import { useAccount } from 'wagmi'
-import { useNiftyApesContract } from '../../hooks/niftyapes/useNiftyApesContract'
 import { processOffer } from '../../lib/niftyapes/processOffer'
 import FormatNativeCrypto from '../FormatNativeCrypto'
 
@@ -159,8 +158,6 @@ const UpcomingPaymentsTableRow = ({
     token
   )
 
-  const { address } = useNiftyApesContract()
-
   const { periodEndTimestamp, remainingPrincipal, minimumPayment } =
     processLoan(loan)
 
@@ -238,7 +235,8 @@ const UpcomingPaymentsTableRow = ({
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         <button
           onClick={() => {
-            window.location.href = `/${address}/${buyerNft.tokenId}`
+            // TODO: We need to add a contract address here.
+            // window.location.href = `/${address}/${buyerNft.tokenId}`
           }}
           className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
         >

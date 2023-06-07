@@ -5,7 +5,6 @@ import { useInView } from 'react-intersection-observer'
 import TokenCard from './TokenCard'
 import { paths } from '@reservoir0x/reservoir-sdk'
 import { useUnderlyingNFTOwner, useOffers } from '@niftyapes/sdk'
-import { useNiftyApesImages } from 'hooks/niftyapes/useNiftyApesImages'
 
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
 const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
@@ -55,21 +54,22 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
     fetchNextPage,
     mutate,
   } = userTokens
-  const { addNiftyApesTokenImages } = useNiftyApesImages()
-  addNiftyApesTokenImages(tokens)
   const { ref, inView } = useInView()
 
-  const { ownedNftTokens } = useUnderlyingNFTOwner()
+  // TODO: We do not need to fetch underlying tokens since
+  // the seller financing tickets contain the token metadata.
+  //
+  // const { ownedNftTokens } = useUnderlyingNFTOwner()
+  //
+  // const {
+  //   data: entitledTokens,
+  //   isFetchingPage: isFetchingPageTokens,
+  //   isFetchingInitialData: isFetchingInitialDataTokens,
+  // } = useTokens({
+  //   tokens: ownedNftTokens,
+  // })
 
-  const {
-    data: entitledTokens,
-    isFetchingPage: isFetchingPageTokens,
-    isFetchingInitialData: isFetchingInitialDataTokens,
-  } = useTokens({
-    tokens: ownedNftTokens,
-  })
-
-  const isLoadingTokens = isFetchingPageTokens || isFetchingInitialDataTokens
+  // const isLoadingTokens = isFetchingPageTokens || isFetchingInitialDataTokens
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -85,20 +85,21 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
 
   return (
     <div className="mx-auto mb-8 grid max-w-[2400px] gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
-      {isFetchingInitialData || isLoadingTokens || isLoadingOffers ? (
+      {isFetchingInitialData || isLoadingOffers ? (
+        // {isFetchingInitialData || isLoadingTokens || isLoadingOffers ? (
         Array(10)
           .fill(null)
           .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
       ) : (
         <>
-          {entitledTokens?.map((token) => (
-            <TokenCard
-              key={`${token?.token?.contract}${token?.token?.tokenId}`}
-              token={token}
-              collectionImage={undefined}
-              mutate={mutate}
-            />
-          ))}
+          {/* {entitledTokens?.map((token) => ( */}
+          {/*   <TokenCard */}
+          {/*     key={`${token?.token?.contract}${token?.token?.tokenId}`} */}
+          {/*     token={token} */}
+          {/*     collectionImage={undefined} */}
+          {/*     mutate={mutate} */}
+          {/*   /> */}
+          {/* ))} */}
           {tokens?.map((token) => {
             const financeOffer = offersData?.find(
               (offer) =>
