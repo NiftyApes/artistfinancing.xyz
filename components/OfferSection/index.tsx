@@ -63,7 +63,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
               />
             </div>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex w-full space-x-2">
             <Link href={`/address/${address}`} legacyBehavior={true}>
               <a>
                 <EthAccount

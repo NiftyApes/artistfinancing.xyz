@@ -31,18 +31,20 @@ const Tooltip = ({
     <RadixTooltip.Provider>
       <RadixTooltip.Root delayDuration={300} {...props}>
         <RadixTooltip.Trigger asChild>{children}</RadixTooltip.Trigger>
-        <RadixTooltip.Content
-          side={side}
-          sideOffset={5}
-          className="data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade"
-        >
-          {content}
-          <RadixTooltip.Arrow
-            width={16}
-            height={8}
-            className={`${arrowStyles}`}
-          />
-        </RadixTooltip.Content>
+        <RadixTooltip.Portal>
+          <RadixTooltip.Content
+            side={side}
+            sideOffset={5}
+            className="data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade"
+          >
+            {content}
+            <RadixTooltip.Arrow
+              width={16}
+              height={8}
+              className={`${arrowStyles}`}
+            />
+          </RadixTooltip.Content>
+        </RadixTooltip.Portal>
       </RadixTooltip.Root>
     </RadixTooltip.Provider>
   )
