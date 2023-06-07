@@ -158,7 +158,7 @@ export const getStaticProps: GetStaticProps<{
   const href = setParams(url, query)
   const res = await fetch(href, options)
 
-  const collections = (await res.json()) as Props['fallback']['collections']
+  const collections = [] as Props['fallback']['collections']
 
   return {
     props: {
