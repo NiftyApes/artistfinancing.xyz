@@ -39,7 +39,9 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
     id: token?.token?.tokenId!,
     name: token.token?.name!,
     imageSrc: token.token?.image!,
-    lastSellValue: String(token.token?.lastSell?.value!),
+    lastSellValue: token.token?.lastSell?.value
+      ? String(token.token.lastSell.value)
+      : '',
     contractAddress: token.token?.contract! as Address,
     collectionName: token.token?.collection?.name!,
   }
