@@ -27,7 +27,7 @@ const sizeStyles = {
 const loadingColors = {
   primary: 'black',
   secondary: 'white',
-  danger: 'white'
+  danger: 'white',
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -43,7 +43,7 @@ const Button: React.FC<ButtonProps> = ({
   <button
     type={type}
     className={twMerge(
-      'flex w-full items-center justify-center whitespace-nowrap rounded-[40px] font-bold focus:ring-0 px-4 hover:opacity-75 transition-opacity',
+      'flex w-full items-center justify-center whitespace-nowrap rounded-[40px] px-4 font-bold transition-opacity hover:opacity-75 focus:ring-0',
       (isLoading || disabled) && 'cursor-not-allowed opacity-75',
       variantStyles[variant],
       sizeStyles[size],
@@ -52,7 +52,11 @@ const Button: React.FC<ButtonProps> = ({
     onClick={onClick}
     disabled={disabled || isLoading}
   >
-    {isLoading ? <ClipLoader size={20} color={loadingColors[variant]} /> : children}
+    {isLoading ? (
+      <ClipLoader size={20} color={loadingColors[variant]} />
+    ) : (
+      children
+    )}
   </button>
 )
 

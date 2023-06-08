@@ -32,7 +32,7 @@ const ConnectWalletButton: FC<Props> = ({ className, children }) => {
                 <button
                   onClick={openConnectModal}
                   type="button"
-                  className={`rounded-md bg-white hover:opacity-75 transition-opacity h-full min-h-[42px] border-none px-3 dark:border-neutral-600 dark:text-white dark:ring-white ${className}`}
+                  className={`h-full min-h-[42px] rounded-md border-none bg-white px-3 transition-opacity hover:opacity-75 dark:border-neutral-600 dark:text-white dark:ring-white ${className}`}
                 >
                   {children}
                 </button>

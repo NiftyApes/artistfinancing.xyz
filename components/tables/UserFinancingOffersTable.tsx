@@ -224,10 +224,7 @@ const UserListingsTableRow = ({
         {status === 'CANCELLED' && 'Cancelled'}
         {status === 'USED_TO_EXECUTE_LOAN' && 'Active Loan'}
         {status === 'ACTIVE' && (
-          <Button
-            isLoading={isLoading}
-            onClick={() => write?.()}
-          >
+          <Button isLoading={isLoading} onClick={() => write?.()}>
             Cancel Offer
           </Button>
         )}
