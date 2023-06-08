@@ -15,6 +15,7 @@ import { optimizeImage } from 'lib/optmizeImage'
 import { useAccount } from 'wagmi'
 import { processOffer } from '../../lib/niftyapes/processOffer'
 import FormatNativeCrypto from '../FormatNativeCrypto'
+import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 
 type Props = {
   isOwner: boolean
@@ -44,7 +45,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
     tokens: tokensQueryArr,
   })
 
-  if (isLoading) {
+  if (isLoading || tokens.isFetchingInitialData || tokens.isFetchingPage) {
     return (
       <div className="my-20 flex justify-center">
         <LoadingIcon />
@@ -109,6 +110,14 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
           </thead>
           <tbody>
             {activeLoans.map((item: Loan, index) => {
+              const token = tokens.data.find(
+                (token) =>
+                  isEqualAddress(
+                    token?.token?.contract,
+                    item.offer.offer.nftContractAddress
+                  ) && token?.token?.tokenId === item.offer.offer.nftId
+              )
+
               return (
                 <UpcomingPaymentsTableRow
                   buyerNft={item.buyerNft}
@@ -116,7 +125,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
                   key={index}
                   loan={item.loan}
                   offer={item.offer.offer}
-                  token={tokens.data[index]}
+                  token={token}
                 />
               )
             })}

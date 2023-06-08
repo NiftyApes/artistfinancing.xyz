@@ -1,6 +1,5 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { paths, setParams } from '@reservoir0x/reservoir-sdk'
-import Avatar from 'components/Avatar'
 import Layout from 'components/Layout'
 import UserActiveLoansTab from 'components/tables/UserActiveLoansTab'
 import UserFinancingOffersTab from 'components/tables/UserFinancingOffersTab'

@@ -10,6 +10,7 @@ import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { useWaitForTransaction } from 'wagmi'
 import { Offer, useOffers, useCancelOffer } from '@niftyapes/sdk'
 import Button from 'components/Button'
+import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 
 const UserFinancingOffersTable: FC = () => {
   const router = useRouter()
@@ -28,7 +29,7 @@ const UserFinancingOffersTable: FC = () => {
     tokens: tokensQueryArr,
   })
 
-  if (isLoading) {
+  if (isLoading || tokens.isFetchingInitialData || tokens.isFetchingPage) {
     return (
       <div className="my-20 flex justify-center">
         <LoadingIcon />
@@ -54,13 +55,23 @@ const UserFinancingOffersTable: FC = () => {
         </div>
       )}
       {isMobile
-        ? offers.map((offer, index) => (
-            <UserFinancingOffersTableMobileRow
-              key={`${offer?.signature}-${index}`}
-              offer={offer.offer}
-              token={tokens.data[index]}
-            />
-          ))
+        ? offers.map((offer, index) => {
+            const token = tokens.data.find(
+              (token) =>
+                isEqualAddress(
+                  token?.token?.contract,
+                  offer.offer.nftContractAddress
+                ) && token?.token?.tokenId === offer.offer.nftId
+            )
+
+            return (
+              <UserFinancingOffersTableMobileRow
+                key={`${offer?.signature}-${index}`}
+                offer={offer.offer}
+                token={token}
+              />
+            )
+          })
         : offers.length > 0 && (
             <table className="min-w-full table-auto dark:divide-neutral-600">
               <thead className="bg-white dark:bg-black">
@@ -91,6 +102,13 @@ const UserFinancingOffersTable: FC = () => {
               <tbody>
                 {offers.map((listing: Offer, index) => {
                   const { offer, signature, status } = listing
+                  const token = tokens.data.find(
+                    (token) =>
+                      isEqualAddress(
+                        token?.token?.contract,
+                        offer.nftContractAddress
+                      ) && token?.token?.tokenId === offer.nftId
+                  )
 
                   return (
                     <UserListingsTableRow
@@ -98,7 +116,7 @@ const UserFinancingOffersTable: FC = () => {
                       signature={signature}
                       offer={offer}
                       status={status}
-                      token={tokens.data[index]}
+                      token={token}
                     />
                   )
                 })}
