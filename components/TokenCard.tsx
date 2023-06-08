@@ -68,73 +68,70 @@ const TokenCard: FC<Props> = ({
   return (
     <div
       key={`${token?.token?.contract}${token?.token?.tokenId}`}
-      className="group relative mb-6 grid self-start border-[#D4D4D4] bg-white dark:border-0 dark:bg-black dark:ring-1 dark:ring-neutral-600"
+      className="group relative mb-6 grid self-start overflow-hidden border-[#D4D4D4] bg-white hover:scale-[1.01] hover:ease-out dark:border-0 dark:bg-black dark:ring-1 dark:ring-neutral-600"
     >
-      <div>
-        <div className="flow-row absolute z-10 ml-2 mt-2 flex">
-          {financeOffer && (
-            <div className="rounded-full bg-black bg-opacity-70 pl-2 pr-2 pt-1 pb-1 text-xs">
-              1 Listing
-            </div>
-          )}
-        </div>
-        <div>
-          <Link
-            key={`${token?.token?.contract}:${token?.token?.tokenId}`}
-            href={`/${token?.token?.contract}/${token?.token?.tokenId}`}
-            legacyBehavior={true}
-          >
-            <a>
-              {token?.token?.image ? (
-                <Image
-                  loader={({ src }) => src}
-                  src={optimizeImage(token?.token?.image, imageSize)}
-                  alt={`${token?.token?.name}`}
-                  className="w-full"
-                  width={imageSize}
-                  height={imageSize}
-                  objectFit="cover"
-                  layout="responsive"
-                />
-              ) : (
-                <div className="relative w-full">
-                  <div className="absolute inset-0 grid place-items-center backdrop-blur-lg">
-                    <div>
-                      <img
-                        src={
-                          collectionImage
-                            ? optimizeImage(collectionImage, imageSize)
-                            : '/niftyapes/placeholder.png'
-                        }
-                        alt={`${token?.token?.collection?.name}`}
-                        className="mx-auto mb-4 h-16 w-16 overflow-hidden rounded-full border-2 border-white"
-                        width="64"
-                        height="64"
-                      />
-                      <div className="reservoir-h6 text-white">
-                        No Content Available
-                      </div>
-                    </div>
-                  </div>
+      <div className="absolute z-10 ml-2 mt-2 flex grid-flow-row">
+        {financeOffer && (
+          <div className="rounded-full bg-black bg-opacity-70 pl-2 pr-2 pt-1 pb-1 text-xs">
+            1 Listing
+          </div>
+        )}
+      </div>
+
+      <Link
+        key={`${token?.token?.contract}:${token?.token?.tokenId}`}
+        href={`/${token?.token?.contract}/${token?.token?.tokenId}`}
+        legacyBehavior={true}
+      >
+        <a className="mb-[130px]">
+          {token?.token?.image ? (
+            <Image
+              loader={({ src }) => src}
+              src={optimizeImage(token?.token?.image, imageSize)}
+              alt={`${token?.token?.name}`}
+              className="w-full"
+              width={imageSize}
+              height={imageSize}
+              objectFit="cover"
+              layout="responsive"
+            />
+          ) : (
+            <div className="relative w-full">
+              <div className="absolute inset-0 grid place-items-center backdrop-blur-lg">
+                <div>
                   <img
                     src={
                       collectionImage
                         ? optimizeImage(collectionImage, imageSize)
-                        : '/niftyapes/NA-BLACK.png'
+                        : '/niftyapes/placeholder.png'
                     }
                     alt={`${token?.token?.collection?.name}`}
-                    className="aspect-square w-full object-cover"
-                    width="250"
-                    height="250"
+                    className="mx-auto mb-4 h-16 w-16 overflow-hidden rounded-full border-2 border-white"
+                    width="64"
+                    height="64"
                   />
+                  <div className="reservoir-h6 text-white">
+                    No Content Available
+                  </div>
                 </div>
-              )}
-            </a>
-          </Link>
-        </div>
-      </div>
+              </div>
+              <img
+                src={
+                  collectionImage
+                    ? optimizeImage(collectionImage, imageSize)
+                    : '/niftyapes/NA-BLACK.png'
+                }
+                alt={`${token?.token?.collection?.name}`}
+                className="aspect-square w-full object-cover"
+                width="250"
+                height="250"
+              />
+            </div>
+          )}
+        </a>
+      </Link>
 
-      <div className="md-bottom-[41px] bottom-[0px] w-full dark:bg-black">
+      <div className="absolute bottom-[0px] w-full dark:bg-black">
         <div className="mb-2 ml-4 mr-4 border-b border-gray-500 pb-4">
           <div className="flex items-center justify-between">
             <div
@@ -162,7 +159,7 @@ const TokenCard: FC<Props> = ({
           {financeOffer && !isOwner && (
             <div
               className={
-                'absolute bottom-[-40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
+                'absolute -bottom-[40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
               }
             >
               <BuyWithFinancingModal
@@ -175,7 +172,7 @@ const TokenCard: FC<Props> = ({
           {isOwner && (
             <div
               className={
-                'absolute bottom-[-40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
+                'absolute -bottom-[40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
               }
             >
               <CreateOfferModal token={formattedToken} />
