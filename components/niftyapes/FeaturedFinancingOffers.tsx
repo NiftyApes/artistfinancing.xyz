@@ -106,7 +106,6 @@ export default function FeaturedFinancingOffers() {
               <Box mb="12" key={idx}>
                 <TokenCard
                   token={token}
-                  financeOffer={offer}
                   collection={collection}
                   collectionImage={collection?.image}
                   mutate={tokensMutate}

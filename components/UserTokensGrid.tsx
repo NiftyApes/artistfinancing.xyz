@@ -101,11 +101,6 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
           {/*   /> */}
           {/* ))} */}
           {tokens?.map((token) => {
-            const financeOffer = offersData?.find(
-              (offer) =>
-                offer.offer.nftId === token?.token?.tokenId &&
-                offer.status === 'ACTIVE'
-            )
 
             return (
               <TokenCard
@@ -125,7 +120,6 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
                 mutate={mutate}
                 collectionImage={token?.token?.collection?.imageUrl}
                 collection={token?.token?.collection}
-                financeOffer={financeOffer}
               />
             )
           })}
