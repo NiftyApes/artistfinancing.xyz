@@ -101,7 +101,6 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
           {/*   /> */}
           {/* ))} */}
           {tokens?.map((token) => {
-
             return (
               <TokenCard
                 token={{

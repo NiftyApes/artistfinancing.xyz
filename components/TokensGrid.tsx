@@ -67,7 +67,6 @@ const TokensGrid: FC<Props> = ({
             .fill(null)
             .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
         : data?.map((token) => {
-
             return (
               <TokenCard
                 token={token}
