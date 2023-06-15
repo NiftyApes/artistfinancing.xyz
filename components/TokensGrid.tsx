@@ -67,15 +67,6 @@ const TokensGrid: FC<Props> = ({
             .fill(null)
             .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
         : data?.map((token) => {
-            // Check if token has a NiftyApes loan offer
-
-            const financeOffer = offersData?.find(
-              (offer) =>
-                offer.offer.nftId === token?.token?.tokenId &&
-                offer.status === 'ACTIVE' &&
-                isEqualAddress(offer.offer.creator, token?.token?.owner)
-            )
-
             return (
               <TokenCard
                 token={token}
@@ -83,7 +74,6 @@ const TokensGrid: FC<Props> = ({
                 collectionImage={collectionImage}
                 mutate={mutate}
                 key={`${token?.token?.contract}:${token?.token?.tokenId}`}
-                financeOffer={financeOffer}
               />
             )
           })}

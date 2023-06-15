@@ -11,11 +11,12 @@ import useTokens from 'hooks/useTokens'
 import { optimizeImage } from 'lib/optmizeImage'
 import Image from 'next/legacy/image'
 import Link from 'next/link'
-import { ComponentPropsWithoutRef, FC } from 'react'
+import { ComponentPropsWithoutRef, FC, useEffect, useState } from 'react'
 import { MutatorCallback } from 'swr'
 import { Collection } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 import TokenCardOwner from './niftyapes/TokenCardOwner'
+import { useOffers } from '@niftyapes/sdk/src/hooks/useOffers'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 const CURRENCIES = process.env.NEXT_PUBLIC_LISTING_CURRENCIES
@@ -36,18 +37,29 @@ type Props = {
   collectionSize?: number | undefined
   collectionAttributes?: Collection['attributes']
   mutate: MutatorCallback
-  financeOffer?: Offer
 }
 
-const TokenCard: FC<Props> = ({
-  token,
-  collection,
-  collectionImage,
-  financeOffer,
-}) => {
+const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
   const account = useAccount()
 
   const singleColumnBreakpoint = useMediaQuery('(max-width: 640px)')
+
+  const [activeOffers, setActiveOffers] = useState<Offer[]>([])
+  const hasActiveOffers: boolean = activeOffers && activeOffers.length > 0
+
+  const offers = useOffers({
+    collection: token?.token?.contract!,
+    nftId: token?.token?.tokenId!,
+  })
+
+  useEffect(() => {
+    if (offers.data) {
+      const activeOffers = offers.data.filter(
+        (offer) => offer.status === 'ACTIVE'
+      )
+      setActiveOffers(activeOffers)
+    }
+  }, [offers])
 
   if (!token) return null
   if (!CHAIN_ID) return null
@@ -71,9 +83,11 @@ const TokenCard: FC<Props> = ({
       className="group relative mb-6 grid self-start overflow-hidden border-[#D4D4D4] bg-white hover:scale-[1.01] hover:ease-out dark:border-0 dark:bg-black dark:ring-1 dark:ring-neutral-600"
     >
       <div className="absolute z-10 ml-2 mt-2 flex grid-flow-row">
-        {financeOffer && (
+        {hasActiveOffers && isOwner && (
           <div className="rounded-full bg-black bg-opacity-70 pl-2 pr-2 pt-1 pb-1 text-xs">
-            1 Listing
+            {`${activeOffers.length} Listing${
+              activeOffers.length === 1 ? '' : 's'
+            }`}
           </div>
         )}
       </div>
@@ -142,13 +156,13 @@ const TokenCard: FC<Props> = ({
             </div>
           </div>
 
-          {financeOffer && <NiftyApesOfferDetails offer={financeOffer} />}
+          {hasActiveOffers && <NiftyApesOfferDetails offer={activeOffers[0]} />}
         </div>
 
         <div className="border-1 group mb-4 ml-4 mr-4 transform-gpu overflow-hidden">
           <div
             className={
-              !financeOffer && !isOwner
+              !hasActiveOffers && !isOwner
                 ? 'opacity-100'
                 : 'group-hover-ease-out opacity-100 transition-all group-hover:opacity-[0]'
             }
@@ -156,7 +170,7 @@ const TokenCard: FC<Props> = ({
             <TokenCardOwner details={token} />
           </div>
 
-          {financeOffer && !isOwner && (
+          {hasActiveOffers && !isOwner && (
             <div
               className={
                 'absolute -bottom-[40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
