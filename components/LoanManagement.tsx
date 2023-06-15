@@ -5,6 +5,7 @@ import FormatNativeCrypto from "./FormatNativeCrypto";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "./Sheet";
 import * as Tabs from '@radix-ui/react-tabs'
 import { useState } from "react";
+import * as Progress from '@radix-ui/react-progress';
 
 const NOTIFICATION_COUNT = 3;
 const tabs = [
@@ -101,8 +102,85 @@ const Drawer = () => {
               ))}
             </Tabs.List>
             <Tabs.Content value="payments">
-              <div className="mt-6">
-                Payments
+              <div className="mt-6 space-y-5">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <img className="h-20 w-20 rounded-md" src="https://i.seadn.io/gae/WrAd3MWdytcr_EchzpMXR1VfpVQwg3oWzkkobUI5EG7W7xJLKz0KbGjDVbaSpTHGccBzL0v6qDuUM3yDHus7r93urgUuZLZe7zDzw2k?w=500&auto=format" />
+                    <div className="flex flex-col">
+                      <p>🍌🕶🚀 #79/100</p>
+                      <p className="text-xs text-gray-400">Due on Jun 01, 2023</p>
+                    </div>
+                  </div>
+                  <div className="cursor-pointer hover:opacity-75 transition text-sm border border-gray-700 rounded-md bg-gray-700/50 p-2">
+                    Pay 0.85 ETH
+                  </div>
+                </div>
+                <Progress.Root
+                  className="relative overflow-hidden bg-gray-700 rounded-full w-full h-[2px]"
+                  style={{
+                    // Fix overflow clipping in Safari
+                    // https://gist.github.com/domske/b66047671c780a238b51c51ffde8d3a0
+                    transform: 'translateZ(0)',
+                  }}
+                  value={13}
+                >
+                  <Progress.Indicator
+                    className="bg-red-500 w-full h-full transition-transform duration-[660ms] ease-[cubic-bezier(0.65, 0, 0.35, 1)]"
+                    style={{ transform: `translateX(-${100 - 13}%)` }}
+                  />
+                </Progress.Root>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <img className="h-20 w-20 rounded-md" src="https://i.seadn.io/gae/WrAd3MWdytcr_EchzpMXR1VfpVQwg3oWzkkobUI5EG7W7xJLKz0KbGjDVbaSpTHGccBzL0v6qDuUM3yDHus7r93urgUuZLZe7zDzw2k?w=500&auto=format" />
+                    <div className="flex flex-col">
+                      <p>🍌🕶🚀 #79/100</p>
+                      <p className="text-xs text-gray-400">Due on Jun 01, 2023</p>
+                    </div>
+                  </div>
+                  <div className="cursor-pointer hover:opacity-75 transition text-sm border border-gray-700 rounded-md bg-gray-700/50 p-2">
+                    Pay 0.85 ETH
+                  </div>
+                </div>
+                <Progress.Root
+                  className="relative overflow-hidden bg-gray-700 rounded-full w-full h-[2px]"
+                  style={{
+                    // Fix overflow clipping in Safari
+                    // https://gist.github.com/domske/b66047671c780a238b51c51ffde8d3a0
+                    transform: 'translateZ(0)',
+                  }}
+                  value={80}
+                >
+                  <Progress.Indicator
+                    className="bg-green-500 w-full h-full transition-transform duration-[660ms] ease-[cubic-bezier(0.65, 0, 0.35, 1)]"
+                    style={{ transform: `translateX(-${100 - 80}%)` }}
+                  />
+                </Progress.Root>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <img className="h-20 w-20 rounded-md" src="https://i.seadn.io/gae/WrAd3MWdytcr_EchzpMXR1VfpVQwg3oWzkkobUI5EG7W7xJLKz0KbGjDVbaSpTHGccBzL0v6qDuUM3yDHus7r93urgUuZLZe7zDzw2k?w=500&auto=format" />
+                    <div className="flex flex-col">
+                      <p>🍌🕶🚀 #79/100</p>
+                      <p className="text-xs text-gray-400">Due on Jun 01, 2023</p>
+                    </div>
+                  </div>
+                  <div className="cursor-pointer hover:opacity-75 transition text-sm border border-gray-700 rounded-md bg-gray-700/50 p-2">
+                    Pay 0.85 ETH
+                  </div>
+                </div>
+                <Progress.Root
+                  className="relative overflow-hidden bg-gray-700 rounded-full w-full h-[2px]"
+                  style={{
+                    // Fix overflow clipping in Safari
+                    // https://gist.github.com/domske/b66047671c780a238b51c51ffde8d3a0
+                    transform: 'translateZ(0)',
+                  }}
+                  value={67}
+                >
+                  <Progress.Indicator
+                    className="bg-green-500 w-full h-full transition-transform duration-[660ms] ease-[cubic-bezier(0.65, 0, 0.35, 1)]"
+                    style={{ transform: `translateX(-${100 - 67}%)` }}
+                  />
+                </Progress.Root>
               </div>
             </Tabs.Content>
             <Tabs.Content value="listings">
