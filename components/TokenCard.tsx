@@ -45,6 +45,8 @@ const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
   const singleColumnBreakpoint = useMediaQuery('(max-width: 640px)')
 
   const [activeOffers, setActiveOffers] = useState<Offer[]>([])
+  const hasActiveOffers: boolean = activeOffers && activeOffers.length > 0
+
   const offers = useOffers({
     collection: token?.token?.contract!,
     nftId: token?.token?.tokenId!,
@@ -81,10 +83,10 @@ const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
       className="group relative mb-6 grid self-start overflow-hidden border-[#D4D4D4] bg-white hover:scale-[1.01] hover:ease-out dark:border-0 dark:bg-black dark:ring-1 dark:ring-neutral-600"
     >
       <div className="absolute z-10 ml-2 mt-2 flex grid-flow-row">
-        {activeOffers.length > 0 && isOwner && (
+        {hasActiveOffers && isOwner && (
           <div className="rounded-full bg-black bg-opacity-70 pl-2 pr-2 pt-1 pb-1 text-xs">
             {`${activeOffers.length} Listing${
-              activeOffers.length == 1 ? '' : 's'
+              activeOffers.length === 1 ? '' : 's'
             }`}
           </div>
         )}
@@ -154,15 +156,13 @@ const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
             </div>
           </div>
 
-          {activeOffers && activeOffers.length > 1 && (
-            <NiftyApesOfferDetails offer={activeOffers[0]} />
-          )}
+          {hasActiveOffers && <NiftyApesOfferDetails offer={activeOffers[0]} />}
         </div>
 
         <div className="border-1 group mb-4 ml-4 mr-4 transform-gpu overflow-hidden">
           <div
             className={
-              activeOffers && activeOffers.length === 0 && !isOwner
+              !hasActiveOffers && !isOwner
                 ? 'opacity-100'
                 : 'group-hover-ease-out opacity-100 transition-all group-hover:opacity-[0]'
             }
@@ -170,7 +170,7 @@ const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
             <TokenCardOwner details={token} />
           </div>
 
-          {activeOffers && activeOffers.length > 1 && !isOwner && (
+          {hasActiveOffers && !isOwner && (
             <div
               className={
                 'absolute -bottom-[40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
