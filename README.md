@@ -1,1 +1,1 @@
-<h2 align="center">SuperRare Underground Test</h2>
+<h2 align="center">SuperRare Underground</h2>
