@@ -3,6 +3,7 @@ import {
   BuyWithFinancingModal,
   CreateOfferModal,
   Offer,
+  useOffers,
 } from '@niftyapes/sdk'
 import { useMediaQuery } from '@react-hookz/web'
 import { ListModal } from '@reservoir0x/reservoir-kit-ui'
@@ -16,7 +17,6 @@ import { MutatorCallback } from 'swr'
 import { Collection } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 import TokenCardOwner from './niftyapes/TokenCardOwner'
-import { useOffers } from '@niftyapes/sdk/src/hooks/useOffers'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 const CURRENCIES = process.env.NEXT_PUBLIC_LISTING_CURRENCIES
@@ -44,22 +44,10 @@ const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
 
   const singleColumnBreakpoint = useMediaQuery('(max-width: 640px)')
 
-  const [activeOffers, setActiveOffers] = useState<Offer[]>([])
-  const hasActiveOffers: boolean = activeOffers && activeOffers.length > 0
-
   const offers = useOffers({
     collection: token?.token?.contract!,
     nftId: token?.token?.tokenId!,
   })
-
-  useEffect(() => {
-    if (offers.data) {
-      const activeOffers = offers.data.filter(
-        (offer) => offer.status === 'ACTIVE'
-      )
-      setActiveOffers(activeOffers)
-    }
-  }, [offers])
 
   if (!token) return null
   if (!CHAIN_ID) return null
@@ -76,6 +64,10 @@ const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
     contractAddress: token.token?.contract! as Address,
     collectionName: token.token?.collection?.name!,
   }
+
+  const activeOffers =
+    offers.data?.filter((offer) => offer.status === 'ACTIVE') || []
+  const hasActiveOffers = activeOffers && activeOffers.length > 0
 
   return (
     <div
