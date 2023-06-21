@@ -160,13 +160,13 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       </div>
 
       <div className="relative col-span-full flex overflow-auto lg:col-span-4 lg:h-vh-minus-6rem lg:pr-12">
-        <div className="grid w-full grid-flow-col gap-4 text-center lg:w-auto lg:text-left">
+        <div className="grid w-full grid-flow-col gap-4 lg:w-auto">
           <div className="resize-none lg:col-span-3">
-            <div className="reservoir-h3 mb-8 font-semibold">
+            <div className="reservoir-h3 mb-8 text-center font-semibold lg:text-left">
               {token?.token?.name || `#${token?.token?.tokenId}`}
             </div>
 
-            <div className="grid-col-2 mb-8 grid grid-flow-col">
+            <div className="mb-8 flex items-center justify-center space-x-[100px] lg:justify-start">
               <EthAccount
                 side="left"
                 label="Artist"
@@ -179,23 +179,29 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
               />
             </div>
 
-            <div className="mb-10">
-              <OfferSection token={token} isOwner={isOwner} />
-            </div>
+            <div className="flex items-center justify-center lg:justify-start">
+              <div className="w-[460px] lg:w-auto">
+                <div className="mb-10">
+                  <OfferSection token={token} isOwner={isOwner} />
+                </div>
 
-            <div className="mb-14">
-              <div className="reservoir-h3 mb-1 font-semibold">Description</div>
-              <div className="text-md text-gray-300">
-                {token?.token?.description}
+                <div className="mb-10">
+                  <div className="reservoir-h3 mb-1 flex font-semibold">
+                    Description
+                  </div>
+                  <div className="text-md flex text-gray-300">
+                    {token?.token?.description}
+                  </div>
+                </div>
+
+                <div className="mb-14">
+                  <TokenInfo token={token.token} />
+                </div>
+
+                <div className="mb-10">
+                  <TokenAttributes token={token?.token} />
+                </div>
               </div>
-            </div>
-
-            <div className="mb-14">
-              <TokenInfo token={token.token} />
-            </div>
-
-            <div className="mb-10">
-              <TokenAttributes token={token?.token} />
             </div>
           </div>
         </div>
