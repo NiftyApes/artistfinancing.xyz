@@ -42,26 +42,26 @@ const metadata = {
   title: (title: string) => (
     <>
       <title>{title}</title>
-      <meta property="twitter:title" content={title} />
-      <meta property="og:title" content={title} />
+      <meta property='twitter:title' content={title} />
+      <meta property='og:title' content={title} />
     </>
   ),
   description: (description: string) => (
     <>
-      <meta name="description" content={description} />
-      <meta name="twitter:description" content={description} />
-      <meta property="og:description" content={description} />
+      <meta name='description' content={description} />
+      <meta name='twitter:description' content={description} />
+      <meta property='og:description' content={description} />
     </>
   ),
   image: (image: string) => (
     <>
-      <meta name="twitter:image" content={image} />
-      <meta property="og:image" content={image} />
+      <meta name='twitter:image' content={image} />
+      <meta property='og:image' content={image} />
     </>
   ),
   tagline: (tagline: string | undefined) => (
     <>{tagline || 'Discover, buy and sell NFTs'}</>
-  ),
+  )
 }
 
 const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
@@ -70,11 +70,11 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
 
   const tokenData = useTokens({
     tokens: [
-      `${router.query?.contract?.toString()}:${router.query?.tokenId?.toString()}`,
+      `${router.query?.contract?.toString()}:${router.query?.tokenId?.toString()}`
     ],
     includeTopBid: true,
     includeAttributes: true,
-    includeDynamicPricing: true,
+    includeDynamicPricing: true
   })
 
   const tokens = tokenData.data
@@ -84,8 +84,8 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
     checkUserOwnership ? account.address : undefined,
     {
       tokens: [
-        `${router.query?.contract?.toString()}:${router.query?.tokenId?.toString()}`,
-      ],
+        `${router.query?.contract?.toString()}:${router.query?.tokenId?.toString()}`
+      ]
     }
   )
 
@@ -101,10 +101,10 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         const response = await data.json()
         fetch(`${PROXY_API_BASE}/seaport/offers`, {
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
           method: 'POST',
-          body: JSON.stringify(response),
+          body: JSON.stringify(response)
         })
       })
     }
@@ -125,14 +125,14 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
   const description = META_DESCRIPTION
     ? metadata.description(META_DESCRIPTION)
     : token?.token?.description
-    ? metadata.description(token?.token?.description)
-    : null
+      ? metadata.description(token?.token?.description)
+      : null
 
   const image = META_OG_IMAGE
     ? metadata.image(META_OG_IMAGE)
     : token?.token?.image
-    ? metadata.image(token?.token?.image)
-    : null
+      ? metadata.image(token?.token?.image)
+      : null
 
   const isOwner =
     userTokens &&
@@ -149,53 +149,61 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         {description}
         {image}
       </Head>
-      <div className="col-span-full lg:col-span-8 lg:pr-12 3xl:col-span-12">
-        <div className="flex items-center justify-center p-4 lg:h-vh-minus-6rem">
+      <div className='col-span-full lg:col-span-8 lg:pr-12 3xl:col-span-12'>
+        <div className='flex items-center justify-center p-4 lg:h-vh-minus-6rem'>
           <img
             alt={token?.token?.name || `#${token?.token?.tokenId}`}
-            className="lg:max-h-xl object-cover lg:max-w-xl"
+            className='lg:max-h-xl object-cover lg:max-w-xl'
             src={optimizeImage(token?.token?.image, 533)}
           />
         </div>
       </div>
 
-      <div className="relative col-span-full flex overflow-auto lg:col-span-4 lg:h-vh-minus-6rem lg:pr-12">
-        <div className="grid w-full grid-flow-col gap-4 text-center lg:w-auto lg:text-left">
-          <div className="resize-none lg:col-span-3">
-            <div className="reservoir-h3 mb-8 font-semibold">
+      <div className='relative col-span-full flex overflow-auto lg:col-span-4 lg:h-vh-minus-6rem lg:pr-12'>
+        <div className='grid w-full grid-flow-col gap-4 lg:w-auto'>
+          <div className='resize-none lg:col-span-3'>
+            <div className='reservoir-h3 mb-8 font-semibold text-center lg:text-left'>
               {token?.token?.name || `#${token?.token?.tokenId}`}
             </div>
 
-            <div className="grid-col-2 mb-8 grid grid-flow-col">
+
+            <div className='mb-8 flex space-x-[100px] justify-center items-center lg:justify-start'>
               <EthAccount
-                side="left"
-                label="Artist"
+                side='left'
+                label='Artist'
                 address={token?.token?.owner}
               />
               <EthAccount
-                side="left"
-                label="Owner"
+                side='left'
+                label='Owner'
                 address={token?.token?.owner}
               />
             </div>
 
-            <div className="mb-10">
-              <OfferSection token={token} isOwner={isOwner} />
-            </div>
+            <div className='flex justify-center items-center lg:justify-start'>
+              <div className='lg:w-auto w-[460px]'>
 
-            <div className="mb-14">
-              <div className="reservoir-h3 mb-1 font-semibold">Description</div>
-              <div className="text-md text-gray-300">
-                {token?.token?.description}
+                <div className='mb-10'>
+                  <OfferSection token={token} isOwner={isOwner} />
+                </div>
+
+                <div>
+                  <div className='flex reservoir-h3 mb-1 font-semibold'>Description</div>
+                  <div className='flex text-md text-gray-300'>
+                    {token?.token?.description}
+                  </div>
+                </div>
+
+                <div className='mb-14'>
+                  <TokenInfo token={token.token} />
+                </div>
+
+
+                <div className='mb-10'>
+                  <TokenAttributes token={token?.token} />
+                </div>
+
               </div>
-            </div>
-
-            <div className="mb-14">
-              <TokenInfo token={token.token} />
-            </div>
-
-            <div className="mb-10">
-              <TokenAttributes token={token?.token} />
             </div>
           </div>
         </div>
@@ -209,7 +217,7 @@ export default Index
 export const getStaticPaths: GetStaticPaths = () => {
   return {
     paths: [],
-    fallback: 'blocking',
+    fallback: 'blocking'
   }
 }
 
@@ -229,7 +237,7 @@ export const getStaticProps: GetStaticProps<{
   ) {
     return {
       notFound: true,
-      revalidate: 10,
+      revalidate: 10
     }
   }
 
@@ -237,7 +245,7 @@ export const getStaticProps: GetStaticProps<{
 
   if (RESERVOIR_API_KEY) {
     options.headers = {
-      'x-api-key': RESERVOIR_API_KEY,
+      'x-api-key': RESERVOIR_API_KEY
     }
   }
 
@@ -248,7 +256,7 @@ export const getStaticProps: GetStaticProps<{
     includeTopBid: true,
     includeAttributes: true,
     includeDynamicPricing: true,
-    normalizeRoyalties: true,
+    normalizeRoyalties: true
   }
 
   const href = setParams(url, query)
@@ -263,11 +271,11 @@ export const getStaticProps: GetStaticProps<{
   if (!collectionId) {
     return {
       notFound: true,
-      revalidate: 10,
+      revalidate: 10
     }
   }
 
   return {
-    props: { collectionId, tokenDetails: data?.tokens?.[0]?.token },
+    props: { collectionId, tokenDetails: data?.tokens?.[0]?.token }
   }
 }

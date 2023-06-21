@@ -26,7 +26,7 @@ const EthAccount: FC<Props> = ({
   )
 
   return (
-    <div className="flex items-center">
+    <div className="flex">
       {side === 'left' && icon}
       <div>
         <div className="ml-3 text-xs text-gray-300">{label}</div>

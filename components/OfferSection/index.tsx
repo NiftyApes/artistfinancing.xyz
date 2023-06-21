@@ -47,7 +47,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div>
       {isLoadingOwnershipCheck ? (
         <div className="flex items-center justify-center">
           <ClipLoader color="#36d7b7" />
