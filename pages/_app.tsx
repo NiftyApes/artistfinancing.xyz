@@ -1,4 +1,5 @@
 import { Address, NiftyApesProvider } from '@niftyapes/sdk'
+import '@niftyapes/sdk/dist/styles.css'
 import '@rainbow-me/rainbowkit/styles.css'
 import {
   ReservoirKitProvider,
