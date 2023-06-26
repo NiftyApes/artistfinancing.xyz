@@ -3,7 +3,7 @@ import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { cva, type VariantProps } from "class-variance-authority"
 import { X } from "lucide-react"
 
-import { cn } from "../lib/utils"
+import { cn } from "../../lib/utils"
 
 const Sheet = SheetPrimitive.Root
 
@@ -117,7 +117,7 @@ const sheetVariants = cva(
       {
         position: ["right", "left"],
         size: "sm",
-        class: "w-1/4",
+        class: "w-2/4",
       },
       {
         position: ["right", "left"],
