@@ -89,20 +89,6 @@ export const UserActiveLoansRow: FC<Props> = ({ loan, token }) => {
         </button>
       </td>
 
-      {/* SELL LOAN */}
-      {/* <td className="whitespace-nowrap px-6 py-4 dark:text-white"> */}
-      {/*   <button */}
-      {/*     onClick={() => { */}
-      {/*       // TODO: We need to add the contract address here. */}
-      {/*       // window.location.href = `/${address}/${sellerNft.tokenId}` */}
-      {/*     }} */}
-      {/*     disabled={loan.status !== 'ACTIVE'} */}
-      {/*     className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4" */}
-      {/*   > */}
-      {/*     Sell Loan */}
-      {/*   </button> */}
-      {/* </td> */}
-
       {/* STATUS */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         {loan.status === 'ACTIVE' && 'Active'}

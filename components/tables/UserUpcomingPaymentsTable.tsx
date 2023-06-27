@@ -93,7 +93,6 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
                 'Next Minimum Payment',
                 'Principal Remaining',
                 'Make Payment',
-                // 'Sell Loan',
               ].map((item) => (
                 <th
                   key={item}
@@ -233,19 +232,6 @@ const UpcomingPaymentsTableRow = ({
           data={{ image: '/niftyapes/banana.png' }}
         />
       </td>
-
-      {/* SELL LOAN */}
-      {/* <td className="whitespace-nowrap px-6 py-4 dark:text-white"> */}
-      {/*   <button */}
-      {/*     onClick={() => { */}
-      {/*       // TODO: We need to add a contract address here. */}
-      {/*       // window.location.href = `/${address}/${buyerNft.tokenId}` */}
-      {/*     }} */}
-      {/*     className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4" */}
-      {/*   > */}
-      {/*     Sell Loan */}
-      {/*   </button> */}
-      {/* </td> */}
     </tr>
   )
 }
