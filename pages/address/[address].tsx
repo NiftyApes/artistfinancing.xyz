@@ -7,7 +7,6 @@ import UserUpcomingPaymentsTab from 'components/tables/UserUpcomingPaymentsTab'
 import UserTokensGrid from 'components/UserTokensGrid'
 import useMounted from 'hooks/useMounted'
 import { toggleOnItem } from 'lib/router'
-import { truncateAddress } from 'lib/truncateText'
 import {
   GetStaticPaths,
   GetStaticProps,
@@ -64,13 +63,13 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
   }
 
   const isOwner = address?.toLowerCase() === accountData?.address?.toLowerCase()
-  const formattedAddress = truncateAddress(address as string)
 
   let tabs = [{ name: 'Gallery', id: 'galley' }]
 
   if (isOwner) {
     tabs = [
       { name: 'Gallery', id: 'gallery' },
+      { name: 'Upcoming Payments', id: 'upcoming_payments' },
       { name: 'Manage Listings', id: 'manage_listings' },
       { name: 'Active Loans', id: 'active_loans' },
     ]
@@ -89,7 +88,7 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
                   id={id}
                   value={id}
                   className={
-                    'group reservoir-label-l relative min-w-0 shrink-0 whitespace-nowrap border-b-2 border-transparent  py-4 px-8 text-center hover:text-gray-700 focus:z-10 radix-state-active:border-black radix-state-active:text-gray-900 dark:text-white dark:radix-state-active:border-white'
+                    'group reservoir-label-l relative min-w-0 shrink-0 whitespace-nowrap border-b-2 border-transparent py-4 px-8 text-center focus:z-10 radix-state-active:border-black radix-state-active:text-gray-900 dark:text-gray-400 dark:hover:text-white dark:hover:underline dark:radix-state-active:border-white dark:radix-state-active:text-white dark:radix-state-active:hover:no-underline'
                   }
                   onClick={() => toggleOnItem(router, 'tab', id)}
                 >

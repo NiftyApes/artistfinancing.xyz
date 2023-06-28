@@ -69,7 +69,7 @@ const UserActiveLoansTable: FC = () => {
         : loans.length > 0 && (
             <table className="min-w-full table-auto dark:divide-neutral-600">
               <thead className="bg-white dark:bg-black">
-                <tr>
+                <tr className="border-b border-gray-700">
                   {[
                     'Item',
                     'Price',
@@ -83,7 +83,7 @@ const UserActiveLoansTable: FC = () => {
                     <th
                       key={item}
                       scope="col"
-                      className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-white"
+                      className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-gray-500"
                     >
                       {item}
                     </th>

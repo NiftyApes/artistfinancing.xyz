@@ -7,6 +7,7 @@ import { processLoan } from 'lib/niftyapes/processLoan'
 import { processOffer } from 'lib/niftyapes/processOffer'
 import { optimizeImage } from 'lib/optmizeImage'
 import { FC } from 'react'
+import Button from '../Button'
 
 type Props = {
   loan: Loan
@@ -52,11 +53,6 @@ export const UserActiveLoansRow: FC<Props> = ({ loan, token }) => {
             <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
               {tokenName ? tokenName : collectionName}
             </div>
-            {tokenName && (
-              <div className="text-xs text-neutral-600 dark:text-neutral-300">
-                {collectionName}
-              </div>
-            )}
           </span>
         </div>
       </td>
@@ -86,27 +82,21 @@ export const UserActiveLoansRow: FC<Props> = ({ loan, token }) => {
 
       {/* SEIZE ASSET */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <button
-          disabled={isLoadingSeizeAsset || !inDefault}
+        <Button
+          textCase="capitalize"
+          variant="secondary"
           onClick={() => write?.()}
-          className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
         >
           Seize Asset
-        </button>
+        </Button>
       </td>
 
       {/* SELL LOAN */}
+      {/* window.location.href = `/${address}/${sellerNft.tokenId}`*/}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <button
-          onClick={() => {
-            // TODO: We need to add the contract address here.
-            // window.location.href = `/${address}/${sellerNft.tokenId}`
-          }}
-          disabled={loan.status !== 'ACTIVE'}
-          className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
-        >
+        <Button textCase="capitalize" variant="secondary" onClick={() => {}}>
           Sell Loan
-        </button>
+        </Button>
       </td>
 
       {/* STATUS */}

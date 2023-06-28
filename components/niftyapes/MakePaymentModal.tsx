@@ -100,7 +100,9 @@ export default function MakePaymentModal({
 
   return (
     <>
-      <Button onClick={onOpen}>Make Payment</Button>
+      <Button textCase="capitalize" variant="secondary" onClick={onOpen}>
+        Make Payment
+      </Button>
       <Modal isOpen={isOpen} onClose={onClose} size="4xl">
         <ModalOverlay />
         <ModalContent>

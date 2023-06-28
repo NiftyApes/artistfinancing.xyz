@@ -16,6 +16,7 @@ import { useAccount } from 'wagmi'
 import { processOffer } from '../../lib/niftyapes/processOffer'
 import FormatNativeCrypto from '../FormatNativeCrypto'
 import isEqualAddress from 'lib/niftyapes/isEqualAddress'
+import Button from '../Button'
 
 type Props = {
   isOwner: boolean
@@ -84,7 +85,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
       {activeLoans && activeLoans.length > 0 && (
         <table className="min-w-full table-auto dark:divide-neutral-600">
           <thead className="bg-white dark:bg-black">
-            <tr>
+            <tr className="border-b border-gray-700">
               {[
                 'Item',
                 'Price',
@@ -98,7 +99,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
                 <th
                   key={item}
                   scope="col"
-                  className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-white"
+                  className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-gray-500"
                 >
                   {item}
                 </th>
@@ -194,11 +195,6 @@ const UpcomingPaymentsTableRow = ({
             <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
               {tokenName ? tokenName : collectionName}
             </div>
-            {tokenName && (
-              <div className="text-xs text-neutral-600 dark:text-neutral-300">
-                {collectionName}
-              </div>
-            )}
           </span>
         </div>
       </td>
@@ -242,15 +238,9 @@ const UpcomingPaymentsTableRow = ({
 
       {/* SELL LOAN */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <button
-          onClick={() => {
-            // TODO: We need to add a contract address here.
-            // window.location.href = `/${address}/${buyerNft.tokenId}`
-          }}
-          className="btn-primary-fill gap-2 dark:ring-primary-900 dark:focus:ring-4"
-        >
+        <Button textCase="capitalize" variant="secondary" onClick={() => {}}>
           Sell Loan
-        </button>
+        </Button>
       </td>
     </tr>
   )
