@@ -19,16 +19,8 @@ const Navbar: FC = () => {
     if (account.isConnected) {
       return (
         <div className="z-10 ml-auto flex gap-11">
-          <div className="text-white hover:underline">
-            <a href={`/`}>Explore</a>
-          </div>
-          <div className="text-white hover:underline">
+          <div className="text-gray-400 hover:text-white hover:underline">
             <a href={`/address/${account.address}?tab=gallery`}>Portfolio</a>
-          </div>
-          <div className="text-white hover:underline">
-            <a href={`/address/${account.address}?tab=upcoming_payments`}>
-              Upcoming Payments
-            </a>
           </div>
         </div>
       )

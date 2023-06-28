@@ -1,12 +1,9 @@
 import LoadingIcon from 'components/LoadingIcon'
 import Toast from 'components/Toast'
-import { ComponentProps, FC } from 'react'
-
 import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
+import { ComponentProps, FC } from 'react'
 import { FiAlertCircle } from 'react-icons/fi'
-
 import { Loan, useLoans } from '@niftyapes/sdk'
-
 import { OfferDetails } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { format } from 'date-fns'
@@ -84,7 +81,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
       {activeLoans && activeLoans.length > 0 && (
         <table className="min-w-full table-auto dark:divide-neutral-600">
           <thead className="bg-white dark:bg-black">
-            <tr>
+            <tr className="border-b border-gray-700">
               {[
                 'Item',
                 'Price',
@@ -97,7 +94,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
                 <th
                   key={item}
                   scope="col"
-                  className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-white"
+                  className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-gray-500"
                 >
                   {item}
                 </th>
@@ -187,11 +184,6 @@ const UpcomingPaymentsTableRow = ({
             <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
               {tokenName ? tokenName : collectionName}
             </div>
-            {tokenName && (
-              <div className="text-xs text-neutral-600 dark:text-neutral-300">
-                {collectionName}
-              </div>
-            )}
           </span>
         </div>
       </td>
