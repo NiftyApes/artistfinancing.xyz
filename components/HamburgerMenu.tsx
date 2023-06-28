@@ -46,7 +46,7 @@ const HamburgerMenu: FC<Props> = ({ externalLinks }) => {
         }}
       >
         <div className="flex items-center justify-between gap-3 border-b border-neutral-300 px-6 py-4 dark:border-neutral-600">
-          <NavbarLogo variant="desktop" />
+          <NavbarLogo />
           <Dialog.Close className="btn-primary-outline py-1.5 px-[5px] dark:text-white">
             <HiX className="h-6 w-6" />
           </Dialog.Close>

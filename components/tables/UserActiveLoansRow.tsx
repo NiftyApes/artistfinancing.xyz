@@ -84,7 +84,7 @@ export const UserActiveLoansRow: FC<Props> = ({ loan, token }) => {
           Seize Asset
         </Button>
       </td>
-      
+
       {/* STATUS */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         {loan.status === 'ACTIVE' && 'Active'}
