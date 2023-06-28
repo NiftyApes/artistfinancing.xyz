@@ -1,12 +1,9 @@
 import LoadingIcon from 'components/LoadingIcon'
 import Toast from 'components/Toast'
-import { ComponentProps, FC } from 'react'
-
 import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
+import { ComponentProps, FC } from 'react'
 import { FiAlertCircle } from 'react-icons/fi'
-
 import { Loan, useLoans } from '@niftyapes/sdk'
-
 import { OfferDetails } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { format } from 'date-fns'
@@ -16,7 +13,6 @@ import { useAccount } from 'wagmi'
 import { processOffer } from '../../lib/niftyapes/processOffer'
 import FormatNativeCrypto from '../FormatNativeCrypto'
 import isEqualAddress from 'lib/niftyapes/isEqualAddress'
-import Button from '../Button'
 
 type Props = {
   isOwner: boolean
@@ -94,7 +90,6 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
                 'Next Minimum Payment',
                 'Principal Remaining',
                 'Make Payment',
-                'Sell Loan',
               ].map((item) => (
                 <th
                   key={item}
@@ -176,20 +171,14 @@ const UpcomingPaymentsTableRow = ({
       {/* ITEM */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         <div className="flex items-center gap-2">
-          <div className="relative h-16 w-16">
-            <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded">
-              <img
-                src={
-                  image
-                    ? optimizeImage(image, 64)
-                    : '/niftyapes/placeholder.png'
-                }
-                alt="Bid Image"
-                className="w-[64px] object-contain"
-                width="64"
-                height="64"
-              />
-            </div>
+          <div className="aspect-w-1 aspect-h-1 relative h-16 w-16 overflow-hidden rounded">
+            <img
+              src={
+                image ? optimizeImage(image, 64) : '/niftyapes/placeholder.png'
+              }
+              alt="Bid Image"
+              className="h-16 w-16 object-contain"
+            />
           </div>
           <span className="whitespace-nowrap">
             <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
@@ -234,13 +223,6 @@ const UpcomingPaymentsTableRow = ({
           loan={loan}
           data={{ image: '/niftyapes/banana.png' }}
         />
-      </td>
-
-      {/* SELL LOAN */}
-      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <Button textCase="capitalize" variant="secondary" onClick={() => {}}>
-          Sell Loan
-        </Button>
       </td>
     </tr>
   )

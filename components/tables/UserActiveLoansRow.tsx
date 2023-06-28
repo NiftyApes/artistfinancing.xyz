@@ -34,20 +34,14 @@ export const UserActiveLoansRow: FC<Props> = ({ loan, token }) => {
       {/* ITEM */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         <div className="flex items-center gap-2">
-          <div className="relative h-16 w-16">
-            <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded">
-              <img
-                src={
-                  image
-                    ? optimizeImage(image, 64)
-                    : '/niftyapes/placeholder.png'
-                }
-                alt="Bid Image"
-                className="w-[64px] object-contain"
-                width="64"
-                height="64"
-              />
-            </div>
+          <div className="aspect-w-1 aspect-h-1 relative h-16 w-16 overflow-hidden rounded">
+            <img
+              src={
+                image ? optimizeImage(image, 64) : '/niftyapes/placeholder.png'
+              }
+              alt="Bid Image"
+              className="h-16 w-16 object-contain"
+            />
           </div>
           <span className="whitespace-nowrap">
             <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
@@ -90,15 +84,7 @@ export const UserActiveLoansRow: FC<Props> = ({ loan, token }) => {
           Seize Asset
         </Button>
       </td>
-
-      {/* SELL LOAN */}
-      {/* window.location.href = `/${address}/${sellerNft.tokenId}`*/}
-      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <Button textCase="capitalize" variant="secondary" onClick={() => {}}>
-          Sell Loan
-        </Button>
-      </td>
-
+      
       {/* STATUS */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         {loan.status === 'ACTIVE' && 'Active'}

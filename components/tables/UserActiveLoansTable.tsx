@@ -77,7 +77,6 @@ const UserActiveLoansTable: FC = () => {
                     'Next payment',
                     'Principal Remaining',
                     'Seize Asset',
-                    'Sell Loan',
                     'Status',
                   ].map((item) => (
                     <th
