@@ -1,5 +1,4 @@
 import { Address, NiftyApesProvider } from '@niftyapes/sdk'
-import '@niftyapes/sdk/dist/styles.css'
 import '@rainbow-me/rainbowkit/styles.css'
 import {
   ReservoirKitProvider,
@@ -49,6 +48,9 @@ import { publicProvider } from 'wagmi/providers/public'
 import presetColors from '../colors'
 import { useGoogleAnalytics } from 'hooks/useGoogleAnalytics'
 import chakraTheme from '../theme'
+
+// Imported last so that it does not conflict
+import '@niftyapes/sdk/dist/styles.css'
 
 const queryClient = new QueryClient()
 
