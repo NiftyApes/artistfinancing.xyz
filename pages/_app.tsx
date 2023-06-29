@@ -217,6 +217,7 @@ const App: FC<AppProps & { baseUrl: string }> = ({
       config={{
         chainId: envChain?.id || allChains.mainnet.id,
         integrationContractAddress: INTEGRATION_CONTRACT_ADDRESS as Address,
+        theme: defaultTheme,
       }}
     >
       <ReservoirKitProvider options={options} theme={reservoirKitTheme}>
