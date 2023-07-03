@@ -2,7 +2,6 @@ import {
   Address,
   BuyWithFinancingModal,
   CreateOfferModal,
-  Offer,
   useOffers,
 } from '@niftyapes/sdk'
 import { useMediaQuery } from '@react-hookz/web'
@@ -12,7 +11,8 @@ import useTokens from 'hooks/useTokens'
 import { optimizeImage } from 'lib/optmizeImage'
 import Image from 'next/legacy/image'
 import Link from 'next/link'
-import { ComponentPropsWithoutRef, FC, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { ComponentPropsWithoutRef, FC } from 'react'
 import { MutatorCallback } from 'swr'
 import { Collection } from 'types/reservoir'
 import { useAccount } from 'wagmi'
@@ -41,6 +41,8 @@ type Props = {
 
 const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
   const account = useAccount()
+
+  const router = useRouter()
 
   const singleColumnBreakpoint = useMediaQuery('(max-width: 640px)')
 
@@ -171,6 +173,11 @@ const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
               <BuyWithFinancingModal
                 token={formattedToken}
                 hideSection={true}
+                redirect={() => {
+                  router.push(
+                    `/address/${account.address}?tab=upcoming_payments`
+                  )
+                }}
               />
             </div>
           )}
