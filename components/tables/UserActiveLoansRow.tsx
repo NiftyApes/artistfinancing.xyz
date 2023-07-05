@@ -20,14 +20,21 @@ export const UserActiveLoansRow: FC<Props> = ({ loan, token }) => {
     token
   )
 
-  const { periodEndTimestamp, remainingPrincipal, inDefault } = processLoan(
+  // TODO: Change back to const
+  let { periodEndTimestamp, remainingPrincipal, inDefault } = processLoan(
     loan.loan
   )
 
-  const { isLoading: isLoadingSeizeAsset, write } = useSeizeAsset({
+  // TODO: Change back to const
+  let { isLoading: isLoadingSeizeAsset, write } = useSeizeAsset({
     nftContractAddress: loan.offer.offer.nftContractAddress,
     nftId: BigNumber.from(loan.offer.offer.nftId),
   })
+
+  // TODO: Wait for transaction
+
+  isLoadingSeizeAsset = true
+  inDefault = true
 
   return (
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
@@ -74,50 +81,28 @@ export const UserActiveLoansRow: FC<Props> = ({ loan, token }) => {
         />
       </td>
 
-      {/* SEIZE ASSET */}
-      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <Button
-          textCase="capitalize"
-          variant="secondary"
-          onClick={() => write?.()}
-        >
-          Seize Asset
-        </Button>
-      </td>
-
       {/* STATUS */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         {loan.status === 'ACTIVE' && 'Active'}
         {loan.status === 'ASSET_SEIZED' && 'Asset Seized'}
         {loan.status === 'FULLY_REPAID' && 'Fully repaid'}
       </td>
+
+      {/* ACTION */}
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+        {inDefault ? (
+          <Button
+            textCase="capitalize"
+            variant="secondary"
+            isLoading={isLoadingSeizeAsset}
+            onClick={() => write?.()}
+          >
+            {isLoadingSeizeAsset ? 'Transaction Submitted' : 'Seize Asset'}
+          </Button>
+        ) : (
+          'None'
+        )}
+      </td>
     </tr>
-  )
-}
-
-export const UserActiveLoansMobileRow: FC<Props> = ({ loan, token }) => {
-  const { listPrice, image } = processOffer(loan.offer.offer, token)
-
-  return (
-    <div className="border-b-[1px] border-solid border-b-neutral-300	py-[16px]">
-      <div className="flex items-center justify-between">
-        <div className="relative h-14 w-14">
-          <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded">
-            <img
-              src={
-                image ? optimizeImage(image, 56) : '/niftyapes/placeholder.png'
-              }
-              alt="Bid Image"
-              className="w-[56px] object-contain"
-              width="56"
-              height="56"
-            />
-          </div>
-        </div>
-        <div className="flex flex-col">
-          <FormatNativeCrypto maximumFractionDigits={4} amount={listPrice} />
-        </div>
-      </div>
-    </div>
   )
 }
