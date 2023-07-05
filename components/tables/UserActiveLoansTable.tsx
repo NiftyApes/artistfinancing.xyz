@@ -1,5 +1,4 @@
 import { useLoans } from '@niftyapes/sdk'
-import { useMediaQuery } from '@react-hookz/web'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import LoadingIcon from 'components/LoadingIcon'
 import isEqualAddress from 'lib/niftyapes/isEqualAddress'
@@ -12,7 +11,11 @@ const UserActiveLoansTable: FC = () => {
   const router = useRouter()
   const { address } = router.query
 
-  const { data: loans = [], isLoading } = useLoans({
+  const {
+    data: loans = [],
+    isLoading,
+    refetch: refetchLoans,
+  } = useLoans({
     seller: address as Address,
   })
 
@@ -85,7 +88,12 @@ const UserActiveLoansTable: FC = () => {
               )
 
               return (
-                <UserActiveLoansRow key={index} loan={loan} token={token} />
+                <UserActiveLoansRow
+                  key={index}
+                  loan={loan}
+                  token={token}
+                  refetchLoans={refetchLoans}
+                />
               )
             })}
           </tbody>

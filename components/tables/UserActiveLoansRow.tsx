@@ -6,35 +6,55 @@ import { BigNumber } from 'ethers'
 import { processLoan } from 'lib/niftyapes/processLoan'
 import { processOffer } from 'lib/niftyapes/processOffer'
 import { optimizeImage } from 'lib/optmizeImage'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
+import { useWaitForTransaction } from 'wagmi'
 import Button from '../Button'
 
 type Props = {
   loan: Loan
   token: ReturnType<typeof useTokens>['data'][0]
+  refetchLoans: () => void
 }
 
-export const UserActiveLoansRow: FC<Props> = ({ loan, token }) => {
+export const UserActiveLoansRow: FC<Props> = ({
+  loan,
+  token,
+  refetchLoans,
+}) => {
   const { apr, listPrice, image, tokenName, collectionName } = processOffer(
     loan.offer.offer,
     token
   )
 
-  // TODO: Change back to const
-  let { periodEndTimestamp, remainingPrincipal, inDefault } = processLoan(
+  const { periodEndTimestamp, remainingPrincipal, inDefault } = processLoan(
     loan.loan
   )
 
-  // TODO: Change back to const
-  let { isLoading: isLoadingSeizeAsset, write } = useSeizeAsset({
+  const {
+    data,
+    isLoading: isWriteLoading,
+    write,
+  } = useSeizeAsset({
     nftContractAddress: loan.offer.offer.nftContractAddress,
     nftId: BigNumber.from(loan.offer.offer.nftId),
   })
 
-  // TODO: Wait for transaction
+  const { isLoading: isTxLoading, isSuccess: isTxSuccess } =
+    useWaitForTransaction({ hash: data?.hash })
 
-  isLoadingSeizeAsset = true
-  inDefault = true
+  // Refetch loans to refresh the page after successful "Seize Asset" call
+  useEffect(() => {
+    setTimeout(refetchLoans, 1000)
+  }, [isTxSuccess])
+
+  const isLoading = isWriteLoading || isTxLoading
+
+  let seizeAssetBtnText = 'Seize Asset'
+  if (isLoading) {
+    seizeAssetBtnText = 'Transaction Submitted'
+  } else if (isTxSuccess) {
+    seizeAssetBtnText = 'Transaction Success'
+  }
 
   return (
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
@@ -94,10 +114,10 @@ export const UserActiveLoansRow: FC<Props> = ({ loan, token }) => {
           <Button
             textCase="capitalize"
             variant="secondary"
-            isLoading={isLoadingSeizeAsset}
+            isLoading={isLoading}
             onClick={() => write?.()}
           >
-            {isLoadingSeizeAsset ? 'Transaction Submitted' : 'Seize Asset'}
+            {seizeAssetBtnText}
           </Button>
         ) : (
           'None'
