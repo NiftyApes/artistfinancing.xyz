@@ -42,8 +42,11 @@ export const UserActiveLoansRow: FC<Props> = ({
     nftId: BigNumber.from(loan.offer.offer.nftId),
   })
 
-  const { isLoading: isTxLoading, isSuccess: isTxSuccess } =
-    useWaitForTransaction({ hash: data?.hash })
+  const {
+    isLoading: isTxLoading,
+    isSuccess: isTxSuccess,
+    isError: isTxError,
+  } = useWaitForTransaction({ hash: data?.hash })
 
   const etherscanUri = useEtherscanUri()
   const etherscanLogo = DARK_MODE
@@ -128,22 +131,24 @@ export const UserActiveLoansRow: FC<Props> = ({
             >
               {seizeAssetBtnText}
             </Button>
-            <div className="flex items-center space-x-2">
-              <img
-                src={etherscanLogo}
-                alt="Etherscan Icon"
-                className="h-4 w-4"
-              />
+            {data?.hash && (
+              <div className="flex items-center space-x-2">
+                <img
+                  src={etherscanLogo}
+                  alt="Etherscan Icon"
+                  className="h-4 w-4"
+                />
 
-              <a
-                className="hover:underline"
-                target="_blank"
-                rel="noreferrer"
-                href={`${etherscanUri}/tx/${data?.hash}`}
-              >
-                View Transaction
-              </a>
-            </div>
+                <a
+                  className="hover:underline"
+                  target="_blank"
+                  rel="noreferrer"
+                  href={`${etherscanUri}/tx/${data?.hash}`}
+                >
+                  View Transaction
+                </a>
+              </div>
+            )}
           </div>
         ) : (
           'None'
