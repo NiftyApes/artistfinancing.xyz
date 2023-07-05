@@ -9,6 +9,7 @@ import InfoTooltip from 'components/InfoTooltip'
 import EthAccount from 'components/niftyapes/EthAccount'
 import useMounted from 'hooks/useMounted'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { ClipLoader } from 'react-spinners'
 import { useAccount } from 'wagmi'
@@ -22,6 +23,8 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
   // Need to check if mounted as ownership can only be determined
   // on the client side with the logged in user.
   const isMounted = useMounted()
+
+  const router = useRouter()
 
   const { address } = useAccount()
   const { isEntitledToNft, isLoadingLoans: isLoadingOwnershipCheck } =
@@ -86,7 +89,12 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
           {isOwner === true ? (
             <CreateOfferModal token={formattedToken} />
           ) : (
-            <BuyWithFinancingModal token={formattedToken} />
+            <BuyWithFinancingModal
+              token={formattedToken}
+              redirect={() => {
+                router.push(`/address/${address}?tab=upcoming_payments`)
+              }}
+            />
           )}
         </>
       )}
