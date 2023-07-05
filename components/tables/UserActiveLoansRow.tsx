@@ -3,6 +3,7 @@ import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { format } from 'date-fns'
 import { BigNumber } from 'ethers'
+import { useEtherscanUri } from 'hooks/useEtherscan'
 import { processLoan } from 'lib/niftyapes/processLoan'
 import { processOffer } from 'lib/niftyapes/processOffer'
 import { optimizeImage } from 'lib/optmizeImage'
@@ -15,6 +16,8 @@ type Props = {
   token: ReturnType<typeof useTokens>['data'][0]
   refetchLoans: () => void
 }
+
+const DARK_MODE = process.env.NEXT_PUBLIC_DARK_MODE
 
 export const UserActiveLoansRow: FC<Props> = ({
   loan,
@@ -41,6 +44,11 @@ export const UserActiveLoansRow: FC<Props> = ({
 
   const { isLoading: isTxLoading, isSuccess: isTxSuccess } =
     useWaitForTransaction({ hash: data?.hash })
+
+  const etherscanUri = useEtherscanUri()
+  const etherscanLogo = DARK_MODE
+    ? '/icons/etherscan-logo-light-circle.svg'
+    : '/icons/etherscan-logo-circle.svg'
 
   // Refetch loans to refresh the page after successful "Seize Asset" call
   useEffect(() => {
@@ -111,14 +119,32 @@ export const UserActiveLoansRow: FC<Props> = ({
       {/* ACTION */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         {inDefault ? (
-          <Button
-            textCase="capitalize"
-            variant="secondary"
-            isLoading={isLoading}
-            onClick={() => write?.()}
-          >
-            {seizeAssetBtnText}
-          </Button>
+          <div className="flex flex-col items-center space-y-2">
+            <Button
+              textCase="capitalize"
+              variant="secondary"
+              isLoading={isLoading}
+              onClick={() => write?.()}
+            >
+              {seizeAssetBtnText}
+            </Button>
+            <div className="flex items-center space-x-2">
+              <img
+                src={etherscanLogo}
+                alt="Etherscan Icon"
+                className="h-4 w-4"
+              />
+
+              <a
+                className="hover:underline"
+                target="_blank"
+                rel="noreferrer"
+                href={`${etherscanUri}/tx/${data?.hash}`}
+              >
+                View Transaction
+              </a>
+            </div>
+          </div>
         ) : (
           'None'
         )}
