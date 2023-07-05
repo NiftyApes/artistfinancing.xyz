@@ -56,7 +56,7 @@ export const UserActiveLoansRow: FC<Props> = ({
   // Refetch loans to refresh the page after successful "Seize Asset" call
   useEffect(() => {
     setTimeout(refetchLoans, 1000)
-  }, [isTxSuccess])
+  }, [isTxSuccess, isTxError])
 
   const isLoading = isWriteLoading || isTxLoading
 
@@ -65,6 +65,8 @@ export const UserActiveLoansRow: FC<Props> = ({
     seizeAssetBtnText = 'Transaction Submitted'
   } else if (isTxSuccess) {
     seizeAssetBtnText = 'Transaction Success'
+  } else if (isTxError) {
+    seizeAssetBtnText = 'Transaction Error'
   }
 
   return (
@@ -127,6 +129,7 @@ export const UserActiveLoansRow: FC<Props> = ({
               textCase="capitalize"
               variant="secondary"
               isLoading={isLoading}
+              disabled={isLoading || isTxError || isTxSuccess}
               onClick={() => write?.()}
             >
               {seizeAssetBtnText}
