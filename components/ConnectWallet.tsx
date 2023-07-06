@@ -74,7 +74,7 @@ const ConnectWallet: FC = () => {
           </div>
           <div className="mt-2 mb-2 border-b border-gray-300"></div>
           <Link
-            href={` / address /${account.address}`}
+            href={`/address/${account.address}`}
             legacyBehavior={true}
             passHref
           >
