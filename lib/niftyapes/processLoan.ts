@@ -15,7 +15,10 @@ export function processLoan(loan: LoanDetails): ProcessedLoan {
   const remainingPrincipal = Number(formatEther(loan.remainingPrincipal))
   const periodInterestRate = loan.periodInterestRateBps / 100
   const interestToBePaid = (periodInterestRate / 100) * remainingPrincipal
-  const inDefault = isAfter(new Date(loan.periodEndTimestamp), new Date())
+  const inDefault = isAfter(
+    new Date(),
+    new Date(loan.periodEndTimestamp * 1000)
+  )
 
   let minimumPayment = minPrincipalPerPeriod + interestToBePaid
 
