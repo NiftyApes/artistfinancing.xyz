@@ -53,7 +53,10 @@ const Button: React.FC<ButtonProps> = ({
     disabled={disabled || isLoading}
   >
     {isLoading ? (
-      <ClipLoader size={20} color={loadingColors[variant]} />
+      <div className="flex space-x-2">
+        <div>{children}</div>
+        <ClipLoader size={20} color={loadingColors[variant]} />
+      </div>
     ) : (
       children
     )}

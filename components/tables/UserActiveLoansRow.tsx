@@ -3,18 +3,27 @@ import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { format } from 'date-fns'
 import { BigNumber } from 'ethers'
+import { useEtherscanUri } from 'hooks/useEtherscan'
 import { processLoan } from 'lib/niftyapes/processLoan'
 import { processOffer } from 'lib/niftyapes/processOffer'
 import { optimizeImage } from 'lib/optmizeImage'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
+import { useWaitForTransaction } from 'wagmi'
 import Button from '../Button'
 
 type Props = {
   loan: Loan
   token: ReturnType<typeof useTokens>['data'][0]
+  refetchLoans: () => void
 }
 
-export const UserActiveLoansRow: FC<Props> = ({ loan, token }) => {
+const DARK_MODE = process.env.NEXT_PUBLIC_DARK_MODE
+
+export const UserActiveLoansRow: FC<Props> = ({
+  loan,
+  token,
+  refetchLoans,
+}) => {
   const { apr, listPrice, image, tokenName, collectionName } = processOffer(
     loan.offer.offer,
     token
@@ -24,10 +33,41 @@ export const UserActiveLoansRow: FC<Props> = ({ loan, token }) => {
     loan.loan
   )
 
-  const { isLoading: isLoadingSeizeAsset, write } = useSeizeAsset({
+  const {
+    data,
+    isLoading: isWriteLoading,
+    write,
+  } = useSeizeAsset({
     nftContractAddress: loan.offer.offer.nftContractAddress,
     nftId: BigNumber.from(loan.offer.offer.nftId),
   })
+
+  const {
+    isLoading: isTxLoading,
+    isSuccess: isTxSuccess,
+    isError: isTxError,
+  } = useWaitForTransaction({ hash: data?.hash })
+
+  const etherscanUri = useEtherscanUri()
+  const etherscanLogo = DARK_MODE
+    ? '/icons/etherscan-logo-light-circle.svg'
+    : '/icons/etherscan-logo-circle.svg'
+
+  // Refetch loans to refresh the page after successful "Seize Asset" call
+  useEffect(() => {
+    setTimeout(refetchLoans, 1000)
+  }, [isTxSuccess, isTxError])
+
+  const isLoading = isWriteLoading || isTxLoading
+
+  let seizeAssetBtnText = 'Seize Asset'
+  if (isLoading) {
+    seizeAssetBtnText = 'Transaction Submitted'
+  } else if (isTxSuccess) {
+    seizeAssetBtnText = 'Transaction Success'
+  } else if (isTxError) {
+    seizeAssetBtnText = 'Transaction Error'
+  }
 
   return (
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
@@ -74,50 +114,49 @@ export const UserActiveLoansRow: FC<Props> = ({ loan, token }) => {
         />
       </td>
 
-      {/* SEIZE ASSET */}
-      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <Button
-          textCase="capitalize"
-          variant="secondary"
-          onClick={() => write?.()}
-        >
-          Seize Asset
-        </Button>
-      </td>
-
       {/* STATUS */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         {loan.status === 'ACTIVE' && 'Active'}
         {loan.status === 'ASSET_SEIZED' && 'Asset Seized'}
         {loan.status === 'FULLY_REPAID' && 'Fully repaid'}
       </td>
-    </tr>
-  )
-}
 
-export const UserActiveLoansMobileRow: FC<Props> = ({ loan, token }) => {
-  const { listPrice, image } = processOffer(loan.offer.offer, token)
+      {/* ACTION */}
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+        {inDefault ? (
+          <div className="flex flex-col items-center space-y-2">
+            <Button
+              textCase="capitalize"
+              variant="secondary"
+              isLoading={isLoading}
+              disabled={isLoading || isTxError || isTxSuccess}
+              onClick={() => write?.()}
+            >
+              {seizeAssetBtnText}
+            </Button>
+            {data?.hash && (
+              <div className="flex items-center space-x-2">
+                <img
+                  src={etherscanLogo}
+                  alt="Etherscan Icon"
+                  className="h-4 w-4"
+                />
 
-  return (
-    <div className="border-b-[1px] border-solid border-b-neutral-300	py-[16px]">
-      <div className="flex items-center justify-between">
-        <div className="relative h-14 w-14">
-          <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded">
-            <img
-              src={
-                image ? optimizeImage(image, 56) : '/niftyapes/placeholder.png'
-              }
-              alt="Bid Image"
-              className="w-[56px] object-contain"
-              width="56"
-              height="56"
-            />
+                <a
+                  className="hover:underline"
+                  target="_blank"
+                  rel="noreferrer"
+                  href={`${etherscanUri}/tx/${data?.hash}`}
+                >
+                  View Transaction
+                </a>
+              </div>
+            )}
           </div>
-        </div>
-        <div className="flex flex-col">
-          <FormatNativeCrypto maximumFractionDigits={4} amount={listPrice} />
-        </div>
-      </div>
-    </div>
+        ) : (
+          'None'
+        )}
+      </td>
+    </tr>
   )
 }

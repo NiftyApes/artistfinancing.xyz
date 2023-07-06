@@ -1,22 +1,21 @@
 import { useLoans } from '@niftyapes/sdk'
-import { useMediaQuery } from '@react-hookz/web'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import LoadingIcon from 'components/LoadingIcon'
 import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { Address } from 'wagmi'
-import {
-  UserActiveLoansMobileRow,
-  UserActiveLoansRow,
-} from './UserActiveLoansRow'
+import { UserActiveLoansRow } from './UserActiveLoansRow'
 
 const UserActiveLoansTable: FC = () => {
   const router = useRouter()
-  const isMobile = useMediaQuery('only screen and (max-width : 730px)')
   const { address } = router.query
 
-  const { data: loans = [], isLoading } = useLoans({
+  const {
+    data: loans = [],
+    isLoading,
+    refetch: refetchLoans,
+  } = useLoans({
     seller: address as Address,
   })
 
@@ -52,63 +51,54 @@ const UserActiveLoansTable: FC = () => {
           No offers yet
         </div>
       )}
-      {isMobile
-        ? loans.map((loan, index) => {
-            const token = data.find(
-              (token) =>
-                isEqualAddress(
-                  token?.token?.contract,
-                  loan.offer.offer.nftContractAddress
-                ) && token?.token?.tokenId === loan.offer.offer.nftId
-            )
+      {loans.length > 0 && (
+        <table className="min-w-full table-auto dark:divide-neutral-600">
+          <thead className="bg-white dark:bg-black">
+            <tr className="border-b border-gray-700">
+              {[
+                'Item',
+                'Price',
+                'APR',
+                'Next payment',
+                'Principal Remaining',
+                'Status',
+                'Action',
+              ].map((item) => (
+                <th
+                  key={item}
+                  scope="col"
+                  className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-gray-500"
+                >
+                  {item}
+                </th>
+              ))}
+              <th scope="col" className="relative px-6 py-3">
+                <span className="sr-only">Cancel</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {loans.map((loan, index) => {
+              const token = data.find(
+                (token) =>
+                  isEqualAddress(
+                    token?.token?.contract,
+                    loan.offer.offer.nftContractAddress
+                  ) && token?.token?.tokenId === loan.offer.offer.nftId
+              )
 
-            return (
-              <UserActiveLoansMobileRow key={index} loan={loan} token={token} />
-            )
-          })
-        : loans.length > 0 && (
-            <table className="min-w-full table-auto dark:divide-neutral-600">
-              <thead className="bg-white dark:bg-black">
-                <tr className="border-b border-gray-700">
-                  {[
-                    'Item',
-                    'Price',
-                    'APR',
-                    'Next payment',
-                    'Principal Remaining',
-                    'Seize Asset',
-                    'Status',
-                  ].map((item) => (
-                    <th
-                      key={item}
-                      scope="col"
-                      className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-gray-500"
-                    >
-                      {item}
-                    </th>
-                  ))}
-                  <th scope="col" className="relative px-6 py-3">
-                    <span className="sr-only">Cancel</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {loans.map((loan, index) => {
-                  const token = data.find(
-                    (token) =>
-                      isEqualAddress(
-                        token?.token?.contract,
-                        loan.offer.offer.nftContractAddress
-                      ) && token?.token?.tokenId === loan.offer.offer.nftId
-                  )
-
-                  return (
-                    <UserActiveLoansRow key={index} loan={loan} token={token} />
-                  )
-                })}
-              </tbody>
-            </table>
-          )}
+              return (
+                <UserActiveLoansRow
+                  key={index}
+                  loan={loan}
+                  token={token}
+                  refetchLoans={refetchLoans}
+                />
+              )
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   )
 }
