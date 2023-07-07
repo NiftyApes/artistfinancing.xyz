@@ -3,6 +3,7 @@ import {
   BuyWithFinancingModal,
   CreateOfferModal,
   useOffers,
+  useSellerFinancingContract,
 } from '@niftyapes/sdk'
 import { useMediaQuery } from '@react-hookz/web'
 import { ListModal } from '@reservoir0x/reservoir-kit-ui'
@@ -44,6 +45,9 @@ const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
 
   const router = useRouter()
 
+  const { address: sellerFinancingContractAddress } =
+    useSellerFinancingContract()
+
   const singleColumnBreakpoint = useMediaQuery('(max-width: 640px)')
 
   const offers = useOffers({
@@ -54,6 +58,9 @@ const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
   if (!token) return null
   if (!CHAIN_ID) return null
 
+  const isLoanTicket: boolean =
+    token?.token?.contract.toLowerCase() ===
+    sellerFinancingContractAddress.toLowerCase()
   const isOwner =
     token?.token?.owner?.toLowerCase() === account?.address?.toLowerCase()
   const imageSize = singleColumnBreakpoint ? 533 : 250
@@ -156,7 +163,7 @@ const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
         <div className="border-1 group mb-4 ml-4 mr-4 transform-gpu overflow-hidden">
           <div
             className={
-              !hasActiveOffers && !isOwner
+              (!hasActiveOffers && !isOwner) || isLoanTicket
                 ? 'opacity-100'
                 : 'group-hover-ease-out opacity-100 transition-all group-hover:opacity-[0]'
             }
@@ -182,7 +189,7 @@ const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
             </div>
           )}
 
-          {isOwner && (
+          {isOwner && !isLoanTicket && (
             <div
               className={
                 'absolute -bottom-[40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'

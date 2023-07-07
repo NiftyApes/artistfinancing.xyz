@@ -79,6 +79,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
 
   const tokens = tokenData.data
   const token = tokens?.[0] || { token: tokenDetails }
+
   const checkUserOwnership = token.token?.kind === 'erc1155'
   const { data: userTokens } = useUserTokens(
     checkUserOwnership ? account.address : undefined,
