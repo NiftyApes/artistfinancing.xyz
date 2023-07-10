@@ -1,35 +1,19 @@
-import LoadingIcon from 'components/LoadingIcon'
-import Toast from 'components/Toast'
-import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
-import { ComponentProps, FC } from 'react'
-import { FiAlertCircle } from 'react-icons/fi'
-import { Loan, useLoans } from '@niftyapes/sdk'
-import { OfferDetails } from '@niftyapes/sdk'
+import { Loan, OfferDetails, useLoans } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
+import LoadingIcon from 'components/LoadingIcon'
+import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
 import { format } from 'date-fns'
+import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { processLoan } from 'lib/niftyapes/processLoan'
 import { optimizeImage } from 'lib/optmizeImage'
+import { FC } from 'react'
 import { useAccount } from 'wagmi'
 import { processOffer } from '../../lib/niftyapes/processOffer'
 import FormatNativeCrypto from '../FormatNativeCrypto'
-import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 
-type Props = {
-  isOwner: boolean
-  collectionIds?: string[]
-  modal: {
-    isInTheWrongNetwork: boolean | undefined
-    setToast: (data: ComponentProps<typeof Toast>['data']) => any
-  }
-  showActive?: boolean
-}
+type Props = {}
 
-const UserUpcomingPaymentsTable: FC<Props> = ({
-  modal,
-  collectionIds,
-  showActive,
-  isOwner,
-}) => {
+const UserUpcomingPaymentsTable: FC<Props> = () => {
   const { address } = useAccount()
   const { data: loans, isLoading } = useLoans({ buyer: address })
 
@@ -52,16 +36,6 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
 
   return (
     <div className="mb-11 overflow-x-auto">
-      {!showActive && (
-        <div className="flex items-center rounded-lg bg-[#F5F5F5] p-4 text-sm dark:bg-[#262626]">
-          <FiAlertCircle className="mr-2 h-4 w-4 shrink-0 text-[#A3A3A3] dark:text-white" />
-          <span>
-            An inactive listing is a listing of your NFT that was never canceled
-            and is still fulfillable should that item be returned to your
-            wallet.
-          </span>
-        </div>
-      )}
       {!activeLoans ||
         (activeLoans.length === 0 && (
           <div className="mt-14 flex flex-col items-center justify-center text-[#525252] dark:text-white">
@@ -75,7 +49,7 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
               alt="No listings"
               className="mb-10 hidden dark:block"
             />
-            No {showActive ? 'active' : 'inactive'} loans yet
+            No active loans yet
           </div>
         ))}
       {activeLoans && activeLoans.length > 0 && (
@@ -116,7 +90,6 @@ const UserUpcomingPaymentsTable: FC<Props> = ({
 
               return (
                 <UpcomingPaymentsTableRow
-                  buyerNft={item.buyerNft}
                   isOwner={true}
                   key={index}
                   loan={item.loan}
@@ -145,19 +118,11 @@ type LoansRowProps = {
     periodEndTimestamp: number
     periodBeginTimestamp: number
   }
-  buyerNft: {
-    tokenId: string
-  }
   offer: OfferDetails
   token: ReturnType<typeof useTokens>['data'][0]
 }
 
-const UpcomingPaymentsTableRow = ({
-  loan,
-  buyerNft,
-  offer,
-  token,
-}: LoansRowProps) => {
+const UpcomingPaymentsTableRow = ({ loan, offer, token }: LoansRowProps) => {
   const { apr, listPrice, image, collectionName, tokenName } = processOffer(
     offer,
     token
