@@ -1,9 +1,9 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { paths, setParams } from '@reservoir0x/reservoir-sdk'
 import Layout from 'components/Layout'
-import UserActiveLoansTab from 'components/tables/UserActiveLoansTab'
-import UserFinancingOffersTab from 'components/tables/UserFinancingOffersTab'
-import UserUpcomingPaymentsTab from 'components/tables/UserUpcomingPaymentsTab'
+import UserActiveLoansTable from 'components/tables/UserActiveLoansTable'
+import UserFinancingOffersTable from 'components/tables/UserFinancingOffersTable'
+import UserUpcomingPaymentsTable from 'components/tables/UserUpcomingPaymentsTable'
 import UserTokensGrid from 'components/UserTokensGrid'
 import useMounted from 'hooks/useMounted'
 import { toggleOnItem } from 'lib/router'
@@ -15,7 +15,7 @@ import {
 } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Address, useAccount, useEnsAvatar, useEnsName } from 'wagmi'
+import { useAccount } from 'wagmi'
 import Footer from '../../components/Footer'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
@@ -38,20 +38,6 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
   if (!address) {
     throw 'No address set'
   }
-
-  const { data: ensAvatar } = useEnsAvatar({
-    address: address as Address,
-  })
-
-  const { data: ensName } = useEnsName({
-    address: address as Address,
-    onSettled(data, error) {
-      console.log('Settled', { data, error })
-    },
-    onError(error) {
-      console.log('Error', error)
-    },
-  })
 
   if (!CHAIN_ID) {
     console.debug({ CHAIN_ID })
@@ -103,17 +89,17 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
             </Tabs.Content>
             {isOwner && (
               <Tabs.Content value="upcoming_payments" className="col-span-full">
-                <UserUpcomingPaymentsTab />
+                <UserUpcomingPaymentsTable />
               </Tabs.Content>
             )}
             {isOwner && (
               <Tabs.Content value="manage_listings" className="col-span-full">
-                <UserFinancingOffersTab />
+                <UserFinancingOffersTable />
               </Tabs.Content>
             )}
             {isOwner && (
               <Tabs.Content value="active_loans" className="col-span-full">
-                <UserActiveLoansTab />
+                <UserActiveLoansTable />
               </Tabs.Content>
             )}
           </Tabs.Root>
