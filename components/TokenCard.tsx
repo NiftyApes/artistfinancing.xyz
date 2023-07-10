@@ -171,7 +171,7 @@ const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
             <TokenCardOwner details={token} />
           </div>
 
-          {hasActiveOffers && !isOwner && (
+          {hasActiveOffers && !isOwner && !isLoanTicket && (
             <div
               className={
                 'absolute -bottom-[40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
