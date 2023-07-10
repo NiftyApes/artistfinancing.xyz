@@ -1678,10 +1678,10 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-13.1.2.tgz#c7e75033e8b8f497768c7b462ac642830141bb00"
   integrity sha512-avsyveEvcvH42PvKjR4Pb8JlLttuGURr2H3ZhS2b85pHOiZ7yjH3rMUoGnNzuLMApyxYaCvd4MedPrLhnNhkog==
 
-"@niftyapes/sdk@^1.0.30":
-  version "1.0.30"
-  resolved "https://registry.yarnpkg.com/@niftyapes/sdk/-/sdk-1.0.30.tgz#de9537ea9fb40e404cb8bf50918b58a984ae03bb"
-  integrity sha512-k4fQOkHO1VnSgQTrsTaLmGJWcuK2XGGpKGWNDp0yqqBKr6U6HJvyr6AvXqcc0PTHR7KjJMpUG8LwWKRdsa7fSg==
+"@niftyapes/sdk@1.0.35":
+  version "1.0.35"
+  resolved "https://registry.yarnpkg.com/@niftyapes/sdk/-/sdk-1.0.35.tgz#506ab795cbb8ed51a83eb076d9f07a4e00ed2054"
+  integrity sha512-ZYxlKGPuLZ0Cy8J9KAHTmm9gp3Xu8YiJpHYj0FQhc3TNClEFfYnT7ts3CmiM5hzMAQIz+55nWktiasskYhquzw==
   dependencies:
     "@radix-ui/react-accordion" "^1.1.1"
     "@radix-ui/react-checkbox" "^1.0.3"

@@ -2,6 +2,7 @@ import {
   Address,
   BuyWithFinancingModal,
   CreateOfferModal,
+  useSellerFinancingContract,
   useUnderlyingNFTOwner,
 } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
@@ -34,6 +35,12 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
     token?.token?.tokenId
   )
 
+  const { address: sellerFinancingContractAddress } =
+    useSellerFinancingContract()
+  const isLoanTicket: boolean =
+    token?.token?.contract.toLowerCase() ===
+    sellerFinancingContractAddress.toLowerCase()
+
   if (!isMounted || !token) {
     return null
   }
@@ -47,6 +54,10 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
       : '',
     contractAddress: token.token?.contract! as Address,
     collectionName: token.token?.collection?.name!,
+  }
+
+  if (isLoanTicket) {
+    return <>Active Loan...</>
   }
 
   return (
