@@ -1,20 +1,18 @@
+import { Offer, useCancelOffer, useOffers } from '@niftyapes/sdk'
+import { useTokens } from '@reservoir0x/reservoir-kit-ui'
+import Button from 'components/Button'
+import FormatNativeCrypto from 'components/FormatNativeCrypto'
+import LoadingIcon from 'components/LoadingIcon'
+import isEqualAddress from 'lib/niftyapes/isEqualAddress'
+import { processOffer } from 'lib/niftyapes/processOffer'
+import { optimizeImage } from 'lib/optmizeImage'
+import { useRouter } from 'next/router'
 import { FC, useEffect } from 'react'
 import { useQueryClient } from 'react-query'
-import { useRouter } from 'next/router'
-import { useTokens } from '@reservoir0x/reservoir-kit-ui'
-import { useMediaQuery } from '@react-hookz/web'
-import { optimizeImage } from 'lib/optmizeImage'
-import { processOffer } from 'lib/niftyapes/processOffer'
-import LoadingIcon from 'components/LoadingIcon'
-import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import { useWaitForTransaction } from 'wagmi'
-import { Offer, useOffers, useCancelOffer } from '@niftyapes/sdk'
-import Button from 'components/Button'
-import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 
 const UserFinancingOffersTable: FC = () => {
   const router = useRouter()
-  const isMobile = useMediaQuery('only screen and (max-width : 730px)')
   const { address } = router.query
 
   const { data: offers = [], isLoading } = useOffers({
@@ -54,75 +52,57 @@ const UserFinancingOffersTable: FC = () => {
           No offers yet
         </div>
       )}
-      {isMobile
-        ? offers.map((offer, index) => {
-            const token = tokens.data.find(
-              (token) =>
-                isEqualAddress(
-                  token?.token?.contract,
-                  offer.offer.nftContractAddress
-                ) && token?.token?.tokenId === offer.offer.nftId
-            )
+      {offers.length > 0 && (
+        <table className="min-w-full table-auto dark:divide-neutral-600">
+          <thead className="bg-white dark:bg-black">
+            <tr className="border-b border-gray-700">
+              {[
+                'Item',
+                'Price',
+                'Down payment',
+                'Min. principal payment',
+                'Pay period',
+                'APR',
+                'Duration',
+                'Expires',
+              ].map((item) => (
+                <th
+                  key={item}
+                  scope="col"
+                  className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-gray-500"
+                >
+                  {item}
+                </th>
+              ))}
+              <th scope="col" className="relative px-6 py-3">
+                <span className="sr-only">Cancel</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {offers.map((listing: Offer, index) => {
+              const { offer, signature, status } = listing
+              const token = tokens.data.find(
+                (token) =>
+                  isEqualAddress(
+                    token?.token?.contract,
+                    offer.nftContractAddress
+                  ) && token?.token?.tokenId === offer.nftId
+              )
 
-            return (
-              <UserFinancingOffersTableMobileRow
-                key={`${offer?.signature}-${index}`}
-                offer={offer.offer}
-                token={token}
-              />
-            )
-          })
-        : offers.length > 0 && (
-            <table className="min-w-full table-auto dark:divide-neutral-600">
-              <thead className="bg-white dark:bg-black">
-                <tr className="border-b border-gray-700">
-                  {[
-                    'Item',
-                    'Price',
-                    'Down payment',
-                    'Min. principal payment',
-                    'Pay period',
-                    'APR',
-                    'Duration',
-                    'Expires',
-                  ].map((item) => (
-                    <th
-                      key={item}
-                      scope="col"
-                      className="px-6 py-3 text-left text-sm font-medium text-neutral-600 dark:text-gray-500"
-                    >
-                      {item}
-                    </th>
-                  ))}
-                  <th scope="col" className="relative px-6 py-3">
-                    <span className="sr-only">Cancel</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {offers.map((listing: Offer, index) => {
-                  const { offer, signature, status } = listing
-                  const token = tokens.data.find(
-                    (token) =>
-                      isEqualAddress(
-                        token?.token?.contract,
-                        offer.nftContractAddress
-                      ) && token?.token?.tokenId === offer.nftId
-                  )
-
-                  return (
-                    <UserListingsTableRow
-                      key={`${signature}-${index}`}
-                      signature={signature}
-                      offer={offer}
-                      status={status}
-                      token={token}
-                    />
-                  )
-                })}
-              </tbody>
-            </table>
-          )}
+              return (
+                <UserListingsTableRow
+                  key={`${signature}-${index}`}
+                  signature={signature}
+                  offer={offer}
+                  status={status}
+                  token={token}
+                />
+              )
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   )
 }
@@ -242,59 +222,6 @@ const UserListingsTableRow = ({
         )}
       </td>
     </tr>
-  )
-}
-
-type UserOffersMobileRowProps = {
-  offer: Offer['offer']
-  token: ReturnType<typeof useTokens>['data'][0]
-}
-
-const UserFinancingOffersTableMobileRow = ({
-  offer,
-  token,
-}: UserOffersMobileRowProps) => {
-  const { listPrice, expirationRelative, image, tokenName, collectionName } =
-    processOffer(offer, token)
-
-  return (
-    <div className="border-b-[1px] border-solid border-b-neutral-300	py-[16px]">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="relative h-14 w-14">
-            <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded">
-              <img
-                src={
-                  image
-                    ? optimizeImage(image, 56)
-                    : '/niftyapes/placeholder.png'
-                }
-                alt="Bid Image"
-                className="w-[56px] object-contain"
-                width="56"
-                height="56"
-              />
-            </div>
-          </div>
-          <div>
-            <div className="reservoir-h6 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap text-start font-headings text-sm dark:text-white">
-              {tokenName ? tokenName : collectionName}
-            </div>
-            {tokenName && (
-              <div className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap text-xs text-neutral-600 dark:text-neutral-300">
-                {collectionName}
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="flex flex-col">
-          <FormatNativeCrypto maximumFractionDigits={4} amount={listPrice} />
-        </div>
-      </div>
-      <div className="flex items-center justify-between pt-4">
-        <div className="text-xs font-light text-neutral-600 dark:text-neutral-300">{`Expires ${expirationRelative}`}</div>
-      </div>
-    </div>
   )
 }
 
