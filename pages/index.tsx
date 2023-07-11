@@ -25,7 +25,6 @@ const REDIRECT_HOMEPAGE = process.env.NEXT_PUBLIC_REDIRECT_HOMEPAGE
 const META_TITLE = process.env.NEXT_PUBLIC_META_TITLE
 const META_DESCRIPTION = process.env.NEXT_PUBLIC_META_DESCRIPTION
 const META_IMAGE = process.env.NEXT_PUBLIC_META_OG_IMAGE
-const TAGLINE = process.env.NEXT_PUBLIC_TAGLINE
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
 const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
 const COLLECTION_SET_ID = process.env.NEXT_PUBLIC_COLLECTION_SET_ID
@@ -54,13 +53,11 @@ const metadata = {
 }
 
 const Home: NextPage<Props> = ({ fallback }) => {
-  const isSmallDevice = useMediaQuery('only screen and (max-width : 600px)')
   const router = useRouter()
 
   const title = META_TITLE && metadata.title(META_TITLE)
   const description = META_DESCRIPTION && metadata.description(META_DESCRIPTION)
   const image = metadata.image(META_IMAGE)
-  const tagline = metadata.tagline(TAGLINE)
 
   useEffect(() => {
     if (REDIRECT_HOMEPAGE && COLLECTION) {
@@ -84,10 +81,13 @@ const Home: NextPage<Props> = ({ fallback }) => {
         {description}
         {image}
       </Head>
-      <header className="col-span-full mb-12 mt-[66px] px-4 md:mt-40 lg:px-0">
-        <h1 className="reservoir-h1 text-center dark:text-white">{tagline}</h1>
-        <h3 className="reservoir-h3 text-center dark:text-white">
-          With terms that don&#39;t suck
+      <header className="col-span-full mt-20 mb-20 px-4">
+        <h1 className="mb-4 text-center text-4xl font-semibold text-white">
+          Buy <span className="font-light">with</span> Financing
+        </h1>
+        <h3 className="text-center text-white">
+          Collect art <span className="text-gray-500">with</span> flexible
+          payment options
         </h3>
       </header>
       <GlobalModal
