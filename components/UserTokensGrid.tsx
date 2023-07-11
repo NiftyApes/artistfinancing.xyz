@@ -1,10 +1,11 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import LoadingCard from './LoadingCard'
-import { useTokens, useUserTokens } from '@reservoir0x/reservoir-kit-ui'
+import { useUserTokens } from '@reservoir0x/reservoir-kit-ui'
 import { useInView } from 'react-intersection-observer'
 import TokenCard from './TokenCard'
 import { paths } from '@reservoir0x/reservoir-sdk'
-import { useUnderlyingNFTOwner, useOffers } from '@niftyapes/sdk'
+import { useOffers, useSellerFinancingContract } from '@niftyapes/sdk'
+import isEqualAddress from '../lib/niftyapes/isEqualAddress'
 
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
 const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
@@ -32,7 +33,9 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
     userTokensParams.collection = COLLECTION
   }
 
-  const { data: offersData, isLoading: isLoadingOffers } = useOffers({})
+  const { address: sellerFinancingContractAddress } =
+    useSellerFinancingContract()
+  const [showTicketLoanNFT, setShowTicketLoanNFT] = useState(false)
 
   const userTokens = useUserTokens(owner, userTokensParams, {
     fallbackData: [fallback.tokens],
@@ -56,21 +59,6 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
   } = userTokens
   const { ref, inView } = useInView()
 
-  // TODO: We do not need to fetch underlying tokens since
-  // the seller financing tickets contain the token metadata.
-  //
-  // const { ownedNftTokens } = useUnderlyingNFTOwner()
-  //
-  // const {
-  //   data: entitledTokens,
-  //   isFetchingPage: isFetchingPageTokens,
-  //   isFetchingInitialData: isFetchingInitialDataTokens,
-  // } = useTokens({
-  //   tokens: ownedNftTokens,
-  // })
-
-  // const isLoadingTokens = isFetchingPageTokens || isFetchingInitialDataTokens
-
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage()
@@ -83,59 +71,74 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
     )
   }
 
+  // Filter out loan tickets
+  const filteredTokens = tokens.filter((tkn) => {
+    if (!showTicketLoanNFT && tkn?.token?.contract) {
+      return !isEqualAddress(
+        tkn?.token?.contract.toLowerCase(),
+        sellerFinancingContractAddress
+      )
+    } else {
+      return true
+    }
+  })
+
   return (
-    <div className="mx-auto mb-8 grid max-w-[2400px] gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
-      {isFetchingInitialData || isLoadingOffers ? (
-        // {isFetchingInitialData || isLoadingTokens || isLoadingOffers ? (
-        Array(10)
-          .fill(null)
-          .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
-      ) : (
-        <>
-          {/* {entitledTokens?.map((token) => ( */}
-          {/*   <TokenCard */}
-          {/*     key={`${token?.token?.contract}${token?.token?.tokenId}`} */}
-          {/*     token={token} */}
-          {/*     collectionImage={undefined} */}
-          {/*     mutate={mutate} */}
-          {/*   /> */}
-          {/* ))} */}
-          {tokens?.map((token) => {
-            return (
-              <TokenCard
-                token={{
-                  token: {
-                    contract: token?.token?.contract || '',
-                    tokenId: token?.token?.tokenId || '',
-                    owner,
-                    ...token?.token,
-                  },
-                  market: {
-                    floorAsk: { ...token?.ownership?.floorAsk },
-                    topBid: { ...token?.token?.topBid },
-                  },
-                }}
-                key={`${token?.token?.contract}${token?.token?.tokenId}`}
-                mutate={mutate}
-                collectionImage={token?.token?.collection?.imageUrl}
-                collection={token?.token?.collection}
-              />
-            )
-          })}
-        </>
-      )}
-      {isFetchingPage ? (
-        Array(10)
-          .fill(null)
-          .map((_, index) => {
-            if (index === 0) {
+    <div>
+      <label className="mb-5 flex items-center space-x-3">
+        <input
+          type="checkbox"
+          onClick={(event) => setShowTicketLoanNFT((prevState) => !prevState)}
+          className="h-6 w-6 rounded-md border border-gray-300 checked:border-transparent focus:outline-none"
+        ></input>
+        <span className="font-medium text-gray-900 text-white">
+          Show loan NFTs
+        </span>
+      </label>
+      <div className="mx-auto mb-8 grid max-w-[2400px] gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
+        {isFetchingInitialData ? (
+          Array(10)
+            .fill(null)
+            .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
+        ) : (
+          <>
+            {filteredTokens?.map((token) => {
+              return (
+                <TokenCard
+                  token={{
+                    token: {
+                      contract: token?.token?.contract || '',
+                      tokenId: token?.token?.tokenId || '',
+                      owner,
+                      ...token?.token,
+                    },
+                    market: {
+                      floorAsk: { ...token?.ownership?.floorAsk },
+                      topBid: { ...token?.token?.topBid },
+                    },
+                  }}
+                  key={`${token?.token?.contract}${token?.token?.tokenId}`}
+                  mutate={mutate}
+                  collectionImage={token?.token?.collection?.imageUrl}
+                  collection={token?.token?.collection}
+                />
+              )
+            })}
+          </>
+        )}
+        {isFetchingPage ? (
+          Array(10)
+            .fill(null)
+            .map((_, index) => {
+              if (index === 0) {
+                return <LoadingCard key={`loading-card-${index}`} />
+              }
               return <LoadingCard key={`loading-card-${index}`} />
-            }
-            return <LoadingCard key={`loading-card-${index}`} />
-          })
-      ) : (
-        <span ref={ref}></span>
-      )}
+            })
+        ) : (
+          <span ref={ref}></span>
+        )}
+      </div>
     </div>
   )
 }
