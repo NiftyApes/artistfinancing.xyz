@@ -3,6 +3,7 @@ import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import Button from 'components/Button'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import LoadingIcon from 'components/LoadingIcon'
+import { useEtherscanUri } from 'hooks/useEtherscan'
 import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { processOffer } from 'lib/niftyapes/processOffer'
 import { optimizeImage } from 'lib/optmizeImage'
@@ -10,6 +11,8 @@ import { useRouter } from 'next/router'
 import { FC, useEffect } from 'react'
 import { useQueryClient } from 'react-query'
 import { useWaitForTransaction } from 'wagmi'
+
+const DARK_MODE = process.env.NEXT_PUBLIC_DARK_MODE
 
 const UserFinancingOffersTable: FC = () => {
   const router = useRouter()
@@ -34,6 +37,17 @@ const UserFinancingOffersTable: FC = () => {
       </div>
     )
   }
+
+  // Sort so that "ACTIVE" loans are at the top.
+  offers.sort((a, b) => {
+    if (a.status === 'ACTIVE' && b.status !== 'ACTIVE') {
+      return -1
+    } else if (b.status === 'ACTIVE' && a.status !== 'ACTIVE') {
+      return 1
+    } else {
+      return 0
+    }
+  })
 
   return (
     <div className="mb-11 overflow-x-auto">
@@ -65,6 +79,8 @@ const UserFinancingOffersTable: FC = () => {
                 'APR',
                 'Duration',
                 'Expires',
+                'Status',
+                'Action',
               ].map((item) => (
                 <th
                   key={item}
@@ -134,20 +150,44 @@ const UserListingsTableRow = ({
     collectionName,
   } = processOffer(offer, token)
 
-  const { data, write } = useCancelOffer({
+  const {
+    data,
+    isLoading: isWriteLoading,
+    write,
+  } = useCancelOffer({
     offer,
     signature,
+    enabled: status === 'ACTIVE',
   })
 
-  const { isSuccess, isLoading } = useWaitForTransaction({
-    hash: data?.hash,
-  })
+  const {
+    isLoading: isTxLoading,
+    isSuccess: isTxSuccess,
+    isError: isTxError,
+  } = useWaitForTransaction({ hash: data?.hash })
 
+  const etherscanUri = useEtherscanUri()
+  const etherscanLogo = DARK_MODE
+    ? '/icons/etherscan-logo-light-circle.svg'
+    : '/icons/etherscan-logo-circle.svg'
+
+  // Refetch offers to refresh the page after successful "Cancel Offer" call
   useEffect(() => {
     setTimeout(() => {
       queryClient.invalidateQueries({ queryKey: ['offers'] })
-    }, 3000)
-  }, [isSuccess])
+    }, 1000)
+  }, [isTxSuccess, isTxError])
+
+  const isLoading = isWriteLoading || isTxLoading
+
+  let cancelOfferBtnText = 'Cancel Offer'
+  if (isLoading) {
+    cancelOfferBtnText = 'Transaction Submitted'
+  } else if (isTxSuccess) {
+    cancelOfferBtnText = 'Transaction Success'
+  } else if (isTxError) {
+    cancelOfferBtnText = 'Transaction Error'
+  }
 
   return (
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
@@ -206,19 +246,47 @@ const UserListingsTableRow = ({
       {/* EXPIRES */}
       <td className="whitespace-nowrap px-6 py-4">{expirationRelative}</td>
 
-      {/* CANCEL OFFER */}
+      {/* STATUS */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         {status === 'CANCELLED' && 'Cancelled'}
-        {status === 'USED_TO_EXECUTE_LOAN' && 'Active Loan'}
-        {status === 'ACTIVE' && (
-          <Button
-            textCase="capitalize"
-            variant="secondary"
-            isLoading={isLoading}
-            onClick={() => write?.()}
-          >
-            Cancel Offer
-          </Button>
+        {status === 'USED_TO_EXECUTE_LOAN' && 'Used to execute loan'}
+        {status === 'ACTIVE' && 'Active'}
+      </td>
+
+      {/* ACTION */}
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+        {status === 'ACTIVE' ? (
+          <div className="flex w-64 flex-col items-center space-y-2">
+            <Button
+              textCase="capitalize"
+              variant="secondary"
+              isLoading={isLoading}
+              disabled={isLoading || isTxError || isTxSuccess}
+              onClick={() => write?.()}
+            >
+              {cancelOfferBtnText}
+            </Button>
+            {data?.hash && (
+              <div className="flex items-center space-x-2">
+                <img
+                  src={etherscanLogo}
+                  alt="Etherscan Icon"
+                  className="h-4 w-4"
+                />
+
+                <a
+                  className="hover:underline"
+                  target="_blank"
+                  rel="noreferrer"
+                  href={`${etherscanUri}/tx/${data?.hash}`}
+                >
+                  View Transaction
+                </a>
+              </div>
+            )}
+          </div>
+        ) : (
+          'None'
         )}
       </td>
     </tr>
