@@ -43,6 +43,17 @@ const UserActiveLoansTable: FC = () => {
     )
   }
 
+  // Sort so that "ACTIVE" loans are at the top.
+  loans.sort((a, b) => {
+    if (a.status === 'ACTIVE' && b.status !== 'ACTIVE') {
+      return -1
+    } else if (b.status === 'ACTIVE' && a.status !== 'ACTIVE') {
+      return 1
+    } else {
+      return 0
+    }
+  })
+
   return (
     <div className="mb-11 overflow-x-auto">
       {loans.length === 0 && (
@@ -139,6 +150,7 @@ const UserActiveLoansRow: FC<UserActiveLoansRowProps> = ({
   } = useSeizeAsset({
     nftContractAddress: loan.offer.offer.nftContractAddress,
     nftId: BigNumber.from(loan.offer.offer.nftId),
+    enabled: inDefault && loan.status === 'ACTIVE',
   })
 
   const {
@@ -222,8 +234,8 @@ const UserActiveLoansRow: FC<UserActiveLoansRowProps> = ({
 
       {/* ACTION */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        {inDefault ? (
-          <div className="flex flex-col items-center space-y-2">
+        {inDefault && loan.status === 'ACTIVE' ? (
+          <div className="flex w-64 flex-col items-center space-y-2">
             <Button
               textCase="capitalize"
               variant="secondary"
