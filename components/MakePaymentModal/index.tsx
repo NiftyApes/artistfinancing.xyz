@@ -17,7 +17,7 @@ import {
 import { format } from 'date-fns'
 import { AiOutlineArrowRight } from 'react-icons/ai'
 import { SiEthereum } from 'react-icons/si'
-import PaymentModalTermStats from './PaymentModalTermStats'
+import PaymentModalTermStats from './TermStats'
 import { BigNumber } from 'ethers'
 import { OfferDetails } from '@niftyapes/sdk'
 import { useEtherscanUri } from '../../hooks/useEtherscan'

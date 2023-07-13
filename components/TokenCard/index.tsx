@@ -6,7 +6,7 @@ import {
   useSellerFinancingContract,
 } from '@niftyapes/sdk'
 import { useMediaQuery } from '@react-hookz/web'
-import NiftyApesOfferDetails from 'components/niftyapes/TokeCardOfferDetails'
+import NiftyApesOfferDetails from './TokenCardOfferDetails'
 import useTokens from 'hooks/useTokens'
 import { optimizeImage } from 'lib/optmizeImage'
 import Image from 'next/legacy/image'
@@ -16,7 +16,7 @@ import { FC } from 'react'
 import { MutatorCallback } from 'swr'
 import { Collection } from 'types/reservoir'
 import { useAccount } from 'wagmi'
-import TokenCardOwner from './niftyapes/TokenCardOwner'
+import TokenCardOwner from './TokenCardOwner'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 

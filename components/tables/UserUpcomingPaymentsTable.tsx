@@ -1,7 +1,7 @@
 import { Loan, OfferDetails, useLoans } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import LoadingIcon from 'components/LoadingIcon'
-import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
+import MakePaymentModal from 'components/MakePaymentModal'
 import { format } from 'date-fns'
 import isEqualAddress from 'lib/isEqualAddress'
 import { processLoan } from 'lib/processLoan'
