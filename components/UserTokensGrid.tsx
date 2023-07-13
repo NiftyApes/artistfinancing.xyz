@@ -91,7 +91,7 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
           onClick={() => setShowTicketLoanNFT((prevState) => !prevState)}
           className="h-6 w-6 rounded-md border border-gray-300 checked:border-transparent focus:outline-none"
         ></input>
-        <span className="font-medium text-gray-900">Show loan NFTs</span>
+        <span className="font-medium text-white">Show loan NFTs</span>
       </label>
       <div className="mx-auto mb-8 grid max-w-[2400px] gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
         {isFetchingInitialData ? (
