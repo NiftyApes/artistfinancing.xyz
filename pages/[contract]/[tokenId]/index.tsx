@@ -1,7 +1,7 @@
 import { useTokens, useUserTokens } from '@reservoir0x/reservoir-kit-ui'
 import { paths } from '@reservoir0x/reservoir-sdk'
 import Layout from 'components/Layout'
-import EthAccount from 'components/niftyapes/EthAccount'
+import EthAccount from 'components/EthAccount'
 import OfferSection from 'components/OfferSection'
 import TokenInfo from 'components/token/TokenInfo'
 import TokenAttributes from 'components/TokenAttributes'

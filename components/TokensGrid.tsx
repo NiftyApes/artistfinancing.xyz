@@ -1,18 +1,14 @@
-import { useOffers } from '@niftyapes/sdk'
-import isEqualAddress from 'lib/niftyapes/isEqualAddress'
 import { FC } from 'react'
 import { useInView } from 'react-intersection-observer'
 import Masonry from 'react-masonry-css'
 import { Collection } from 'types/reservoir'
 import useTokens from '../hooks/useTokens'
 import LoadingCard from './LoadingCard'
-import { setToast } from './token/setToast'
 import TokenCard from './TokenCard'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
 type Props = {
-  collectionId: string
   collection?: Collection
   tokens: ReturnType<typeof useTokens>['tokens']
   collectionImage: string | undefined
@@ -21,7 +17,6 @@ type Props = {
 }
 
 const TokensGrid: FC<Props> = ({
-  collectionId,
   collection,
   tokens,
   viewRef,
@@ -30,21 +25,8 @@ const TokensGrid: FC<Props> = ({
 }) => {
   const { data, mutate } = tokens
   const didReachEnd = tokens.isFetchingInitialData || !tokens.hasNextPage
-  const {
-    data: offersData,
-    error,
-    isLoading: isLoadingOffers,
-  } = useOffers({ collection: collectionId })
 
   if (!CHAIN_ID) return null
-
-  if (error) {
-    setToast({
-      kind: 'error',
-      message: 'Please retry by reloading this page.',
-      title: 'Failed to load financing offers',
-    })
-  }
 
   return (
     <Masonry
@@ -62,7 +44,7 @@ const TokensGrid: FC<Props> = ({
       className="masonry-grid"
       columnClassName="masonry-grid_column"
     >
-      {tokens.isFetchingInitialData || isLoading || isLoadingOffers
+      {tokens.isFetchingInitialData || isLoading
         ? Array(20)
             .fill(null)
             .map((_, index) => <LoadingCard key={`loading-card-${index}`} />)
