@@ -6,30 +6,19 @@ import {
   useSellerFinancingContract,
 } from '@niftyapes/sdk'
 import { useMediaQuery } from '@react-hookz/web'
-import { ListModal } from '@reservoir0x/reservoir-kit-ui'
 import NiftyApesOfferDetails from 'components/niftyapes/TokeCardOfferDetails'
 import useTokens from 'hooks/useTokens'
 import { optimizeImage } from 'lib/optmizeImage'
 import Image from 'next/legacy/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { ComponentPropsWithoutRef, FC } from 'react'
+import { FC } from 'react'
 import { MutatorCallback } from 'swr'
 import { Collection } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 import TokenCardOwner from './niftyapes/TokenCardOwner'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
-const CURRENCIES = process.env.NEXT_PUBLIC_LISTING_CURRENCIES
-
-type ListingCurrencies = ComponentPropsWithoutRef<
-  typeof ListModal
->['currencies']
-let listingCurrencies: ListingCurrencies = undefined
-
-if (CURRENCIES) {
-  listingCurrencies = JSON.parse(CURRENCIES)
-}
 
 type Props = {
   token?: ReturnType<typeof useTokens>['tokens']['data'][0]
@@ -40,7 +29,7 @@ type Props = {
   mutate: MutatorCallback
 }
 
-const TokenCard: FC<Props> = ({ token, collection, collectionImage }) => {
+const TokenCard: FC<Props> = ({ token, collectionImage }) => {
   const account = useAccount()
 
   const router = useRouter()
