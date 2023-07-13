@@ -1,9 +1,8 @@
-import { Link } from '@chakra-ui/react'
 import { paths } from '@reservoir0x/reservoir-sdk'
+import FeaturedFinancingOffers from 'components/FeaturedFinancingOffers'
 import Footer from 'components/Footer'
 import Layout from 'components/Layout'
-import FeaturedFinancingOffers from 'components/FeaturedFinancingOffers'
-import GlobalModal from 'components/GlobalModal'
+import TermsOfServiceModal from 'components/TermsOfServiceModal'
 import setParams from 'lib/params'
 import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
 import Head from 'next/head'
@@ -89,36 +88,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
           payment options
         </h3>
       </header>
-      <GlobalModal
-        storageKey="TOS_marketplace"
-        actionText="Accept"
-        title="Terms of Services"
-        description={
-          <div>
-            Your use of the NiftyApes App is expressly conditioned on your
-            acceptance of NiftyApes’
-            <Link
-              color="purple.400"
-              target="_blank"
-              href="https://blog.niftyapes.money/legal-privacy-tos/"
-            >
-              &nbsp;Terms of Service&nbsp;
-            </Link>
-            and
-            <Link
-              color="purple.400"
-              target="_blank"
-              href="https://blog.niftyapes.money/legal-privacy-tos/"
-            >
-              &nbsp;Privacy Policy&nbsp;
-            </Link>
-            . By clicking accept and close, you indicate that you have read and
-            agree to the NiftyApes Terms of Service and Privacy Policy, and that
-            you consent to collection, storage and use of your personal
-            information for the purposes set forth in the Privacy Policy.
-          </div>
-        }
-      />
+      <TermsOfServiceModal />
       <div className="col-span-full px-6 md:px-16">
         <FeaturedFinancingOffers />
       </div>
