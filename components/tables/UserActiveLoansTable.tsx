@@ -172,7 +172,9 @@ const UserActiveLoansRow: FC<UserActiveLoansRowProps> = ({
   const isLoading = isWriteLoading || isTxLoading
 
   let seizeAssetBtnText = 'Seize Asset'
-  if (isLoading) {
+  if (isWriteLoading) {
+    seizeAssetBtnText = 'Pending Approval'
+  } else if (isTxLoading) {
     seizeAssetBtnText = 'Transaction Submitted'
   } else if (isTxSuccess) {
     seizeAssetBtnText = 'Transaction Success'

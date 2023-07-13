@@ -79,7 +79,6 @@ const UserFinancingOffersTable: FC = () => {
                 'APR',
                 'Duration',
                 'Expires',
-                'Status',
                 'Action',
               ].map((item) => (
                 <th
@@ -181,7 +180,9 @@ const UserListingsTableRow = ({
   const isLoading = isWriteLoading || isTxLoading
 
   let cancelOfferBtnText = 'Cancel Offer'
-  if (isLoading) {
+  if (isWriteLoading) {
+    cancelOfferBtnText = 'Pending Approval'
+  } else if (isTxLoading) {
     cancelOfferBtnText = 'Transaction Submitted'
   } else if (isTxSuccess) {
     cancelOfferBtnText = 'Transaction Success'
@@ -246,16 +247,11 @@ const UserListingsTableRow = ({
       {/* EXPIRES */}
       <td className="whitespace-nowrap px-6 py-4">{expirationRelative}</td>
 
-      {/* STATUS */}
+      {/* ACTION */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         {status === 'CANCELLED' && 'Cancelled'}
         {status === 'USED_TO_EXECUTE_LOAN' && 'Used to execute loan'}
-        {status === 'ACTIVE' && 'Active'}
-      </td>
-
-      {/* ACTION */}
-      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        {status === 'ACTIVE' ? (
+        {status === 'ACTIVE' && (
           <div className="flex w-64 flex-col items-center space-y-2">
             <Button
               textCase="capitalize"
@@ -285,8 +281,6 @@ const UserListingsTableRow = ({
               </div>
             )}
           </div>
-        ) : (
-          'None'
         )}
       </td>
     </tr>
