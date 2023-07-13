@@ -1,5 +1,5 @@
 import { Offer } from '@niftyapes/sdk'
-import { processOffer } from 'lib/niftyapes/processOffer'
+import { processOffer } from 'lib/processOffer'
 
 export default function TokeCardOfferDetails({ offer }: { offer: Offer }) {
   const terms = processOffer(offer.offer)
