@@ -13,6 +13,7 @@ type Props = {
   hideIcon?: boolean
 }
 
+// TODO: Consolidate with 'EthAccount' component.
 const TokenCardEthAccount: FC<Props> = forwardRef<
   HTMLAnchorElement,
   ComponentPropsWithoutRef<FC<Props>>

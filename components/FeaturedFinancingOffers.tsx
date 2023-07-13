@@ -1,17 +1,21 @@
-import { Box, Button, Skeleton, VStack } from '@chakra-ui/react'
+import { useOffers, useSellerFinancingContract } from '@niftyapes/sdk'
 import { useCollections, useTokens } from '@reservoir0x/reservoir-kit-ui'
+import LoadingCard from 'components/LoadingCard'
 import TokenCard from 'components/TokenCard'
-import { useOffers } from '@niftyapes/sdk'
-import isEqualAddress from 'lib/niftyapes/isEqualAddress'
+import isEqualAddress from 'lib/isEqualAddress'
 import { sortBy, uniq, uniqBy } from 'lodash'
 import { useState } from 'react'
 import Masonry from 'react-masonry-css'
 
 export default function FeaturedFinancingOffers() {
-  const [numOffers, setNumOffers] = useState(10) // Show 10 initial offers
+  const [numOffers, setNumOffers] = useState(5) // Show 10 initial offers
   const onShowMore = () => {
     setNumOffers(numOffers + 10)
   }
+
+  const { address: sellerFinancingContractAddress } =
+    useSellerFinancingContract()
+
   const { data: offersData, isLoading: isLoadingOffers } = useOffers({})
 
   const activeOffers = offersData?.filter((offer) => offer.status === 'ACTIVE')
@@ -55,7 +59,9 @@ export default function FeaturedFinancingOffers() {
     .filter(
       ({ offer, token }) =>
         // Filter out offers where creator is not the current NFT owner
-        token && isEqualAddress(offer.offer.creator, token?.token?.owner)
+        token &&
+        isEqualAddress(offer.offer.creator, token?.token?.owner) &&
+        !isEqualAddress(token.token?.contract, sellerFinancingContractAddress)
     )
     .slice(0, numOffers) // Only show numOffers
 
@@ -82,7 +88,7 @@ export default function FeaturedFinancingOffers() {
   })
 
   return (
-    <VStack mb="12" spacing="12" w="full" className="w-full">
+    <div className="mb-12 flex w-full flex-col space-y-12">
       <Masonry
         key="tokensGridMasonry"
         breakpointCols={{
@@ -99,27 +105,25 @@ export default function FeaturedFinancingOffers() {
         columnClassName=""
       >
         {isLoadingOffers || isFetchingTokens
-          ? [...Array(numOffers)].map((_, idx) => (
-              <Skeleton key={idx} rounded="md" height="sm" mb="6" />
-            ))
-          : fullOffers?.map(({ offer, token, collection }, idx) => (
-              <Box mb="12" key={idx}>
+          ? [...Array(numOffers)].map((_, idx) => <LoadingCard key={idx} />)
+          : fullOffers?.map(({ token, collection }, idx) => (
+              <div className="mb-12" key={idx}>
                 <TokenCard
                   token={token}
                   collection={collection}
                   collectionImage={collection?.image}
                   mutate={tokensMutate}
                 />
-              </Box>
+              </div>
             ))}
       </Masonry>
-      <Button
+      <button
+        className="hover:underline"
         hidden={numOffers > Number(fullOffers?.length)}
-        colorScheme={'purple'}
         onClick={onShowMore}
       >
         Show more
-      </Button>
-    </VStack>
+      </button>
+    </div>
   )
 }

@@ -1,8 +1,7 @@
+import { toggleOffItem } from 'lib/router'
 import { toggleOffAttribute, toggleOnAttribute, updateAttribute } from 'lib/url'
 import { useRouter } from 'next/router'
-import { toggleOffItem } from 'lib/router'
-import { FC, MutableRefObject } from 'react'
-import { SWRInfiniteResponse } from 'swr/infinite/dist/infinite'
+import { FC } from 'react'
 
 type Props = {
   children: React.ReactNode
