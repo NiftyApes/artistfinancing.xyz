@@ -1,4 +1,4 @@
-import { useOffers } from '@niftyapes/sdk'
+import { useOffers, useSellerFinancingContract } from '@niftyapes/sdk'
 import { useCollections, useTokens } from '@reservoir0x/reservoir-kit-ui'
 import LoadingCard from 'components/LoadingCard'
 import TokenCard from 'components/TokenCard'
@@ -12,6 +12,10 @@ export default function FeaturedFinancingOffers() {
   const onShowMore = () => {
     setNumOffers(numOffers + 10)
   }
+
+  const { address: sellerFinancingContractAddress } =
+    useSellerFinancingContract()
+
   const { data: offersData, isLoading: isLoadingOffers } = useOffers({})
 
   const activeOffers = offersData?.filter((offer) => offer.status === 'ACTIVE')
@@ -55,7 +59,9 @@ export default function FeaturedFinancingOffers() {
     .filter(
       ({ offer, token }) =>
         // Filter out offers where creator is not the current NFT owner
-        token && isEqualAddress(offer.offer.creator, token?.token?.owner)
+        token &&
+        isEqualAddress(offer.offer.creator, token?.token?.owner) &&
+        !isEqualAddress(token.token?.contract, sellerFinancingContractAddress)
     )
     .slice(0, numOffers) // Only show numOffers
 
