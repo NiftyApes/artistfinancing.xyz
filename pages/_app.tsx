@@ -34,7 +34,6 @@ import 'styles/styreneb.css'
 import { WagmiConfig, configureChains, createClient } from 'wagmi'
 import * as allChains from 'wagmi/chains'
 
-import { ChakraProvider } from '@chakra-ui/react'
 import {
   RainbowKitProvider,
   getDefaultWallets,
@@ -47,7 +46,6 @@ import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 import presetColors from '../colors'
 import { useGoogleAnalytics } from 'hooks/useGoogleAnalytics'
-import chakraTheme from '../theme'
 
 // Imported last so that it does not conflict
 import '@niftyapes/sdk/dist/styles.css'
@@ -109,15 +107,13 @@ function AppWrapper(props: AppProps & { baseUrl: string }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ChakraProvider theme={chakraTheme}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme={defaultTheme}
-          forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
-        >
-          <App {...props} />
-        </ThemeProvider>
-      </ChakraProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme={defaultTheme}
+        forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
+      >
+        <App {...props} />
+      </ThemeProvider>
     </QueryClientProvider>
   )
 }
