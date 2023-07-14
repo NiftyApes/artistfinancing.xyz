@@ -15,6 +15,7 @@ import { SiEthereum } from 'react-icons/si'
 import { useQueryClient } from 'react-query'
 import { useWaitForTransaction } from 'wagmi'
 import FormatNativeCrypto from './FormatNativeCrypto'
+import NumberInput from './NumberInput'
 
 export default function MakePaymentModal({
   loan,
@@ -170,32 +171,19 @@ export default function MakePaymentModal({
                       </div>
                     </div>
 
-                    <div className="flex w-full flex-row items-center justify-between rounded-md p-4">
-                      <div className="flex w-full flex-row items-center gap-4">
-                        <div className="flex flex-row items-center gap-2 text-2xl font-bold">
-                          <SiEthereum />
-                          <p>ETH</p>
-                        </div>
-                        <input
-                          value={formatEther(payment)}
-                          type="number"
-                          onChange={(event) => {
-                            const newPayment: BigNumber = parseEther(
-                              event.target.value
-                            )
+                    <div className="flex w-full flex-row items-center justify-center gap-4">
+                      <p>Payment Amount</p>
+                      <div className="w-[280px]">
+                        <NumberInput
+                          defaultValue={formatEther(payment)}
+                          onChange={(valueAsString) => {
+                            const newPayment: BigNumber =
+                              parseEther(valueAsString)
                             if (newPayment.gt(minPayment)) {
                               setPayment(newPayment)
                             }
                           }}
-                          className="reservoir-label-l input-primary-outline dark:border-neutral-600 dark:bg-neutral-800
-                        dark:text-white dark:ring-primary-900 dark:placeholder:text-neutral-400 dark:focus:ring-4"
                         />
-                        <button
-                          className="btn-purple-fill ml-auto"
-                          onClick={() => write?.()}
-                        >
-                          Make Payment
-                        </button>
                       </div>
                     </div>
                   </div>
