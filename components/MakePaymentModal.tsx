@@ -11,7 +11,6 @@ import { optimizeImage } from 'lib/optmizeImage'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { AiOutlineArrowRight } from 'react-icons/ai'
-import { SiEthereum } from 'react-icons/si'
 import { useQueryClient } from 'react-query'
 import { useWaitForTransaction } from 'wagmi'
 import FormatNativeCrypto from './FormatNativeCrypto'
@@ -138,7 +137,7 @@ export default function MakePaymentModal({
                           )}
 
                           <AiOutlineArrowRight />
-                          <span className="text-green-400">
+                          <span className="text-green-600">
                             {Number(
                               formatEther(
                                 BigNumber.from(loan.remainingPrincipal).sub(
