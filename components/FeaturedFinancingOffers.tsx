@@ -8,7 +8,7 @@ import { useState } from 'react'
 import Masonry from 'react-masonry-css'
 
 export default function FeaturedFinancingOffers() {
-  const [numOffers, setNumOffers] = useState(5) // Show 10 initial offers
+  const [numOffers, setNumOffers] = useState(10) // Show 10 initial offers
   const onShowMore = () => {
     setNumOffers(numOffers + 10)
   }
@@ -119,7 +119,7 @@ export default function FeaturedFinancingOffers() {
       </Masonry>
       <button
         className="hover:underline"
-        hidden={numOffers > Number(fullOffers?.length)}
+        hidden={numOffers >= Number(fullOffers?.length)}
         onClick={onShowMore}
       >
         Show more
