@@ -1,5 +1,6 @@
 import { LoanDetails, OfferDetails, useMakePayment } from '@niftyapes/sdk'
 import { Cross2Icon } from '@radix-ui/react-icons'
+import clsx from 'clsx'
 import Button from 'components/Button'
 import Modal from 'components/Modal'
 import { format } from 'date-fns'
@@ -100,104 +101,131 @@ export default function MakePaymentModal({
             </div>
           </div>
 
-          <div className="flex">
-            <img
-              alt={`Token image for ${tokenName}`}
-              className="w-[200px] object-contain"
-              src={optimizeImage(image, 200)}
-            />
-            <div className="w-full p-6">
-              {paymentTxn && (
-                <div>
-                  {isSuccessTxn &&
-                    `Thanks for your payment. Transaction processed successfully. `}
-                  {isLoadingTxn && `Processing transaction... `}
-                  {isErrorTxn && `Unable to process transaction... `}
+          <div className="flex flex-col">
+            <div className="flex">
+              <img
+                alt={`Token image for ${tokenName}`}
+                className="w-[200px] object-contain"
+                src={optimizeImage(image, 200)}
+              />
+              <div className="w-full p-6">
+                {paymentTxn && (
+                  <div>
+                    {isSuccessTxn &&
+                      `Thanks for your payment. Transaction processed successfully. `}
+                    {isLoadingTxn && `Processing transaction... `}
+                    {isErrorTxn && `Unable to process transaction... `}
 
-                  <a
-                    href={`${etherscanUri}/tx/${paymentTxn?.hash}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    View Transaction
-                  </a>
-                </div>
-              )}
+                    <a
+                      href={`${etherscanUri}/tx/${paymentTxn?.hash}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      View Transaction
+                    </a>
+                  </div>
+                )}
 
-              {!paymentTxn && (
-                <div className="flex w-full flex-col justify-between gap-4">
-                  <div className="flex w-full flex-row items-center justify-between rounded-md bg-gray-700 p-4">
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="flex flex-row items-center gap-2 text-xl font-semibold">
-                        {Number(formatEther(loan.remainingPrincipal)).toFixed(
-                          4
-                        )}
-
-                        <AiOutlineArrowRight />
-                        <span className="text-green-400">
-                          {Number(
-                            formatEther(
-                              BigNumber.from(loan.remainingPrincipal).sub(
-                                BigNumber.from(loan.minimumPrincipalPerPeriod)
-                              )
-                            )
-                          ).toFixed(4)}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-300">Principal Change</p>
-                    </div>
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="flex flex-row items-center gap-2 text-xl font-semibold">
-                        <FormatNativeCrypto
-                          maximumFractionDigits={4}
-                          amount={payment}
-                        />
-                      </div>
-                      <p className="text-sm text-gray-300">Payment Due Now</p>
-                    </div>
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="flex flex-row items-center font-semibold">
-                        <p>
-                          {format(
-                            new Date(loan.periodEndTimestamp * 1000),
-                            'Pp'
+                {!paymentTxn && (
+                  <div className="flex w-full flex-col justify-between gap-4">
+                    <div className="flex w-full flex-row items-center justify-between rounded-md p-4">
+                      <div className="flex flex-col items-center gap-2">
+                        <p className="text-sm">Principal Change</p>
+                        <div className="flex flex-row items-center gap-2 text-xl font-semibold">
+                          {Number(formatEther(loan.remainingPrincipal)).toFixed(
+                            4
                           )}
-                        </p>
-                      </div>
-                      <p className="text-sm text-gray-300">Next Payment Due</p>
-                    </div>
-                  </div>
 
-                  <div className="flex w-full flex-row items-center justify-between rounded-md bg-gray-700 p-4">
-                    <div className="flex w-full flex-row items-center gap-4">
-                      <div className="flex flex-row items-center gap-2 text-2xl font-bold">
-                        <SiEthereum />
-                        <p>ETH</p>
+                          <AiOutlineArrowRight />
+                          <span className="text-green-400">
+                            {Number(
+                              formatEther(
+                                BigNumber.from(loan.remainingPrincipal).sub(
+                                  BigNumber.from(loan.minimumPrincipalPerPeriod)
+                                )
+                              )
+                            ).toFixed(4)}
+                          </span>
+                        </div>
                       </div>
-                      <input
-                        value={formatEther(payment)}
-                        type="number"
-                        onChange={(event) => {
-                          const newPayment: BigNumber = parseEther(
-                            event.target.value
-                          )
-                          if (newPayment.gt(minPayment)) {
-                            setPayment(newPayment)
-                          }
-                        }}
-                        className="reservoir-label-l input-primary-outline dark:border-neutral-600 dark:bg-neutral-800
+                      <div className="flex flex-col items-center gap-2">
+                        <p className="text-sm">Payment Due Now</p>
+                        <div className="flex flex-row items-center gap-2 text-xl font-semibold">
+                          <FormatNativeCrypto
+                            maximumFractionDigits={4}
+                            amount={payment}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-center gap-2">
+                        <p className="text-sm">Next Payment Due</p>
+                        <div className="flex flex-row items-center font-semibold">
+                          <p>
+                            {format(
+                              new Date(loan.periodEndTimestamp * 1000),
+                              'Pp'
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex w-full flex-row items-center justify-between rounded-md p-4">
+                      <div className="flex w-full flex-row items-center gap-4">
+                        <div className="flex flex-row items-center gap-2 text-2xl font-bold">
+                          <SiEthereum />
+                          <p>ETH</p>
+                        </div>
+                        <input
+                          value={formatEther(payment)}
+                          type="number"
+                          onChange={(event) => {
+                            const newPayment: BigNumber = parseEther(
+                              event.target.value
+                            )
+                            if (newPayment.gt(minPayment)) {
+                              setPayment(newPayment)
+                            }
+                          }}
+                          className="reservoir-label-l input-primary-outline dark:border-neutral-600 dark:bg-neutral-800
                         dark:text-white dark:ring-primary-900 dark:placeholder:text-neutral-400 dark:focus:ring-4"
-                      />
-                      <button
-                        className="btn-purple-fill ml-auto"
-                        onClick={() => write?.()}
-                      >
-                        Make Payment
-                      </button>
+                        />
+                        <button
+                          className="btn-purple-fill ml-auto"
+                          onClick={() => write?.()}
+                        >
+                          Make Payment
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-between">
+              <i
+                className={clsx('text-sm', {
+                  'text-red-500': undefined, // errorText
+                })}
+              >
+                {'Testing footer text'}
+              </i>
+              <div className="flex flex-shrink-0 space-x-8 self-end">
+                <button
+                  onClick={onClose}
+                  className="rounded-full text-sm font-bold uppercase hover:underline hover:underline-offset-4"
+                >
+                  Nevermind
+                </button>
+                <button
+                  onClick={() => write?.()}
+                  className="rounded-full border-2 border-black px-8 py-3 text-sm font-bold uppercase hover:bg-black hover:text-white"
+                >
+                  Make Payment
+                </button>
+              </div>
             </div>
           </div>
         </div>
