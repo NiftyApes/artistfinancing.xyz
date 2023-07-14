@@ -12,6 +12,7 @@ export type FinancingTerms = {
   downPaymentAmount: number
   minPrincipalPerPeriod: number
   tokenName?: string
+  tokenId?: string
   collectionName?: string
   image?: string
 }
@@ -48,6 +49,7 @@ export function processOffer(
 
   return {
     image: token?.image,
+    tokenId,
     tokenName: token?.name || `#${tokenId}`,
     collectionName: token?.collection?.name || '',
     listPrice,
