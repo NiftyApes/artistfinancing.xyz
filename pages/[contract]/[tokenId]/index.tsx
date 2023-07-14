@@ -15,7 +15,6 @@ import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 import { useOffers } from '@niftyapes/sdk'
 import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
-import FormatCurrency from '../../../components/FormatCurrency'
 import { DateTime, Duration } from 'luxon'
 import { formatBN } from '../../../lib/numbers'
 
