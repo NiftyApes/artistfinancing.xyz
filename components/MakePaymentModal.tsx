@@ -213,8 +213,9 @@ export default function MakePaymentModal({
                   Nevermind
                 </button>
                 <button
+                  disabled={!write}
                   onClick={() => write?.()}
-                  className="rounded-full border-2 border-black px-8 py-3 text-sm font-bold uppercase hover:bg-black hover:text-white"
+                  className="rounded-full border-2 border-black px-8 py-3 text-sm font-bold uppercase hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-black"
                 >
                   Make Payment
                 </button>
