@@ -73,11 +73,11 @@ export default function MakePaymentModal({
 
   const queryClient = useQueryClient()
   useEffect(() => {
-    // Invalidates parent table query three seconds after the transaction
+    // Invalidates parent table query one second after the transaction
     if (isSuccessTxn) {
       setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: [parentTableQuery] })
-      }, 3000)
+      }, 1000)
     }
   }, [isSuccessTxn])
 
