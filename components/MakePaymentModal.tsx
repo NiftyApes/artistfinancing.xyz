@@ -84,6 +84,7 @@ export default function MakePaymentModal({
   const [errorText, setErrorText] = useState('')
   useEffect(() => {
     if (!isWriteError) {
+      setErrorText('')
       return
     }
 
