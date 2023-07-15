@@ -1,19 +1,18 @@
 import { LoanDetails, OfferDetails, useMakePayment } from '@niftyapes/sdk'
 import { Cross2Icon } from '@radix-ui/react-icons'
-import clsx from 'clsx'
 import Button from 'components/Button'
 import Modal from 'components/Modal'
 import { format } from 'date-fns'
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useEtherscanUri } from 'hooks/useEtherscan'
+import { formatBN } from 'lib/numbers'
 import { optimizeImage } from 'lib/optmizeImage'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { AiOutlineArrowRight } from 'react-icons/ai'
 import { useQueryClient } from 'react-query'
 import { useWaitForTransaction } from 'wagmi'
-import FormatNativeCrypto from './FormatNativeCrypto'
 import NumberInput from './NumberInput'
 
 export default function MakePaymentModal({
@@ -54,6 +53,7 @@ export default function MakePaymentModal({
   const {
     data: paymentTxn,
     isError: isWriteError,
+    error: writeError,
     write,
   } = useMakePayment({
     nftContractAddress: offer.nftContractAddress,
@@ -79,6 +79,21 @@ export default function MakePaymentModal({
     }
   }, [isSuccessTxn])
 
+  const [errorText, setErrorText] = useState('')
+  useEffect(() => {
+    if (!isWriteError) {
+      return
+    }
+
+    if ((writeError as any)?.code === 'INSUFFICIENT_FUNDS') {
+      setErrorText('You have insufficient funds for payment.')
+    } else if ((writeError as any)?.code === 'ACTION_REJECTED') {
+      setErrorText('You rejected the transaction.')
+    } else {
+      setErrorText('An error occurred with this transaction.')
+    }
+  }, [isWriteError])
+
   return (
     <>
       <Button textCase="capitalize" variant="secondary" onClick={onOpen}>
@@ -86,7 +101,7 @@ export default function MakePaymentModal({
       </Button>
 
       <Modal open={open} onOpenChange={setOpen}>
-        <div className="p-4 text-black">
+        <div className="flex flex-col space-y-6 px-6 py-4 text-black">
           <div className="flex flex-col">
             <div className="relative flex justify-center p-1">
               <h4 className="max-w-xl truncate text-center text-xl">{`Make Payment for ${collectionName} #${tokenId}`}</h4>
@@ -101,14 +116,14 @@ export default function MakePaymentModal({
             </div>
           </div>
 
-          <div className="flex flex-col">
-            <div className="flex">
+          <div className="flex flex-col space-y-6">
+            <div className="flex space-x-6">
               <img
                 alt={`Token image for ${tokenName}`}
                 className="w-[200px] object-contain"
                 src={optimizeImage(image, 200)}
               />
-              <div className="w-full p-6">
+              <div className="w-full">
                 {paymentTxn && (
                   <div>
                     {isSuccessTxn &&
@@ -127,54 +142,51 @@ export default function MakePaymentModal({
                 )}
 
                 {!paymentTxn && (
-                  <div className="flex w-full flex-col justify-between gap-4">
-                    <div className="flex w-full flex-row items-center justify-between rounded-md p-4">
-                      <div className="flex flex-col items-center gap-2">
-                        <p className="text-sm">Principal Change</p>
-                        <div className="flex flex-row items-center gap-2 text-xl font-semibold">
-                          {Number(formatEther(loan.remainingPrincipal)).toFixed(
-                            4
-                          )}
+                  <div className="flex w-full flex-col space-y-6">
+                    <div className="flex justify-between">
+                      <p className="text-gray-500">Amount Due</p>
+                      <p className="font-bold">{`${formatBN(
+                        payment,
+                        7
+                      )} ETH`}</p>
+                    </div>
 
-                          <AiOutlineArrowRight />
-                          <span className="text-green-600">
-                            {Number(
-                              formatEther(
-                                BigNumber.from(loan.remainingPrincipal).sub(
-                                  BigNumber.from(loan.minimumPrincipalPerPeriod)
-                                )
-                              )
-                            ).toFixed(4)}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-center gap-2">
-                        <p className="text-sm">Payment Due Now</p>
-                        <div className="flex flex-row items-center gap-2 text-xl font-semibold">
-                          <FormatNativeCrypto
-                            maximumFractionDigits={4}
-                            amount={payment}
-                          />
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-center gap-2">
-                        <p className="text-sm">Next Payment Due</p>
-                        <div className="flex flex-row items-center font-semibold">
-                          <p>
-                            {format(
-                              new Date(loan.periodEndTimestamp * 1000),
-                              'Pp'
-                            )}
-                          </p>
-                        </div>
+                    <div className="flex justify-between">
+                      <p className="text-gray-500">Principal Change</p>
+                      <div className="flex flex-row items-center gap-2">
+                        <p className="font-bold">
+                          {`${formatBN(loan.remainingPrincipal, 7)} ETH`}
+                        </p>
+                        <AiOutlineArrowRight />
+                        <p className="font-bold text-green-600">
+                          {`${formatBN(
+                            BigNumber.from(loan.remainingPrincipal).sub(
+                              BigNumber.from(loan.minimumPrincipalPerPeriod)
+                            ),
+                            7
+                          )} ETH`}
+                        </p>
                       </div>
                     </div>
 
-                    <div className="flex w-full flex-row items-center justify-center gap-4">
-                      <p>Payment Amount</p>
+                    <div className="flex justify-between">
+                      <p className="text-gray-500">Due On</p>
+                      <div className="flex flex-row items-center">
+                        <p>
+                          {format(
+                            new Date(loan.periodEndTimestamp * 1000),
+                            'Pp'
+                          )}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex w-full flex-row items-center gap-4">
+                      <p className="text-gray-500">Payment Amount</p>
                       <div className="w-[280px]">
                         <NumberInput
                           defaultValue={formatEther(payment)}
+                          descriptor="ETH"
                           onChange={(valueAsString) => {
                             const newPayment: BigNumber =
                               parseEther(valueAsString)
@@ -192,13 +204,7 @@ export default function MakePaymentModal({
 
             {/* Footer */}
             <div className="flex items-center justify-between">
-              <i
-                className={clsx('text-sm', {
-                  'text-red-500': undefined, // errorText
-                })}
-              >
-                {'Testing footer text'}
-              </i>
+              {errorText && <i className="text-sm text-red-500">{errorText}</i>}
               <div className="flex flex-shrink-0 space-x-8 self-end">
                 <button
                   onClick={onClose}
