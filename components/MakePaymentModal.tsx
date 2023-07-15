@@ -11,7 +11,9 @@ import { optimizeImage } from 'lib/optmizeImage'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { AiOutlineArrowRight } from 'react-icons/ai'
+import { IoCheckmarkCircle } from 'react-icons/io5'
 import { useQueryClient } from 'react-query'
+import { PropagateLoader } from 'react-spinners'
 import { useWaitForTransaction } from 'wagmi'
 import NumberInput from './NumberInput'
 
@@ -101,7 +103,7 @@ export default function MakePaymentModal({
       </Button>
 
       <Modal open={open} onOpenChange={setOpen}>
-        <div className="flex flex-col space-y-6 px-6 py-4 text-black">
+        <div className="flex min-w-[700px] flex-col space-y-6 px-6 py-4 text-black">
           <div className="flex flex-col">
             <div className="relative flex justify-center p-1">
               <h4 className="max-w-xl truncate text-center text-xl">{`Make Payment for ${collectionName} #${tokenId}`}</h4>
@@ -125,29 +127,64 @@ export default function MakePaymentModal({
               />
               <div className="w-full">
                 {paymentTxn && (
-                  <div>
-                    {isSuccessTxn &&
-                      `Thanks for your payment. Transaction processed successfully. `}
-                    {isLoadingTxn && `Processing transaction... `}
-                    {isErrorTxn && `Unable to process transaction... `}
-
-                    <a
-                      href={`${etherscanUri}/tx/${paymentTxn?.hash}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      View Transaction
-                    </a>
-                  </div>
+                  <>
+                    {isLoadingTxn && (
+                      <div className="flex flex-col items-center justify-center space-y-8">
+                        <i>Transaction Submitted</i>
+                        <PropagateLoader size={10} color="#36d7b7" />
+                        <a
+                          target="_blank"
+                          rel="noreferrer"
+                          href={`${etherscanUri}/tx/${paymentTxn?.hash}`}
+                          className="underline underline-offset-4"
+                        >
+                          View on Etherscan
+                        </a>
+                      </div>
+                    )}
+                    {isSuccessTxn && (
+                      <div className="flex flex-col items-center justify-center space-y-8">
+                        <i>
+                          Thanks for your payment. Transaction processed
+                          successfully.
+                        </i>
+                        <IoCheckmarkCircle
+                          size={48}
+                          className="text-green-600"
+                        />
+                        <a
+                          target="_blank"
+                          rel="noreferrer"
+                          href={`${etherscanUri}/tx/${paymentTxn?.hash}`}
+                          className="underline underline-offset-4"
+                        >
+                          View on Etherscan
+                        </a>
+                      </div>
+                    )}
+                    {isErrorTxn && (
+                      <div className="flex flex-col items-center justify-center space-y-8">
+                        <i className="text-red-500">Transaction Error</i>
+                        <p>There was an error processing your transaction</p>
+                        <a
+                          target="_blank"
+                          rel="noreferrer"
+                          href={`${etherscanUri}/tx/${paymentTxn?.hash}`}
+                          className="underline underline-offset-4"
+                        >
+                          View on Etherscan
+                        </a>
+                      </div>
+                    )}
+                  </>
                 )}
-
                 {!paymentTxn && (
                   <div className="flex w-full flex-col space-y-6">
                     <div className="flex justify-between">
                       <p className="text-gray-500">Amount Due</p>
                       <p className="font-bold">{`${formatBN(
                         payment,
-                        7
+                        8
                       )} ETH`}</p>
                     </div>
 
@@ -155,7 +192,7 @@ export default function MakePaymentModal({
                       <p className="text-gray-500">Principal Change</p>
                       <div className="flex flex-row items-center gap-2">
                         <p className="font-bold">
-                          {`${formatBN(loan.remainingPrincipal, 7)} ETH`}
+                          {`${formatBN(loan.remainingPrincipal, 8)} ETH`}
                         </p>
                         <AiOutlineArrowRight />
                         <p className="font-bold text-green-600">
@@ -163,7 +200,7 @@ export default function MakePaymentModal({
                             BigNumber.from(loan.remainingPrincipal).sub(
                               BigNumber.from(loan.minimumPrincipalPerPeriod)
                             ),
-                            7
+                            8
                           )} ETH`}
                         </p>
                       </div>
@@ -188,8 +225,8 @@ export default function MakePaymentModal({
                           defaultValue={formatEther(payment)}
                           descriptor="ETH"
                           onChange={(valueAsString) => {
-                            const newPayment: BigNumber =
-                              parseEther(valueAsString)
+                            if (!valueAsString) return
+                            const newPayment = parseEther(valueAsString)
                             if (newPayment.gt(minPayment)) {
                               setPayment(newPayment)
                             }
@@ -204,21 +241,32 @@ export default function MakePaymentModal({
 
             {/* Footer */}
             <div className="flex items-center justify-between">
-              {errorText && <i className="text-sm text-red-500">{errorText}</i>}
+              <i className="text-sm text-red-500">{errorText}</i>
               <div className="flex flex-shrink-0 space-x-8 self-end">
-                <button
-                  onClick={onClose}
-                  className="rounded-full text-sm font-bold uppercase hover:underline hover:underline-offset-4"
-                >
-                  Nevermind
-                </button>
-                <button
-                  disabled={!write}
-                  onClick={() => write?.()}
-                  className="rounded-full border-2 border-black px-8 py-3 text-sm font-bold uppercase hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-black"
-                >
-                  Make Payment
-                </button>
+                {!paymentTxn ? (
+                  <>
+                    <button
+                      onClick={onClose}
+                      className="rounded-full text-sm font-bold uppercase hover:underline hover:underline-offset-4"
+                    >
+                      Nevermind
+                    </button>
+                    <button
+                      disabled={!write}
+                      onClick={() => write?.()}
+                      className="rounded-full border-2 border-black px-8 py-3 text-sm font-bold uppercase hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-black"
+                    >
+                      Make Payment
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={onClose}
+                    className="rounded-full border-2 border-black px-8 py-3 text-sm font-bold uppercase hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-black"
+                  >
+                    Close
+                  </button>
+                )}
               </div>
             </div>
           </div>
