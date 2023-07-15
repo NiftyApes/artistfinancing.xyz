@@ -55,7 +55,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     >
       <input
         type="number"
-        className="w-full bg-transparent px-4 py-2 text-sm font-bold text-black selection:bg-blue-200 focus:appearance-none focus:outline-none"
+        className="w-full bg-transparent px-4 py-2 font-bold text-black selection:bg-blue-200 focus:appearance-none focus:outline-none"
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={handleChange}
