@@ -16,9 +16,11 @@ import { useAccount } from 'wagmi'
 import { useOffers } from '@niftyapes/sdk'
 import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
 import { DateTime, Duration } from 'luxon'
-import { formatBN } from '../../../lib/numbers'
+import { formatBN } from 'lib/numbers'
+import Link from 'next/link'
 
 // Environment variables
+
 // For more information about these variables
 // refer to the README.md file on this repository
 // Reference: https://nextjs.org/docs/basic-features/environment-variables#exposing-environment-variables-to-the-browser
@@ -202,14 +204,12 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         })}
         {activeOffers.length > 3 && (
           <div className="mt-10 flex items-center justify-center border-b border-gray-600 border-opacity-50">
-            <div
-              onClick={() =>
-                (window.location.href = `/address/${account?.address}?tab=manage_listings`)
-              }
+            <Link
+              href={`/address/${account?.address}?tab=manage_listings`}
               className="my-[-16px] inline-block cursor-pointer rounded-2xl border border-gray-600 border-opacity-50 bg-black px-4 py-2 hover:bg-gray-800 hover:text-gray-200"
             >
               {`View all ${activeOffers.length} Listings`}
-            </div>
+            </Link>
           </div>
         )}
       </div>
