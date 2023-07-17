@@ -13,11 +13,6 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
-import { useOffers } from '@niftyapes/sdk'
-import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
-import { DateTime, Duration } from 'luxon'
-import { formatBN } from 'lib/numbers'
-import Link from 'next/link'
 
 // Environment variables
 
@@ -114,15 +109,6 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
     }
   }, [])
 
-  const offers = useOffers({
-    collection: token?.token?.contract!,
-    nftId: token?.token?.tokenId!,
-  })
-
-  const activeOffers =
-    offers.data?.filter((offer) => offer.status === 'ACTIVE') || []
-  const hasActiveOffers = activeOffers && activeOffers.length > 0
-
   if (tokenData.error) {
     return <div>There was an error</div>
   }
@@ -154,67 +140,6 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
     +userTokens[0].ownership.tokenCount > 0
       ? true
       : token?.token?.owner?.toLowerCase() === account?.address?.toLowerCase()
-
-  /**
-   * Displays listings headers
-   */
-  const renderActiveListingsHeader = () => {
-    return (
-      <div className="flex h-full items-center">
-        <div className="reservoir-h3 mb-1 mr-5 flex font-semibold">
-          Listings
-        </div>
-        <AiFillTags className="mr-2 text-xs text-gray-500" />
-        <div className="text-xs text-gray-500">{`${
-          activeOffers.length
-        } Active Listing${activeOffers.length === 1 ? '' : 's'}`}</div>
-      </div>
-    )
-  }
-
-  /**
-   * Displays top three listings and manage listings button
-   */
-  const renderActiveListings = () => {
-    const subset = activeOffers.slice(0, 3)
-
-    return (
-      <div className="mt-5 text-xs text-gray-400">
-        {subset.map((offer, idx) => {
-          return (
-            <div
-              className="mb-4 mt-2 flex h-full items-center"
-              key={`offer-${idx}`}
-            >
-              <AiOutlineRightCircle className="mr-3 text-xl text-gray-600" />
-              <div>
-                {`${
-                  formatBN(offer.offer.price, 2) as any
-                } ETH over ${Duration.fromObject({
-                  seconds: offer.offer.periodDuration,
-                }).as('days')} days`}
-              </div>
-
-              <div className="ml-auto rounded-lg border border-gray-600 border-opacity-50 px-2 py-[2px]">
-                expires{' '}
-                {DateTime.fromSeconds(offer.offer.expiration).toRelative()!}
-              </div>
-            </div>
-          )
-        })}
-        {activeOffers.length > 3 && (
-          <div className="mt-10 flex items-center justify-center border-b border-gray-600 border-opacity-50">
-            <Link
-              href={`/address/${account?.address}?tab=manage_listings`}
-              className="my-[-16px] inline-block cursor-pointer rounded-2xl border border-gray-600 border-opacity-50 bg-black px-4 py-2 hover:bg-gray-800 hover:text-gray-200"
-            >
-              {`View all ${activeOffers.length} Listings`}
-            </Link>
-          </div>
-        )}
-      </div>
-    )
-  }
 
   return (
     <Layout navbar={{}}>
@@ -258,13 +183,6 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
                 <div className="mb-10">
                   <OfferSection token={token} isOwner={isOwner} />
                 </div>
-
-                {hasActiveOffers && isOwner && (
-                  <div className="mb-10">
-                    {renderActiveListingsHeader()}
-                    {renderActiveListings()}
-                  </div>
-                )}
 
                 <div className="mb-10">
                   <div className="reservoir-h3 mb-1 flex font-semibold">
