@@ -1,14 +1,14 @@
 import { Loan, OfferDetails, useLoans } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import LoadingIcon from 'components/LoadingIcon'
-import MakePaymentModal from 'components/niftyapes/MakePaymentModal'
+import MakePaymentModal from 'components/MakePaymentModal'
 import { format } from 'date-fns'
-import isEqualAddress from 'lib/niftyapes/isEqualAddress'
-import { processLoan } from 'lib/niftyapes/processLoan'
+import isEqualAddress from 'lib/isEqualAddress'
+import { processLoan } from 'lib/processLoan'
 import { optimizeImage } from 'lib/optmizeImage'
 import { FC } from 'react'
 import { useAccount } from 'wagmi'
-import { processOffer } from '../../lib/niftyapes/processOffer'
+import { processOffer } from '../../lib/processOffer'
 import FormatNativeCrypto from '../FormatNativeCrypto'
 
 type Props = {}

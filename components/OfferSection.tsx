@@ -8,7 +8,7 @@ import {
 } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import InfoTooltip from 'components/InfoTooltip'
-import EthAccount from 'components/niftyapes/EthAccount'
+import EthAccount from 'components/EthAccount'
 import useMounted from 'hooks/useMounted'
 import Link from 'next/link'
 import { useRouter } from 'next/router'

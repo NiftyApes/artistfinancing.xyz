@@ -1,11 +1,11 @@
-import { FC, useEffect, useState } from 'react'
-import LoadingCard from './LoadingCard'
+import { useSellerFinancingContract } from '@niftyapes/sdk'
 import { useUserTokens } from '@reservoir0x/reservoir-kit-ui'
-import { useInView } from 'react-intersection-observer'
-import TokenCard from './TokenCard'
 import { paths } from '@reservoir0x/reservoir-sdk'
-import { useOffers, useSellerFinancingContract } from '@niftyapes/sdk'
-import isEqualAddress from '../lib/niftyapes/isEqualAddress'
+import { FC, useEffect, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
+import isEqualAddress from '../lib/isEqualAddress'
+import LoadingCard from './LoadingCard'
+import TokenCard from './TokenCard'
 
 const COLLECTION = process.env.NEXT_PUBLIC_COLLECTION
 const COMMUNITY = process.env.NEXT_PUBLIC_COMMUNITY
@@ -88,12 +88,10 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
       <label className="mb-5 flex items-center space-x-3">
         <input
           type="checkbox"
-          onClick={(event) => setShowTicketLoanNFT((prevState) => !prevState)}
+          onClick={() => setShowTicketLoanNFT((prevState) => !prevState)}
           className="h-6 w-6 rounded-md border border-gray-300 checked:border-transparent focus:outline-none"
         ></input>
-        <span className="font-medium text-gray-900 text-white">
-          Show loan NFTs
-        </span>
+        <span className="font-medium text-white">Show loan NFTs</span>
       </label>
       <div className="mx-auto mb-8 grid max-w-[2400px] gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
         {isFetchingInitialData ? (

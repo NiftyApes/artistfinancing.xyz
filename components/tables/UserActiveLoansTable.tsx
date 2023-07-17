@@ -5,9 +5,9 @@ import LoadingIcon from 'components/LoadingIcon'
 import { format } from 'date-fns'
 import { BigNumber } from 'ethers'
 import { useEtherscanUri } from 'hooks/useEtherscan'
-import isEqualAddress from 'lib/niftyapes/isEqualAddress'
-import { processLoan } from 'lib/niftyapes/processLoan'
-import { processOffer } from 'lib/niftyapes/processOffer'
+import isEqualAddress from 'lib/isEqualAddress'
+import { processLoan } from 'lib/processLoan'
+import { processOffer } from 'lib/processOffer'
 import { optimizeImage } from 'lib/optmizeImage'
 import { useRouter } from 'next/router'
 import { FC, useEffect } from 'react'
@@ -172,7 +172,9 @@ const UserActiveLoansRow: FC<UserActiveLoansRowProps> = ({
   const isLoading = isWriteLoading || isTxLoading
 
   let seizeAssetBtnText = 'Seize Asset'
-  if (isLoading) {
+  if (isWriteLoading) {
+    seizeAssetBtnText = 'Pending Approval'
+  } else if (isTxLoading) {
     seizeAssetBtnText = 'Transaction Submitted'
   } else if (isTxSuccess) {
     seizeAssetBtnText = 'Transaction Success'

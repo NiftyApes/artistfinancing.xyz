@@ -11,37 +11,41 @@ type Props = {
   title?: string
   side?: 'left' | 'right'
   hideIcon?: boolean
+  label?: string
 }
 
 const EthAccount: FC<Props> = ({
   address,
   ens,
-  title,
-  side = 'right',
   hideIcon,
+  label,
+  side = 'right',
 }) => {
-  const icon = !hideIcon && <Avatar address={address} avatar={ens?.avatar} />
+  const icon = !hideIcon && (
+    <Avatar address={address} avatar={ens?.avatar} size={42} />
+  )
 
   return (
-    <div className="flex items-center gap-2">
-      {title && (
-        <p className="reservoir-label-l capitalize text-gray-400 dark:text-white">
-          {title}
-        </p>
-      )}
+    <div className="flex">
       {side === 'left' && icon}
-      {ens?.name ? (
-        <div title={address} className="dark:text-white">
-          {truncateEns(ens.name)}
-        </div>
-      ) : (
-        <div
-          className="reservoir-label-l block whitespace-nowrap font-mono dark:text-white"
-          title={address}
-        >
-          {truncateAddress(address || '')}
-        </div>
-      )}
+      <div>
+        <div className="ml-3 text-xs text-gray-300">{label}</div>
+        {ens?.name ? (
+          <div
+            className="ml-3 whitespace-nowrap text-base text-gray-200"
+            title={address}
+          >
+            {truncateEns(ens.name)}
+          </div>
+        ) : (
+          <div
+            className="ml-3 whitespace-nowrap text-base text-gray-200"
+            title={address}
+          >
+            {truncateAddress(address || '')}
+          </div>
+        )}
+      </div>
       {side === 'right' && icon}
     </div>
   )
