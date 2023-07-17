@@ -16,7 +16,7 @@ import { FC } from 'react'
 import { ClipLoader } from 'react-spinners'
 import { useAccount } from 'wagmi'
 import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
-import { formatBN } from '../../lib/numbers'
+import { formatBN } from 'lib/numbers'
 import { DateTime, Duration } from 'luxon'
 
 type Props = {
