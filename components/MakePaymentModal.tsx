@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react'
 import { AiOutlineArrowRight } from 'react-icons/ai'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import { useQueryClient } from 'react-query'
-import { PropagateLoader } from 'react-spinners'
+import { BeatLoader, PropagateLoader } from 'react-spinners'
 import { useWaitForTransaction } from 'wagmi'
 import NumberInput from './NumberInput'
 
@@ -55,6 +55,7 @@ export default function MakePaymentModal({
   const {
     data: paymentTxn,
     isError: isWriteError,
+    isLoading: isWriteLoading,
     error: writeError,
     write,
   } = useMakePayment({
@@ -184,7 +185,7 @@ export default function MakePaymentModal({
                     <div className="flex justify-between">
                       <p className="text-gray-500">Amount Due</p>
                       <p className="font-bold">{`${formatBN(
-                        payment,
+                        minPayment,
                         8
                       )} ETH`}</p>
                     </div>
@@ -227,10 +228,7 @@ export default function MakePaymentModal({
                           descriptor="ETH"
                           onChange={(valueAsString) => {
                             if (!valueAsString) return
-                            const newPayment = parseEther(valueAsString)
-                            if (newPayment.gt(minPayment)) {
-                              setPayment(newPayment)
-                            }
+                            setPayment(parseEther(valueAsString))
                           }}
                         />
                       </div>
@@ -253,11 +251,26 @@ export default function MakePaymentModal({
                       Nevermind
                     </button>
                     <button
-                      disabled={!write}
+                      disabled={!write || isWriteLoading || isLoadingTxn}
                       onClick={() => write?.()}
                       className="rounded-full border-2 border-black px-8 py-3 text-sm font-bold uppercase hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-black"
                     >
-                      Make Payment
+                      {isWriteLoading || isLoadingTxn ? (
+                        <span>
+                          PENDING{' '}
+                          <span
+                            style={{
+                              position: 'relative',
+                              top: 1,
+                              marginLeft: '2px',
+                            }}
+                          >
+                            <BeatLoader color="#36d7b7" size={10} />
+                          </span>
+                        </span>
+                      ) : (
+                        'Make Payment'
+                      )}
                     </button>
                   </>
                 ) : (
