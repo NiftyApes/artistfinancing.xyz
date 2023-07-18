@@ -15,6 +15,7 @@ import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 
 // Environment variables
+
 // For more information about these variables
 // refer to the README.md file on this repository
 // Reference: https://nextjs.org/docs/basic-features/environment-variables#exposing-environment-variables-to-the-browser
@@ -58,9 +59,6 @@ const metadata = {
       <meta name="twitter:image" content={image} />
       <meta property="og:image" content={image} />
     </>
-  ),
-  tagline: (tagline: string | undefined) => (
-    <>{tagline || 'Discover, buy and sell NFTs'}</>
   ),
 }
 
