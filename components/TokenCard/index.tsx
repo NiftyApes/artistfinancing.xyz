@@ -17,6 +17,7 @@ import { MutatorCallback } from 'swr'
 import { Collection } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 import TokenCardOwner from './TokenCardOwner'
+import isEqualAddress from 'lib/isEqualAddress'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
@@ -38,11 +39,11 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
     useSellerFinancingContract()
 
   const singleColumnBreakpoint = useMediaQuery('(max-width: 640px)')
+  const imageSize = singleColumnBreakpoint ? 533 : 250
 
   const offers = useOffers({
     collection: token?.token?.contract!,
     nftId: token?.token?.tokenId!,
-    creator: account.address,
   })
 
   if (!token) return null
@@ -51,9 +52,7 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
   const isLoanTicket: boolean =
     token?.token?.contract.toLowerCase() ===
     sellerFinancingContractAddress.toLowerCase()
-  const isOwner =
-    token?.token?.owner?.toLowerCase() === account?.address?.toLowerCase()
-  const imageSize = singleColumnBreakpoint ? 533 : 250
+  const isOwner = isEqualAddress(token?.token?.owner, account.address)
 
   const formattedToken = {
     id: token?.token?.tokenId!,
@@ -64,8 +63,13 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
     collectionName: token.token?.collection?.name!,
   }
 
+  // Filter out offers where creator is not the current NFT owner
   const activeOffers =
-    offers.data?.filter((offer) => offer.status === 'ACTIVE') || []
+    offers.data?.filter(
+      (offer) =>
+        offer.status === 'ACTIVE' &&
+        isEqualAddress(offer.offer.creator, token?.token?.owner)
+    ) || []
   const hasActiveOffers = activeOffers && activeOffers.length > 0
 
   return (
