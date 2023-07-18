@@ -8,11 +8,9 @@ import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useEtherscanUri } from 'hooks/useEtherscan'
 import { formatBN } from 'lib/numbers'
 import { optimizeImage } from 'lib/optmizeImage'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { AiOutlineArrowRight } from 'react-icons/ai'
 import { IoCheckmarkCircle } from 'react-icons/io5'
-import { useQueryClient } from 'react-query'
 import { BeatLoader, PropagateLoader } from 'react-spinners'
 import { useWaitForTransaction } from 'wagmi'
 import NumberInput from './NumberInput'
@@ -20,6 +18,7 @@ import NumberInput from './NumberInput'
 export default function MakePaymentModal({
   loan,
   offer,
+  refetchLoans,
   image,
   tokenName,
   tokenId,
@@ -27,15 +26,12 @@ export default function MakePaymentModal({
 }: {
   loan: LoanDetails
   offer: OfferDetails
+  refetchLoans: () => void
   image?: string
   tokenName?: string
   tokenId?: string
   collectionName?: string
 }) {
-  const router = useRouter()
-  const { address } = router.query
-  const parentTableQuery = `/loans?buyer=${address as string}`
-
   const [open, setOpen] = useState(false)
   const onOpen = () => setOpen(true)
   const onClose = () => setOpen(false)
@@ -72,15 +68,9 @@ export default function MakePaymentModal({
     hash: paymentTxn?.hash,
   })
 
-  const queryClient = useQueryClient()
   useEffect(() => {
-    // Invalidates parent table query one second after the transaction
-    if (isSuccessTxn) {
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: [parentTableQuery] })
-      }, 1000)
-    }
-  }, [isSuccessTxn])
+    setTimeout(refetchLoans, 1000)
+  }, [isSuccessTxn, isErrorTxn])
 
   const [errorText, setErrorText] = useState('')
   useEffect(() => {

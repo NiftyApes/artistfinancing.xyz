@@ -1,11 +1,11 @@
 import { Address, NiftyApesProvider } from '@niftyapes/sdk'
 import '@rainbow-me/rainbowkit/styles.css'
 import {
+  darkTheme,
+  lightTheme,
   ReservoirKitProvider,
   ReservoirKitProviderProps,
   ReservoirKitTheme,
-  darkTheme,
-  lightTheme,
 } from '@reservoir0x/reservoir-kit-ui'
 import AnalyticsProvider from 'components/AnalyticsProvider'
 import { ThemeProvider, useTheme } from 'next-themes'
@@ -31,31 +31,23 @@ import 'styles/roboto.css'
 import 'styles/rodger.css'
 import 'styles/roobert.css'
 import 'styles/styreneb.css'
-import { WagmiConfig, configureChains, createClient } from 'wagmi'
+import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import * as allChains from 'wagmi/chains'
 
 import {
-  RainbowKitProvider,
-  getDefaultWallets,
   darkTheme as rainbowKitDarkTheme,
+  getDefaultWallets,
   lightTheme as rainbowKitLightTheme,
+  RainbowKitProvider,
 } from '@rainbow-me/rainbowkit'
+import { useGoogleAnalytics } from 'hooks/useGoogleAnalytics'
 import ReactGA from 'react-ga4'
-import { QueryClient, QueryClientProvider } from 'react-query'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 import presetColors from '../colors'
-import { useGoogleAnalytics } from 'hooks/useGoogleAnalytics'
 
 // Imported last so that it does not conflict
 import '@niftyapes/sdk/dist/styles.css'
-
-const queryClient = new QueryClient()
-
-// Select a custom ether.js interface for connecting to a network
-// Reference = https://wagmi-xyz.vercel.app/docs/provider#provider-optional
-// OPTIONAL
-const infuraId = process.env.NEXT_PUBLIC_INFURA_ID
 
 // API key for Ethereum node
 // Two popular services are Alchemy (alchemy.com) and Infura (infura.io)
@@ -106,15 +98,13 @@ function AppWrapper(props: AppProps & { baseUrl: string }) {
   const defaultTheme = DARK_MODE_ENABLED ? 'dark' : 'light'
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme={defaultTheme}
-        forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
-      >
-        <App {...props} />
-      </ThemeProvider>
-    </QueryClientProvider>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme={defaultTheme}
+      forcedTheme={!THEME_SWITCHING_ENABLED ? defaultTheme : undefined}
+    >
+      <App {...props} />
+    </ThemeProvider>
   )
 }
 

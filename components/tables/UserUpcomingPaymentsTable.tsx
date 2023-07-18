@@ -13,7 +13,11 @@ import FormatNativeCrypto from '../FormatNativeCrypto'
 
 const UserUpcomingPaymentsTable: FC = () => {
   const { address } = useAccount()
-  const { data: loans, isLoading } = useLoans({ buyer: address })
+  const {
+    data: loans,
+    isLoading,
+    refetch: refetchLoans,
+  } = useLoans({ buyer: address })
 
   const activeLoans = loans?.filter((loan) => loan.status === 'ACTIVE')
 
@@ -93,6 +97,7 @@ const UserUpcomingPaymentsTable: FC = () => {
                   loan={item.loan}
                   offer={item.offer.offer}
                   token={token}
+                  refetchLoans={refetchLoans}
                 />
               )
             })}
@@ -108,9 +113,15 @@ type LoansRowProps = {
   loan: LoanDetails
   offer: OfferDetails
   token: ReturnType<typeof useTokens>['data'][0]
+  refetchLoans: () => void
 }
 
-const UpcomingPaymentsTableRow = ({ loan, offer, token }: LoansRowProps) => {
+const UpcomingPaymentsTableRow = ({
+  loan,
+  offer,
+  token,
+  refetchLoans,
+}: LoansRowProps) => {
   const { apr, listPrice, image, collectionName, tokenName, tokenId } =
     processOffer(offer, token)
 
@@ -176,6 +187,7 @@ const UpcomingPaymentsTableRow = ({ loan, offer, token }: LoansRowProps) => {
           tokenId={tokenId}
           tokenName={tokenName}
           collectionName={collectionName}
+          refetchLoans={refetchLoans}
         />
       </td>
     </tr>
