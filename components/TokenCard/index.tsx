@@ -42,6 +42,7 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
   const offers = useOffers({
     collection: token?.token?.contract!,
     nftId: token?.token?.tokenId!,
+    creator: account.address,
   })
 
   if (!token) return null
