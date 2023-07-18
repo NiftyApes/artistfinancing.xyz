@@ -5,11 +5,10 @@ import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import LoadingIcon from 'components/LoadingIcon'
 import { useEtherscanUri } from 'hooks/useEtherscan'
 import isEqualAddress from 'lib/isEqualAddress'
-import { processOffer } from 'lib/processOffer'
 import { optimizeImage } from 'lib/optmizeImage'
+import { processOffer } from 'lib/processOffer'
 import { useRouter } from 'next/router'
 import { FC, useEffect } from 'react'
-import { useQueryClient } from 'react-query'
 import { useWaitForTransaction } from 'wagmi'
 
 const DARK_MODE = process.env.NEXT_PUBLIC_DARK_MODE
@@ -18,7 +17,11 @@ const UserFinancingOffersTable: FC = () => {
   const router = useRouter()
   const { address } = router.query
 
-  const { data: offers = [], isLoading } = useOffers({
+  const {
+    data: offers = [],
+    isLoading,
+    refetch: refetchOffers,
+  } = useOffers({
     creator: address as string,
     includeExpired: true,
   })
@@ -112,6 +115,7 @@ const UserFinancingOffersTable: FC = () => {
                   offer={offer}
                   status={status}
                   token={token}
+                  refetchOffers={refetchOffers}
                 />
               )
             })}
@@ -127,6 +131,7 @@ type UserOffersRowProps = {
   signature: `0x${string}`
   status: 'ACTIVE' | 'USED_TO_EXECUTE_LOAN' | 'CANCELLED'
   token: ReturnType<typeof useTokens>['data'][0]
+  refetchOffers: () => void
 }
 
 const UserListingsTableRow = ({
@@ -134,9 +139,8 @@ const UserListingsTableRow = ({
   status,
   signature,
   token,
+  refetchOffers,
 }: UserOffersRowProps) => {
-  const queryClient = useQueryClient()
-
   const {
     listPrice,
     downPaymentAmount,
@@ -172,9 +176,7 @@ const UserListingsTableRow = ({
 
   // Refetch offers to refresh the page after successful "Cancel Offer" call
   useEffect(() => {
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: ['offers'] })
-    }, 1000)
+    setTimeout(refetchOffers, 1000)
   }, [isTxSuccess, isTxError])
 
   const isLoading = isWriteLoading || isTxLoading

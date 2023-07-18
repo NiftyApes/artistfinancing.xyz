@@ -1,4 +1,4 @@
-import { Loan, OfferDetails, useLoans } from '@niftyapes/sdk'
+import { Loan, LoanDetails, OfferDetails, useLoans } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import LoadingIcon from 'components/LoadingIcon'
 import MakePaymentModal from 'components/MakePaymentModal'
@@ -11,11 +11,13 @@ import { useAccount } from 'wagmi'
 import { processOffer } from '../../lib/processOffer'
 import FormatNativeCrypto from '../FormatNativeCrypto'
 
-type Props = {}
-
-const UserUpcomingPaymentsTable: FC<Props> = () => {
+const UserUpcomingPaymentsTable: FC = () => {
   const { address } = useAccount()
-  const { data: loans, isLoading } = useLoans({ buyer: address })
+  const {
+    data: loans,
+    isLoading,
+    refetch: refetchLoans,
+  } = useLoans({ buyer: address })
 
   const activeLoans = loans?.filter((loan) => loan.status === 'ACTIVE')
 
@@ -95,6 +97,7 @@ const UserUpcomingPaymentsTable: FC<Props> = () => {
                   loan={item.loan}
                   offer={item.offer.offer}
                   token={token}
+                  refetchLoans={refetchLoans}
                 />
               )
             })}
@@ -107,26 +110,20 @@ const UserUpcomingPaymentsTable: FC<Props> = () => {
 
 type LoansRowProps = {
   isOwner: boolean
-
-  loan: {
-    buyerNftId: string
-    sellerNftId: string
-    remainingPrincipal: string
-    minimumPrincipalPerPeriod: string
-    periodInterestRateBps: number
-    periodDuration: number
-    periodEndTimestamp: number
-    periodBeginTimestamp: number
-  }
+  loan: LoanDetails
   offer: OfferDetails
   token: ReturnType<typeof useTokens>['data'][0]
+  refetchLoans: () => void
 }
 
-const UpcomingPaymentsTableRow = ({ loan, offer, token }: LoansRowProps) => {
-  const { apr, listPrice, image, collectionName, tokenName } = processOffer(
-    offer,
-    token
-  )
+const UpcomingPaymentsTableRow = ({
+  loan,
+  offer,
+  token,
+  refetchLoans,
+}: LoansRowProps) => {
+  const { apr, listPrice, image, collectionName, tokenName, tokenId } =
+    processOffer(offer, token)
 
   const { periodEndTimestamp, remainingPrincipal, minimumPayment } =
     processLoan(loan)
@@ -186,7 +183,11 @@ const UpcomingPaymentsTableRow = ({ loan, offer, token }: LoansRowProps) => {
         <MakePaymentModal
           offer={offer}
           loan={loan}
-          data={{ image: '/niftyapes/banana.png' }}
+          image={image}
+          tokenId={tokenId}
+          tokenName={tokenName}
+          collectionName={collectionName}
+          refetchLoans={refetchLoans}
         />
       </td>
     </tr>
