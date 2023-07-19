@@ -8,6 +8,7 @@ import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import HomeCarousel from '../components/HomeCarousel'
 
 // Environment variables
 // For more information about these variables
@@ -32,7 +33,7 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>
 const metadata = {
   title: (title: string) => <title>{title}</title>,
   description: (description: string) => (
-    <meta name="description" content={description} />
+    <meta name='description' content={description} />
   ),
   tagline: (tagline: string | undefined) => (
     <>{tagline || 'Discover, buy and sell NFTs'}</>
@@ -41,13 +42,13 @@ const metadata = {
     if (image) {
       return (
         <>
-          <meta name="twitter:image" content={image} />
-          <meta name="og:image" content={image} />
+          <meta name='twitter:image' content={image} />
+          <meta name='og:image' content={image} />
         </>
       )
     }
     return null
-  },
+  }
 }
 
 const Home: NextPage<Props> = ({ fallback }) => {
@@ -79,17 +80,25 @@ const Home: NextPage<Props> = ({ fallback }) => {
         {description}
         {image}
       </Head>
-      <header className="col-span-full mt-20 mb-20 px-4">
-        <h1 className="mb-4 text-center text-4xl font-semibold text-white">
-          Buy <span className="font-light">with</span> Financing
-        </h1>
-        <h3 className="text-center text-white">
-          Collect art <span className="text-gray-500">with</span> flexible
-          payment options
+
+
+        <HomeCarousel content={[{ artist: 'XCopy' }, { artist: 'Tyler Hobbs' }, { artist: 'Dmitry Cherniak' }]} />
+      
+      <header className='col-span-full mt-20 mb-20 px-4'>
+        <div className='mb-4 text-4xl text-white'>
+          <div className='font-thin'>What is</div>
+          <div className='font-semibold'>Artist Financing</div>
+        </div>
+
+
+
+        <h3 className='text-white'>
+          Admirers become collectors with flexible payments options.
         </h3>
       </header>
+
       <TermsOfServiceModal />
-      <div className="col-span-full px-6 md:px-16">
+      <div className='col-span-full px-6 md:px-16'>
         <FeaturedFinancingOffers />
       </div>
       <Footer />
@@ -108,7 +117,7 @@ export const getStaticProps: GetStaticProps<{
 
   if (RESERVOIR_API_KEY) {
     options.headers = {
-      'x-api-key': RESERVOIR_API_KEY,
+      'x-api-key': RESERVOIR_API_KEY
     }
   }
 
@@ -117,7 +126,7 @@ export const getStaticProps: GetStaticProps<{
   let query: paths['/collections/v5']['get']['parameters']['query'] = {
     limit: 20,
     sortBy: '1DayVolume',
-    normalizeRoyalties: true,
+    normalizeRoyalties: true
   }
 
   if (COLLECTION && !COMMUNITY) query.contract = [COLLECTION]
@@ -132,8 +141,8 @@ export const getStaticProps: GetStaticProps<{
   return {
     props: {
       fallback: {
-        collections,
-      },
-    },
+        collections
+      }
+    }
   }
 }
