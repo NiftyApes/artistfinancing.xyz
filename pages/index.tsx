@@ -9,6 +9,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import HomeCarousel from '../components/HomeCarousel'
+import { AiOutlineArrowRight, AiOutlinePlusCircle, AiOutlineUpCircle } from 'react-icons/ai'
 
 // Environment variables
 // For more information about these variables
@@ -51,6 +52,42 @@ const metadata = {
   }
 }
 
+const CAROUSEL = [
+
+  {
+    artist: 'Tyler Hobbs',
+    buyFinancingPrice: 23,
+    buyNowPrice: 122,
+    image: 'https://i.seadn.io/gcs/files/a3b27c1b14dcd4948b5e444cde1f3644.png?auto=format&dpr=1&w=1000',
+    rarity: '1/1',
+    title: 'Fidenza'
+  },
+  {
+    artist: 'Gremplin',
+    buyFinancingPrice: 0.5,
+    buyNowPrice: 1.2,
+    image: 'https://i.seadn.io/gcs/files/82b442194b45749ae1ec7d9572dd6431.png?auto=format&dpr=1&w=2048',
+    rarity: '1/6900',
+    title: 'Cryptoadz'
+  },
+  {
+    artist: 'sdfd',
+    buyFinancingPrice: 19,
+    buyNowPrice: 142,
+    image: 'https://i.seadn.io/gcs/files/e4f8c7574bf861c8e5e7d387d618d72e.png?auto=format&dpr=1&w=1000',
+    rarity: '1/10000',
+    title: 'CryptoPunks'
+  },
+  {
+    artist: 'XCopy',
+    buyFinancingPrice: 22,
+    buyNowPrice: 123,
+    image: 'https://i.seadn.io/gcs/files/6ceed67665dad2b17d2bdf99d48055a4.png?auto=format&dpr=1&w=3840',
+    rarity: '1/42',
+    title: 'God is typing'
+  }
+]
+
 const Home: NextPage<Props> = ({ fallback }) => {
   const router = useRouter()
 
@@ -82,25 +119,28 @@ const Home: NextPage<Props> = ({ fallback }) => {
       </Head>
 
 
-        <HomeCarousel content={[{ artist: 'XCopy' }, { artist: 'Tyler Hobbs' }, { artist: 'Dmitry Cherniak' }]} />
-      
-      <header className='col-span-full mt-20 mb-20 px-4'>
-        <div className='mb-4 text-4xl text-white'>
-          <div className='font-thin'>What is</div>
-          <div className='font-semibold'>Artist Financing</div>
+      <div className='flex justify-center items-center col-span-full mt-20 mb-20 px-4'>
+
+        <div>
+          <div className='mb-4 text-4xl text-white'>
+            <div className='font-[100]'>What is</div>
+            <div className='font-semibold'>Artist Financing?</div>
+          </div>
+
+          <h3 className='text-white'>
+            Admirers become collectors with flexible payments options.
+          </h3>
+          <div className='flex mt-10'>
+            <div className='bg-white text-black text-center py-3 px-8 rounded-full uppercase flex flex-row'><span className="text-xs mt-0.5">list art</span><AiOutlinePlusCircle className="ml-2 mt-0.5"/></div>
+            <div className='bg-black text-white text-center py-3 px-8 rounded-full uppercase flex flex-row'><span className="text-xs mt-0.5">docs</span><AiOutlineUpCircle className="ml-2 mt-0.5"/></div>
+          </div>
         </div>
 
-
-
-        <h3 className='text-white'>
-          Admirers become collectors with flexible payments options.
-        </h3>
-      </header>
-
-      <TermsOfServiceModal />
-      <div className='col-span-full px-6 md:px-16'>
-        <FeaturedFinancingOffers />
+        <div className='ml-10'>
+          <HomeCarousel cards={CAROUSEL} />
+        </div>
       </div>
+
       <Footer />
     </Layout>
   )
