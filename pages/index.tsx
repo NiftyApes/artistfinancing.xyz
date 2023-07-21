@@ -10,6 +10,9 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import HomeCarousel from '../components/HomeCarousel'
 import { AiOutlineArrowRight, AiOutlinePlusCircle, AiOutlineUpCircle } from 'react-icons/ai'
+import { useOffers } from '@niftyapes/sdk'
+import { sortBy, uniq, uniqBy } from 'lodash'
+import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 
 // Environment variables
 // For more information about these variables
@@ -82,9 +85,17 @@ const CAROUSEL = [
     artist: 'XCopy',
     buyFinancingPrice: 22,
     buyNowPrice: 123,
-    image: 'https://i.seadn.io/gcs/files/6ceed67665dad2b17d2bdf99d48055a4.png?auto=format&dpr=1&w=3840',
-    rarity: '1/42',
-    title: 'God is typing'
+    image: 'https://i.seadn.io/gcs/files/8ca9eb1a40c8f193ccb8fecabad09e45.gif?auto=format&dpr=1&w=1000',
+    rarity: '3031/7394',
+    title: 'MAX PAIN'
+  },
+  {
+    artist: 'NiftyApes',
+    buyFinancingPrice: 0.2,
+    buyNowPrice: 1.5,
+    image: 'https://i.seadn.io/gae/WrAd3MWdytcr_EchzpMXR1VfpVQwg3oWzkkobUI5EG7W7xJLKz0KbGjDVbaSpTHGccBzL0v6qDuUM3yDHus7r93urgUuZLZe7zDzw2k?w=500&auto=format',
+    rarity: '1/1',
+    title: 'Banana Man'
   }
 ]
 
@@ -94,6 +105,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
   const title = META_TITLE && metadata.title(META_TITLE)
   const description = META_DESCRIPTION && metadata.description(META_DESCRIPTION)
   const image = metadata.image(META_IMAGE)
+
 
   useEffect(() => {
     if (REDIRECT_HOMEPAGE && COLLECTION) {
@@ -131,14 +143,16 @@ const Home: NextPage<Props> = ({ fallback }) => {
             Admirers become collectors with flexible payments options.
           </h3>
           <div className='flex mt-10'>
-            <div className='bg-white text-black text-center py-3 px-8 rounded-full uppercase flex flex-row'><span className="text-xs mt-0.5">list art</span><AiOutlinePlusCircle className="ml-2 mt-0.5"/></div>
-            <div className='bg-black text-white text-center py-3 px-8 rounded-full uppercase flex flex-row'><span className="text-xs mt-0.5">docs</span><AiOutlineUpCircle className="ml-2 mt-0.5"/></div>
+            <div className='bg-white text-black text-center py-3 px-8 rounded-full uppercase flex flex-row'><span
+              className='text-xs mt-0.5'>list art</span><AiOutlinePlusCircle className='ml-2 mt-0.5' /></div>
+            <div className='bg-black text-white text-center py-3 px-8 rounded-full uppercase flex flex-row'><span
+              className='text-xs mt-0.5'>docs</span><AiOutlineUpCircle className='ml-2 mt-0.5' /></div>
           </div>
         </div>
 
-        <div className='ml-10'>
-          <HomeCarousel cards={CAROUSEL} />
-        </div>
+          <div className='ml-10'>
+            <HomeCarousel cards={CAROUSEL} />
+          </div>
       </div>
 
       <Footer />
