@@ -129,7 +129,7 @@ const UserFinancingOffersTable: FC = () => {
 type UserOffersRowProps = {
   offer: Offer['offer']
   signature: `0x${string}`
-  status: 'ACTIVE' | 'USED_TO_EXECUTE_LOAN' | 'CANCELLED'
+  status: Offer['status']
   token: ReturnType<typeof useTokens>['data'][0]
   refetchOffers: () => void
 }
@@ -253,6 +253,7 @@ const UserListingsTableRow = ({
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         {status === 'CANCELLED' && 'Cancelled'}
         {status === 'USED_TO_EXECUTE_LOAN' && 'Used to execute loan'}
+        {status === 'EXPIRED' && 'Expired'}
         {status === 'ACTIVE' && (
           <div className="flex w-64 flex-col items-center space-y-2">
             <Button
