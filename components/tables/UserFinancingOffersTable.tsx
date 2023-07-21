@@ -21,10 +21,7 @@ const UserFinancingOffersTable: FC = () => {
     data: offers = [],
     isLoading,
     refetch: refetchOffers,
-  } = useOffers({
-    creator: address as string,
-    includeExpired: true,
-  })
+  } = useOffers({ creator: address as string })
 
   const tokensQueryArr = offers?.map(
     (offer) => `${offer.offer.nftContractAddress}:${offer.offer.nftId}`
