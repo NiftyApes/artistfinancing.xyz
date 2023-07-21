@@ -1,5 +1,4 @@
 import { paths } from '@reservoir0x/reservoir-sdk'
-import FeaturedFinancingOffers from 'components/FeaturedFinancingOffers'
 import Footer from 'components/Footer'
 import Layout from 'components/Layout'
 import TermsOfServiceModal from 'components/TermsOfServiceModal'
@@ -9,10 +8,9 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import HomeCarousel from '../components/HomeCarousel'
-import { AiOutlineArrowRight, AiOutlinePlusCircle, AiOutlineUpCircle } from 'react-icons/ai'
-import { useOffers } from '@niftyapes/sdk'
-import { sortBy, uniq, uniqBy } from 'lodash'
-import { useTokens } from '@reservoir0x/reservoir-kit-ui'
+import { AiOutlinePlusCircle, AiOutlineUpCircle } from 'react-icons/ai'
+import Link from 'next/link'
+import { useAccount } from 'wagmi'
 
 // Environment variables
 // For more information about these variables
@@ -37,7 +35,7 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>
 const metadata = {
   title: (title: string) => <title>{title}</title>,
   description: (description: string) => (
-    <meta name='description' content={description} />
+    <meta name="description" content={description} />
   ),
   tagline: (tagline: string | undefined) => (
     <>{tagline || 'Discover, buy and sell NFTs'}</>
@@ -46,66 +44,62 @@ const metadata = {
     if (image) {
       return (
         <>
-          <meta name='twitter:image' content={image} />
-          <meta name='og:image' content={image} />
+          <meta name="twitter:image" content={image} />
+          <meta name="og:image" content={image} />
         </>
       )
     }
     return null
-  }
+  },
 }
 
 const CAROUSEL = [
-
   {
     artist: 'Tyler Hobbs',
     buyFinancingPrice: 23,
     buyNowPrice: 122,
-    image: 'https://i.seadn.io/gcs/files/a3b27c1b14dcd4948b5e444cde1f3644.png?auto=format&dpr=1&w=1000',
+    image:
+      'https://i.seadn.io/gcs/files/a3b27c1b14dcd4948b5e444cde1f3644.png?auto=format&dpr=1&w=1000',
     rarity: '1/1',
-    title: 'Fidenza'
+    title: 'Fidenza',
   },
   {
     artist: 'Gremplin',
     buyFinancingPrice: 0.5,
     buyNowPrice: 1.2,
-    image: 'https://i.seadn.io/gcs/files/82b442194b45749ae1ec7d9572dd6431.png?auto=format&dpr=1&w=2048',
+    image:
+      'https://i.seadn.io/gcs/files/82b442194b45749ae1ec7d9572dd6431.png?auto=format&dpr=1&w=2048',
     rarity: '1/6900',
-    title: 'Cryptoadz'
-  },
-  {
-    artist: 'sdfd',
-    buyFinancingPrice: 19,
-    buyNowPrice: 142,
-    image: 'https://i.seadn.io/gcs/files/e4f8c7574bf861c8e5e7d387d618d72e.png?auto=format&dpr=1&w=1000',
-    rarity: '1/10000',
-    title: 'CryptoPunks'
+    title: 'Cryptoadz',
   },
   {
     artist: 'XCopy',
     buyFinancingPrice: 22,
     buyNowPrice: 123,
-    image: 'https://i.seadn.io/gcs/files/8ca9eb1a40c8f193ccb8fecabad09e45.gif?auto=format&dpr=1&w=1000',
+    image:
+      'https://i.seadn.io/gcs/files/8ca9eb1a40c8f193ccb8fecabad09e45.gif?auto=format&dpr=1&w=1000',
     rarity: '3031/7394',
-    title: 'MAX PAIN'
+    title: 'MAX PAIN',
   },
   {
     artist: 'NiftyApes',
     buyFinancingPrice: 0.2,
     buyNowPrice: 1.5,
-    image: 'https://i.seadn.io/gae/WrAd3MWdytcr_EchzpMXR1VfpVQwg3oWzkkobUI5EG7W7xJLKz0KbGjDVbaSpTHGccBzL0v6qDuUM3yDHus7r93urgUuZLZe7zDzw2k?w=500&auto=format',
+    image:
+      'https://i.seadn.io/gae/WrAd3MWdytcr_EchzpMXR1VfpVQwg3oWzkkobUI5EG7W7xJLKz0KbGjDVbaSpTHGccBzL0v6qDuUM3yDHus7r93urgUuZLZe7zDzw2k?w=500&auto=format',
     rarity: '1/1',
-    title: 'Banana Man'
-  }
+    title: 'Banana Man',
+  },
 ]
 
 const Home: NextPage<Props> = ({ fallback }) => {
   const router = useRouter()
 
+  const { address, isConnected } = useAccount()
+
   const title = META_TITLE && metadata.title(META_TITLE)
   const description = META_DESCRIPTION && metadata.description(META_DESCRIPTION)
   const image = metadata.image(META_IMAGE)
-
 
   useEffect(() => {
     if (REDIRECT_HOMEPAGE && COLLECTION) {
@@ -130,31 +124,46 @@ const Home: NextPage<Props> = ({ fallback }) => {
         {image}
       </Head>
 
-
-      <div className='flex justify-center items-center col-span-full mt-20 mb-20 px-4'>
-
+      <div className="col-span-full mt-20 mb-20 flex items-center justify-center px-4">
         <div>
-          <div className='mb-4 text-4xl text-white'>
-            <div className='font-[100]'>What is</div>
-            <div className='font-semibold'>Artist Financing?</div>
+          <div className="mb-4 text-4xl text-white">
+            <div className="font-light">What is</div>
+            <div className="font-semibold">Artist Financing?</div>
           </div>
 
-          <h3 className='text-white'>
-            Admirers become collectors with flexible payments options.
+          <h3 className="font-light text-white">
+            Admirers <span className="text-gray-500">become</span> collectors{' '}
+            <span className="text-gray-500">with</span> flexible payments
+            options.
           </h3>
-          <div className='flex mt-10'>
-            <div className='bg-white text-black text-center py-3 px-8 rounded-full uppercase flex flex-row'><span
-              className='text-xs mt-0.5'>list art</span><AiOutlinePlusCircle className='ml-2 mt-0.5' /></div>
-            <div className='bg-black text-white text-center py-3 px-8 rounded-full uppercase flex flex-row'><span
-              className='text-xs mt-0.5'>docs</span><AiOutlineUpCircle className='ml-2 mt-0.5' /></div>
+
+          <div className="mt-10 flex">
+            {/*TODO: Implement wallet connect handler*/}
+            <Link
+              href={
+                isConnected
+                  ? `address/${address}?tab=gallery`
+                  : 'IMPLMENT WALLET CONNECT'
+              }
+            >
+              <div className="flex flex-row rounded-full bg-white py-3 px-8 text-center uppercase text-black">
+                <span className="mt-0.5 text-xs">list art</span>
+                <AiOutlinePlusCircle className="ml-2 mt-0.5" />
+              </div>
+            </Link>
+            <Link href="https://niftyapes.readme.io/docs" target="_blank">
+              <div className="flex flex-row rounded-full bg-black py-3 px-8 text-center uppercase text-white">
+                <span className="mt-0.5 text-xs">docs</span>
+                <AiOutlineUpCircle className="ml-2 mt-0.5" />
+              </div>
+            </Link>
           </div>
         </div>
 
-          <div className='ml-10'>
-            <HomeCarousel cards={CAROUSEL} />
-          </div>
+        <div className="ml-10">
+          <HomeCarousel cards={CAROUSEL} />
+        </div>
       </div>
-
       <Footer />
     </Layout>
   )
@@ -171,7 +180,7 @@ export const getStaticProps: GetStaticProps<{
 
   if (RESERVOIR_API_KEY) {
     options.headers = {
-      'x-api-key': RESERVOIR_API_KEY
+      'x-api-key': RESERVOIR_API_KEY,
     }
   }
 
@@ -180,7 +189,7 @@ export const getStaticProps: GetStaticProps<{
   let query: paths['/collections/v5']['get']['parameters']['query'] = {
     limit: 20,
     sortBy: '1DayVolume',
-    normalizeRoyalties: true
+    normalizeRoyalties: true,
   }
 
   if (COLLECTION && !COMMUNITY) query.contract = [COLLECTION]
@@ -195,8 +204,8 @@ export const getStaticProps: GetStaticProps<{
   return {
     props: {
       fallback: {
-        collections
-      }
-    }
+        collections,
+      },
+    },
   }
 }
