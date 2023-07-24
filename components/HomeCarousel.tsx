@@ -45,7 +45,7 @@ const HomeCarousel: FC<Props> = ({ cards }) => {
 
   return (
     <div style={{ width: `${frameSize}px`, height: `${frameSize}px` }}>
-      <div className='relative left-[20px]'>
+      <div className="relative left-[20px]">
         {shiftedCards.map((item, idx) => {
           return (
             <div
@@ -58,7 +58,7 @@ const HomeCarousel: FC<Props> = ({ cards }) => {
                 position: 'absolute',
                 top: `${cardTotal * cardOffset - (idx + 1) * cardOffset}px`,
                 width: `${cardSize}px`,
-                zIndex: cardTotal - idx
+                zIndex: cardTotal - idx,
               }}
             >
               <img src={item.image} alt={item.title} />
@@ -76,26 +76,26 @@ const HomeCarousel: FC<Props> = ({ cards }) => {
         style={{ marginTop: `${btmCardY}px` }}
         className={`opacity-85 absolute z-50 border border-gray-700 bg-black py-[14px] px-[18px]`}
       >
-        <div className='mb-3'>
-          <div className='text-xs text-gray-500'>{featuredNft.artist}</div>
-          <div className='text-sm'>{featuredNft.title}</div>
+        <div className="mb-3">
+          <div className="text-xs text-gray-500">{featuredNft.artist}</div>
+          <div className="text-sm">{featuredNft.title}</div>
         </div>
-        <div className='flex'>
+        <div className="flex">
           <div>
-            <div className='text-[10px]'>{featuredNft.buyNowPrice} ETH</div>
-            <div className='text-[8px] uppercase text-gray-500'>price</div>
+            <div className="text-[10px]">{featuredNft.buyNowPrice} ETH</div>
+            <div className="text-[8px] uppercase text-gray-500">price</div>
           </div>
-          <div className='ml-10'>
-            <div className='text-[10px]'>
+          <div className="ml-10">
+            <div className="text-[10px]">
               {featuredNft.buyFinancingPrice} ETH
             </div>
-            <div className='text-[8px] uppercase text-gray-500'>
+            <div className="text-[8px] uppercase text-gray-500">
               buy with financing
             </div>
           </div>
         </div>
       </div>
-      <div className='clearfix'></div>
+      <div className="clearfix"></div>
     </div>
   )
 }
