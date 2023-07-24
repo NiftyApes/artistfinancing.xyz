@@ -35,60 +35,53 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>
 const metadata = {
   title: (title: string) => <title>{title}</title>,
   description: (description: string) => (
-    <meta name="description" content={description} />
-  ),
-  tagline: (tagline: string | undefined) => (
-    <>{tagline || 'Discover, buy and sell NFTs'}</>
+    <meta name='description' content={description} />
   ),
   image: (image?: string) => {
     if (image) {
       return (
         <>
-          <meta name="twitter:image" content={image} />
-          <meta name="og:image" content={image} />
+          <meta name='twitter:image' content={image} />
+          <meta name='og:image' content={image} />
         </>
       )
     }
     return null
-  },
+  }
 }
 
 const CAROUSEL = [
   {
-    artist: 'Tyler Hobbs',
-    buyFinancingPrice: 23,
-    buyNowPrice: 122,
-    image:
-      'https://i.seadn.io/gcs/files/a3b27c1b14dcd4948b5e444cde1f3644.png?auto=format&dpr=1&w=1000',
-    rarity: '1/1',
-    title: 'Fidenza',
-  },
-  {
-    artist: 'Gremplin',
-    buyFinancingPrice: 0.5,
-    buyNowPrice: 1.2,
-    image:
-      'https://i.seadn.io/gcs/files/82b442194b45749ae1ec7d9572dd6431.png?auto=format&dpr=1&w=2048',
-    rarity: '1/6900',
-    title: 'Cryptoadz',
-  },
-  {
     artist: 'XCopy',
-    buyFinancingPrice: 22,
-    buyNowPrice: 123,
-    image:
-      'https://i.seadn.io/gcs/files/8ca9eb1a40c8f193ccb8fecabad09e45.gif?auto=format&dpr=1&w=1000',
-    rarity: '3031/7394',
-    title: 'MAX PAIN',
+    buyFinancingPrice: 70,
+    buyNowPrice: 350,
+    image: 'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
+    rarity: '1/1',
+    title: 'Breaker'
   },
   {
-    artist: 'NiftyApes',
-    buyFinancingPrice: 0.2,
-    buyNowPrice: 1.5,
-    image:
-      'https://i.seadn.io/gae/WrAd3MWdytcr_EchzpMXR1VfpVQwg3oWzkkobUI5EG7W7xJLKz0KbGjDVbaSpTHGccBzL0v6qDuUM3yDHus7r93urgUuZLZe7zDzw2k?w=500&auto=format',
+    artist: 'Victor Mosquera',
+    buyFinancingPrice: 3.09,
+    buyNowPrice: 15.45,
+    image: 'https://ipfs.pixura.io/ipfs/QmWrg4ZnAdNbcdR74gJKqR6SgYh2pWcyhzRrNJ1DMN7piU/standard.jpg',
     rarity: '1/1',
-    title: 'Banana Man',
+    title: 'ALMA'
+  },
+  {
+    artist: 'Miss AL Simpson',
+    buyFinancingPrice: 4.12,
+    buyNowPrice: 20.600,
+    image: 'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F5136%252Fk7lqfl?ixlib=js-3.8.0&w=550&h=550&fit=crop&q=75&auto=format%2Ccompress&s=81a357466eb6a7148f462b431d0349a0',
+    rarity: '1/1',
+    title: 'HAUNTED BRICKS'
+  },
+  {
+    artist: 'Yigit Yerlikaya',
+    buyFinancingPrice: 0.58,
+    buyNowPrice: 2.9,
+    image: 'https://ipfs.pixura.io/ipfs/QmaYrjB5XrgHpVsCyLvsRN6kCKmyP6ZBbTvAM7aiK56p37/quantumania.jpg',
+    rarity: '1/1',
+    title: 'Quantumania'
   },
 ]
 
@@ -124,20 +117,20 @@ const Home: NextPage<Props> = ({ fallback }) => {
         {image}
       </Head>
 
-      <div className="col-span-full mt-20 mb-20 flex items-center justify-center px-4">
+      <div className='col-span-full mt-20 mb-20 flex items-center justify-center px-4'>
         <div>
-          <div className="mb-4 text-4xl text-white">
-            <div className="font-light">What is</div>
-            <div className="font-semibold">Artist Financing?</div>
+          <div className='mb-4 text-4xl text-white'>
+            <div className='font-light'>What is</div>
+            <div className='font-semibold'>Artist Financing?</div>
           </div>
 
-          <h3 className="font-light text-white">
-            Admirers <span className="text-gray-500">become</span> collectors{' '}
-            <span className="text-gray-500">with</span> flexible payments
+          <h3 className='font-light text-white'>
+            Admirers <span className='text-gray-500'>become</span> collectors{' '}
+            <span className='text-gray-500'>with</span> flexible payments
             options.
           </h3>
 
-          <div className="mt-10 flex">
+          <div className='mt-10 flex'>
             {/*TODO: Implement wallet connect handler*/}
             <Link
               href={
@@ -146,21 +139,22 @@ const Home: NextPage<Props> = ({ fallback }) => {
                   : 'IMPLMENT WALLET CONNECT'
               }
             >
-              <div className="flex flex-row rounded-full bg-white py-3 px-8 text-center uppercase text-black">
-                <span className="mt-0.5 text-xs">list art</span>
-                <AiOutlinePlusCircle className="ml-2 mt-0.5" />
+              <div className='flex flex-row rounded-full bg-white py-3 px-8 text-center uppercase text-black'>
+                <span className='mt-0.5 text-xs'>list art</span>
+                <AiOutlinePlusCircle className='ml-2 mt-0.5' />
               </div>
             </Link>
-            <Link href="https://niftyapes.readme.io/docs" target="_blank">
-              <div className="flex flex-row rounded-full bg-black py-3 px-8 text-center uppercase text-white">
-                <span className="mt-0.5 text-xs">docs</span>
-                <AiOutlineUpCircle className="ml-2 mt-0.5" />
+            <Link href='https://niftyapes.readme.io/docs' target='_blank'>
+              <div className='flex flex-row rounded-full bg-black py-3 px-8 text-center uppercase text-white'>
+                <span className='mt-0.5 text-xs'>docs</span>
+                <AiOutlineUpCircle className='ml-2 mt-0.5' />
               </div>
             </Link>
           </div>
+          <TermsOfServiceModal />
         </div>
 
-        <div className="ml-10">
+        <div className='ml-10'>
           <HomeCarousel cards={CAROUSEL} />
         </div>
       </div>
@@ -180,7 +174,7 @@ export const getStaticProps: GetStaticProps<{
 
   if (RESERVOIR_API_KEY) {
     options.headers = {
-      'x-api-key': RESERVOIR_API_KEY,
+      'x-api-key': RESERVOIR_API_KEY
     }
   }
 
@@ -189,7 +183,7 @@ export const getStaticProps: GetStaticProps<{
   let query: paths['/collections/v5']['get']['parameters']['query'] = {
     limit: 20,
     sortBy: '1DayVolume',
-    normalizeRoyalties: true,
+    normalizeRoyalties: true
   }
 
   if (COLLECTION && !COMMUNITY) query.contract = [COLLECTION]
@@ -204,8 +198,8 @@ export const getStaticProps: GetStaticProps<{
   return {
     props: {
       fallback: {
-        collections,
-      },
-    },
+        collections
+      }
+    }
   }
 }
