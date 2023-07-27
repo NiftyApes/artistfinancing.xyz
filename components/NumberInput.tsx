@@ -35,44 +35,47 @@ const NumberInput: React.FC<NumberInputProps> = ({
   }
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    // Set value to min on blur
+    if (!isNaN(Number(min)) && Number(e.target.value) < Number(min)) {
+      handleChange(String(min))
+    }
+
     setIsFocused(false)
     if (props.onBlur) {
       props.onBlur(e)
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Ignore negative numbers
-    if (!isNaN(Number(min)) && Number(e.target.value) < Number(min)) return
-
-    setInternalValue(e.target.value)
+  const handleChange = (value: string) => {
+    setInternalValue(value)
 
     if (onChange) {
-      onChange(String(e.target.value), Number(e.target.value))
+      onChange(value, Number(value))
     }
   }
+
+  const handleChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
+    handleChange(e.target.value)
 
   return (
     <div
       className={clsx(
-        'flex h-full w-full items-center border-[1px] border-gray-500 bg-white',
+        'flex h-full w-full items-center space-x-2 border-[1px] border-gray-500 bg-white px-4 py-2',
         { 'border-transparent ring-2 ring-black': isFocused },
         { 'border-red-500 ring-2 ring-red-500': formError }
       )}
     >
       <input
         type="number"
-        className="w-full bg-transparent px-4 py-2 text-sm font-bold text-black focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+        className="w-full bg-transparent text-sm font-bold text-black focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
         onFocus={handleFocus}
         onBlur={handleBlur}
-        onChange={handleChange}
+        onChange={handleChangeEvent}
         value={internalValue}
         min={min}
         {...props}
       />
-      {descriptor && (
-        <div className="px-4 py-2 text-gray-500">{descriptor}</div>
-      )}
+      {descriptor && <div className="text-gray-500">{descriptor}</div>}
     </div>
   )
 }
