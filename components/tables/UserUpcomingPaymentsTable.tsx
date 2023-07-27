@@ -51,7 +51,7 @@ const UserUpcomingPaymentsTable: FC = () => {
               alt="No listings"
               className="mb-10 hidden dark:block"
             />
-            No active loans yet
+            No sales yet
           </div>
         ))}
       {activeLoans && activeLoans.length > 0 && (
