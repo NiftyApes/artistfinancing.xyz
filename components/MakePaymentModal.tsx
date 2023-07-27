@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 import { BigNumber } from 'ethers'
 import { formatEther, parseEther } from 'ethers/lib/utils'
 import { useEtherscanUri } from 'hooks/useEtherscan'
-import { formatBN } from 'lib/numbers'
+import { formatBN, scientificToDecimal } from 'lib/numbers'
 import { optimizeImage } from 'lib/optmizeImage'
 import { useEffect, useState } from 'react'
 import { AiOutlineArrowRight } from 'react-icons/ai'
@@ -34,7 +34,19 @@ export default function MakePaymentModal({
 }) {
   const [open, setOpen] = useState(false)
   const onOpen = () => setOpen(true)
-  const onClose = () => setOpen(false)
+  // Reset modal state
+  const onClose = () => {
+    resetWrite()
+    setInputVal(formatEther(minPayment))
+    setPayment(minPayment)
+    setValueErr(false)
+    setOpen(false)
+  }
+  const onOpenChange = (open: boolean) => {
+    if (!open) {
+      onClose()
+    }
+  }
 
   const etherscanUri = useEtherscanUri()
 
@@ -46,13 +58,16 @@ export default function MakePaymentModal({
       .div(BigNumber.from('10000'))
   )
 
+  const [inputVal, setInputVal] = useState(formatEther(minPayment))
   const [payment, setPayment] = useState<BigNumber>(minPayment)
+  const [valueErr, setValueErr] = useState(false)
 
   const {
     data: paymentTxn,
-    isError: isWriteError,
-    isLoading: isWriteLoading,
+    isError: isErrorWrite,
+    isLoading: isLoadingWrite,
     error: writeError,
+    reset: resetWrite,
     write,
   } = useMakePayment({
     nftContractAddress: offer.nftContractAddress,
@@ -74,8 +89,13 @@ export default function MakePaymentModal({
 
   const [errorText, setErrorText] = useState('')
   useEffect(() => {
-    if (!isWriteError) {
+    if (!isErrorWrite && !valueErr) {
       setErrorText('')
+      return
+    }
+
+    if (valueErr) {
+      setErrorText('Please enter a valid payment value')
       return
     }
 
@@ -86,7 +106,7 @@ export default function MakePaymentModal({
     } else {
       setErrorText('An error occurred with this transaction.')
     }
-  }, [isWriteError])
+  }, [isErrorWrite, valueErr])
 
   return (
     <>
@@ -94,8 +114,8 @@ export default function MakePaymentModal({
         Make Payment
       </Button>
 
-      <Modal open={open} onOpenChange={setOpen}>
-        <div className="flex min-w-[700px] flex-col space-y-6 px-6 py-4 text-black">
+      <Modal open={open} onOpenChange={onOpenChange}>
+        <div className="flex min-w-[700px] flex-col space-y-6 px-6 py-4 text-black selection:bg-blue-200">
           <div className="flex flex-col">
             <div className="relative flex justify-center p-1">
               <h4 className="max-w-xl truncate text-center text-xl">{`Make Payment for ${collectionName} #${tokenId}`}</h4>
@@ -214,11 +234,34 @@ export default function MakePaymentModal({
                       <p className="text-gray-500">Payment Amount</p>
                       <div className="w-[280px]">
                         <NumberInput
-                          defaultValue={formatEther(payment)}
+                          value={inputVal}
+                          disabled={isLoadingTxn || isLoadingWrite}
                           descriptor="ETH"
+                          min={0}
                           onChange={(valueAsString) => {
-                            if (!valueAsString) return
-                            setPayment(parseEther(valueAsString))
+                            setValueErr(false)
+                            if (!valueAsString) {
+                              setValueErr(true)
+                              return
+                            }
+                            setInputVal(valueAsString)
+
+                            // Setting the payment value requires parsing scientific notation input
+                            // into decimal and then attempting to parse and ether value from that.
+                            // If the user enters an invalid ether value, then we do not set the
+                            // payment value. They will have to fix their input to proceed.
+                            let parsedEther
+                            try {
+                              parsedEther = parseEther(
+                                scientificToDecimal(valueAsString)
+                              )
+                            } catch (err) {
+                              setValueErr(true)
+                              return
+                            }
+
+                            resetWrite()
+                            setPayment(parsedEther)
                           }}
                         />
                       </div>
@@ -241,11 +284,13 @@ export default function MakePaymentModal({
                       Nevermind
                     </button>
                     <button
-                      disabled={!write || isWriteLoading || isLoadingTxn}
+                      disabled={
+                        !write || valueErr || isLoadingWrite || isLoadingTxn
+                      }
                       onClick={() => write?.()}
                       className="rounded-full border-2 border-black px-8 py-3 text-sm font-bold uppercase hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-black"
                     >
-                      {isWriteLoading || isLoadingTxn ? (
+                      {isLoadingWrite || isLoadingTxn ? (
                         <span>
                           PENDING{' '}
                           <span

@@ -85,7 +85,7 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
 
   return (
     <div>
-      <label className="mb-5 flex items-center space-x-3">
+      <label className="mb-5 inline-flex items-center space-x-3">
         <input
           type="checkbox"
           onClick={() => setShowTicketLoanNFT((prevState) => !prevState)}
