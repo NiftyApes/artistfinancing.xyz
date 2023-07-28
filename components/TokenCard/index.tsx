@@ -61,6 +61,7 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
     lastSellValue: String(token.token?.lastSell?.value!),
     contractAddress: token.token?.contract! as Address,
     collectionName: token.token?.collection?.name!,
+    owner: token.token?.owner! as Address,
   }
 
   // Filter out offers where creator is not the current NFT owner
