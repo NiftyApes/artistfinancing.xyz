@@ -20,11 +20,11 @@ const HomeCarousel: FC<Props> = ({ cards }) => {
   const timer = 5000
   const cardOffset = 15
   const cardTotal = cards.length
-  const cardSize = 305
+  const cardSize = 400
   const frameSize = cardSize + cardTotal * cardOffset
 
   const topCardY = cardTotal * cardOffset
-  const btmCardY = topCardY + cardSize - 105
+  const btmCardY = topCardY + cardSize - 115
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -77,19 +77,19 @@ const HomeCarousel: FC<Props> = ({ cards }) => {
         className={`opacity-85 absolute z-50 border border-gray-700 bg-black py-[14px] px-[18px]`}
       >
         <div className="mb-3">
-          <div className="text-xs text-gray-500">{featuredNft.artist}</div>
-          <div className="text-sm">{featuredNft.title}</div>
+          <div className="text-sm text-gray-500">{featuredNft.artist}</div>
+          <div className="text-base">{featuredNft.title}</div>
         </div>
         <div className="flex">
           <div>
-            <div className="text-[10px]">{featuredNft.buyNowPrice} ETH</div>
-            <div className="text-[8px] uppercase text-gray-500">price</div>
+            <div className="text-xs">{featuredNft.buyNowPrice} ETH</div>
+            <div className="text-[10px] uppercase text-gray-500">price</div>
           </div>
           <div className="ml-10">
-            <div className="text-[10px]">
+            <div className="text-xs">
               {featuredNft.buyFinancingPrice} ETH
             </div>
-            <div className="text-[8px] uppercase text-gray-500">
+            <div className="text-[10px] uppercase text-gray-500">
               buy with financing
             </div>
           </div>

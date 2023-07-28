@@ -5,55 +5,47 @@ const FOOTER_ENABLED = process.env.NEXT_PUBLIC_FOOTER_ENABLED == 'true'
 const Footer = () => {
   if (FOOTER_ENABLED)
     return (
-      <footer className="col-span-full mt-20 bg-white pt-20 pb-20 text-black sm:flex-row md:px-16">
-        <div className="mb-6 flex flex-row flex-wrap justify-between gap-x-6 text-xs sm:mb-0 sm:gap-x-8 sm:text-sm">
-          <div>
-            <div className="text-xl font-bold">
-              SuperRare Underground by NiftyApes
-            </div>
-            <div>The future is rare bananas</div>
-          </div>
+      <footer className='lg:flex col-span-full bg-white p-20 text-black text-sm'>
 
-          <div>
-            <div className="mb-1 font-bold uppercase">Community</div>
-            <div>
-              <Link href="https://twitter.com/niftyapes" legacyBehavior={true}>
-                <a className="min-w-max" target="_blank" rel="noreferrer">
-                  Twitter
-                </a>
-              </Link>
-            </div>
-            <div>
-              <Link
-                href="https://discord.com/invite/Ge8Zwy6syQ"
-                legacyBehavior={true}
-              >
-                <a className="min-w-max" target="_blank" rel="noreferrer">
-                  Discord
-                </a>
-              </Link>
-            </div>
+
+        <div>
+          <img src='/niftyapes/sru-logo-footer.svg' />
+          <div className='italic mt-[8px]'>Powered by NiftyApes</div>
+          <div className='flex space-x-[15px] mt-[8px]'>
+            <div><img src='/icons/twitter-plain.svg' /></div>
+            <div><img src='/icons/discord-plain.svg' /></div>
           </div>
-          <div>
-            <div className="mb-1 font-bold uppercase">Products</div>
-            <div>
-              <Link
-                href="https://www.niftyapes.money/#top"
-                legacyBehavior={true}
-              >
-                <a className="min-w-max" target="_blank" rel="noreferrer">
-                  SDK
-                </a>
-              </Link>
-            </div>
-            <div>
-              <Link href="https://app.niftyapes.money/" legacyBehavior={true}>
-                <a className="min-w-max" target="_blank" rel="noreferrer">
-                  Lending App
-                </a>
-              </Link>
-            </div>
+        </div>
+
+
+        <div className='flex items-center justify-center ml-auto space-x-[20px]'>
+          <div className="flex items-center justify-center">
+            <Link
+              href='https://www.niftyapes.money/#top'
+              legacyBehavior={true}
+            >
+              <a target='_blank' rel='noreferrer'>
+                SDK
+              </a>
+            </Link>
+            <div className='uppercase border border-black rounded-[5px] text-[8px] px-[5px] ml-2'>new</div>
           </div>
+          <div className='border-t border-r border-gray-200 h-[16px]'></div>
+          <Link href='https://app.niftyapes.money/' legacyBehavior={true}>
+            <a className='min-w-max' target='_blank' rel='noreferrer'>
+              Lending App
+            </a>
+          </Link>
+          <div className='border-t border-r border-gray-200 h-[16px]'></div>
+          <div>Blog</div>
+          <div className='border-t border-r border-gray-200 h-[16px]'></div>
+          <div>Contracts</div>
+          <div className='border-t border-r border-gray-200 h-[16px]'></div>
+          <div>FAQ</div>
+          <div className='border-t border-r border-gray-200 h-[16px]'></div>
+          <div>Docs</div>
+          <div className='border-t border-r border-gray-200 h-[16px]'></div>
+          <div>Terms of Service</div>
         </div>
       </footer>
     )
