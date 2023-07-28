@@ -57,7 +57,7 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
       { name: 'Gallery', id: 'gallery' },
       { name: 'Upcoming Payments', id: 'upcoming_payments' },
       { name: 'Manage Listings', id: 'manage_listings' },
-      { name: 'Active Loans', id: 'active_loans' },
+      { name: 'Sales', id: 'sales' },
     ]
   }
 
@@ -98,7 +98,7 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
               </Tabs.Content>
             )}
             {isOwner && (
-              <Tabs.Content value="active_loans" className="col-span-full">
+              <Tabs.Content value="sales" className="col-span-full">
                 <UserActiveLoansTable />
               </Tabs.Content>
             )}
