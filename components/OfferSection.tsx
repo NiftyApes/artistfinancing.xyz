@@ -48,6 +48,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
   const offers = useOffers({
     collection: token?.token?.contract!,
     nftId: token?.token?.tokenId!,
+    creator: account.address,
   })
 
   const activeOffers =

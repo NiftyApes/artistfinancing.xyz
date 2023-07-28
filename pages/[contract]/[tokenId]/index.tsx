@@ -152,7 +152,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         <div className="flex items-center justify-center p-4 lg:h-vh-minus-6rem">
           <img
             alt={token?.token?.name || `#${token?.token?.tokenId}`}
-            className="lg:max-h-xl object-cover lg:max-w-xl"
+            className="max-h-full object-cover lg:max-w-xl"
             src={optimizeImage(token?.token?.image, 533)}
           />
         </div>
