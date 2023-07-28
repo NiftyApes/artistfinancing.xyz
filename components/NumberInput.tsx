@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React, { InputHTMLAttributes, useState } from 'react'
+import React, { InputHTMLAttributes, useEffect, useState } from 'react'
 
 interface NumberInputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
@@ -13,9 +13,17 @@ const NumberInput: React.FC<NumberInputProps> = ({
   onChange,
   defaultValue,
   formError,
+  value: valueProp,
+  min,
   ...props
 }) => {
   const [internalValue, setInternalValue] = useState(defaultValue || '')
+
+  useEffect(() => {
+    if (valueProp !== undefined) {
+      setInternalValue(valueProp.toString())
+    }
+  }, [valueProp])
 
   const [isFocused, setIsFocused] = useState(false)
 
@@ -27,45 +35,47 @@ const NumberInput: React.FC<NumberInputProps> = ({
   }
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    // Set value to min on blur
+    if (!isNaN(Number(min)) && Number(e.target.value) < Number(min)) {
+      handleChange(String(min))
+    }
+
     setIsFocused(false)
     if (props.onBlur) {
       props.onBlur(e)
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key.length === 1 && /[a-zA-Z]/g.test(e.key)) e.preventDefault()
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInternalValue(e.target.value)
+  const handleChange = (value: string) => {
+    setInternalValue(value)
 
     if (onChange) {
-      onChange(String(e.target.value), Number(e.target.value))
+      onChange(value, Number(value))
     }
   }
+
+  const handleChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
+    handleChange(e.target.value)
 
   return (
     <div
       className={clsx(
-        'flex h-full w-full items-center border-[1px] border-gray-500 bg-white',
+        'flex h-full w-full items-center space-x-2 border-[1px] border-gray-500 bg-white px-4 py-2',
         { 'border-transparent ring-2 ring-black': isFocused },
         { 'border-red-500 ring-2 ring-red-500': formError }
       )}
     >
       <input
         type="number"
-        className="w-full bg-transparent px-4 py-2 font-bold text-black selection:bg-blue-200 focus:appearance-none focus:outline-none"
+        className="w-full bg-transparent text-sm font-bold text-black focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
         onFocus={handleFocus}
         onBlur={handleBlur}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
+        onChange={handleChangeEvent}
         value={internalValue}
+        min={min}
         {...props}
       />
-      {descriptor && (
-        <div className="px-4 py-2 text-gray-500">{descriptor}</div>
-      )}
+      {descriptor && <div className="text-gray-500">{descriptor}</div>}
     </div>
   )
 }

@@ -149,4 +149,19 @@ function formatBN(
   }
 }
 
-export { formatDollar, formatBN, formatNumber }
+const scientificToDecimal = (num: string | number) => {
+  num = typeof num === 'number' ? num.toString() : num
+
+  if (!/\d+\.?\d*e[\+\-]*\d+/i.test(num)) {
+    return num
+  }
+
+  let [base, expo] = num.toLowerCase().split('e')
+  const decimalPlaces = base.split('.')[1]?.length || 0
+  let response = Number.parseFloat(num).toFixed(
+    Math.max(0, expo ? decimalPlaces - Number.parseInt(expo) : decimalPlaces)
+  )
+  return response.indexOf('.') !== -1 ? response.replace(/0+$/, '') : response
+}
+
+export { formatDollar, formatBN, formatNumber, scientificToDecimal }
