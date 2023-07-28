@@ -161,11 +161,11 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       <div className="relative col-span-full flex overflow-auto lg:col-span-4 lg:h-vh-minus-6rem lg:pr-12">
         <div className="grid w-full grid-flow-col gap-4 lg:w-auto">
           <div className="resize-none lg:col-span-3">
-            <div className="reservoir-h3 mb-8 text-center font-semibold lg:text-left">
+            <div className="reservoir-h3 mb-8 text-center font-semibold lg:!text-left">
               {token?.token?.name || `#${token?.token?.tokenId}`}
             </div>
 
-            <div className="mb-8 flex items-center justify-center space-x-[100px] lg:justify-start">
+            <div className="mb-16 flex items-center justify-center space-x-[100px] lg:!justify-start">
               <EthAccount
                 side="left"
                 label="Artist"

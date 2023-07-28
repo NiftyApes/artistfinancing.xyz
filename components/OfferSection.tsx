@@ -68,6 +68,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
       : '',
     contractAddress: token.token?.contract! as Address,
     collectionName: token.token?.collection?.name!,
+    owner: token.token?.owner! as Address,
   }
 
   /**
@@ -136,7 +137,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
   }
 
   return (
-    <div>
+    <>
       {isLoadingOwnershipCheck ? (
         <div className="flex items-center justify-center">
           <ClipLoader color="#36d7b7" />
@@ -190,7 +191,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
           {renderActiveListings()}
         </div>
       )}
-    </div>
+    </>
   )
 }
 
