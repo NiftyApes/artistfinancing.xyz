@@ -226,7 +226,7 @@ const App: FC<AppProps & { baseUrl: string }> = ({
 AppWrapper.getInitialProps = async (appContext: AppContext) => {
   // calls page's `getInitialProps` and fills `appProps.pageProps`
   const appProps = await NextApp.getInitialProps(appContext)
-  let baseUrl = ''
+  let baseUrl = 'womp'
 
   if (appContext.ctx.req?.headers.host) {
     baseUrl = `http://${appContext.ctx.req?.headers.host}`
