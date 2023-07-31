@@ -86,9 +86,7 @@ const HomeCarousel: FC<Props> = ({ cards }) => {
             <div className="text-[10px] uppercase text-gray-500">price</div>
           </div>
           <div className="ml-10">
-            <div className="text-xs">
-              {featuredNft.buyFinancingPrice} ETH
-            </div>
+            <div className="text-xs">{featuredNft.buyFinancingPrice} ETH</div>
             <div className="text-[10px] uppercase text-gray-500">
               buy with financing
             </div>

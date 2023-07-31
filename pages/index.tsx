@@ -13,7 +13,7 @@ import {
   AiOutlinePlus,
   AiOutlineUpCircle,
   AiOutlineArrowRight,
-  AiOutlineTwitter
+  AiOutlineTwitter,
 } from 'react-icons/ai'
 import { BsArrowRight } from 'react-icons/bs'
 import Link from 'next/link'
@@ -42,19 +42,19 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>
 const metadata = {
   title: (title: string) => <title>{title}</title>,
   description: (description: string) => (
-    <meta name='description' content={description} />
+    <meta name="description" content={description} />
   ),
   image: (image?: string) => {
     if (image) {
       return (
         <>
-          <meta name='twitter:image' content={image} />
-          <meta name='og:image' content={image} />
+          <meta name="twitter:image" content={image} />
+          <meta name="og:image" content={image} />
         </>
       )
     }
     return null
-  }
+  },
 }
 
 const CAROUSEL = [
@@ -65,7 +65,7 @@ const CAROUSEL = [
     image:
       'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
     rarity: '1/1',
-    title: 'Breaker'
+    title: 'Breaker',
   },
   {
     artist: 'Miss AL Simpson',
@@ -74,7 +74,7 @@ const CAROUSEL = [
     image:
       'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F5136%252Fk7lqfl?ixlib=js-3.8.0&w=550&h=550&fit=crop&q=75&auto=format%2Ccompress&s=81a357466eb6a7148f462b431d0349a0',
     rarity: '1/1',
-    title: 'HAUNTED BRICKS'
+    title: 'HAUNTED BRICKS',
   },
   {
     artist: 'Yigit Yerlikaya',
@@ -83,8 +83,8 @@ const CAROUSEL = [
     image:
       'https://ipfs.pixura.io/ipfs/QmaYrjB5XrgHpVsCyLvsRN6kCKmyP6ZBbTvAM7aiK56p37/quantumania.jpg',
     rarity: '1/1',
-    title: 'Quantumania'
-  }
+    title: 'Quantumania',
+  },
 ]
 
 const Home: NextPage<Props> = ({ fallback }) => {
@@ -119,20 +119,20 @@ const Home: NextPage<Props> = ({ fallback }) => {
         {image}
       </Head>
 
-      <div className='col-span-full mt-20 mb-20 flex items-center justify-center px-4'>
-        <div className='mr-[90px]'>
-          <div className='mb-[24px] text-6xl text-white'>
-            <div className='font-light'>What is</div>
-            <div className='font-extrabold'>Artist Financing?</div>
+      <div className="col-span-full mt-20 mb-20 flex items-center justify-center px-4">
+        <div className="mr-[90px]">
+          <div className="mb-[24px] text-6xl text-white">
+            <div className="font-light">What is</div>
+            <div className="font-extrabold">Artist Financing?</div>
           </div>
 
-          <div className='text-2xl text-white font-thin'>
-            Admirers <span className='text-gray-600'>become</span> collectors{' '}
-            <span className='text-gray-600'>with</span> flexible<br /> payments
-            options.
+          <div className="text-2xl font-thin text-white">
+            Admirers <span className="text-gray-600">become</span> collectors{' '}
+            <span className="text-gray-600">with</span> flexible
+            <br /> payments options.
           </div>
 
-          <div className='mt-10 flex'>
+          <div className="mt-10 flex">
             <Link
               href={
                 isConnected
@@ -140,19 +140,17 @@ const Home: NextPage<Props> = ({ fallback }) => {
                   : 'IMPLMENT WALLET CONNECT'
               }
             >
-              <div className='flex flex-row rounded-full bg-white py-5 px-14 text-center uppercase text-black'>
-                <span className='mt-0.2 text-lg'>list art</span>
-                <div
-                  className='flex justify-center items-center border border-black rounded-full mt-[2px] ml-[15px] w-[24px] h-[24px]'>
-                  <AiOutlinePlus /></div>
+              <div className="flex flex-row rounded-full bg-white py-5 px-14 text-center uppercase text-black">
+                <span className="mt-0.2 text-lg">list art</span>
+                <div className="mt-[2px] ml-[15px] flex h-[24px] w-[24px] items-center justify-center rounded-full border border-black">
+                  <AiOutlinePlus />
+                </div>
               </div>
             </Link>
-            <Link href='https://niftyapes.readme.io/docs' target='_blank'>
-              <div className='flex flex-row rounded-full bg-black py-5 px-8 text-center uppercase text-white'>
-                <span className='text-lg'>docs</span>
-                <div
-                  className="border border-white rounded-full mt-[2px] ml-[15px] w-[24px] h-[24px] bg-[url('/icons/arrow-up-right.svg')] bg-center bg-no-repeat">
-                </div>
+            <Link href="https://niftyapes.readme.io/docs" target="_blank">
+              <div className="flex flex-row rounded-full bg-black py-5 px-8 text-center uppercase text-white">
+                <span className="text-lg">docs</span>
+                <div className="mt-[2px] ml-[15px] h-[24px] w-[24px] rounded-full border border-white bg-[url('/icons/arrow-up-right.svg')] bg-center bg-no-repeat"></div>
               </div>
             </Link>
           </div>
@@ -161,73 +159,79 @@ const Home: NextPage<Props> = ({ fallback }) => {
         <TermsOfServiceModal />
 
         <HomeCarousel cards={CAROUSEL} />
-
       </div>
-      <div className='col-span-full flex flex-col items-center justify-center mt-10'>
-        <div className='text-5xl'>How Artist Financing Works</div>
-        <div className='text-xl font-thin mt-5 text-gray-600'>Sell your art faster without compromising on your value
+      <div className="col-span-full mt-10 flex flex-col items-center justify-center">
+        <div className="text-5xl">How Artist Financing Works</div>
+        <div className="mt-5 text-xl font-thin text-gray-600">
+          Sell your art faster without compromising on your value
         </div>
 
-        <div className='flex items-center mt-[60px]'>
-          <div
-            className="border border-gray-700 rounded-[35px] p-5 h-[300px] w-[300px] bg-[url('/niftyapes/home_how_a.jpg')] bg-center bg-contain bg-no-repeat"></div>
-          <div className='flex justify-center text-gray-600 w-[100px]'><BsArrowRight /></div>
-          <div
-            className="border border-gray-700 rounded-[35px] p-5 h-[300px] w-[300px] bg-[url('/niftyapes/home_how_b.jpg')] bg-center bg-contain bg-no-repeat"></div>
-          <div className='flex justify-center text-gray-600 w-[100px]'><BsArrowRight /></div>
-          <div
-            className="border border-gray-700 rounded-[35px] p-5 h-[300px] w-[300px] bg-[url('/niftyapes/home_how_c.jpg')] bg-center bg-contain bg-no-repeat"></div>
+        <div className="mt-[60px] flex items-center">
+          <div className="h-[300px] w-[300px] rounded-[35px] border border-gray-700 bg-[url('/niftyapes/home_how_a.jpg')] bg-contain bg-center bg-no-repeat p-5"></div>
+          <div className="flex w-[100px] justify-center text-gray-600">
+            <BsArrowRight />
+          </div>
+          <div className="h-[300px] w-[300px] rounded-[35px] border border-gray-700 bg-[url('/niftyapes/home_how_b.jpg')] bg-contain bg-center bg-no-repeat p-5"></div>
+          <div className="flex w-[100px] justify-center text-gray-600">
+            <BsArrowRight />
+          </div>
+          <div className="h-[300px] w-[300px] rounded-[35px] border border-gray-700 bg-[url('/niftyapes/home_how_c.jpg')] bg-contain bg-center bg-no-repeat p-5"></div>
         </div>
 
-        <div className='flex mt-[40px] text-center'>
-          <div className='w-[300px] mr-[100px]'>
-            <div className='uppercase text-xl'>artists</div>
-            <div className='text-gray-600 text-lg'>Create financing offers with two clicks and zero transaction costs.
+        <div className="mt-[40px] flex text-center">
+          <div className="mr-[100px] w-[300px]">
+            <div className="text-xl uppercase">artists</div>
+            <div className="text-lg text-gray-600">
+              Create financing offers with two clicks and zero transaction
+              costs.
             </div>
           </div>
-          <div className='w-[300px] mr-[100px]'>
-            <div className='uppercase text-xl'>collectors</div>
-            <div className='text-gray-600 text-lg'>Purchase art for a fraction of the sell price.</div>
+          <div className="mr-[100px] w-[300px]">
+            <div className="text-xl uppercase">collectors</div>
+            <div className="text-lg text-gray-600">
+              Purchase art for a fraction of the sell price.
+            </div>
           </div>
-          <div className='w-[300px]'>
-            <div className='uppercase text-xl'>trustless</div>
-            <div className='text-gray-600 text-lg'>Art NFTs are kept in escrow smart contracts until the final payments
-              are made.
+          <div className="w-[300px]">
+            <div className="text-xl uppercase">trustless</div>
+            <div className="text-lg text-gray-600">
+              Art NFTs are kept in escrow smart contracts until the final
+              payments are made.
             </div>
           </div>
         </div>
 
-        <div className='col-span-full border-t border-gray-700 w-full mt-[90px] mb-[90px]'></div>
-        <div className='text-6xl'>Everyone Benefits</div>
+        <div className="col-span-full mt-[90px] mb-[90px] w-full border-t border-gray-700"></div>
+        <div className="text-6xl">Everyone Benefits</div>
 
-        <div className='flex items-center mt-[60px] mb-[90px]'>
-          <div className='mr-[32px] w-[320px] text-right'>
-            <div className='text-4xl'>Artists</div>
-            <div className='text-gray-600 text-xl'>Sell art faster, receive a steady monthly income stream</div>
-          </div>
-          <div className='flex flex-col items-center justify-center h-[180px] w-[180px]'>
-            <div className='absolute border border-gray-700 w-[180px]'></div>
-            <div
-              className="absolute border border-gray-700 bg-black rounded-full w-[158px] h-[158px] bg-[url('/niftyapes/home_heart.svg')] bg-center bg-no-repeat">
+        <div className="mt-[60px] mb-[90px] flex items-center">
+          <div className="mr-[32px] w-[320px] text-right">
+            <div className="text-4xl">Artists</div>
+            <div className="text-xl text-gray-600">
+              Sell art faster, receive a steady monthly income stream
             </div>
           </div>
-          <div className='ml-[32px] w-[320px] text-left'>
-            <div className='text-4xl '>Collectors</div>
-            <div className='text-gray-600 text-xl'>Collect more art while spending less ETH up-front</div>
+          <div className="flex h-[180px] w-[180px] flex-col items-center justify-center">
+            <div className="absolute w-[180px] border border-gray-700"></div>
+            <div className="absolute h-[158px] w-[158px] rounded-full border border-gray-700 bg-black bg-[url('/niftyapes/home_heart.svg')] bg-center bg-no-repeat"></div>
+          </div>
+          <div className="ml-[32px] w-[320px] text-left">
+            <div className="text-4xl ">Collectors</div>
+            <div className="text-xl text-gray-600">
+              Collect more art while spending less ETH up-front
+            </div>
           </div>
         </div>
 
+        <div className="col-span-full flex w-full flex-col items-center bg-[url('/niftyapes/home_holographic_bg.png')] bg-cover bg-no-repeat py-20 text-black">
+          <div className="mb-[24px] text-6xl">Powered by NiftyApes</div>
 
-        <div
-          className="flex flex-col items-center col-span-full py-20 w-full text-black bg-[url('/niftyapes/home_holographic_bg.png')] bg-cover bg-no-repeat">
-          <div className='text-6xl mb-[24px]'>Powered by NiftyApes</div>
-
-          <div className='flex items-center text-2xl mb-[48px]'>
-            <div className='underline'>Protocol Benefits</div>
-            <div className='ml-[15px] mr-[15px] rounded-full w-[8px] h-[8px] bg-black'></div>
-            <div className='underline'>Artist Benefits</div>
-            <div className='ml-[15px] mr-[15px] rounded-full w-[8px] h-[8px] bg-black'></div>
-            <div className='underline'>Buyer Benefits</div>
+          <div className="mb-[48px] flex items-center text-2xl">
+            <div className="underline">Protocol Benefits</div>
+            <div className="ml-[15px] mr-[15px] h-[8px] w-[8px] rounded-full bg-black"></div>
+            <div className="underline">Artist Benefits</div>
+            <div className="ml-[15px] mr-[15px] h-[8px] w-[8px] rounded-full bg-black"></div>
+            <div className="underline">Buyer Benefits</div>
           </div>
 
           <Link
@@ -237,19 +241,17 @@ const Home: NextPage<Props> = ({ fallback }) => {
                 : 'IMPLMENT WALLET CONNECT'
             }
           >
-            <div className='flex flex-row rounded-[10px] bg-black py-[24px] px-[75px] text-white uppercase mb-[35px]'>
+            <div className="mb-[35px] flex flex-row rounded-[10px] bg-black py-[24px] px-[75px] uppercase text-white">
               <span>list with financing</span>
-              <div
-                className='flex justify-center items-center border border-white rounded-full mt-[2px] ml-[15px] w-[24px] h-[24px]'>
-                <AiOutlinePlus /></div>
+              <div className="mt-[2px] ml-[15px] flex h-[24px] w-[24px] items-center justify-center rounded-full border border-white">
+                <AiOutlinePlus />
+              </div>
             </div>
           </Link>
 
-          <div className='flex uppercase'>
+          <div className="flex uppercase">
             <span>build with seller financing sdk</span>
-            <div
-              className="border border-gray-700 rounded-full ml-[10px] w-[24px] h-[24px] bg-[url('/icons/package-plus.svg')] bg-center bg-no-repeat">
-            </div>
+            <div className="ml-[10px] h-[24px] w-[24px] rounded-full border border-gray-700 bg-[url('/icons/package-plus.svg')] bg-center bg-no-repeat"></div>
           </div>
         </div>
       </div>
@@ -269,7 +271,7 @@ export const getStaticProps: GetStaticProps<{
 
   if (RESERVOIR_API_KEY) {
     options.headers = {
-      'x-api-key': RESERVOIR_API_KEY
+      'x-api-key': RESERVOIR_API_KEY,
     }
   }
 
@@ -278,7 +280,7 @@ export const getStaticProps: GetStaticProps<{
   let query: paths['/collections/v5']['get']['parameters']['query'] = {
     limit: 20,
     sortBy: '1DayVolume',
-    normalizeRoyalties: true
+    normalizeRoyalties: true,
   }
 
   if (COLLECTION && !COMMUNITY) query.contract = [COLLECTION]
@@ -293,8 +295,8 @@ export const getStaticProps: GetStaticProps<{
   return {
     props: {
       fallback: {
-        collections
-      }
-    }
+        collections,
+      },
+    },
   }
 }
