@@ -169,11 +169,14 @@ const Home: NextPage<Props> = ({ fallback }) => {
         </div>
 
         <div className='flex items-center mt-[60px]'>
-          <div className="border border-gray-700 rounded-[35px] p-5 h-[300px] w-[300px] bg-[url('/niftyapes/home_how_a.jpg')] bg-center bg-contain bg-no-repeat"></div>
+          <div
+            className="border border-gray-700 rounded-[35px] p-5 h-[300px] w-[300px] bg-[url('/niftyapes/home_how_a.jpg')] bg-center bg-contain bg-no-repeat"></div>
           <div className='flex justify-center text-gray-600 w-[100px]'><BsArrowRight /></div>
-          <div className="border border-gray-700 rounded-[35px] p-5 h-[300px] w-[300px] bg-[url('/niftyapes/home_how_b.jpg')] bg-center bg-contain bg-no-repeat"></div>
+          <div
+            className="border border-gray-700 rounded-[35px] p-5 h-[300px] w-[300px] bg-[url('/niftyapes/home_how_b.jpg')] bg-center bg-contain bg-no-repeat"></div>
           <div className='flex justify-center text-gray-600 w-[100px]'><BsArrowRight /></div>
-          <div className="border border-gray-700 rounded-[35px] p-5 h-[300px] w-[300px] bg-[url('/niftyapes/home_how_c.jpg')] bg-center bg-contain bg-no-repeat"></div>
+          <div
+            className="border border-gray-700 rounded-[35px] p-5 h-[300px] w-[300px] bg-[url('/niftyapes/home_how_c.jpg')] bg-center bg-contain bg-no-repeat"></div>
         </div>
 
         <div className='flex mt-[40px] text-center'>
@@ -227,12 +230,20 @@ const Home: NextPage<Props> = ({ fallback }) => {
             <div className='underline'>Buyer Benefits</div>
           </div>
 
-          <div className='flex flex-row rounded-[10px] bg-black py-[24px] px-[75px] text-white uppercase mb-[35px]'>
-            <span>list with financing</span>
-            <div
-              className='flex justify-center items-center border border-white rounded-full mt-[2px] ml-[15px] w-[24px] h-[24px]'>
-              <AiOutlinePlus /></div>
-          </div>
+          <Link
+            href={
+              isConnected
+                ? `address/${address}?tab=gallery`
+                : 'IMPLMENT WALLET CONNECT'
+            }
+          >
+            <div className='flex flex-row rounded-[10px] bg-black py-[24px] px-[75px] text-white uppercase mb-[35px]'>
+              <span>list with financing</span>
+              <div
+                className='flex justify-center items-center border border-white rounded-full mt-[2px] ml-[15px] w-[24px] h-[24px]'>
+                <AiOutlinePlus /></div>
+            </div>
+          </Link>
 
           <div className='flex uppercase'>
             <span>build with seller financing sdk</span>
