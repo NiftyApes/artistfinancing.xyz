@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react'
 
-type FeaturedNFT = {
+export type FeaturedNFT = {
   artist: string
   buyFinancingPrice: number
   buyNowPrice: number
