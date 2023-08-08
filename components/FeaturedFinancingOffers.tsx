@@ -88,7 +88,7 @@ export default function FeaturedFinancingOffers() {
   })
 
   return (
-    <div className="mb-12 flex w-full flex-col space-y-12">
+    <div className="flex w-full flex-col space-y-12">
       <Masonry
         key="tokensGridMasonry"
         breakpointCols={{
