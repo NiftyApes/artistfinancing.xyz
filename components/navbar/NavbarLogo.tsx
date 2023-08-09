@@ -26,10 +26,8 @@ const NavbarLogo: FC<Props> = ({ className }) => {
         className={`relative inline-flex flex-none items-center gap-1 ${className}`}
       >
         <img src={logo} alt={logoAlt} className={`mr-5 block h-6 w-auto`} />
-        <span className='text-gray-400 hover:text-white hover:underline'>
-          <Link href='/explore'>
-          Explore
-          </Link>
+        <span className="text-gray-400 hover:text-white hover:underline">
+          <Link href="/explore">Explore</Link>
         </span>
       </a>
     </Link>
