@@ -57,6 +57,12 @@ export default function MakePaymentModal({
       .mul(BigNumber.from(loan.periodInterestRateBps))
       .div(BigNumber.from('10000'))
   )
+  // Pay in full amount is remaining principal plus this period's interest.
+  const maxPayment: BigNumber = BigNumber.from(loan.remainingPrincipal).add(
+    BigNumber.from(loan.remainingPrincipal)
+      .mul(BigNumber.from(loan.periodInterestRateBps))
+      .div(BigNumber.from('10000'))
+  )
 
   const [inputVal, setInputVal] = useState(formatEther(minPayment))
   const [payment, setPayment] = useState<BigNumber>(minPayment)
@@ -230,40 +236,51 @@ export default function MakePaymentModal({
                       </div>
                     </div>
 
-                    <div className="flex w-full flex-row items-center gap-4">
+                    <div className="flex w-full flex-row items-center justify-between">
                       <p className="text-gray-500">Payment Amount</p>
-                      <div className="w-[280px]">
-                        <NumberInput
-                          value={inputVal}
-                          disabled={isLoadingTxn || isLoadingWrite}
-                          descriptor="ETH"
-                          min={0}
-                          onChange={(valueAsString) => {
-                            setValueErr(false)
-                            if (!valueAsString) {
-                              setValueErr(true)
-                              return
-                            }
-                            setInputVal(valueAsString)
+                      <div className="flex space-x-6">
+                        <div className="w-[180px]">
+                          <NumberInput
+                            value={inputVal}
+                            disabled={isLoadingTxn || isLoadingWrite}
+                            descriptor="ETH"
+                            min={0}
+                            onChange={(valueAsString) => {
+                              setValueErr(false)
+                              if (!valueAsString) {
+                                setValueErr(true)
+                                return
+                              }
+                              setInputVal(valueAsString)
 
-                            // Setting the payment value requires parsing scientific notation input
-                            // into decimal and then attempting to parse and ether value from that.
-                            // If the user enters an invalid ether value, then we do not set the
-                            // payment value. They will have to fix their input to proceed.
-                            let parsedEther
-                            try {
-                              parsedEther = parseEther(
-                                scientificToDecimal(valueAsString)
-                              )
-                            } catch (err) {
-                              setValueErr(true)
-                              return
-                            }
+                              // Setting the payment value requires parsing scientific notation input
+                              // into decimal and then attempting to parse and ether value from that.
+                              // If the user enters an invalid ether value, then we do not set the
+                              // payment value. They will have to fix their input to proceed.
+                              let parsedEther
+                              try {
+                                parsedEther = parseEther(
+                                  scientificToDecimal(valueAsString)
+                                )
+                              } catch (err) {
+                                setValueErr(true)
+                                return
+                              }
 
-                            resetWrite()
-                            setPayment(parsedEther)
+                              resetWrite()
+                              setPayment(parsedEther)
+                            }}
+                          />
+                        </div>
+                        <button
+                          className="uppercase underline underline-offset-2 hover:decoration-2"
+                          onClick={() => {
+                            setInputVal(formatEther(maxPayment))
+                            setPayment(maxPayment)
                           }}
-                        />
+                        >
+                          PAY IN FULL
+                        </button>
                       </div>
                     </div>
                   </div>
