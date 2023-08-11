@@ -2,6 +2,7 @@ import {
   Address,
   BuyWithFinancingModal,
   CreateOfferModal,
+  useLoans,
   useOffers,
   useSellerFinancingContract,
   useUnderlyingNFTOwner,
@@ -18,6 +19,7 @@ import { useAccount } from 'wagmi'
 import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
 import { formatBN } from 'lib/numbers'
 import { DateTime, Duration } from 'luxon'
+import MakePaymentModal from './MakePaymentModal'
 
 type Props = {
   token: ReturnType<typeof useTokens>['data'][0]
@@ -54,6 +56,18 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
   const activeOffers =
     offers.data?.filter((offer) => offer.status === 'ACTIVE') || []
   const hasActiveOffers = activeOffers && activeOffers.length > 0
+
+  const {
+    data: loans,
+    isLoading: isLoadingActiveLoans,
+    refetch: refetchLoans,
+  } = useLoans({ buyer: account.address })
+  const activeLoan = loans?.find(
+    (loan) =>
+      loan.offer.offer.nftId === token?.token?.tokenId &&
+      loan.offer.offer.nftContractAddress &&
+      token?.token?.collection?.id
+  )
 
   if (!isMounted || !token) {
     return null
@@ -133,7 +147,12 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
   }
 
   if (isLoanTicket) {
-    return <>Active Loan...</>
+    return (
+      <>
+        Active Loan...
+        <div>Owned by NiftyApes {isOwner === true ? 'Rruw' : 'false'}</div>
+      </>
+    )
   }
 
   return (
@@ -142,7 +161,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
         <div className="flex items-center justify-center">
           <ClipLoader color="#36d7b7" />
         </div>
-      ) : isNiftyApesOwned ? (
+      ) : isNiftyApesOwned && activeLoan ? (
         <div className="flex flex-col space-y-6">
           <div className="flex flex-col">
             <h3 className="reservoir-h3">Purchased with Financing</h3>
@@ -156,19 +175,34 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
             </div>
           </div>
           <div className="flex w-full space-x-2">
-            <Link href={`/address/${address}`} legacyBehavior={true}>
-              <a>
-                <EthAccount
-                  address={address}
-                  side="left"
-                  label="Underlying Owner"
+            <div className="mr-2">
+              <div className="flex">
+                <Link href={`/address/${address}`} className="mr-2">
+                  <EthAccount
+                    address={address}
+                    side="left"
+                    label="Underlying Owner"
+                  />
+                </Link>
+                <InfoTooltip
+                  side="bottom"
+                  content="You are entitled to this NFT once your loan is paid in full."
                 />
-              </a>
-            </Link>
-            <InfoTooltip
-              side="bottom"
-              content="You are entitled to this NFT once your loan is paid in full."
-            />
+              </div>
+            </div>
+            {!isLoadingActiveLoans && activeLoan && (
+              <div className="flex-grow">
+                <MakePaymentModal
+                  offer={activeLoan?.offer?.offer}
+                  loan={activeLoan?.loan}
+                  image={token.token?.image}
+                  tokenId={token.token?.tokenId}
+                  tokenName={token.token?.name}
+                  collectionName={token.token?.collection?.name}
+                  refetchLoans={refetchLoans}
+                />
+              </div>
+            )}
           </div>
         </div>
       ) : (
