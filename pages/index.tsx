@@ -11,7 +11,7 @@ import HomeCarousel from '../components/HomeCarousel'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { BsArrowRight } from 'react-icons/bs'
 import Link from 'next/link'
-import { Address, useAccount } from 'wagmi'
+import { useAccount } from 'wagmi'
 import HomeFeatured from '../components/HomeFeatured'
 
 // Environment variables

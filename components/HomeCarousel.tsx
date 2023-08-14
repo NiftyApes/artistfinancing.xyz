@@ -5,7 +5,7 @@ export type FeaturedNFT = {
   artist: string
   buyFinancingPrice: number
   buyNowPrice: number
-  contractAddress: `0x${string}`
+  contractAddress: string
   image: string
   rarity: string
   title: string
