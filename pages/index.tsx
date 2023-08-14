@@ -11,7 +11,7 @@ import HomeCarousel from '../components/HomeCarousel'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { BsArrowRight } from 'react-icons/bs'
 import Link from 'next/link'
-import { useAccount } from 'wagmi'
+import { Address, useAccount } from 'wagmi'
 import HomeFeatured from '../components/HomeFeatured'
 
 // Environment variables
@@ -57,28 +57,34 @@ const CAROUSEL = [
     artist: 'XCopy',
     buyFinancingPrice: 70,
     buyNowPrice: 350,
+    contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
       'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
     rarity: '1/1',
     title: 'Breaker',
+    tokenId: '275',
   },
   {
-    artist: 'Miss AL Simpson',
-    buyFinancingPrice: 4.12,
-    buyNowPrice: 20.6,
+    artist: 'XCopy',
+    buyFinancingPrice: 70,
+    buyNowPrice: 350,
+    contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
-      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F5136%252Fk7lqfl?ixlib=js-3.8.0&w=550&h=550&fit=crop&q=75&auto=format%2Ccompress&s=81a357466eb6a7148f462b431d0349a0',
+      'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
     rarity: '1/1',
-    title: 'HAUNTED BRICKS',
+    title: 'Breaker',
+    tokenId: '275',
   },
   {
-    artist: 'Yigit Yerlikaya',
-    buyFinancingPrice: 0.58,
-    buyNowPrice: 2.9,
+    artist: 'XCopy',
+    buyFinancingPrice: 70,
+    buyNowPrice: 350,
+    contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
-      'https://ipfs.pixura.io/ipfs/QmaYrjB5XrgHpVsCyLvsRN6kCKmyP6ZBbTvAM7aiK56p37/quantumania.jpg',
+      'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
     rarity: '1/1',
-    title: 'Quantumania',
+    title: 'Breaker',
+    tokenId: '275',
   },
 ]
 
@@ -87,64 +93,45 @@ const FEATURED = [
     artist: '@xcopy',
     buyFinancingPrice: 4.12,
     buyNowPrice: 20.6,
+    contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
       'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45620%252F9f5cf41c-6869-40c9-b286-acf042bac3d5%252Furi%252Fimage-2023-07-27-00-44-xfyag?ixlib=js-3.8.0&w=1080&fit=clip&q=100&auto=format&s=bbe92020ff2c95e50409189908f3c10a',
     rarity: '1/1',
     title: 'copy paste guy',
+    tokenId: '275',
   },
   {
-    artist: '@hobbs',
+    artist: '@xcopy',
     buyFinancingPrice: 4.12,
     buyNowPrice: 20.6,
+    contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
       'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45620%252F9f5cf41c-6869-40c9-b286-acf042bac3d5%252Furi%252Fimage-2023-07-27-00-44-xfyag?ixlib=js-3.8.0&w=1080&fit=clip&q=100&auto=format&s=bbe92020ff2c95e50409189908f3c10a',
     rarity: '1/1',
-    title: 'Fidenza 132',
+    title: 'copy paste guy',
+    tokenId: '275',
   },
   {
-    artist: '@cherniak',
+    artist: '@xcopy',
     buyFinancingPrice: 4.12,
     buyNowPrice: 20.6,
+    contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
       'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45620%252F9f5cf41c-6869-40c9-b286-acf042bac3d5%252Furi%252Fimage-2023-07-27-00-44-xfyag?ixlib=js-3.8.0&w=1080&fit=clip&q=100&auto=format&s=bbe92020ff2c95e50409189908f3c10a',
     rarity: '1/1',
-    title: 'Dead Ringer',
+    title: 'copy paste guy',
+    tokenId: '275',
   },
   {
-    artist: '@beeple',
+    artist: '@xcopy',
     buyFinancingPrice: 4.12,
     buyNowPrice: 20.6,
+    contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
       'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45620%252F9f5cf41c-6869-40c9-b286-acf042bac3d5%252Furi%252Fimage-2023-07-27-00-44-xfyag?ixlib=js-3.8.0&w=1080&fit=clip&q=100&auto=format&s=bbe92020ff2c95e50409189908f3c10a',
     rarity: '1/1',
-    title: 'Day 77',
-  },
-  {
-    artist: '@ninjarat',
-    buyFinancingPrice: 4.12,
-    buyNowPrice: 20.6,
-    image:
-      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45620%252F9f5cf41c-6869-40c9-b286-acf042bac3d5%252Furi%252Fimage-2023-07-27-00-44-xfyag?ixlib=js-3.8.0&w=1080&fit=clip&q=100&auto=format&s=bbe92020ff2c95e50409189908f3c10a',
-    rarity: '1/1',
-    title: 'HAUNTED BRICKS',
-  },
-  {
-    artist: '@rektguy',
-    buyFinancingPrice: 4.12,
-    buyNowPrice: 20.6,
-    image:
-      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45620%252F9f5cf41c-6869-40c9-b286-acf042bac3d5%252Furi%252Fimage-2023-07-27-00-44-xfyag?ixlib=js-3.8.0&w=1080&fit=clip&q=100&auto=format&s=bbe92020ff2c95e50409189908f3c10a',
-    rarity: '1/1',
-    title: 'HAUNTED BRICKS',
-  },
-  {
-    artist: '@cryptoad',
-    buyFinancingPrice: 4.12,
-    buyNowPrice: 20.6,
-    image:
-      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45620%252F9f5cf41c-6869-40c9-b286-acf042bac3d5%252Furi%252Fimage-2023-07-27-00-44-xfyag?ixlib=js-3.8.0&w=1080&fit=clip&q=100&auto=format&s=bbe92020ff2c95e50409189908f3c10a',
-    rarity: '1/1',
-    title: 'HAUNTED BRICKS',
+    title: 'copy paste guy',
+    tokenId: '275',
   },
 ]
 

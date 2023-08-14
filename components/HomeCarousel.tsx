@@ -1,12 +1,16 @@
 import { FC, useEffect, useState } from 'react'
+import { Address } from 'wagmi'
+import Link from 'next/link'
 
 export type FeaturedNFT = {
   artist: string
   buyFinancingPrice: number
   buyNowPrice: number
-  title: string
+  contractAddress: Address
   image: string
   rarity: string
+  title: string
+  tokenId: string
 }
 
 type Props = {
@@ -48,21 +52,25 @@ const HomeCarousel: FC<Props> = ({ cards }) => {
       <div className="relative left-[20px]">
         {shiftedCards.map((item, idx) => {
           return (
-            <div
+            <Link
               key={`card-${idx}`}
-              style={{
-                height: `${cardSize}px`,
-                left: `${idx * cardOffset}px`,
-                opacity: (cardTotal - idx) / cardTotal,
-                overflow: 'hidden',
-                position: 'absolute',
-                top: `${cardTotal * cardOffset - (idx + 1) * cardOffset}px`,
-                width: `${cardSize}px`,
-                zIndex: cardTotal - idx,
-              }}
+              href={`/${item.contractAddress}/${item.tokenId}`}
             >
-              <img src={item.image} alt={item.title} />
-            </div>
+              <div
+                style={{
+                  height: `${cardSize}px`,
+                  left: `${idx * cardOffset}px`,
+                  opacity: (cardTotal - idx) / cardTotal,
+                  overflow: 'hidden',
+                  position: 'absolute',
+                  top: `${cardTotal * cardOffset - (idx + 1) * cardOffset}px`,
+                  width: `${cardSize}px`,
+                  zIndex: cardTotal - idx,
+                }}
+              >
+                <img src={item.image} alt={item.title} />
+              </div>
+            </Link>
           )
         })}
       </div>
