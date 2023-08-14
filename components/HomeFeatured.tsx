@@ -59,7 +59,7 @@ const HomeFeatured: FC<Props> = ({ cards }) => {
 const renderFeaturedImage = (item: FeaturedNFT) => {
   return (
     <div className="group relative">
-      <Link href="#">
+      <Link href={`/${item.contractAddress}/${item.tokenId}`}>
         <div className="absolute right-0 z-50 bg-white py-[14px] px-[18px] opacity-0 transition-opacity duration-100 group-hover:opacity-100">
           <div className="mb-3">
             <span className="mr-2 text-sm text-gray-500">{item.artist}</span>
