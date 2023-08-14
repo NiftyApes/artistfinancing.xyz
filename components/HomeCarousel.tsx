@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from 'react'
-import { Address } from 'wagmi'
 import Link from 'next/link'
 
 export type FeaturedNFT = {
   artist: string
   buyFinancingPrice: number
   buyNowPrice: number
-  contractAddress: Address
+  contractAddress: `0x${string}`
   image: string
   rarity: string
   title: string
