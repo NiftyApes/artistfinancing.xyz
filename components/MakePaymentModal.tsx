@@ -236,10 +236,10 @@ export default function MakePaymentModal({
                       </div>
                     </div>
 
-                    <div className="flex w-full flex-row items-center justify-between">
+                    <div className="flex w-full flex-row items-center justify-between space-x-6">
                       <p className="text-gray-500">Payment Amount</p>
-                      <div className="flex space-x-6">
-                        <div className="w-[180px]">
+                      <div className="flex space-x-4">
+                        <div className="w-[160px]">
                           <NumberInput
                             value={inputVal}
                             disabled={isLoadingTxn || isLoadingWrite}
