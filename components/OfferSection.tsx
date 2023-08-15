@@ -34,8 +34,17 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
   const router = useRouter()
 
   const { address } = useAccount()
-  const { isEntitledToNft, isLoadingLoans: isLoadingOwnershipCheck } =
-    useUnderlyingNFTOwner()
+  const {
+    isEntitledToNft,
+    isLoadingLoans: isLoadingOwnershipCheck,
+    activeLoanforNft,
+  } = useUnderlyingNFTOwner()
+
+  const activeLoan = activeLoanforNft(
+    token?.token?.contract as Address,
+    token?.token?.tokenId
+  )
+
   const isNiftyApesOwned = isEntitledToNft(
     token?.token?.contract as Address,
     token?.token?.tokenId
@@ -56,18 +65,6 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
   const activeOffers =
     offers.data?.filter((offer) => offer.status === 'ACTIVE') || []
   const hasActiveOffers = activeOffers && activeOffers.length > 0
-
-  const {
-    data: loans,
-    isLoading: isLoadingActiveLoans,
-    refetch: refetchLoans,
-  } = useLoans({ buyer: account.address })
-  const activeLoan = loans?.find(
-    (loan) =>
-      loan.offer.offer.nftId === token?.token?.tokenId &&
-      loan.offer.offer.nftContractAddress &&
-      token?.token?.collection?.id
-  )
 
   if (!isMounted || !token) {
     return null
@@ -147,12 +144,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
   }
 
   if (isLoanTicket) {
-    return (
-      <>
-        Active Loan...
-        <div>Owned by NiftyApes {isOwner === true ? 'Rruw' : 'false'}</div>
-      </>
-    )
+    return <>Active Loan...</>
   }
 
   return (
@@ -190,7 +182,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
                 />
               </div>
             </div>
-            {!isLoadingActiveLoans && activeLoan && (
+            {activeLoan && (
               <div className="flex-grow">
                 <MakePaymentModal
                   offer={activeLoan?.offer?.offer}
@@ -199,7 +191,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
                   tokenId={token.token?.tokenId}
                   tokenName={token.token?.name}
                   collectionName={token.token?.collection?.name}
-                  refetchLoans={refetchLoans}
+                  refetchLoans={() => {}}
                 />
               </div>
             )}
