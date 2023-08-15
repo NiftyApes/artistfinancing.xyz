@@ -19,6 +19,7 @@ const FONT_URLS = process.env.NEXT_PUBLIC_FONT_URLS
 const SOURCE_ICON = process.env.NEXT_PUBLIC_SOURCE_ICON
 const SOURCE_NAME = process.env.NEXT_PUBLIC_SOURCE_NAME
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
+const NEXT_PUBLIC_FATHOM = process.env.NEXT_PUBLIC_FATHOM
 
 const MyDocument = function () {
   const chain = findChain(CHAIN_ID)
@@ -36,6 +37,14 @@ const MyDocument = function () {
       <meta name="description" content={META_DESCRIPTION} />
       <meta name="keywords" content="NFT, API, Protocol" />
       {/* Twitter */}
+
+      {/* Fathom */}
+      <script
+        src="https://cdn.usefathom.com/script.js"
+        data-site={NEXT_PUBLIC_FATHOM}
+        defer
+      ></script>
+
       {/* The optimal size is 1200 x 630 (1.91:1 ratio). */}
       <meta name="twitter:image" content={OG_IMAGE} />
       <meta name="twitter:card" content="summary_large_image" />

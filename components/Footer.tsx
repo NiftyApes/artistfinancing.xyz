@@ -7,7 +7,7 @@ const Footer = () => {
     return (
       <footer className="col-span-full bg-white p-20 text-sm text-black lg:flex">
         <div>
-          <img src="/niftyapes/sru-logo-footer.svg" />
+          <img src="/niftyapes/af-artist-financing-black.svg" />
           <div className="mt-[8px] italic">Powered by NiftyApes</div>
           <div className="mt-[8px] flex space-x-[15px]">
             <div>

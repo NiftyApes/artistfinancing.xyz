@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
+import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
 
 // Environment variables
 
@@ -87,6 +88,9 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       ],
     }
   )
+
+  const { updateTokenImages } = useFinancingTicketImages()
+  updateTokenImages([token])
 
   useEffect(() => {
     if (CHAIN_ID && (+CHAIN_ID === 1 || +CHAIN_ID === 5)) {
@@ -178,7 +182,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
               />
             </div>
 
-            <div className="flex items-center justify-center lg:justify-start">
+            <div className="flex items-center justify-center lg:!justify-start">
               <div className="w-[460px] lg:w-auto">
                 <div className="mb-10">
                   <OfferSection token={token} isOwner={isOwner} />

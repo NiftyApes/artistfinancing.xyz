@@ -27,7 +27,7 @@ const NavbarLogo: FC<Props> = ({ className }) => {
       >
         <img src={logo} alt={logoAlt} className={`mr-5 block h-6 w-auto`} />
         <span className="text-gray-400 hover:text-white hover:underline">
-          Explore
+          <Link href="/explore">Explore</Link>
         </span>
       </a>
     </Link>
