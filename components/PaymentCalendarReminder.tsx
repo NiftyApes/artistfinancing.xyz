@@ -1,5 +1,4 @@
-import { useCreateCalendarReminder } from '.yalc/@niftyapes/sdk/dist'
-import { Loan, useLoans } from '@niftyapes/sdk'
+import { Loan, useCreateCalendarReminder, useLoans } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import useEnvChain from 'hooks/useEnvChain'
 import { LuCalendarPlus } from 'react-icons/lu'
