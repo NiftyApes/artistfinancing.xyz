@@ -7,17 +7,18 @@ import {
   useUnderlyingNFTOwner,
 } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
-import InfoTooltip from 'components/InfoTooltip'
 import EthAccount from 'components/EthAccount'
+import InfoTooltip from 'components/InfoTooltip'
 import useMounted from 'hooks/useMounted'
+import { formatBN } from 'lib/numbers'
+import { DateTime, Duration } from 'luxon'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
+import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
 import { ClipLoader } from 'react-spinners'
 import { useAccount } from 'wagmi'
-import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
-import { formatBN } from 'lib/numbers'
-import { DateTime, Duration } from 'luxon'
+import { PaymentCalendarReminderFromToken } from './PaymentCalendarReminder'
 
 type Props = {
   token: ReturnType<typeof useTokens>['data'][0]
@@ -170,6 +171,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
               content="You are entitled to this NFT once your loan is paid in full."
             />
           </div>
+          <PaymentCalendarReminderFromToken token={token} />
         </div>
       ) : (
         <>
