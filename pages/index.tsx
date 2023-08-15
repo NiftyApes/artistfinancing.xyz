@@ -51,30 +51,20 @@ const metadata = {
     return null
   },
 }
-
 const CAROUSEL = [
   {
-    artist: 'XCopy',
+    artist: 'AnjolaDave',
     buyFinancingPrice: 70,
     buyNowPrice: 350,
-    contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
+    contractAddress: '0x378598185034531cf9becdb82bbcba2a5fc2a903',
     image:
-      'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0x378598185034531cf9becdb82bbcba2a5fc2a903%252F6%252F8xc9c?ixlib=js-3.8.0&w=550&h=550&fit=crop&q=75&auto=format%2Ccompress&s=0153d0b6b7eadffa8ba3ccc97d87d1c8',
     rarity: '1/1',
-    title: 'Breaker',
-    tokenId: '275',
+    title: 'A Message From Heaven',
+    tokenId: '6',
   },
-  {
-    artist: 'XCopy',
-    buyFinancingPrice: 70,
-    buyNowPrice: 350,
-    contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
-    image:
-      'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
-    rarity: '1/1',
-    title: 'Breaker',
-    tokenId: '275',
-  },
+]
+const CAROUSEL_TESTNET = [
   {
     artist: 'XCopy',
     buyFinancingPrice: 70,
@@ -87,50 +77,84 @@ const CAROUSEL = [
     tokenId: '275',
   },
 ]
-
 const FEATURED = [
   {
-    artist: '@xcopy',
-    buyFinancingPrice: 4.12,
-    buyNowPrice: 20.6,
+    artist: 'AnjolaDave',
+    buyFinancingPrice: 70,
+    buyNowPrice: 350,
+    contractAddress: '0x378598185034531cf9becdb82bbcba2a5fc2a903',
+    image:
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0x378598185034531cf9becdb82bbcba2a5fc2a903%252F6%252F8xc9c?ixlib=js-3.8.0&w=550&h=550&fit=crop&q=75&auto=format%2Ccompress&s=0153d0b6b7eadffa8ba3ccc97d87d1c8',
+    rarity: '1/1',
+    title: 'A Message From Heaven',
+    tokenId: '6',
+  },
+  {
+    artist: 'AnjolaDave',
+    buyFinancingPrice: 70,
+    buyNowPrice: 350,
+    contractAddress: '0x378598185034531cf9becdb82bbcba2a5fc2a903',
+    image:
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0x378598185034531cf9becdb82bbcba2a5fc2a903%252F6%252F8xc9c?ixlib=js-3.8.0&w=550&h=550&fit=crop&q=75&auto=format%2Ccompress&s=0153d0b6b7eadffa8ba3ccc97d87d1c8',
+    rarity: '1/1',
+    title: 'A Message From Heaven',
+    tokenId: '6',
+  },
+  {
+    artist: 'AnjolaDave',
+    buyFinancingPrice: 70,
+    buyNowPrice: 350,
+    contractAddress: '0x378598185034531cf9becdb82bbcba2a5fc2a903',
+    image:
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0x378598185034531cf9becdb82bbcba2a5fc2a903%252F6%252F8xc9c?ixlib=js-3.8.0&w=550&h=550&fit=crop&q=75&auto=format%2Ccompress&s=0153d0b6b7eadffa8ba3ccc97d87d1c8',
+    rarity: '1/1',
+    title: 'A Message From Heaven',
+    tokenId: '6',
+  },
+]
+const FEATURED_TESTNET = [
+  {
+    artist: 'XCopy',
+    buyFinancingPrice: 70,
+    buyNowPrice: 350,
     contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
-      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45620%252F9f5cf41c-6869-40c9-b286-acf042bac3d5%252Furi%252Fimage-2023-07-27-00-44-xfyag?ixlib=js-3.8.0&w=1080&fit=clip&q=100&auto=format&s=bbe92020ff2c95e50409189908f3c10a',
+      'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
     rarity: '1/1',
-    title: 'copy paste guy',
+    title: 'Breaker',
     tokenId: '275',
   },
   {
-    artist: '@xcopy',
-    buyFinancingPrice: 4.12,
-    buyNowPrice: 20.6,
+    artist: 'XCopy',
+    buyFinancingPrice: 70,
+    buyNowPrice: 350,
     contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
-      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45620%252F9f5cf41c-6869-40c9-b286-acf042bac3d5%252Furi%252Fimage-2023-07-27-00-44-xfyag?ixlib=js-3.8.0&w=1080&fit=clip&q=100&auto=format&s=bbe92020ff2c95e50409189908f3c10a',
+      'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
     rarity: '1/1',
-    title: 'copy paste guy',
+    title: 'Breaker',
     tokenId: '275',
   },
   {
-    artist: '@xcopy',
-    buyFinancingPrice: 4.12,
-    buyNowPrice: 20.6,
+    artist: 'XCopy',
+    buyFinancingPrice: 70,
+    buyNowPrice: 350,
     contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
-      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45620%252F9f5cf41c-6869-40c9-b286-acf042bac3d5%252Furi%252Fimage-2023-07-27-00-44-xfyag?ixlib=js-3.8.0&w=1080&fit=clip&q=100&auto=format&s=bbe92020ff2c95e50409189908f3c10a',
+      'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
     rarity: '1/1',
-    title: 'copy paste guy',
+    title: 'Breaker',
     tokenId: '275',
   },
   {
-    artist: '@xcopy',
-    buyFinancingPrice: 4.12,
-    buyNowPrice: 20.6,
+    artist: 'XCopy',
+    buyFinancingPrice: 70,
+    buyNowPrice: 350,
     contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
-      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45620%252F9f5cf41c-6869-40c9-b286-acf042bac3d5%252Furi%252Fimage-2023-07-27-00-44-xfyag?ixlib=js-3.8.0&w=1080&fit=clip&q=100&auto=format&s=bbe92020ff2c95e50409189908f3c10a',
+      'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
     rarity: '1/1',
-    title: 'copy paste guy',
+    title: 'Breaker',
     tokenId: '275',
   },
 ]
@@ -205,8 +229,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
         </div>
 
         <TermsOfServiceModal />
-
-        <HomeCarousel cards={CAROUSEL} />
+        <HomeCarousel cards={CHAIN_ID === '1' ? CAROUSEL : CAROUSEL_TESTNET} />
       </div>
       <div className="col-span-full mt-10 flex flex-col items-center justify-center">
         <div className="text-5xl">How Artist Financing Works</div>
@@ -277,7 +300,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
       <div className="col-span-full mt-[90px] mb-[90px] w-full border-t border-gray-700"></div>
 
       <div className="col-span-full mb-[90px] flex w-full items-center justify-center">
-        <HomeFeatured cards={FEATURED} />
+        <HomeFeatured cards={CHAIN_ID === '1' ? FEATURED : FEATURED_TESTNET} />
       </div>
 
       {/* ------------------ GOERLI ------------------ */}
