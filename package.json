@@ -37,6 +37,7 @@
     "detective": "^5.2.1",
     "ethers": "^5.7.1",
     "framer-motion": "^8.5.0",
+    "graphql": "^16.8.0",
     "graphql-request": "^6.1.0",
     "lodash.debounce": "^4.0.8",
     "luxon": "^3.2.1",

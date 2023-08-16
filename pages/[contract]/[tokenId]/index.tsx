@@ -14,6 +14,7 @@ import { useEffect } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
+import useSRToken from 'hooks/useSRToken'
 
 // Environment variables
 
@@ -91,6 +92,10 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
 
   const { updateTokenImages } = useFinancingTicketImages()
   updateTokenImages([token])
+
+  const { data } = useSRToken(token.token?.contract!, token.token?.tokenId!)
+  console.log('data', data)
+  // console.log('error', error)
 
   useEffect(() => {
     if (CHAIN_ID && (+CHAIN_ID === 1 || +CHAIN_ID === 5)) {
