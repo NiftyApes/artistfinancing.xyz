@@ -7,17 +7,19 @@ import {
   useUnderlyingNFTOwner,
 } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
-import InfoTooltip from 'components/InfoTooltip'
 import EthAccount from 'components/EthAccount'
+import InfoTooltip from 'components/InfoTooltip'
 import useMounted from 'hooks/useMounted'
+import { formatBN } from 'lib/numbers'
+import { DateTime, Duration } from 'luxon'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
+import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
 import { ClipLoader } from 'react-spinners'
 import { useAccount } from 'wagmi'
-import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
-import { formatBN } from 'lib/numbers'
-import { DateTime, Duration } from 'luxon'
+import MakePaymentModal from './MakePaymentModal'
+import { PaymentCalendarReminderFromToken } from './PaymentCalendarReminder'
 
 type Props = {
   token: ReturnType<typeof useTokens>['data'][0]
@@ -32,8 +34,17 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
   const router = useRouter()
 
   const { address } = useAccount()
-  const { isEntitledToNft, isLoadingLoans: isLoadingOwnershipCheck } =
-    useUnderlyingNFTOwner()
+  const {
+    isEntitledToNft,
+    isLoadingLoans: isLoadingOwnershipCheck,
+    activeLoanforNft,
+  } = useUnderlyingNFTOwner()
+
+  const activeLoan = activeLoanforNft(
+    token?.token?.contract as Address,
+    token?.token?.tokenId
+  )
+
   const isNiftyApesOwned = isEntitledToNft(
     token?.token?.contract as Address,
     token?.token?.tokenId
@@ -142,7 +153,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
         <div className="flex items-center justify-center">
           <ClipLoader color="#36d7b7" />
         </div>
-      ) : isNiftyApesOwned ? (
+      ) : isNiftyApesOwned && activeLoan ? (
         <div className="flex flex-col space-y-6">
           <div className="flex flex-col">
             <h3 className="reservoir-h3">Purchased with Financing</h3>
@@ -156,20 +167,36 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
             </div>
           </div>
           <div className="flex w-full space-x-2">
-            <Link href={`/address/${address}`} legacyBehavior={true}>
-              <a>
-                <EthAccount
-                  address={address}
-                  side="left"
-                  label="Underlying Owner"
+            <div className="mr-2">
+              <div className="flex">
+                <Link href={`/address/${address}`} className="mr-2">
+                  <EthAccount
+                    address={address}
+                    side="left"
+                    label="Underlying Owner"
+                  />
+                </Link>
+                <InfoTooltip
+                  side="bottom"
+                  content="You are entitled to this NFT once your loan is paid in full."
                 />
-              </a>
-            </Link>
-            <InfoTooltip
-              side="bottom"
-              content="You are entitled to this NFT once your loan is paid in full."
-            />
+              </div>
+            </div>
+            {activeLoan && (
+              <div className="flex-grow">
+                <MakePaymentModal
+                  offer={activeLoan?.offer?.offer}
+                  loan={activeLoan?.loan}
+                  image={token.token?.image}
+                  tokenId={token.token?.tokenId}
+                  tokenName={token.token?.name}
+                  collectionName={token.token?.collection?.name}
+                  refetchLoans={() => {}}
+                />
+              </div>
+            )}
           </div>
+          <PaymentCalendarReminderFromToken token={token} />
         </div>
       ) : (
         <>
