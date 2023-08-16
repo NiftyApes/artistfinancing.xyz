@@ -13,6 +13,7 @@ import { BsArrowRight } from 'react-icons/bs'
 import Link from 'next/link'
 import { useAccount } from 'wagmi'
 import HomeFeatured from '../components/HomeFeatured'
+import ListArtButton from '../components/ListArtButton'
 
 // Environment variables
 // For more information about these variables
@@ -205,20 +206,15 @@ const Home: NextPage<Props> = ({ fallback }) => {
           </div>
 
           <div className="mt-10 flex">
-            <Link
-              href={
-                isConnected
-                  ? `address/${address}?tab=gallery`
-                  : 'IMPLMENT WALLET CONNECT'
-              }
-            >
+            <ListArtButton>
               <div className="flex flex-row rounded-full bg-white py-5 px-14 text-center uppercase text-black">
                 <span className="mt-0.2 text-lg">list art</span>
                 <div className="mt-[2px] ml-[15px] flex h-[24px] w-[24px] items-center justify-center rounded-full border border-black">
                   <AiOutlinePlus />
                 </div>
               </div>
-            </Link>
+            </ListArtButton>
+
             <Link href="https://niftyapes.readme.io/docs" target="_blank">
               <div className="flex flex-row items-center rounded-full bg-black py-5 px-8 text-center uppercase text-white">
                 <span className="text-lg">docs</span>
@@ -368,20 +364,14 @@ const Home: NextPage<Props> = ({ fallback }) => {
             <div className="underline">Buyer Benefits</div>
           </div>
 
-          <Link
-            href={
-              isConnected
-                ? `address/${address}?tab=gallery`
-                : 'IMPLEMENT WALLET CONNECT'
-            }
-          >
+          <ListArtButton>
             <div className="mb-[35px] flex flex-row rounded-[10px] bg-black py-[24px] px-[75px] uppercase text-white">
               <span>list with financing</span>
               <div className="mt-[2px] ml-[15px] flex h-[24px] w-[24px] items-center justify-center rounded-full border border-white">
                 <AiOutlinePlus />
               </div>
             </div>
-          </Link>
+          </ListArtButton>
 
           <div className="flex uppercase">
             <span>build with seller financing sdk</span>
