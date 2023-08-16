@@ -2,10 +2,11 @@ import { Loan, LoanDetails, OfferDetails, useLoans } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import LoadingIcon from 'components/LoadingIcon'
 import MakePaymentModal from 'components/MakePaymentModal'
+import { PaymentCalendarReminderFromToken } from 'components/PaymentCalendarReminder'
 import { format } from 'date-fns'
 import isEqualAddress from 'lib/isEqualAddress'
-import { processLoan } from 'lib/processLoan'
 import { optimizeImage } from 'lib/optmizeImage'
+import { processLoan } from 'lib/processLoan'
 import { FC } from 'react'
 import { useAccount } from 'wagmi'
 import { processOffer } from '../../lib/processOffer'
@@ -163,6 +164,9 @@ const UpcomingPaymentsTableRow = ({
       {/* NEXT PAYMENT DUE */}
       <td className="whitespace-nowrap px-6 py-4">
         {format(new Date(periodEndTimestamp * 1000), 'Pp')}
+        <div className="flex pt-4" style={{ color: '#00B75F' }}>
+          <PaymentCalendarReminderFromToken token={token} />
+        </div>
       </td>
 
       {/* NEXT MINIMUM PAYMENT */}

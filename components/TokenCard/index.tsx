@@ -18,6 +18,7 @@ import { Collection } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 import TokenCardOwner from './TokenCardOwner'
 import isEqualAddress from 'lib/isEqualAddress'
+import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
@@ -45,6 +46,9 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
     collection: token?.token?.contract!,
     nftId: token?.token?.tokenId!,
   })
+
+  const { updateTokenImages } = useFinancingTicketImages()
+  updateTokenImages([token])
 
   if (!token) return null
   if (!CHAIN_ID) return null
