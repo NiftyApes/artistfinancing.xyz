@@ -121,8 +121,8 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
 
   // META
   const title = META_TITLE
-    ? metadata.title(`Buy with Financing | ${tokenName} - ${META_TITLE}`)
-    : metadata.title(`Buy with Financing | ${tokenName}
+    ? metadata.title(`${tokenName} - ${META_TITLE}`)
+    : metadata.title(`${tokenName}
     ${
       token?.token?.collection?.name
         ? ` - ${token?.token?.collection?.name}`
