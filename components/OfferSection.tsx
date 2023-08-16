@@ -2,7 +2,6 @@ import {
   Address,
   BuyWithFinancingModal,
   CreateOfferModal,
-  useLoans,
   useOffers,
   useSellerFinancingContract,
   useUnderlyingNFTOwner,
@@ -19,9 +18,6 @@ import { FC } from 'react'
 import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
 import { ClipLoader } from 'react-spinners'
 import { useAccount } from 'wagmi'
-import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
-import { formatBN } from 'lib/numbers'
-import { DateTime, Duration } from 'luxon'
 import MakePaymentModal from './MakePaymentModal'
 import { PaymentCalendarReminderFromToken } from './PaymentCalendarReminder'
 
