@@ -6,6 +6,26 @@ const SUPER_RARE_API_BASE =
   process.env.NEXT_PUBLIC_SUPER_RARE_API_BASE ||
   'https://staging-api.superrare.co'
 
+export interface SuperRareTokenData {
+  erc721_token: {
+    universal_token_id: string
+    contract_address: string
+    token_id: number
+    erc721_creator: {
+      contract_address: string
+      token_id: number
+      address: string
+      creator: {
+        id: string
+        username: string
+        fullname: string
+        avatar: string
+        bio: string
+      }
+    }
+  } | null
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -26,24 +46,14 @@ export default async function handler(
         universal_token_id
         contract_address
         token_id
-        erc721_owner {
-          contract_address
-          owner {
-            id
-            fullname
-            about
-            avatar
-            bio
-          }
-        }
         erc721_creator {
           contract_address
           token_id
           address
           creator {
             id
+            username
             fullname
-            about
             avatar
             bio
           }
@@ -58,13 +68,8 @@ export default async function handler(
     Accept: 'application/json',
   }
 
-  // TODO: Change this. And export to the hook.
-  interface Data {
-    Movie: { releaseDate: string; actors: Array<{ name: string }> }
-  }
-
   try {
-    const data = await graphQLClient.request<Data>(
+    const data = await graphQLClient.request<SuperRareTokenData>(
       document,
       { universalTokenId },
       headers
