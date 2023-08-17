@@ -101,7 +101,6 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
     name: srToken?.erc721_token?.erc721_creator.creator.username,
     avatar: srToken?.erc721_token?.erc721_creator.creator.avatar,
   }
-  console.log('srToken', srToken)
 
   useEffect(() => {
     if (CHAIN_ID && (+CHAIN_ID === 1 || +CHAIN_ID === 5)) {
