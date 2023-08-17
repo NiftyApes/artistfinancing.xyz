@@ -69,10 +69,8 @@ export default async function handler(
       { universalTokenId },
       headers
     )
-    console.log(data)
     return res.status(200).send(data)
   } catch (error) {
-    console.error(error)
     return res.status(400).send(error)
   }
 }
