@@ -14,7 +14,7 @@ import { useEffect } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
-import useSRToken from 'hooks/useSRToken'
+import useSuperRareToken from 'hooks/useSuperRareToken'
 
 // Environment variables
 
@@ -93,7 +93,10 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
   const { updateTokenImages } = useFinancingTicketImages()
   updateTokenImages([token])
 
-  const { data } = useSRToken(token.token?.contract!, token.token?.tokenId!)
+  const { data } = useSuperRareToken(
+    token.token?.contract!,
+    token.token?.tokenId!
+  )
   console.log('data', data)
   // console.log('error', error)
 
