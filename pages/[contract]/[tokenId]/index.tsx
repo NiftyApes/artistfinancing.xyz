@@ -232,7 +232,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
                 </div>
 
                 <div className="mb-14">
-                  <TokenInfo token={token.token} />
+                  <TokenInfo token={token.token} srToken={srToken} />
                 </div>
 
                 <div className="mb-10">

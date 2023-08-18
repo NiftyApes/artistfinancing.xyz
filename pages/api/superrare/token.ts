@@ -23,6 +23,9 @@ export interface SuperRareTokenData {
         bio: string
       }
     }
+    nft_image: {
+      image_full: string
+    }
   } | null
 }
 
@@ -57,6 +60,9 @@ export default async function handler(
             avatar
             bio
           }
+        }
+        nft_image {
+          image_full
         }
       }
     }
