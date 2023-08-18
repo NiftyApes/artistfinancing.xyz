@@ -17,6 +17,8 @@ const TokenInfo: FC<Props> = ({ token, srToken }) => {
 
   const ipfsUrl = srToken?.erc721_token?.nft_image?.image_full || token?.image
 
+  const metadataUrl = srToken?.erc721_token?.erc721_metadata?.metadata_uri || ''
+
   return (
     <div>
       <div className="mb-6 text-sm uppercase text-gray-400">details</div>
@@ -65,7 +67,7 @@ const TokenInfo: FC<Props> = ({ token, srToken }) => {
         </div>
 
         <div className="float-left ml-4 text-base text-gray-400">
-          <a target="_blank" rel="noopener noreferrer" href={''}>
+          <a target="_blank" rel="noopener noreferrer" href={metadataUrl}>
             <img
               src="/icons/sru-metadata.svg"
               alt="IPFS"

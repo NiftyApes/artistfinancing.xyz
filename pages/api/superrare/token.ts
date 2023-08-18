@@ -26,6 +26,9 @@ export interface SuperRareTokenData {
     nft_image: {
       image_full: string
     }
+    erc721_metadata: {
+      metadata_uri: string
+    }
   } | null
 }
 
@@ -63,6 +66,9 @@ export default async function handler(
         }
         nft_image {
           image_full
+        }
+        erc721_metadata {
+          metadata_uri
         }
       }
     }
