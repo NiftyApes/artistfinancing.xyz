@@ -88,15 +88,19 @@ const Home: NextPage<Props> = ({ fallback, id }) => {
   const tokenCount = stats?.data?.stats?.tokenCount ?? 0
 
   const title = metaTitle ? (
-    <title>{metaTitle}</title>
+    <title>
+      {collection?.name ? `${collection?.name} - ` : ''}
+      {metaTitle}
+    </title>
   ) : (
     <title>{collection?.name}</title>
   )
-  const description = metaDescription ? (
-    <meta name="description" content={metaDescription} />
-  ) : (
+
+  const description = collection?.description ? (
     <meta name="description" content={collection?.description as string} />
-  )
+  ) : metaDescription ? (
+    <meta name="description" content={metaDescription} />
+  ) : null
 
   const bannerImage = (envBannerImage || collection?.banner) as string
 
