@@ -3,10 +3,10 @@ import { paths } from '@reservoir0x/reservoir-sdk'
 import EthAccount from 'components/EthAccount'
 import Layout from 'components/Layout'
 import OfferSection from 'components/OfferSection'
-import TokenInfo from 'components/token/TokenInfo'
 import TokenAttributes from 'components/TokenAttributes'
-import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
 import useSuperRareToken from 'hooks/useSuperRareToken'
+import TokenInfo from 'components/token/TokenInfo'
+import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
 import { optimizeImage } from 'lib/optmizeImage'
 import setParams from 'lib/params'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
@@ -132,13 +132,17 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
   // META
   const title = META_TITLE
     ? metadata.title(`${tokenName} - ${META_TITLE}`)
-    : metadata.title(`${tokenName} - 
-    ${token?.token?.collection?.name}`)
+    : metadata.title(`${tokenName}
+    ${
+      token?.token?.collection?.name
+        ? ` - ${token?.token?.collection?.name}`
+        : ''
+    }`)
 
-  const description = META_DESCRIPTION
-    ? metadata.description(META_DESCRIPTION)
-    : token?.token?.description
+  const description = token?.token?.description
     ? metadata.description(token?.token?.description)
+    : META_DESCRIPTION
+    ? metadata.description(META_DESCRIPTION)
     : null
 
   const image = META_OG_IMAGE
