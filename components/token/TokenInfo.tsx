@@ -1,64 +1,23 @@
 import useEnvChain from 'hooks/useEnvChain'
 import { truncateAddress } from 'lib/truncateText'
-import React, { FC } from 'react'
+import { SuperRareTokenData } from 'pages/api/superrare/token'
+import { FC } from 'react'
 import { TokenDetails } from 'types/reservoir'
-import { setToast } from './setToast'
-
-const PROXY_API_BASE = process.env.NEXT_PUBLIC_PROXY_API_BASE
 
 type Props = {
   token?: TokenDetails
+  srToken?: SuperRareTokenData
 }
 
-const TokenInfo: FC<Props> = ({ token }) => {
+const TokenInfo: FC<Props> = ({ token, srToken }) => {
   const envChain = useEnvChain()
 
   const blockExplorerBaseUrl =
     envChain?.blockExplorers?.default?.url || 'https://etherscan.io'
 
-  async function refreshToken(token: string | undefined) {
-    function handleError(message?: string) {
-      setToast({
-        kind: 'error',
-        message: message || 'Request to refresh this token was rejected.',
-        title: 'Refresh token failed',
-      })
-    }
+  const ipfsUrl = srToken?.erc721_token?.nft_image?.image_full || token?.image
 
-    try {
-      if (!token) throw new Error('No token')
-
-      const data = {
-        token,
-      }
-
-      const pathname = `${PROXY_API_BASE}/tokens/refresh/v1`
-
-      const res = await fetch(pathname, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-
-      if (!res.ok) {
-        const json = await res.json()
-        handleError(json?.message)
-        return
-      }
-
-      setToast({
-        kind: 'success',
-        message: 'Request to refresh this token was accepted.',
-        title: 'Refresh token',
-      })
-    } catch (err) {
-      handleError()
-      console.error(err)
-      return
-    }
-  }
+  const metadataUrl = srToken?.erc721_token?.erc721_metadata?.metadata_uri || ''
 
   return (
     <div>
@@ -101,29 +60,29 @@ const TokenInfo: FC<Props> = ({ token }) => {
             <img
               src="/icons/sru-etherscan.svg"
               alt="Etherscan Icon"
-              className="float-left mr-2 h-6 w-6 w-[17px]"
+              className="float-left mr-2 h-6 w-6"
             />
             Etherscan
           </a>
         </div>
 
         <div className="float-left ml-4 text-base text-gray-400">
-          <a target="_blank" rel="noopener noreferrer" href={''}>
+          <a target="_blank" rel="noopener noreferrer" href={metadataUrl}>
             <img
               src="/icons/sru-metadata.svg"
               alt="IPFS"
-              className="float-left mr-2 h-6 w-6 w-[17px]"
+              className="float-left mr-2 h-6 w-6"
             />
             Metadata
           </a>
         </div>
 
         <div className="float-left ml-4 text-base text-gray-400">
-          <a target="_blank" rel="noopener noreferrer" href={token?.image}>
+          <a target="_blank" rel="noopener noreferrer" href={ipfsUrl}>
             <img
               src="/icons/sru-ipfs.svg"
               alt="IPFS"
-              className="float-left mr-2 h-6 w-6 w-[17px]"
+              className="float-left mr-2 h-6 w-6"
             />
             IPFS
           </a>

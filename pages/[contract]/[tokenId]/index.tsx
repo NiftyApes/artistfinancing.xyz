@@ -4,6 +4,7 @@ import EthAccount from 'components/EthAccount'
 import Layout from 'components/Layout'
 import OfferSection from 'components/OfferSection'
 import TokenAttributes from 'components/TokenAttributes'
+import useSuperRareToken from 'hooks/useSuperRareToken'
 import TokenInfo from 'components/token/TokenInfo'
 import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
 import { optimizeImage } from 'lib/optmizeImage'
@@ -11,7 +12,7 @@ import setParams from 'lib/params'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { ReactElement, ReactNode, useEffect } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
 
@@ -92,6 +93,15 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
   const { updateTokenImages } = useFinancingTicketImages()
   updateTokenImages([token])
 
+  const { data: srToken } = useSuperRareToken(
+    token.token?.contract!,
+    token.token?.tokenId!
+  )
+  const artistEns = {
+    name: srToken?.erc721_token?.erc721_creator.creator.username,
+    avatar: srToken?.erc721_token?.erc721_creator.creator.avatar,
+  }
+
   useEffect(() => {
     if (CHAIN_ID && (+CHAIN_ID === 1 || +CHAIN_ID === 5)) {
       const baseUrl =
@@ -149,6 +159,13 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       ? true
       : token?.token?.owner?.toLowerCase() === account?.address?.toLowerCase()
 
+  const ConditionalWrapper: React.FC<{
+    condition: boolean
+    wrapper: (children: ReactNode) => ReactElement
+    children: ReactNode
+  }> = ({ condition, wrapper, children }) =>
+    condition ? wrapper(children) : <>{children}</>
+
   return (
     <Layout navbar={{}}>
       <Head>
@@ -173,12 +190,29 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
               {token?.token?.name || `#${token?.token?.tokenId}`}
             </div>
 
-            <div className="mb-16 flex items-center justify-center space-x-[100px] lg:!justify-start">
-              <EthAccount
-                side="left"
-                label="Artist"
-                address={token?.token?.owner}
-              />
+            <div className="mb-16 flex items-start justify-center space-x-[100px] lg:!justify-start">
+              <ConditionalWrapper
+                condition={!!artistEns.name}
+                wrapper={(children: ReactNode) => (
+                  <a
+                    href={`https://superrare.com/${artistEns.name}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {children}
+                  </a>
+                )}
+              >
+                <EthAccount
+                  side="left"
+                  label="Artist"
+                  ens={artistEns}
+                  address={
+                    srToken?.erc721_token?.erc721_creator.address ||
+                    token?.token?.owner
+                  }
+                />
+              </ConditionalWrapper>
               <EthAccount
                 side="left"
                 label="Owner"
@@ -202,7 +236,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
                 </div>
 
                 <div className="mb-14">
-                  <TokenInfo token={token.token} />
+                  <TokenInfo token={token.token} srToken={srToken} />
                 </div>
 
                 <div className="mb-10">
