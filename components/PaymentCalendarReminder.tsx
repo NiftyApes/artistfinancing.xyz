@@ -41,7 +41,7 @@ function _PaymentCalendarReminderFromToken({
 export function PaymentCalendarReminder({ loan }: { loan: Loan }) {
   const chain = useEnvChain()
 
-  const { autoDownloadCalendarReminderIcs } = useCreateCalendarReminder({
+  const { openGoogleCalendarReminderInNewTab } = useCreateCalendarReminder({
     loan,
     chainId: chain?.id,
   })
@@ -54,7 +54,7 @@ export function PaymentCalendarReminder({ loan }: { loan: Loan }) {
         alignItems: 'center',
         justifyContent: 'center',
       }}
-      onClick={autoDownloadCalendarReminderIcs}
+      onClick={openGoogleCalendarReminderInNewTab}
     >
       <span style={{ marginTop: '-3px' }}>
         <LuCalendarPlus />
