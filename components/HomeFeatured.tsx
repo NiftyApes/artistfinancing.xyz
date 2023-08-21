@@ -8,7 +8,7 @@ type Props = {
 
 const HomeFeatured: FC<Props> = ({ cards }) => {
   return (
-    <div className="col-span-full max-w-[1095px]">
+    <div className="max-w-[1095px]">
       <div className="mb-[48px] flex">
         <div>
           <div className="text-4xl">Featured Art</div>
