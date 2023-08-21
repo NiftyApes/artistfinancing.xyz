@@ -11,7 +11,6 @@ import HomeCarousel from '../components/HomeCarousel'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { BsArrowRight } from 'react-icons/bs'
 import Link from 'next/link'
-import { useAccount } from 'wagmi'
 import HomeFeatured from '../components/HomeFeatured'
 import ListArtButton from '../components/ListArtButton'
 
@@ -163,8 +162,6 @@ const FEATURED_TESTNET = [
 const Home: NextPage<Props> = ({ fallback }) => {
   const router = useRouter()
 
-  const { address, isConnected } = useAccount()
-
   const title = META_TITLE && metadata.title(META_TITLE)
   const description = META_DESCRIPTION && metadata.description(META_DESCRIPTION)
   const image = metadata.image(META_IMAGE)
@@ -215,7 +212,11 @@ const Home: NextPage<Props> = ({ fallback }) => {
               </div>
             </ListArtButton>
 
-            <Link href="https://niftyapes.readme.io/docs" target="_blank">
+            <Link
+              passHref
+              href="https://niftyapes.readme.io/docs"
+              target="_blank"
+            >
               <div className="flex flex-row items-center rounded-full bg-black py-5 px-8 text-center uppercase text-white">
                 <span className="text-lg">docs</span>
                 <div className="ml-[15px] h-[24px] w-[24px] rounded-full border border-white bg-[url('/icons/arrow-up-right.svg')] bg-center bg-no-repeat"></div>
@@ -309,13 +310,13 @@ const Home: NextPage<Props> = ({ fallback }) => {
               <div className="mt-[24px] mb-[48px] text-2xl text-gray-600">
                 Go to{' '}
                 <span className="text-white underline">
-                  <Link href="https://goerli.niftyapes.money" target="_blank">
-                    goerli.niftyapes.money
+                  <Link href="https://sru.niftyapes.money" target="_blank">
+                    sru.niftyapes.money
                   </Link>
                 </span>{' '}
                 and switch your wallet network to Goerli
               </div>
-              <Link href="https://goerli.niftyapes.money" target="_blank">
+              <Link passHref href="https://sru.niftyapes.money" target="_blank">
                 <div className="flex flex-row items-center justify-center rounded-[10px] border border-gray-700 bg-black py-5 px-8">
                   <span className="text-lg uppercase">go to goerli</span>
                   <div className="ml-[15px] h-[24px] w-[24px] rounded-full border border-white bg-[url('/icons/arrow-up-right.svg')] bg-center bg-no-repeat"></div>
@@ -345,6 +346,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
             <img
               className="mt-[-50px] mb-[-50px] w-[500px] min-w-[450px]"
               src="https://ipfs.pixura.io/ipfs/QmaYrjB5XrgHpVsCyLvsRN6kCKmyP6ZBbTvAM7aiK56p37/quantumania.jpg"
+              alt="NFT Image"
             />
           </div>
         </div>

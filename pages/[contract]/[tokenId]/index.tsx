@@ -1,19 +1,20 @@
 import { useTokens, useUserTokens } from '@reservoir0x/reservoir-kit-ui'
 import { paths } from '@reservoir0x/reservoir-sdk'
-import Layout from 'components/Layout'
 import EthAccount from 'components/EthAccount'
+import Layout from 'components/Layout'
 import OfferSection from 'components/OfferSection'
-import TokenInfo from 'components/token/TokenInfo'
 import TokenAttributes from 'components/TokenAttributes'
+import useSuperRareToken from 'hooks/useSuperRareToken'
+import TokenInfo from 'components/token/TokenInfo'
+import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
 import { optimizeImage } from 'lib/optmizeImage'
 import setParams from 'lib/params'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { ReactElement, ReactNode, useEffect } from 'react'
 import { TokenDetails } from 'types/reservoir'
 import { useAccount } from 'wagmi'
-import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
 
 // Environment variables
 
@@ -92,6 +93,15 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
   const { updateTokenImages } = useFinancingTicketImages()
   updateTokenImages([token])
 
+  const { data: srToken } = useSuperRareToken(
+    token.token?.contract!,
+    token.token?.tokenId!
+  )
+  const artistEns = {
+    name: srToken?.erc721_token?.erc721_creator.creator.username,
+    avatar: srToken?.erc721_token?.erc721_creator.creator.avatar,
+  }
+
   useEffect(() => {
     if (CHAIN_ID && (+CHAIN_ID === 1 || +CHAIN_ID === 5)) {
       const baseUrl =
@@ -122,13 +132,17 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
   // META
   const title = META_TITLE
     ? metadata.title(`${tokenName} - ${META_TITLE}`)
-    : metadata.title(`${tokenName} - 
-    ${token?.token?.collection?.name}`)
+    : metadata.title(`${tokenName}
+    ${
+      token?.token?.collection?.name
+        ? ` - ${token?.token?.collection?.name}`
+        : ''
+    }`)
 
-  const description = META_DESCRIPTION
-    ? metadata.description(META_DESCRIPTION)
-    : token?.token?.description
+  const description = token?.token?.description
     ? metadata.description(token?.token?.description)
+    : META_DESCRIPTION
+    ? metadata.description(META_DESCRIPTION)
     : null
 
   const image = META_OG_IMAGE
@@ -144,6 +158,13 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
     +userTokens[0].ownership.tokenCount > 0
       ? true
       : token?.token?.owner?.toLowerCase() === account?.address?.toLowerCase()
+
+  const ConditionalWrapper: React.FC<{
+    condition: boolean
+    wrapper: (children: ReactNode) => ReactElement
+    children: ReactNode
+  }> = ({ condition, wrapper, children }) =>
+    condition ? wrapper(children) : <>{children}</>
 
   return (
     <Layout navbar={{}}>
@@ -169,12 +190,29 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
               {token?.token?.name || `#${token?.token?.tokenId}`}
             </div>
 
-            <div className="mb-16 flex items-center justify-center space-x-[100px] lg:!justify-start">
-              <EthAccount
-                side="left"
-                label="Artist"
-                address={token?.token?.owner}
-              />
+            <div className="mb-16 flex items-start justify-center space-x-[100px] lg:!justify-start">
+              <ConditionalWrapper
+                condition={!!artistEns.name}
+                wrapper={(children: ReactNode) => (
+                  <a
+                    href={`https://superrare.com/${artistEns.name}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {children}
+                  </a>
+                )}
+              >
+                <EthAccount
+                  side="left"
+                  label="Artist"
+                  ens={artistEns}
+                  address={
+                    srToken?.erc721_token?.erc721_creator.address ||
+                    token?.token?.owner
+                  }
+                />
+              </ConditionalWrapper>
               <EthAccount
                 side="left"
                 label="Owner"
@@ -198,7 +236,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
                 </div>
 
                 <div className="mb-14">
-                  <TokenInfo token={token.token} />
+                  <TokenInfo token={token.token} srToken={srToken} />
                 </div>
 
                 <div className="mb-10">
