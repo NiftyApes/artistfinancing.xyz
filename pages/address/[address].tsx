@@ -2,9 +2,9 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { paths, setParams } from '@reservoir0x/reservoir-sdk'
 import Layout from 'components/Layout'
 import UserTokensGrid from 'components/UserTokensGrid'
-import UserActiveLoansTable from 'components/tables/UserActiveLoansTable'
-import UserFinancingOffersTable from 'components/tables/UserFinancingOffersTable'
-import UserUpcomingPaymentsTable from 'components/tables/UserUpcomingPaymentsTable'
+import SalesTable from 'components/tables/SalesTable'
+import ManageListingsTable from 'components/tables/ManageListingsTable'
+import UpcomingPaymentsTable from 'components/tables/UpcomingPaymentsTable'
 import useMounted from 'hooks/useMounted'
 import { toggleOnItem } from 'lib/router'
 import {
@@ -89,17 +89,17 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
             </Tabs.Content>
             {isOwner && (
               <Tabs.Content value="upcoming_payments" className="col-span-full">
-                <UserUpcomingPaymentsTable />
+                <UpcomingPaymentsTable />
               </Tabs.Content>
             )}
             {isOwner && (
               <Tabs.Content value="manage_listings" className="col-span-full">
-                <UserFinancingOffersTable />
+                <ManageListingsTable />
               </Tabs.Content>
             )}
             {isOwner && (
               <Tabs.Content value="sales" className="col-span-full">
-                <UserActiveLoansTable />
+                <SalesTable />
               </Tabs.Content>
             )}
           </Tabs.Root>

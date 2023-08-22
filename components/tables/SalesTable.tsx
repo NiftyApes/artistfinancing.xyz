@@ -17,7 +17,7 @@ import Link from 'next/link'
 
 const DARK_MODE = process.env.NEXT_PUBLIC_DARK_MODE
 
-const UserActiveLoansTable: FC = () => {
+const SalesTable: FC = () => {
   const router = useRouter()
   const { address } = router.query
 
@@ -109,7 +109,7 @@ const UserActiveLoansTable: FC = () => {
               )
 
               return (
-                <UserActiveLoansRow
+                <SalesRow
                   key={index}
                   loan={loan}
                   token={token}
@@ -124,17 +124,13 @@ const UserActiveLoansTable: FC = () => {
   )
 }
 
-type UserActiveLoansRowProps = {
+type SalesRowProps = {
   loan: Loan
   token: ReturnType<typeof useTokens>['data'][0]
   refetchLoans: () => void
 }
 
-const UserActiveLoansRow: FC<UserActiveLoansRowProps> = ({
-  loan,
-  token,
-  refetchLoans,
-}) => {
+const SalesRow: FC<SalesRowProps> = ({ loan, token, refetchLoans }) => {
   const { apr, listPrice, image, tokenName, collectionName } = processOffer(
     loan.offer.offer,
     token
@@ -237,7 +233,15 @@ const UserActiveLoansRow: FC<UserActiveLoansRowProps> = ({
 
       {/* STATUS */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        {loan.status === 'ACTIVE' && 'Active'}
+        {loan.status === 'ACTIVE' &&
+          loan.defaultStatus === 'NOT_IN_DEFAULT' &&
+          'Active'}
+        {loan.status === 'ACTIVE' &&
+          loan.defaultStatus === 'IN_DEFAULT_AND_REPAYABLE' &&
+          'In default, late payments possible'}
+        {loan.status === 'ACTIVE' &&
+          loan.defaultStatus === 'IN_DEFAULT_AND_NOT_REPAYABLE' &&
+          'In default, not repayable'}
         {loan.status === 'ASSET_SEIZED' && 'Asset Seized'}
         {loan.status === 'FULLY_REPAID' && 'Fully repaid'}
       </td>
@@ -282,4 +286,4 @@ const UserActiveLoansRow: FC<UserActiveLoansRowProps> = ({
   )
 }
 
-export default UserActiveLoansTable
+export default SalesTable
