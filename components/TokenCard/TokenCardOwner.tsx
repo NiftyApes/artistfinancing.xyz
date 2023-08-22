@@ -23,14 +23,16 @@ const TokenCardOwner: FC<Props> = ({ details }) => {
 
   return (
     <div className="flex">
-      <div className="w-1/2">
-        <div className="my-2 text-[10px] text-gray-400">Artist</div>
-        <TokenCardEthAccount
-          address={srToken?.erc721_token?.erc721_creator.address}
-          ens={artistEns}
-          side="left"
-        />
-      </div>
+      {srToken?.erc721_token && (
+        <div className="w-1/2">
+          <div className="my-2 text-[10px] text-gray-400">Artist</div>
+          <TokenCardEthAccount
+            address={srToken?.erc721_token?.erc721_creator.address}
+            ens={artistEns}
+            side="left"
+          />
+        </div>
+      )}
       {owner && (
         <div className="w-1/2">
           <div className="my-2 text-[10px] text-gray-400">Owner</div>
