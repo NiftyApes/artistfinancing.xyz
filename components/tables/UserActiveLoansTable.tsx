@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import { FC, useEffect } from 'react'
 import { Address, useWaitForTransaction } from 'wagmi'
 import Button from '../Button'
+import Link from 'next/link'
 
 const DARK_MODE = process.env.NEXT_PUBLIC_DARK_MODE
 
@@ -186,22 +187,29 @@ const UserActiveLoansRow: FC<UserActiveLoansRowProps> = ({
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
       {/* ITEM */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <div className="flex items-center gap-2">
-          <div className="aspect-w-1 aspect-h-1 relative h-16 w-16 overflow-hidden rounded">
-            <img
-              src={
-                image ? optimizeImage(image, 64) : '/niftyapes/placeholder.png'
-              }
-              alt="Bid Image"
-              className="h-16 w-16 object-contain"
-            />
-          </div>
-          <span className="whitespace-nowrap">
-            <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
-              {tokenName ? tokenName : collectionName}
+        <Link
+          passHref
+          href={`/${token?.token?.contract}/${token?.token?.tokenId}`}
+        >
+          <div className="flex items-center gap-2">
+            <div className="aspect-w-1 aspect-h-1 relative h-16 w-16 overflow-hidden rounded">
+              <img
+                src={
+                  image
+                    ? optimizeImage(image, 64)
+                    : '/niftyapes/placeholder.png'
+                }
+                alt="Bid Image"
+                className="h-16 w-16 object-contain"
+              />
             </div>
-          </span>
-        </div>
+            <span className="whitespace-nowrap">
+              <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
+                {tokenName ? tokenName : collectionName}
+              </div>
+            </span>
+          </div>
+        </Link>
       </td>
 
       {/* PRICE */}
