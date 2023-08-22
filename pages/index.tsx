@@ -11,7 +11,7 @@ import HomeCarousel from '../components/HomeCarousel'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { BsArrowRight } from 'react-icons/bs'
 import Link from 'next/link'
-import HomeFeatured from '../components/HomeFeatured'
+import {FeaturedArtworks, FeaturedArtists } from '../components/HomeFeatured'
 import ListArtButton from '../components/ListArtButton'
 
 // Environment variables
@@ -102,7 +102,7 @@ const FEATURED = [
     buyNowPrice: 350,
     contractAddress: '0x378598185034531cf9becdb82bbcba2a5fc2a903',
     image:
-      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0x378598185034531cf9becdb82bbcba2a5fc2a903%252F6%252F8xc9c?ixlib=js-3.8.0&w=550&h=550&fit=crop&q=75&auto=format%2Ccompress&s=0153d0b6b7eadffa8ba3ccc97d87d1c8',
+      'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
     rarity: '1/1',
     title: 'A Message From Heaven',
     tokenId: '6'
@@ -113,7 +113,7 @@ const FEATURED = [
     buyNowPrice: 350,
     contractAddress: '0x378598185034531cf9becdb82bbcba2a5fc2a903',
     image:
-      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0x378598185034531cf9becdb82bbcba2a5fc2a903%252F6%252F8xc9c?ixlib=js-3.8.0&w=550&h=550&fit=crop&q=75&auto=format%2Ccompress&s=0153d0b6b7eadffa8ba3ccc97d87d1c8',
+      'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
     rarity: '1/1',
     title: 'A Message From Heaven',
     tokenId: '6'
@@ -124,7 +124,7 @@ const FEATURED = [
     buyNowPrice: 350,
     contractAddress: '0x378598185034531cf9becdb82bbcba2a5fc2a903',
     image:
-      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0x378598185034531cf9becdb82bbcba2a5fc2a903%252F6%252F8xc9c?ixlib=js-3.8.0&w=550&h=550&fit=crop&q=75&auto=format%2Ccompress&s=0153d0b6b7eadffa8ba3ccc97d87d1c8',
+      'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
     rarity: '1/1',
     title: 'A Message From Heaven',
     tokenId: '6'
@@ -137,7 +137,7 @@ const FEATURED_TESTNET = [
     buyNowPrice: 350,
     contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
-      'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
+      'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
     rarity: '1/1',
     title: 'Breaker',
     tokenId: '275'
@@ -148,7 +148,7 @@ const FEATURED_TESTNET = [
     buyNowPrice: 350,
     contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
-      'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
+      'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
     rarity: '1/1',
     title: 'Breaker',
     tokenId: '275'
@@ -159,7 +159,7 @@ const FEATURED_TESTNET = [
     buyNowPrice: 350,
     contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
-      'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
+      'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
     rarity: '1/1',
     title: 'Breaker',
     tokenId: '275'
@@ -170,7 +170,40 @@ const FEATURED_TESTNET = [
     buyNowPrice: 350,
     contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
     image:
-      'https://ipfs.pixura.io/ipfs/Qmea9LPon6MkNMEmS3e2ig3LoTja92duWFpaWGvGZ5JaWe/breaker.jpg',
+      'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
+    rarity: '1/1',
+    title: 'Breaker',
+    tokenId: '275'
+  },
+  {
+    artist: 'XCopy',
+    buyFinancingPrice: 70,
+    buyNowPrice: 350,
+    contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
+    image:
+      'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
+    rarity: '1/1',
+    title: 'Breaker',
+    tokenId: '275'
+  },
+  {
+    artist: 'XCopy',
+    buyFinancingPrice: 70,
+    buyNowPrice: 350,
+    contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
+    image:
+      'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
+    rarity: '1/1',
+    title: 'Breaker',
+    tokenId: '275'
+  },
+  {
+    artist: 'XCopy',
+    buyFinancingPrice: 70,
+    buyNowPrice: 350,
+    contractAddress: '0xacec411dd36946bb5bec9900ef28bb58be7acbd4',
+    image:
+      'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
     rarity: '1/1',
     title: 'Breaker',
     tokenId: '275'
@@ -322,19 +355,38 @@ const Home: NextPage<Props> = ({ fallback }) => {
         </div>
       </div>
 
-      {/* ------------------ FEATURED ART ------------------ */}
-
       <div className='col-span-full mt-[90px] mb-[90px] w-full border-t border-gray-700'></div>
 
-      <div className='col-span-full mb-[90px] flex w-full items-center justify-center'>
-        <HomeFeatured cards={CHAIN_ID === '1' ? FEATURED : FEATURED_TESTNET} />
+      {/* ------------------ FEATURED ART ------------------ */}
+
+      <div className='lg:px-0 px-[24px] flex flex-col col-span-full justify-center items-center mb-[90px]'>
+
+        <div className="flex w-full max-w-[1095px]">
+          <div className="text-4xl">Featured Art</div>
+          <div className="ml-auto">
+            <Link href="/explore">
+              <div className="flex items-center uppercase text-white">
+                <span className="text-lg">explore</span>
+                <div className="ml-[15px] h-[24px] w-[24px] rounded-full border border-white bg-[url('/icons/arrow-up-right.svg')] bg-center bg-no-repeat"></div>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        <div className='mb-[48px] w-full max-w-[1095px]'>
+          <FeaturedArtists cards={CHAIN_ID === '1' ? FEATURED : FEATURED_TESTNET} />
+        </div>
+        <div className='max-w-[1095px] min-w-[600px]'>
+          <FeaturedArtworks cards={CHAIN_ID === '1' ? FEATURED : FEATURED_TESTNET} />
+        </div>
       </div>
 
       {/* ------------------ GOERLI ------------------ */}
 
       <div className='col-span-full mt-[90px] mb-[90px] w-full'>
         <div className='ml-[30px] mr-[30px] flex items-center justify-center border border-gray-800'>
-          <div className='mr-[215px] flex max-w-[565px] items-center justify-center py-[60px]'>
+
+          <div className='lg:mr-[215px] lg:max-w-[565px] flex items-center justify-center py-[60px] px-[24px]'>
             <div>
               <div className='text-6xl'>Try it on Goerli</div>
               <div className='mt-[24px] mb-[48px] text-2xl text-gray-600'>
@@ -374,7 +426,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
             </div>
           </div>
 
-          <div>
+          <div className='hidden lg:block'>
             <img
               className='mt-[-50px] mb-[-50px] w-[500px] min-w-[450px]'
               src='https://ipfs.pixura.io/ipfs/QmaYrjB5XrgHpVsCyLvsRN6kCKmyP6ZBbTvAM7aiK56p37/quantumania.jpg'
