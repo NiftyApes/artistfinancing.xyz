@@ -209,7 +209,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
 
       {/* ------------------ MAIN SECTION ------------------ */}
       <div
-        className='col-span-full px-4 mb-20 mt-[24px] items-center justify-center flex flex-col lg:flex lg:flex-row lg:mt-20'>
+        className='col-span-full px-4 mb-20 mt-[24px] items-center justify-center flex flex-col lg:flex-row lg:mt-20'>
         <div className='order-2 lg:order-1 lg:mr-[90px] max-w-[460px]'>
           <div className='mb-[24px] text-6xl text-white'>
             <div className='font-light'>What is</div>
@@ -248,7 +248,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
           </div>
         </div>
 
-        <div className='order-1  lg:order-2 mb-[48px] lg:mb-0'>
+        <div className='order-1 lg:order-2 mb-[48px] lg:mb-0'>
           <HomeCarousel cards={CHAIN_ID === '1' ? CAROUSEL : CAROUSEL_TESTNET} />
         </div>
       </div>
