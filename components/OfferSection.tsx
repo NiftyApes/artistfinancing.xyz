@@ -158,10 +158,10 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
           <div className="flex flex-col">
             <h3 className="reservoir-h3">Purchased with Financing</h3>
             <div className="flex space-x-2">
-              <p>on NiftyApes</p>
+              <p className="text-md text-gray-300">on Artist Financing</p>
               <img
                 className="h-6 w-6"
-                src="/niftyapes/banana.png"
+                src="/niftyapes/af+dot-white.svg"
                 alt="NiftyApes banana logo"
               />
             </div>

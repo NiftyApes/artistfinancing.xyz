@@ -7,6 +7,7 @@ import { useEtherscanUri } from 'hooks/useEtherscan'
 import isEqualAddress from 'lib/isEqualAddress'
 import { optimizeImage } from 'lib/optmizeImage'
 import { processOffer } from 'lib/processOffer'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC, useEffect } from 'react'
 import { useWaitForTransaction } from 'wagmi'
@@ -196,22 +197,29 @@ const UserListingsTableRow = ({
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
       {/* ITEM */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <div className="flex items-center gap-2">
-          <div className="relative overflow-hidden rounded">
-            <img
-              src={
-                image ? optimizeImage(image, 64) : '/niftyapes/placeholder.png'
-              }
-              alt="Bid Image"
-              className="h-16 w-16 object-contain"
-            />
-          </div>
-          <span className="whitespace-nowrap">
-            <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
-              {tokenName ? tokenName : collectionName}
+        <Link
+          passHref
+          href={`/${token?.token?.contract}/${token?.token?.tokenId}`}
+        >
+          <div className="flex items-center gap-2">
+            <div className="relative overflow-hidden rounded">
+              <img
+                src={
+                  image
+                    ? optimizeImage(image, 64)
+                    : '/niftyapes/placeholder.png'
+                }
+                alt="Bid Image"
+                className="h-16 w-16 object-contain"
+              />
             </div>
-          </span>
-        </div>
+            <span className="whitespace-nowrap">
+              <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
+                {tokenName ? tokenName : collectionName}
+              </div>
+            </span>
+          </div>
+        </Link>
       </td>
 
       {/* PRICE */}

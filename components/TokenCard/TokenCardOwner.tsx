@@ -1,7 +1,7 @@
-import TokenCardEthAccount from './TokenCardEthAccount'
-import Link from 'next/link'
-import { FC } from 'react'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
+import useSuperRareToken from 'hooks/useSuperRareToken'
+import { FC } from 'react'
+import TokenCardEthAccount from './TokenCardEthAccount'
 
 type Props = {
   details: ReturnType<typeof useTokens>['data'][0]
@@ -15,13 +15,27 @@ const TokenCardOwner: FC<Props> = ({ details }) => {
       ? details?.market?.floorAsk?.maker
       : token?.owner
 
+  const { data: srToken } = useSuperRareToken(token?.contract!, token?.tokenId!)
+  const artistEns = {
+    name: srToken?.erc721_token?.erc721_creator.creator.username,
+    avatar: srToken?.erc721_token?.erc721_creator.creator.avatar,
+  }
+
   return (
-    <div>
-      <div className="my-2 text-[10px] text-gray-400">Owner</div>
+    <div className="flex">
+      <div className="w-1/2">
+        <div className="my-2 text-[10px] text-gray-400">Artist</div>
+        <TokenCardEthAccount
+          address={srToken?.erc721_token?.erc721_creator.address}
+          ens={artistEns}
+          side="left"
+        />
+      </div>
       {owner && (
-        <Link href={`/address/${owner}`} legacyBehavior passHref>
+        <div className="w-1/2">
+          <div className="my-2 text-[10px] text-gray-400">Owner</div>
           <TokenCardEthAccount address={owner} side="left" />
-        </Link>
+        </div>
       )}
     </div>
   )
