@@ -2,6 +2,7 @@ import {
   Address,
   BuyWithFinancingModal,
   CreateOfferModal,
+  Offer,
   useOffers,
   useSellerFinancingContract,
 } from '@niftyapes/sdk'
@@ -71,7 +72,7 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
   // Filter out offers where creator is not the current NFT owner
   const activeOffers =
     offers.data?.filter(
-      (offer) =>
+      (offer: Offer) =>
         offer.status === 'ACTIVE' &&
         isEqualAddress(offer.offer.creator, token?.token?.owner)
     ) || []
