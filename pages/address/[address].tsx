@@ -1,10 +1,10 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { paths, setParams } from '@reservoir0x/reservoir-sdk'
 import Layout from 'components/Layout'
+import UserTokensGrid from 'components/UserTokensGrid'
 import UserActiveLoansTable from 'components/tables/UserActiveLoansTable'
 import UserFinancingOffersTable from 'components/tables/UserFinancingOffersTable'
 import UserUpcomingPaymentsTable from 'components/tables/UserUpcomingPaymentsTable'
-import UserTokensGrid from 'components/UserTokensGrid'
 import useMounted from 'hooks/useMounted'
 import { toggleOnItem } from 'lib/router'
 import {
@@ -50,7 +50,7 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
 
   const isOwner = address?.toLowerCase() === accountData?.address?.toLowerCase()
 
-  let tabs = [{ name: 'Gallery', id: 'galley' }]
+  let tabs = [{ name: 'Gallery', id: 'gallery' }]
 
   if (isOwner) {
     tabs = [
