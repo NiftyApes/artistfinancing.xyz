@@ -16,6 +16,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
+import { LuCalendarX } from 'react-icons/lu'
 import { ClipLoader } from 'react-spinners'
 import { useAccount } from 'wagmi'
 import MakePaymentModal from './MakePaymentModal'
@@ -182,21 +183,43 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
                 />
               </div>
             </div>
-            {activeLoan && (
-              <div className="flex-grow">
-                <MakePaymentModal
-                  offer={activeLoan?.offer?.offer}
-                  loan={activeLoan?.loan}
-                  image={token.token?.image}
-                  tokenId={token.token?.tokenId}
-                  tokenName={token.token?.name}
-                  collectionName={token.token?.collection?.name}
-                  refetchLoans={() => {}}
-                />
-              </div>
-            )}
+            {activeLoan &&
+              activeLoan.defaultStatus !== 'IN_DEFAULT_AND_NOT_REPAYABLE' && (
+                <div className="flex-grow">
+                  <MakePaymentModal
+                    offer={activeLoan?.offer?.offer}
+                    loan={activeLoan?.loan}
+                    image={token.token?.image}
+                    tokenId={token.token?.tokenId}
+                    tokenName={token.token?.name}
+                    collectionName={token.token?.collection?.name}
+                    refetchLoans={() => {}}
+                  />
+                </div>
+              )}
           </div>
-          <PaymentCalendarReminderFromToken token={token} />
+          {activeLoan && activeLoan.defaultStatus === 'NOT_IN_DEFAULT' ? (
+            <PaymentCalendarReminderFromToken token={token} />
+          ) : (
+            <div className="flex items-center space-x-2 text-red-500">
+              <span style={{ marginTop: '-3px' }}>
+                <LuCalendarX />
+              </span>
+              <span
+                style={{
+                  marginLeft: '8px',
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                  fontFamily: 'Inter',
+                  fontSize: '14px',
+                }}
+              >
+                {activeLoan.defaultStatus === 'IN_DEFAULT_AND_NOT_REPAYABLE'
+                  ? 'In default, not repayable'
+                  : 'Payment Past Due'}
+              </span>
+            </div>
+          )}
         </div>
       ) : (
         <>

@@ -14,7 +14,7 @@ import { useWaitForTransaction } from 'wagmi'
 
 const DARK_MODE = process.env.NEXT_PUBLIC_DARK_MODE
 
-const UserFinancingOffersTable: FC = () => {
+const ManageListingsTable: FC = () => {
   const router = useRouter()
   const { address } = router.query
 
@@ -110,7 +110,7 @@ const UserFinancingOffersTable: FC = () => {
               )
 
               return (
-                <UserListingsTableRow
+                <ManageListingsTableRow
                   key={`${signature}-${index}`}
                   signature={signature}
                   offer={offer}
@@ -127,7 +127,7 @@ const UserFinancingOffersTable: FC = () => {
   )
 }
 
-type UserOffersRowProps = {
+type ManageListingsRowProps = {
   offer: Offer['offer']
   signature: `0x${string}`
   status: Offer['status']
@@ -135,13 +135,13 @@ type UserOffersRowProps = {
   refetchOffers: () => void
 }
 
-const UserListingsTableRow = ({
+const ManageListingsTableRow = ({
   offer,
   status,
   signature,
   token,
   refetchOffers,
-}: UserOffersRowProps) => {
+}: ManageListingsRowProps) => {
   const {
     listPrice,
     downPaymentAmount,
@@ -298,4 +298,4 @@ const UserListingsTableRow = ({
   )
 }
 
-export default UserFinancingOffersTable
+export default ManageListingsTable

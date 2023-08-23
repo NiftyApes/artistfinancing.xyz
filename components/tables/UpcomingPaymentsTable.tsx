@@ -1,4 +1,5 @@
 import { Loan, LoanDetails, OfferDetails, useLoans } from '@niftyapes/sdk'
+import { LuCalendarX } from 'react-icons/lu'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import LoadingIcon from 'components/LoadingIcon'
 import MakePaymentModal from 'components/MakePaymentModal'
@@ -13,7 +14,7 @@ import { useAccount } from 'wagmi'
 import { processOffer } from '../../lib/processOffer'
 import FormatNativeCrypto from '../FormatNativeCrypto'
 
-const UserUpcomingPaymentsTable: FC = () => {
+const UpcomingPaymentsTable: FC = () => {
   const { address } = useAccount()
   const {
     data: loans,
@@ -98,6 +99,7 @@ const UserUpcomingPaymentsTable: FC = () => {
                   key={index}
                   loan={item.loan}
                   offer={item.offer.offer}
+                  defaultStatus={item.defaultStatus}
                   token={token}
                   refetchLoans={refetchLoans}
                 />
@@ -110,10 +112,11 @@ const UserUpcomingPaymentsTable: FC = () => {
   )
 }
 
-type LoansRowProps = {
+type UpcomingPaymentsRowProps = {
   isOwner: boolean
   loan: LoanDetails
   offer: OfferDetails
+  defaultStatus: Loan['defaultStatus']
   token: ReturnType<typeof useTokens>['data'][0]
   refetchLoans: () => void
 }
@@ -122,8 +125,9 @@ const UpcomingPaymentsTableRow = ({
   loan,
   offer,
   token,
+  defaultStatus,
   refetchLoans,
-}: LoansRowProps) => {
+}: UpcomingPaymentsRowProps) => {
   const { apr, listPrice, image, collectionName, tokenName, tokenId } =
     processOffer(offer, token)
 
@@ -172,9 +176,30 @@ const UpcomingPaymentsTableRow = ({
       {/* NEXT PAYMENT DUE */}
       <td className="whitespace-nowrap px-6 py-4">
         {format(new Date(periodEndTimestamp * 1000), 'Pp')}
-        <div className="flex pt-4" style={{ color: '#00B75F' }}>
-          <PaymentCalendarReminderFromToken token={token} />
-        </div>
+        {defaultStatus === 'NOT_IN_DEFAULT' && (
+          <div className="flex pt-4" style={{ color: '#00B75F' }}>
+            <PaymentCalendarReminderFromToken token={token} />
+          </div>
+        )}
+        {defaultStatus === 'IN_DEFAULT_AND_REPAYABLE' ||
+          (defaultStatus === 'IN_DEFAULT_AND_NOT_REPAYABLE' && (
+            <div className="flex items-center space-x-2 pt-4 text-red-500">
+              <span style={{ marginTop: '-3px' }}>
+                <LuCalendarX />
+              </span>
+              <span
+                style={{
+                  marginLeft: '8px',
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                  fontFamily: 'Inter',
+                  fontSize: '14px',
+                }}
+              >
+                Payment Past Due
+              </span>
+            </div>
+          ))}
       </td>
 
       {/* NEXT MINIMUM PAYMENT */}
@@ -192,18 +217,22 @@ const UpcomingPaymentsTableRow = ({
 
       {/* MAKE PAYMENT */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <MakePaymentModal
-          offer={offer}
-          loan={loan}
-          image={image}
-          tokenId={tokenId}
-          tokenName={tokenName}
-          collectionName={collectionName}
-          refetchLoans={refetchLoans}
-        />
+        {defaultStatus !== 'IN_DEFAULT_AND_NOT_REPAYABLE' ? (
+          <MakePaymentModal
+            offer={offer}
+            loan={loan}
+            image={image}
+            tokenId={tokenId}
+            tokenName={tokenName}
+            collectionName={collectionName}
+            refetchLoans={refetchLoans}
+          />
+        ) : (
+          'In default, not repayable'
+        )}
       </td>
     </tr>
   )
 }
 
-export default UserUpcomingPaymentsTable
+export default UpcomingPaymentsTable
