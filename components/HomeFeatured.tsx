@@ -8,43 +8,40 @@ type Props = {
 
 export const FeaturedArtists: FC<Props> = ({ cards }) => {
   return (
-        <div>
-          <div className="mt-[24px] flex flex-wrap items-center text-gray-600">
-            {cards.map((item, idx) => {
-              return (
-                <>
-                  <div className="">{item.artist}</div>
-                  {idx < cards.length - 1 && (
-                    <div className="ml-[15px] mr-[15px] h-[6px] w-[6px] rounded-full bg-gray-700"></div>
-                  )}
-                </>
-              )
-            })}
-          </div>
-        </div>
+    <div>
+      <div className="mt-[24px] flex flex-wrap items-center text-gray-600">
+        {cards.map((item, idx) => {
+          return (
+            <>
+              <div className="">{item.artist}</div>
+              {idx < cards.length - 1 && (
+                <div className="ml-[15px] mr-[15px] h-[6px] w-[6px] rounded-full bg-gray-700"></div>
+              )}
+            </>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 
 export const FeaturedArtworks: FC<Props> = ({ cards }) => {
   return (
-
-      <div>
-        <div className="grid w-full lg:grid-cols-4 grid-cols-1 lg:items-end lg:space-x-[24px] space-y-[24px]">
-          {cards.slice(0, 4).map((item, idx) => {
-            return (
-              <div key={`first-row-${idx}`}>{renderFeaturedImage(item)}</div>
-            )
-          })}
-        </div>
-
-        <div className="mt-[24px] grid w-full lg:grid-cols-3 grid-cols-1 items-start lg:space-x-[24px] space-y-[24px]">
-          {cards.slice(4, 7).map((item, idx) => {
-            return (
-              <div key={`second-row-${idx}`}>{renderFeaturedImage(item)}</div>
-            )
-          })}
-        </div>
+    <div>
+      <div className="grid w-full grid-cols-1 space-y-[24px] lg:grid-cols-4 lg:items-end lg:space-x-[24px]">
+        {cards.slice(0, 4).map((item, idx) => {
+          return <div key={`first-row-${idx}`}>{renderFeaturedImage(item)}</div>
+        })}
       </div>
+
+      <div className="mt-[24px] grid w-full grid-cols-1 items-start space-y-[24px] lg:grid-cols-3 lg:space-x-[24px]">
+        {cards.slice(4, 7).map((item, idx) => {
+          return (
+            <div key={`second-row-${idx}`}>{renderFeaturedImage(item)}</div>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 
