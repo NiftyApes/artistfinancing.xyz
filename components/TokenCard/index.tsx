@@ -7,8 +7,9 @@ import {
   useSellerFinancingContract,
 } from '@niftyapes/sdk'
 import { useMediaQuery } from '@react-hookz/web'
-import NiftyApesOfferDetails from './TokenCardOfferDetails'
+import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
 import useTokens from 'hooks/useTokens'
+import isEqualAddress from 'lib/isEqualAddress'
 import { optimizeImage } from 'lib/optmizeImage'
 import Image from 'next/legacy/image'
 import Link from 'next/link'
@@ -17,9 +18,8 @@ import { FC } from 'react'
 import { MutatorCallback } from 'swr'
 import { Collection } from 'types/reservoir'
 import { useAccount } from 'wagmi'
+import NiftyApesOfferDetails from './TokenCardOfferDetails'
 import TokenCardOwner from './TokenCardOwner'
-import isEqualAddress from 'lib/isEqualAddress'
-import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
@@ -112,29 +112,11 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
             />
           ) : (
             <div className="relative w-full">
-              <div className="absolute inset-0 grid place-items-center backdrop-blur-lg">
-                <div>
-                  <img
-                    src={
-                      collectionImage
-                        ? optimizeImage(collectionImage, imageSize)
-                        : '/niftyapes/placeholder.png'
-                    }
-                    alt={`${token?.token?.collection?.name}`}
-                    className="mx-auto mb-4 h-16 w-16 overflow-hidden rounded-full border-2 border-white"
-                    width="64"
-                    height="64"
-                  />
-                  <div className="reservoir-h6 text-white">
-                    No Content Available
-                  </div>
-                </div>
-              </div>
               <img
                 src={
                   collectionImage
                     ? optimizeImage(collectionImage, imageSize)
-                    : '/niftyapes/NA-BLACK.png'
+                    : '/niftyapes/placeholder.png'
                 }
                 alt={`${token?.token?.collection?.name}`}
                 className="aspect-square w-full object-cover"
