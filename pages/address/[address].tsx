@@ -83,7 +83,7 @@ const Address: NextPage<Props> = ({ address, fallback }) => {
               ))}
             </Tabs.List>
             <Tabs.Content value="gallery">
-              <div className="mt-6">
+              <div className="mt-6 px-4">
                 <UserTokensGrid fallback={fallback} owner={address || ''} />
               </div>
             </Tabs.Content>
