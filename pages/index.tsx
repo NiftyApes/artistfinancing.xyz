@@ -11,7 +11,7 @@ import HomeCarousel from '../components/HomeCarousel'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { BsArrowRight } from 'react-icons/bs'
 import Link from 'next/link'
-import {FeaturedArtworks, FeaturedArtists } from '../components/HomeFeatured'
+import { FeaturedArtworks, FeaturedArtists } from '../components/HomeFeatured'
 import ListArtButton from '../components/ListArtButton'
 
 // Environment variables
@@ -244,7 +244,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
       <div
         className='col-span-full px-4 mb-20 mt-[24px] items-center justify-center flex flex-col lg:flex-row lg:mt-20'>
         <div className='order-2 lg:order-1 lg:mr-[90px] max-w-[460px]'>
-          <div className='mb-[24px] text-6xl text-white'>
+          <div className='mb-[24px] text-5xl lg:text-6xl text-white'>
             <div className='font-light'>What is</div>
             <div className='font-extrabold'>Artist Financing?</div>
           </div>
@@ -288,12 +288,18 @@ const Home: NextPage<Props> = ({ fallback }) => {
 
       {/* ------------------ HOW FINANCING WORKS  ------------------ */}
       <div className='col-span-full mt-10 flex flex-col items-center justify-center'>
-        <div className='text-5xl text-center w-[360px] md:w-auto'>How Artist Financing Works</div>
-        <div className='mt-5 text-xl font-thin text-gray-600 text-center w-[360px] md:w-auto'>
+
+        <div className='text-5xl lg:text-6xl text-center w-[360px] md:w-auto'>How Artist Financing Works</div>
+        <div className='mt-5 text-xl font-thin text-gray-600 text-center w-[270px] lg:w-auto'>
           Sell your art faster without compromising on your value
         </div>
+      </div>
 
-        <div className='mt-[60px] flex items-center'>
+      {/* ------------------ FINANCING CARDS ------------------ */}
+      <div className='col-span-full mt-10 flex flex-col px-[100px] lg:px-0 lg:items-center items-start justify-center overflow-x-auto'>
+
+        <div className='inline-block mt-[60px] flex items-center'>
+
           <div
             className="h-[300px] w-[300px] rounded-[35px] border border-gray-700 bg-[url('/niftyapes/home_how_a.jpg')] bg-contain bg-center bg-no-repeat p-5"></div>
           <div className='flex w-[100px] justify-center text-gray-600'>
@@ -308,7 +314,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
             className="h-[300px] w-[300px] rounded-[35px] border border-gray-700 bg-[url('/niftyapes/home_how_c.jpg')] bg-contain bg-center bg-no-repeat p-5"></div>
         </div>
 
-        <div className='mt-[40px] flex text-center'>
+        <div className='inline-block mt-[40px] flex text-center'>
           <div className='mr-[100px] w-[300px]'>
             <div className='text-xl uppercase'>artists</div>
             <div className='text-lg text-gray-600'>
@@ -330,24 +336,31 @@ const Home: NextPage<Props> = ({ fallback }) => {
             </div>
           </div>
         </div>
+      </div>
 
-        <div className='col-span-full mt-[90px] mb-[90px] w-full border-t border-gray-700'></div>
-        <div className='text-6xl'>Everyone Benefits</div>
+      <div className='col-span-full mt-[90px] mb-[90px] w-full border-t border-gray-700'></div>
 
-        <div className='mt-[60px] flex items-center'>
-          <div className='mr-[32px] w-[320px] text-right'>
-            <div className='text-4xl'>Artists</div>
-            <div className='text-xl text-gray-600'>
+      {/* ------------------ EVERYONE BENEFITS ------------------ */}
+      <div className='col-span-full mt-10 flex flex-col items-center justify-center'>
+        <div className='text-5xl lg:text-6xl'>Everyone Benefits</div>
+
+        <div className='mt-[60px] flex lg:flex-row flex-col items-center'>
+
+          <div className='mr-0 mb-[32px] lg:mb-0 lg:mr-[32px] w-[320px] flex flex-col text-center lg:text-right'>
+            <div className='text-4xl order-2 lg:order-1'>Artists</div>
+            <div className='text-xl text-gray-600 order-1 lg:order-2'>
               Sell art faster, receive a steady monthly income stream
             </div>
           </div>
+
           <div className='flex h-[180px] w-[180px] flex-col items-center justify-center'>
-            <div className='absolute w-[180px] border border-gray-700'></div>
+            <div className='absolute w-0 h-[180px] lg:h-0 lg:w-[180px] border border-gray-700'></div>
             <div
               className="absolute h-[158px] w-[158px] rounded-full border border-gray-700 bg-black bg-[url('/niftyapes/home_heart.svg')] bg-center bg-no-repeat"></div>
           </div>
-          <div className='ml-[32px] w-[320px] text-left'>
-            <div className='text-4xl '>Collectors</div>
+
+          <div className='ml-0 mt-[32px] mt-0 lg:ml-[32px] w-[320px] flex flex-col text-center lg:text-left'>
+            <div className='text-4xl'>Collectors</div>
             <div className='text-xl text-gray-600'>
               Collect more art while spending less ETH up-front
             </div>
@@ -361,13 +374,14 @@ const Home: NextPage<Props> = ({ fallback }) => {
 
       <div className='lg:px-0 px-[24px] flex flex-col col-span-full justify-center items-center mb-[90px]'>
 
-        <div className="flex w-full max-w-[1095px]">
-          <div className="text-4xl">Featured Art</div>
-          <div className="ml-auto">
-            <Link href="/explore">
-              <div className="flex items-center uppercase text-white">
-                <span className="text-lg">explore</span>
-                <div className="ml-[15px] h-[24px] w-[24px] rounded-full border border-white bg-[url('/icons/arrow-up-right.svg')] bg-center bg-no-repeat"></div>
+        <div className='flex w-full max-w-[1095px]'>
+          <div className='text-5xl lg:text-6xl'>Featured Art</div>
+          <div className='ml-auto'>
+            <Link href='/explore'>
+              <div className='flex items-center uppercase text-white'>
+                <span className='text-lg'>explore</span>
+                <div
+                  className="ml-[15px] h-[24px] w-[24px] rounded-full border border-white bg-[url('/icons/arrow-up-right.svg')] bg-center bg-no-repeat"></div>
               </div>
             </Link>
           </div>
@@ -388,7 +402,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
 
           <div className='lg:mr-[215px] lg:max-w-[565px] flex items-center justify-center py-[60px] px-[24px]'>
             <div>
-              <div className='text-6xl'>Try it on Goerli</div>
+              <div className='text-5xl lg:text-6xl'>Try it on Goerli</div>
               <div className='mt-[24px] mb-[48px] text-2xl text-gray-600'>
                 Go to{' '}
                 <span className='text-white underline'>
@@ -441,7 +455,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
       <div className='col-span-full mt-10 flex flex-col items-center justify-center'>
         <div
           className="col-span-full flex w-full flex-col items-center bg-[url('/niftyapes/home_holographic_bg.png')] bg-cover bg-no-repeat py-20 text-black">
-          <div className='mb-[24px] text-6xl text-center'>Powered by NiftyApes</div>
+          <div className='text-5xl lg:text-6xl mb-[24px] text-center'>Powered by NiftyApes</div>
 
           <div className='mb-[48px] lg:flex items-center text-center text-2xl'>
             <div className='underline lg:mb-0 mb-3'>Protocol Benefits</div>
