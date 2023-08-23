@@ -192,28 +192,30 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
             </div>
 
             <div className="mb-16 flex items-start justify-center space-x-[100px] lg:!justify-start">
-              <ConditionalWrapper
-                condition={!!artistEns.name}
-                wrapper={(children: ReactNode) => (
-                  <a
-                    href={`https://superrare.com/${artistEns.name}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {children}
-                  </a>
-                )}
-              >
-                <EthAccount
-                  side="left"
-                  label="Artist"
-                  ens={artistEns}
-                  address={
-                    srToken?.erc721_token?.erc721_creator.address ||
-                    token?.token?.owner
-                  }
-                />
-              </ConditionalWrapper>
+              {srToken?.erc721_token && (
+                <ConditionalWrapper
+                  condition={!!artistEns.name}
+                  wrapper={(children: ReactNode) => (
+                    <a
+                      href={`https://superrare.com/${artistEns.name}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {children}
+                    </a>
+                  )}
+                >
+                  <EthAccount
+                    side="left"
+                    label="Artist"
+                    ens={artistEns}
+                    address={
+                      srToken?.erc721_token?.erc721_creator.address ||
+                      token?.token?.owner
+                    }
+                  />
+                </ConditionalWrapper>
+              )}
               <EthAccount
                 side="left"
                 label="Owner"
