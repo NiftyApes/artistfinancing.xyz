@@ -1,39 +1,42 @@
-import { Offer, useCancelOffer, useOffers } from '@niftyapes/sdk'
+import { Loan, useLoans, useSeizeAsset } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
-import Button from 'components/Button'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import LoadingIcon from 'components/LoadingIcon'
+import { format } from 'date-fns'
+import { BigNumber } from 'ethers'
 import { useEtherscanUri } from 'hooks/useEtherscan'
 import isEqualAddress from 'lib/isEqualAddress'
-import { optimizeImage } from 'lib/optmizeImage'
+import { processLoan } from 'lib/processLoan'
 import { processOffer } from 'lib/processOffer'
+import { optimizeImage } from 'lib/optmizeImage'
 import { useRouter } from 'next/router'
 import { FC, useEffect } from 'react'
-import { useWaitForTransaction } from 'wagmi'
+import { Address, useWaitForTransaction } from 'wagmi'
+import Button from '../Button'
+import Link from 'next/link'
 
 const DARK_MODE = process.env.NEXT_PUBLIC_DARK_MODE
 
-const UserFinancingOffersTable: FC = () => {
+const SalesTable: FC = () => {
   const router = useRouter()
   const { address } = router.query
 
   const {
-    data: offers = [],
+    data: loans = [],
     isLoading,
-    refetch: refetchOffers,
-  } = useOffers({
-    creator: address as string,
-    includeExpired: true,
+    refetch: refetchLoans,
+  } = useLoans({
+    seller: address as Address,
   })
 
-  const tokensQueryArr = offers?.map(
-    (offer) => `${offer.offer.nftContractAddress}:${offer.offer.nftId}`
+  const tokensQueryArr = loans?.map(
+    (item) => `${item.offer.offer.nftContractAddress}:${item.offer.offer.nftId}`
   )
-  const tokens = useTokens({
+  const { data, isFetchingPage, isFetchingInitialData } = useTokens({
     tokens: tokensQueryArr,
   })
 
-  if (isLoading || tokens.isFetchingInitialData || tokens.isFetchingPage) {
+  if (isLoading || isFetchingInitialData || isFetchingPage) {
     return (
       <div className="my-20 flex justify-center">
         <LoadingIcon />
@@ -42,7 +45,7 @@ const UserFinancingOffersTable: FC = () => {
   }
 
   // Sort so that "ACTIVE" loans are at the top.
-  offers.sort((a, b) => {
+  loans.sort((a, b) => {
     if (a.status === 'ACTIVE' && b.status !== 'ACTIVE') {
       return -1
     } else if (b.status === 'ACTIVE' && a.status !== 'ACTIVE') {
@@ -54,7 +57,7 @@ const UserFinancingOffersTable: FC = () => {
 
   return (
     <div className="mb-11 overflow-x-auto">
-      {offers.length === 0 && (
+      {loans.length === 0 && (
         <div className="mt-14 flex flex-col items-center justify-center text-[#525252] dark:text-white">
           <img
             src="/icons/listing-icon.svg"
@@ -69,19 +72,17 @@ const UserFinancingOffersTable: FC = () => {
           No offers yet
         </div>
       )}
-      {offers.length > 0 && (
+      {loans.length > 0 && (
         <table className="min-w-full table-auto dark:divide-neutral-600">
           <thead className="bg-white dark:bg-black">
             <tr className="border-b border-gray-700">
               {[
                 'Item',
                 'Price',
-                'Down payment',
-                'Min. principal payment',
-                'Pay period',
                 'APR',
-                'Duration',
-                'Expires',
+                'Next payment',
+                'Principal Remaining',
+                'Status',
                 'Action',
               ].map((item) => (
                 <th
@@ -98,24 +99,21 @@ const UserFinancingOffersTable: FC = () => {
             </tr>
           </thead>
           <tbody>
-            {offers.map((listing: Offer, index) => {
-              const { offer, signature, status } = listing
-              const token = tokens.data.find(
+            {loans.map((loan, index) => {
+              const token = data.find(
                 (token) =>
                   isEqualAddress(
                     token?.token?.contract,
-                    offer.nftContractAddress
-                  ) && token?.token?.tokenId === offer.nftId
+                    loan.offer.offer.nftContractAddress
+                  ) && token?.token?.tokenId === loan.offer.offer.nftId
               )
 
               return (
-                <UserListingsTableRow
-                  key={`${signature}-${index}`}
-                  signature={signature}
-                  offer={offer}
-                  status={status}
+                <SalesRow
+                  key={index}
+                  loan={loan}
                   token={token}
-                  refetchOffers={refetchOffers}
+                  refetchLoans={refetchLoans}
                 />
               )
             })}
@@ -126,41 +124,30 @@ const UserFinancingOffersTable: FC = () => {
   )
 }
 
-type UserOffersRowProps = {
-  offer: Offer['offer']
-  signature: `0x${string}`
-  status: Offer['status']
+type SalesRowProps = {
+  loan: Loan
   token: ReturnType<typeof useTokens>['data'][0]
-  refetchOffers: () => void
+  refetchLoans: () => void
 }
 
-const UserListingsTableRow = ({
-  offer,
-  status,
-  signature,
-  token,
-  refetchOffers,
-}: UserOffersRowProps) => {
-  const {
-    listPrice,
-    downPaymentAmount,
-    expirationRelative,
-    payPeriodDays,
-    apr,
-    minPrincipalPerPeriod,
-    image,
-    tokenName,
-    collectionName,
-  } = processOffer(offer, token)
+const SalesRow: FC<SalesRowProps> = ({ loan, token, refetchLoans }) => {
+  const { apr, listPrice, image, tokenName, collectionName } = processOffer(
+    loan.offer.offer,
+    token
+  )
+
+  const { periodEndTimestamp, remainingPrincipal, inDefault } = processLoan(
+    loan.loan
+  )
 
   const {
     data,
     isLoading: isWriteLoading,
     write,
-  } = useCancelOffer({
-    offer,
-    signature,
-    enabled: status === 'ACTIVE',
+  } = useSeizeAsset({
+    nftContractAddress: loan.offer.offer.nftContractAddress,
+    nftId: BigNumber.from(loan.offer.offer.nftId),
+    enabled: inDefault && loan.status === 'ACTIVE',
   })
 
   const {
@@ -174,44 +161,51 @@ const UserListingsTableRow = ({
     ? '/icons/etherscan-logo-light-circle.svg'
     : '/icons/etherscan-logo-circle.svg'
 
-  // Refetch offers to refresh the page after successful "Cancel Offer" call
+  // Refetch loans to refresh the page after successful "Seize Asset" call
   useEffect(() => {
-    setTimeout(refetchOffers, 1000)
+    setTimeout(refetchLoans, 1000)
   }, [isTxSuccess, isTxError])
 
   const isLoading = isWriteLoading || isTxLoading
 
-  let cancelOfferBtnText = 'Cancel Offer'
+  let seizeAssetBtnText = 'Seize Asset'
   if (isWriteLoading) {
-    cancelOfferBtnText = 'Pending Approval'
+    seizeAssetBtnText = 'Pending Approval'
   } else if (isTxLoading) {
-    cancelOfferBtnText = 'Transaction Submitted'
+    seizeAssetBtnText = 'Transaction Submitted'
   } else if (isTxSuccess) {
-    cancelOfferBtnText = 'Transaction Success'
+    seizeAssetBtnText = 'Transaction Success'
   } else if (isTxError) {
-    cancelOfferBtnText = 'Transaction Error'
+    seizeAssetBtnText = 'Transaction Error'
   }
 
   return (
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
       {/* ITEM */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <div className="flex items-center gap-2">
-          <div className="relative overflow-hidden rounded">
-            <img
-              src={
-                image ? optimizeImage(image, 64) : '/niftyapes/placeholder.png'
-              }
-              alt="Bid Image"
-              className="h-16 w-16 object-contain"
-            />
-          </div>
-          <span className="whitespace-nowrap">
-            <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
-              {tokenName ? tokenName : collectionName}
+        <Link
+          passHref
+          href={`/${token?.token?.contract}/${token?.token?.tokenId}`}
+        >
+          <div className="flex items-center gap-2">
+            <div className="aspect-w-1 aspect-h-1 relative h-16 w-16 overflow-hidden rounded">
+              <img
+                src={
+                  image
+                    ? optimizeImage(image, 64)
+                    : '/niftyapes/placeholder.png'
+                }
+                alt="Bid Image"
+                className="h-16 w-16 object-contain"
+              />
             </div>
-          </span>
-        </div>
+            <span className="whitespace-nowrap">
+              <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
+                {tokenName ? tokenName : collectionName}
+              </div>
+            </span>
+          </div>
+        </Link>
       </td>
 
       {/* PRICE */}
@@ -219,42 +213,42 @@ const UserListingsTableRow = ({
         <FormatNativeCrypto maximumFractionDigits={4} amount={listPrice} />
       </td>
 
-      {/* DOWN PAYMENT */}
-      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <FormatNativeCrypto
-          maximumFractionDigits={4}
-          amount={downPaymentAmount}
-        />
-      </td>
-
-      {/* MIN. PAYMENT */}
-      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <FormatNativeCrypto
-          maximumFractionDigits={4}
-          amount={minPrincipalPerPeriod}
-        />
-      </td>
-
-      {/* PAY PERIOD */}
-      <td className="whitespace-nowrap px-6 py-4">10 days</td>
-
       {/* APR */}
       <td className="px-6 py-4 font-light text-neutral-600 dark:text-neutral-300">
         {apr}%
       </td>
 
-      {/* DURATION */}
-      <td className="whitespace-nowrap px-6 py-4">{payPeriodDays} days</td>
+      {/* NEXT PAYMENT DUE */}
+      <td className="whitespace-nowrap px-6 py-4">
+        {format(new Date(periodEndTimestamp * 1000), 'Pp')}
+      </td>
 
-      {/* EXPIRES */}
-      <td className="whitespace-nowrap px-6 py-4">{expirationRelative}</td>
+      {/* PRINCIPAL REMAINING */}
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+        <FormatNativeCrypto
+          maximumFractionDigits={4}
+          amount={remainingPrincipal}
+        />
+      </td>
+
+      {/* STATUS */}
+      <td className="whitespace-nowrap px-6 py-4 dark:text-white">
+        {loan.status === 'ACTIVE' &&
+          loan.defaultStatus === 'NOT_IN_DEFAULT' &&
+          'Active'}
+        {loan.status === 'ACTIVE' &&
+          loan.defaultStatus === 'IN_DEFAULT_AND_REPAYABLE' &&
+          'In default, late payments possible'}
+        {loan.status === 'ACTIVE' &&
+          loan.defaultStatus === 'IN_DEFAULT_AND_NOT_REPAYABLE' &&
+          'In default, not repayable'}
+        {loan.status === 'ASSET_SEIZED' && 'Asset Seized'}
+        {loan.status === 'FULLY_REPAID' && 'Fully repaid'}
+      </td>
 
       {/* ACTION */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        {status === 'CANCELLED' && 'Cancelled'}
-        {status === 'USED_TO_EXECUTE_LOAN' && 'Used to execute loan'}
-        {status === 'EXPIRED' && 'Expired'}
-        {status === 'ACTIVE' && (
+        {inDefault && loan.status === 'ACTIVE' ? (
           <div className="flex w-64 flex-col items-center space-y-2">
             <Button
               textCase="capitalize"
@@ -263,7 +257,7 @@ const UserListingsTableRow = ({
               disabled={isLoading || isTxError || isTxSuccess}
               onClick={() => write?.()}
             >
-              {cancelOfferBtnText}
+              {seizeAssetBtnText}
             </Button>
             {data?.hash && (
               <div className="flex items-center space-x-2">
@@ -284,10 +278,12 @@ const UserListingsTableRow = ({
               </div>
             )}
           </div>
+        ) : (
+          'None'
         )}
       </td>
     </tr>
   )
 }
 
-export default UserFinancingOffersTable
+export default SalesTable

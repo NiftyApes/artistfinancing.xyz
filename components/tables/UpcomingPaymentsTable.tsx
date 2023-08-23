@@ -1,4 +1,5 @@
 import { Loan, LoanDetails, OfferDetails, useLoans } from '@niftyapes/sdk'
+import { LuCalendarX } from 'react-icons/lu'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import LoadingIcon from 'components/LoadingIcon'
 import MakePaymentModal from 'components/MakePaymentModal'
@@ -7,12 +8,13 @@ import { format } from 'date-fns'
 import isEqualAddress from 'lib/isEqualAddress'
 import { optimizeImage } from 'lib/optmizeImage'
 import { processLoan } from 'lib/processLoan'
+import Link from 'next/link'
 import { FC } from 'react'
 import { useAccount } from 'wagmi'
 import { processOffer } from '../../lib/processOffer'
 import FormatNativeCrypto from '../FormatNativeCrypto'
 
-const UserUpcomingPaymentsTable: FC = () => {
+const UpcomingPaymentsTable: FC = () => {
   const { address } = useAccount()
   const {
     data: loans,
@@ -97,6 +99,7 @@ const UserUpcomingPaymentsTable: FC = () => {
                   key={index}
                   loan={item.loan}
                   offer={item.offer.offer}
+                  defaultStatus={item.defaultStatus}
                   token={token}
                   refetchLoans={refetchLoans}
                 />
@@ -109,10 +112,11 @@ const UserUpcomingPaymentsTable: FC = () => {
   )
 }
 
-type LoansRowProps = {
+type UpcomingPaymentsRowProps = {
   isOwner: boolean
   loan: LoanDetails
   offer: OfferDetails
+  defaultStatus: Loan['defaultStatus']
   token: ReturnType<typeof useTokens>['data'][0]
   refetchLoans: () => void
 }
@@ -121,8 +125,9 @@ const UpcomingPaymentsTableRow = ({
   loan,
   offer,
   token,
+  defaultStatus,
   refetchLoans,
-}: LoansRowProps) => {
+}: UpcomingPaymentsRowProps) => {
   const { apr, listPrice, image, collectionName, tokenName, tokenId } =
     processOffer(offer, token)
 
@@ -133,22 +138,29 @@ const UpcomingPaymentsTableRow = ({
     <tr className="group h-[80px] border-b-[1px] border-solid border-b-neutral-300 bg-white text-left dark:border-b-neutral-600 dark:bg-black">
       {/* ITEM */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <div className="flex items-center gap-2">
-          <div className="aspect-w-1 aspect-h-1 relative h-16 w-16 overflow-hidden rounded">
-            <img
-              src={
-                image ? optimizeImage(image, 64) : '/niftyapes/placeholder.png'
-              }
-              alt="Bid Image"
-              className="h-16 w-16 object-contain"
-            />
-          </div>
-          <span className="whitespace-nowrap">
-            <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
-              {tokenName ? tokenName : collectionName}
+        <Link
+          passHref
+          href={`/${token?.token?.contract}/${token?.token?.tokenId}`}
+        >
+          <div className="flex items-center gap-2">
+            <div className="aspect-w-1 aspect-h-1 relative h-16 w-16 overflow-hidden rounded">
+              <img
+                src={
+                  image
+                    ? optimizeImage(image, 64)
+                    : '/niftyapes/placeholder.png'
+                }
+                alt="Bid Image"
+                className="h-16 w-16 object-contain"
+              />
             </div>
-          </span>
-        </div>
+            <span className="whitespace-nowrap">
+              <div className="reservoir-h6 max-w-[250px] overflow-hidden text-ellipsis font-headings text-base dark:text-white">
+                {tokenName ? tokenName : collectionName}
+              </div>
+            </span>
+          </div>
+        </Link>
       </td>
 
       {/* PRICE */}
@@ -164,9 +176,30 @@ const UpcomingPaymentsTableRow = ({
       {/* NEXT PAYMENT DUE */}
       <td className="whitespace-nowrap px-6 py-4">
         {format(new Date(periodEndTimestamp * 1000), 'Pp')}
-        <div className="flex pt-4" style={{ color: '#00B75F' }}>
-          <PaymentCalendarReminderFromToken token={token} />
-        </div>
+        {defaultStatus === 'NOT_IN_DEFAULT' && (
+          <div className="flex pt-4" style={{ color: '#00B75F' }}>
+            <PaymentCalendarReminderFromToken token={token} />
+          </div>
+        )}
+        {defaultStatus === 'IN_DEFAULT_AND_REPAYABLE' ||
+          (defaultStatus === 'IN_DEFAULT_AND_NOT_REPAYABLE' && (
+            <div className="flex items-center space-x-2 pt-4 text-red-500">
+              <span style={{ marginTop: '-3px' }}>
+                <LuCalendarX />
+              </span>
+              <span
+                style={{
+                  marginLeft: '8px',
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                  fontFamily: 'Inter',
+                  fontSize: '14px',
+                }}
+              >
+                Payment Past Due
+              </span>
+            </div>
+          ))}
       </td>
 
       {/* NEXT MINIMUM PAYMENT */}
@@ -184,18 +217,22 @@ const UpcomingPaymentsTableRow = ({
 
       {/* MAKE PAYMENT */}
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
-        <MakePaymentModal
-          offer={offer}
-          loan={loan}
-          image={image}
-          tokenId={tokenId}
-          tokenName={tokenName}
-          collectionName={collectionName}
-          refetchLoans={refetchLoans}
-        />
+        {defaultStatus !== 'IN_DEFAULT_AND_NOT_REPAYABLE' ? (
+          <MakePaymentModal
+            offer={offer}
+            loan={loan}
+            image={image}
+            tokenId={tokenId}
+            tokenName={tokenName}
+            collectionName={collectionName}
+            refetchLoans={refetchLoans}
+          />
+        ) : (
+          'In default, not repayable'
+        )}
       </td>
     </tr>
   )
 }
 
-export default UserUpcomingPaymentsTable
+export default UpcomingPaymentsTable
