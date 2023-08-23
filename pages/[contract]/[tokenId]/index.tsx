@@ -4,9 +4,10 @@ import EthAccount from 'components/EthAccount'
 import Layout from 'components/Layout'
 import OfferSection from 'components/OfferSection'
 import TokenAttributes from 'components/TokenAttributes'
-import useSuperRareToken from 'hooks/useSuperRareToken'
 import TokenInfo from 'components/token/TokenInfo'
 import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
+import useSuperRareToken from 'hooks/useSuperRareToken'
+import { getSocialMediaPreviewTitle } from 'lib/getSocialMediaPreviewTitle'
 import { optimizeImage } from 'lib/optmizeImage'
 import setParams from 'lib/params'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
@@ -45,8 +46,8 @@ const metadata = {
   title: (title: string) => (
     <>
       <title>{title}</title>
-      <meta property="twitter:title" content={title} />
-      <meta property="og:title" content={title} />
+      <meta property="twitter:title" content={getSocialMediaPreviewTitle()} />
+      <meta property="og:title" content={getSocialMediaPreviewTitle()} />
     </>
   ),
   description: (description: string) => (

@@ -1,10 +1,11 @@
 import { findChain } from 'hooks/useEnvChain'
+import { getSocialMediaPreviewTitle } from 'lib/getSocialMediaPreviewTitle'
 import Document, {
-  Html,
+  DocumentContext,
   Head,
+  Html,
   Main,
   NextScript,
-  DocumentContext,
 } from 'next/document'
 
 const DARK_MODE = process.env.NEXT_PUBLIC_DARK_MODE
@@ -51,7 +52,7 @@ const MyDocument = function () {
       <meta name="twitter:site:domain" content={META_URL} />
       <meta name="twitter:url" content={META_URL} />
       {/* should be between 30-60 characters, with a maximum of 70 */}
-      <meta name="twitter:title" content={META_TITLE} />
+      <meta name="twitter:title" content={getSocialMediaPreviewTitle()} />
       {/* should be between 55 and 200 characters long */}
       <meta name="twitter:description" content={META_DESCRIPTION} />
       <meta name="twitter:site" content={META_TWITTER_USERNAME} />
@@ -59,7 +60,7 @@ const MyDocument = function () {
       {/* OG - https://ogp.me/ */}
       {/* https://www.opengraph.xyz/ */}
       {/* should be between 30-60 characters, with a maximum of 90 */}
-      <meta name="og:title" content={META_TITLE} />
+      <meta name="og:title" content={getSocialMediaPreviewTitle()} />
       <meta property="og:type" content="website" />
       <meta property="og:determiner" content="the" />
       <meta property="og:locale" content="en" />
