@@ -47,7 +47,7 @@ const Explore: NextPage = () => {
       </div>
 
       <div className="col-span-full mb-20">
-        <div className="flex items-center justify-center px-4">
+        <div className="flex items-center justify-center px-12">
           <FeaturedFinancingOffers />
         </div>
       </div>

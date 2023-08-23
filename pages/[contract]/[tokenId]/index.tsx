@@ -4,9 +4,10 @@ import EthAccount from 'components/EthAccount'
 import Layout from 'components/Layout'
 import OfferSection from 'components/OfferSection'
 import TokenAttributes from 'components/TokenAttributes'
-import useSuperRareToken from 'hooks/useSuperRareToken'
 import TokenInfo from 'components/token/TokenInfo'
 import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
+import useSuperRareToken from 'hooks/useSuperRareToken'
+import { getSocialMediaPreviewTitle } from 'lib/getSocialMediaPreviewTitle'
 import { optimizeImage } from 'lib/optmizeImage'
 import setParams from 'lib/params'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
@@ -45,8 +46,8 @@ const metadata = {
   title: (title: string) => (
     <>
       <title>{title}</title>
-      <meta property="twitter:title" content={title} />
-      <meta property="og:title" content={title} />
+      <meta property="twitter:title" content={getSocialMediaPreviewTitle()} />
+      <meta property="og:title" content={getSocialMediaPreviewTitle()} />
     </>
   ),
   description: (description: string) => (
@@ -191,28 +192,30 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
             </div>
 
             <div className="mb-16 flex items-start justify-center space-x-[100px] lg:!justify-start">
-              <ConditionalWrapper
-                condition={!!artistEns.name}
-                wrapper={(children: ReactNode) => (
-                  <a
-                    href={`https://superrare.com/${artistEns.name}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {children}
-                  </a>
-                )}
-              >
-                <EthAccount
-                  side="left"
-                  label="Artist"
-                  ens={artistEns}
-                  address={
-                    srToken?.erc721_token?.erc721_creator.address ||
-                    token?.token?.owner
-                  }
-                />
-              </ConditionalWrapper>
+              {srToken?.erc721_token && (
+                <ConditionalWrapper
+                  condition={!!artistEns.name}
+                  wrapper={(children: ReactNode) => (
+                    <a
+                      href={`https://superrare.com/${artistEns.name}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {children}
+                    </a>
+                  )}
+                >
+                  <EthAccount
+                    side="left"
+                    label="Artist"
+                    ens={artistEns}
+                    address={
+                      srToken?.erc721_token?.erc721_creator.address ||
+                      token?.token?.owner
+                    }
+                  />
+                </ConditionalWrapper>
+              )}
               <EthAccount
                 side="left"
                 label="Owner"
