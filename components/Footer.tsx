@@ -10,7 +10,7 @@ const Footer = () => {
         {/* ------------------ LOGO ------------------ */}
         <div className='order-2 lg:order-1 lg:items-start flex flex-col justify-center items-center'>
           <img src='/niftyapes/af-artist-financing-black.svg' width='250' />
-          <div className='mt-[8px] italic'>Powered by NiftyApes</div>
+          <div className='mt-[8px] '>Brought to you by <a href="https://niftyapes.money" className="underline" target="_blank" rel="noreferrer">NiftyApes</a> and <a className="underline" href="https://rare.xyz" target="_blank" rel="noreferrer">SuperRare DAO</a></div>
           <div className='mt-[8px] flex space-x-[15px]'>
             <div>
               <Link href='https://twitter.com/NiftyApes' legacyBehavior={true}>

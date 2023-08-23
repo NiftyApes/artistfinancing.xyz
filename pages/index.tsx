@@ -296,7 +296,8 @@ const Home: NextPage<Props> = ({ fallback }) => {
       </div>
 
       {/* ------------------ FINANCING CARDS ------------------ */}
-      <div className='col-span-full mt-10 flex flex-col px-[100px] lg:px-0 lg:items-center items-start justify-center overflow-x-auto'>
+      <div
+        className='col-span-full flex flex-col px-[100px] lg:px-0 lg:items-center items-start justify-center overflow-x-auto'>
 
         <div className='inline-block mt-[60px] flex items-center'>
 
@@ -341,7 +342,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
       <div className='col-span-full mt-[90px] mb-[90px] w-full border-t border-gray-700'></div>
 
       {/* ------------------ EVERYONE BENEFITS ------------------ */}
-      <div className='col-span-full mt-10 flex flex-col items-center justify-center'>
+      <div className='col-span-full flex flex-col items-center justify-center'>
         <div className='text-5xl lg:text-6xl'>Everyone Benefits</div>
 
         <div className='mt-[60px] flex lg:flex-row flex-col items-center'>
@@ -395,9 +396,10 @@ const Home: NextPage<Props> = ({ fallback }) => {
         </div>
       </div>
 
+
       {/* ------------------ GOERLI ------------------ */}
 
-      <div className='col-span-full mt-[90px] mb-[90px] w-full'>
+      <div className='col-span-full w-full mb-[90px] mt-[90px]'>
         <div className='ml-[30px] mr-[30px] flex items-center justify-center border border-gray-800'>
 
           <div className='lg:mr-[215px] lg:max-w-[565px] flex items-center justify-center py-[60px] px-[24px]'>
@@ -452,7 +454,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
 
       {/* ------------------ SDK ------------------ */}
 
-      <div className='col-span-full mt-10 flex flex-col items-center justify-center'>
+      <div className='col-span-full flex flex-col items-center justify-center'>
         <div
           className="col-span-full flex w-full flex-col items-center bg-[url('/niftyapes/home_holographic_bg.png')] bg-cover bg-no-repeat py-20 text-black">
           <div className='text-5xl lg:text-6xl mb-[24px] text-center'>Powered by NiftyApes</div>

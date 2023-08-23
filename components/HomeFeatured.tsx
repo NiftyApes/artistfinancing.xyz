@@ -29,7 +29,7 @@ export const FeaturedArtworks: FC<Props> = ({ cards }) => {
   return (
 
       <div>
-        <div className="grid w-full grid-cols-4 items-end space-x-[24px]">
+        <div className="grid w-full lg:grid-cols-4 grid-cols-1 lg:items-end lg:space-x-[24px] space-y-[24px]">
           {cards.slice(0, 4).map((item, idx) => {
             return (
               <div key={`first-row-${idx}`}>{renderFeaturedImage(item)}</div>
@@ -37,7 +37,7 @@ export const FeaturedArtworks: FC<Props> = ({ cards }) => {
           })}
         </div>
 
-        <div className="mt-[24px] grid w-full grid-cols-3 items-start space-x-[24px]">
+        <div className="mt-[24px] grid w-full lg:grid-cols-3 grid-cols-1 items-start lg:space-x-[24px] space-y-[24px]">
           {cards.slice(4, 7).map((item, idx) => {
             return (
               <div key={`second-row-${idx}`}>{renderFeaturedImage(item)}</div>
@@ -80,7 +80,7 @@ const renderFeaturedImage = (item: FeaturedNFT) => {
           }}
           className="absolute bottom-0 right-0 h-full w-full opacity-0 transition-opacity duration-100 group-hover:opacity-100"
         ></div>
-        <img className="h-full" src={item.image} />
+        <img className="h-full w-full" src={item.image} />
       </Link>
     </div>
   )
