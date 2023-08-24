@@ -176,11 +176,17 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       </Head>
       <div className="col-span-full lg:col-span-8 lg:pr-12 3xl:col-span-12">
         <div className="flex items-center justify-center p-4 lg:h-vh-minus-6rem">
-          <img
-            alt={token?.token?.name || `#${token?.token?.tokenId}`}
-            className="max-h-full object-cover lg:max-w-xl"
-            src={optimizeImage(token?.token?.image, 533)}
-          />
+          {
+            <img
+              alt={token?.token?.name || `#${token?.token?.tokenId}`}
+              className="max-h-full object-cover lg:max-w-xl"
+              src={
+                token?.token?.image
+                  ? optimizeImage(token?.token?.image, 533)
+                  : '/niftyapes/placeholder.png'
+              }
+            />
+          }
         </div>
       </div>
 
