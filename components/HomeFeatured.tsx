@@ -6,51 +6,40 @@ type Props = {
   cards: FeaturedNFT[]
 }
 
-const HomeFeatured: FC<Props> = ({ cards }) => {
+export const FeaturedArtists: FC<Props> = ({ cards }) => {
   return (
-    <div className="col-span-full max-w-[1095px]">
-      <div className="mb-[48px] flex">
-        <div>
-          <div className="text-4xl">Featured Art</div>
-          <div className="mt-[24px] flex items-center text-gray-600">
-            {cards.map((item, idx) => {
-              return (
-                <div key={idx}>
-                  <div>{item.artist}</div>
-                  {idx < cards.length - 1 && (
-                    <div className="ml-[15px] mr-[15px] h-[6px] w-[6px] rounded-full bg-gray-700"></div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </div>
-        <div className="ml-auto">
-          <Link passHref href="/explore">
-            <div className="flex items-center uppercase text-white">
-              <span className="text-lg">explore</span>
-              <div className="ml-[15px] h-[24px] w-[24px] rounded-full border border-white bg-[url('/icons/arrow-up-right.svg')] bg-center bg-no-repeat"></div>
-            </div>
-          </Link>
-        </div>
+    <div>
+      <div className="mt-[24px] flex flex-wrap items-center text-gray-600">
+        {cards.map((item, idx) => {
+          return (
+            <>
+              <div className="">{item.artist}</div>
+              {idx < cards.length - 1 && (
+                <div className="ml-[15px] mr-[15px] h-[6px] w-[6px] rounded-full bg-gray-700"></div>
+              )}
+            </>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+export const FeaturedArtworks: FC<Props> = ({ cards }) => {
+  return (
+    <div>
+      <div className="grid w-full grid-cols-1 space-y-[24px] lg:grid-cols-4 lg:items-end lg:space-x-[24px]">
+        {cards.slice(0, 4).map((item, idx) => {
+          return <div key={`first-row-${idx}`}>{renderFeaturedImage(item)}</div>
+        })}
       </div>
 
-      <div>
-        <div className="grid w-full grid-cols-4 items-end space-x-[24px]">
-          {cards.slice(0, 4).map((item, idx) => {
-            return (
-              <div key={`first-row-${idx}`}>{renderFeaturedImage(item)}</div>
-            )
-          })}
-        </div>
-
-        <div className="mt-[24px] grid w-full grid-cols-3 items-start space-x-[24px]">
-          {cards.slice(4, 7).map((item, idx) => {
-            return (
-              <div key={`second-row-${idx}`}>{renderFeaturedImage(item)}</div>
-            )
-          })}
-        </div>
+      <div className="mt-[24px] grid w-full grid-cols-1 items-start space-y-[24px] lg:grid-cols-3 lg:space-x-[24px]">
+        {cards.slice(4, 7).map((item, idx) => {
+          return (
+            <div key={`second-row-${idx}`}>{renderFeaturedImage(item)}</div>
+          )
+        })}
       </div>
     </div>
   )
@@ -88,10 +77,8 @@ const renderFeaturedImage = (item: FeaturedNFT) => {
           }}
           className="absolute bottom-0 right-0 h-full w-full opacity-0 transition-opacity duration-100 group-hover:opacity-100"
         ></div>
-        <img className="h-full" src={item.image} />
+        <img className="h-full w-full" src={item.image} />
       </Link>
     </div>
   )
 }
-
-export default HomeFeatured

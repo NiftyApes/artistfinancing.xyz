@@ -23,7 +23,7 @@ const HomeCarousel: FC<Props> = ({ cards }) => {
   const timer = 5000
   const cardOffset = 15
   const cardTotal = cards.length
-  const cardSize = 400
+  const cardSize = 430
   const frameSize = cardSize + cardTotal * cardOffset
 
   const topCardY = cardTotal * cardOffset
