@@ -1,5 +1,5 @@
 import { Address, NiftyApesProvider } from '@niftyapes/sdk'
-// Imported last so that it does not conflict
+
 import '@niftyapes/sdk/dist/styles.css'
 
 import '@rainbow-me/rainbowkit/styles.css'
