@@ -64,6 +64,17 @@ const CAROUSEL = [
     tokenId: '5',
   },
   {
+    artist: 'frenetikvoid',
+    buyFinancingPrice: 2,
+    buyNowPrice: 10.35,
+    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
+    image:
+      'https://i.seadn.io/gae/pws_HlAJEFacExc3bGGqj8V6W1U6J3_MabY5blcnHUtVCZXbHzTt3EKcSIchWs35eNYnPrxpXBdwVA5ffRUsqSZqmLtnraGXwhhB?w=500&auto=format',
+    rarity: '1/1',
+    title: 'Polished Jealousy',
+    tokenId: '30581',
+  },
+  {
     artist: 'der_probst',
     buyFinancingPrice: 0.759,
     buyNowPrice: 3.3,
@@ -120,6 +131,17 @@ const FEATURED = [
     rarity: '1/1',
     title: 'Anxiety will get the best of you',
     tokenId: '5',
+  },
+  {
+    artist: 'frenetikvoid',
+    buyFinancingPrice: 2,
+    buyNowPrice: 10.35,
+    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
+    image:
+      'https://i.seadn.io/gae/pws_HlAJEFacExc3bGGqj8V6W1U6J3_MabY5blcnHUtVCZXbHzTt3EKcSIchWs35eNYnPrxpXBdwVA5ffRUsqSZqmLtnraGXwhhB?w=500&auto=format',
+    rarity: '1/1',
+    title: 'Polished Jealousy',
+    tokenId: '30581',
   },
   {
     artist: 'der_probst',
