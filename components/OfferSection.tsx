@@ -110,24 +110,26 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
       <div className="mt-5 text-xs text-gray-400">
         {subset.map((offer, idx) => {
           return (
-            <div
-              className="mb-4 mt-2 flex h-full items-center"
+            <Link
+              href={`/address/${account?.address}?tab=manage_listings`}
               key={`offer-${idx}`}
             >
-              <AiOutlineRightCircle className="mr-3 text-xl text-gray-600" />
-              <div>
-                {`${
-                  formatBN(offer.offer.price, 2) as any
-                } ETH over ${Duration.fromObject({
-                  seconds: offer.offer.periodDuration,
-                }).as('days')} days`}
-              </div>
+              <div className="mb-4 mt-2 flex h-full items-center">
+                <AiOutlineRightCircle className="mr-3 text-xl text-gray-600" />
+                <div>
+                  {`${
+                    formatBN(offer.offer.price, 2) as any
+                  } ETH over ${Duration.fromObject({
+                    seconds: offer.offer.periodDuration,
+                  }).as('days')} days`}
+                </div>
 
-              <div className="ml-auto rounded-lg border border-gray-600 border-opacity-50 px-2 py-[2px]">
-                expires{' '}
-                {DateTime.fromSeconds(offer.offer.expiration).toRelative()!}
+                <div className="ml-auto rounded-lg border border-gray-600 border-opacity-50 px-2 py-[2px]">
+                  expires{' '}
+                  {DateTime.fromSeconds(offer.offer.expiration).toRelative()!}
+                </div>
               </div>
-            </div>
+            </Link>
           )
         })}
         {activeOffers.length > 3 && (
