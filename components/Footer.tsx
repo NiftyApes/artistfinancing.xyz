@@ -5,10 +5,30 @@ const FOOTER_ENABLED = process.env.NEXT_PUBLIC_FOOTER_ENABLED == 'true'
 const Footer = () => {
   if (FOOTER_ENABLED)
     return (
-      <footer className="col-span-full bg-white p-20 text-sm text-black lg:flex">
-        <div>
-          <img src="/niftyapes/af-artist-financing-black.svg" />
-          <div className="mt-[8px] italic">Powered by NiftyApes</div>
+      <footer className="col-span-full flex flex-col bg-white p-20 text-sm text-black lg:flex-row">
+        {/* ------------------ LOGO ------------------ */}
+        <div className="order-2 flex flex-col items-center justify-center lg:order-1 lg:items-start">
+          <img src="/niftyapes/af-artist-financing-black.svg" width="250" />
+          <div className="mt-[8px] ">
+            Brought to you by{' '}
+            <a
+              href="https://niftyapes.money"
+              className="underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              NiftyApes
+            </a>{' '}
+            and{' '}
+            <a
+              className="underline"
+              href="https://rare.xyz"
+              target="_blank"
+              rel="noreferrer"
+            >
+              SuperRare DAO
+            </a>
+          </div>
           <div className="mt-[8px] flex space-x-[15px]">
             <div>
               <Link href="https://twitter.com/NiftyApes" legacyBehavior={true}>
@@ -30,7 +50,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="ml-auto flex items-center justify-center space-x-[20px]">
+        {/* ------------------ LINKS ------------------ */}
+        <div className="order-1 mb-[48px] ml-0 flex flex-col items-center space-y-[20px] lg:order-2 lg:ml-auto lg:mb-0 lg:flex-row lg:space-x-[20px] lg:space-y-0">
           <div className="flex items-center justify-center">
             <Link
               href="https://niftyapes.readme.io/docs/introduction"
@@ -44,13 +65,14 @@ const Footer = () => {
               new
             </div>
           </div>
-          <div className="h-[16px] border-t border-r border-gray-200"></div>
+
+          <div className="hidden h-[16px] border-t border-r border-gray-200 lg:block"></div>
           <Link href="https://app.niftyapes.money/" legacyBehavior={true}>
             <a target="_blank" rel="noreferrer">
               Lending App
             </a>
           </Link>
-          <div className="h-[16px] border-t border-r border-gray-200"></div>
+          <div className="hidden h-[16px] border-t border-r border-gray-200 lg:block"></div>
           <div>
             <Link href="https://blog.niftyapes.money/" legacyBehavior={true}>
               <a target="_blank" rel="noreferrer">
@@ -58,7 +80,7 @@ const Footer = () => {
               </a>
             </Link>
           </div>
-          <div className="h-[16px] border-t border-r border-gray-200"></div>
+          <div className="hidden h-[16px] border-t border-r border-gray-200 lg:block"></div>
           <div>
             <Link
               href="https://niftyapes.readme.io/docs/contracts"
@@ -69,7 +91,7 @@ const Footer = () => {
               </a>
             </Link>
           </div>
-          <div className="h-[16px] border-t border-r border-gray-200"></div>
+          <div className="hidden h-[16px] border-t border-r border-gray-200 lg:block"></div>
           <div>
             <Link
               href="https://niftyapes.readme.io/docs/faq"
@@ -80,7 +102,7 @@ const Footer = () => {
               </a>
             </Link>
           </div>
-          <div className="h-[16px] border-t border-r border-gray-200"></div>
+          <div className="hidden h-[16px] border-t border-r border-gray-200 lg:block"></div>
           <div>
             <Link href="https://niftyapes.readme.io/docs" legacyBehavior={true}>
               <a target="_blank" rel="noreferrer">
@@ -88,7 +110,7 @@ const Footer = () => {
               </a>
             </Link>
           </div>
-          <div className="h-[16px] border-t border-r border-gray-200"></div>
+          <div className="hidden h-[16px] border-t border-r border-gray-200 lg:block"></div>
           <div>Terms of Service</div>
         </div>
       </footer>
