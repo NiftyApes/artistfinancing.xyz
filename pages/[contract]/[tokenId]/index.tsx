@@ -132,7 +132,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
 
   // META
   const title = META_TITLE
-    ? metadata.title(`${tokenName} - ${META_TITLE}`)
+    ? metadata.title(`${tokenName} | ${META_TITLE}`)
     : metadata.title(`${tokenName}
     ${
       token?.token?.collection?.name
