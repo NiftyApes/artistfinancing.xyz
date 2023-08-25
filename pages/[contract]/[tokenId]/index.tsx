@@ -146,10 +146,10 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
     ? metadata.description(META_DESCRIPTION)
     : null
 
-  const image = META_OG_IMAGE
-    ? metadata.image(META_OG_IMAGE)
-    : token?.token?.image
+  const image = token?.token?.image
     ? metadata.image(token?.token?.image)
+    : META_OG_IMAGE
+    ? metadata.image(META_OG_IMAGE)
     : null
 
   const isOwner =
