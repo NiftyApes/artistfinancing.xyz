@@ -6,7 +6,7 @@ const SUPER_RARE_API_BASE =
   process.env.NEXT_PUBLIC_SUPER_RARE_API_BASE ||
   'https://staging-api.superrare.co'
 
-export interface SuperRareTokenData {
+export interface SuperRareToken {
   erc721_token: {
     universal_token_id: string
     contract_address: string
@@ -24,6 +24,7 @@ export interface SuperRareTokenData {
       }
     }
     nft_image: {
+      image_artwork_detail: string
       image_full: string
     }
     erc721_metadata: {
@@ -65,6 +66,7 @@ export default async function handler(
           }
         }
         nft_image {
+          image_artwork_detail
           image_full
         }
         erc721_metadata {
@@ -81,7 +83,7 @@ export default async function handler(
   }
 
   try {
-    const data = await graphQLClient.request<SuperRareTokenData>(
+    const data = await graphQLClient.request<SuperRareToken>(
       document,
       { universalTokenId },
       headers

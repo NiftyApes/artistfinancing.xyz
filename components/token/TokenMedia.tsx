@@ -1,16 +1,22 @@
 import { optimizeImage } from 'lib/optmizeImage'
 import Script from 'next/script'
+import { SuperRareToken } from 'pages/api/superrare/token'
 import { FC } from 'react'
 import { TokenDetails } from 'types/reservoir'
 
 type Props = {
   token?: TokenDetails
+  srToken?: SuperRareToken
 }
 
-const TokenMedia: FC<Props> = ({ token }) => {
-  const tokenImage = token?.image
+const TokenMedia: FC<Props> = ({ token, srToken }) => {
+  let tokenImage = token?.image
     ? optimizeImage(token?.image, 533)
     : '/niftyapes/placeholder.png'
+
+  if (srToken?.erc721_token?.nft_image.image_artwork_detail) {
+    tokenImage = srToken.erc721_token.nft_image.image_artwork_detail
+  }
 
   return (
     <>

@@ -1,12 +1,12 @@
 import useEnvChain from 'hooks/useEnvChain'
 import { truncateAddress } from 'lib/truncateText'
-import { SuperRareTokenData } from 'pages/api/superrare/token'
+import { SuperRareToken } from 'pages/api/superrare/token'
 import { FC } from 'react'
 import { TokenDetails } from 'types/reservoir'
 
 type Props = {
   token?: TokenDetails
-  srToken?: SuperRareTokenData
+  srToken?: SuperRareToken
 }
 
 const TokenInfo: FC<Props> = ({ token, srToken }) => {
