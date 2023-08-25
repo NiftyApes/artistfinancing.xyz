@@ -6,14 +6,14 @@ import { format } from 'date-fns'
 import { BigNumber } from 'ethers'
 import { useEtherscanUri } from 'hooks/useEtherscan'
 import isEqualAddress from 'lib/isEqualAddress'
+import { optimizeImage } from 'lib/optmizeImage'
 import { processLoan } from 'lib/processLoan'
 import { processOffer } from 'lib/processOffer'
-import { optimizeImage } from 'lib/optmizeImage'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC, useEffect } from 'react'
 import { Address, useWaitForTransaction } from 'wagmi'
 import Button from '../Button'
-import Link from 'next/link'
 
 const DARK_MODE = process.env.NEXT_PUBLIC_DARK_MODE
 
@@ -193,7 +193,7 @@ const SalesRow: FC<SalesRowProps> = ({ loan, token, refetchLoans }) => {
                 src={
                   image
                     ? optimizeImage(image, 64)
-                    : '/niftyapes/placeholder.png'
+                    : '/niftyapes/placeholder-64x64.png'
                 }
                 alt="Bid Image"
                 className="h-16 w-16 object-contain"
