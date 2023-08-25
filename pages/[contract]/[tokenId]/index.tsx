@@ -3,12 +3,12 @@ import { paths } from '@reservoir0x/reservoir-sdk'
 import EthAccount from 'components/EthAccount'
 import Layout from 'components/Layout'
 import OfferSection from 'components/OfferSection'
-import TokenAttributes from 'components/TokenAttributes'
 import TokenInfo from 'components/token/TokenInfo'
+import TokenMedia from 'components/token/TokenMedia'
+import TokenAttributes from 'components/TokenAttributes'
 import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
 import useSuperRareToken from 'hooks/useSuperRareToken'
 import { getSocialMediaPreviewTitle } from 'lib/getSocialMediaPreviewTitle'
-import { optimizeImage } from 'lib/optmizeImage'
 import setParams from 'lib/params'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
@@ -132,7 +132,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
 
   // META
   const title = META_TITLE
-    ? metadata.title(`${tokenName} - ${META_TITLE}`)
+    ? metadata.title(`${tokenName} | ${META_TITLE}`)
     : metadata.title(`${tokenName}
     ${
       token?.token?.collection?.name
@@ -146,10 +146,10 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
     ? metadata.description(META_DESCRIPTION)
     : null
 
-  const image = META_OG_IMAGE
-    ? metadata.image(META_OG_IMAGE)
-    : token?.token?.image
+  const image = token?.token?.image
     ? metadata.image(token?.token?.image)
+    : META_OG_IMAGE
+    ? metadata.image(META_OG_IMAGE)
     : null
 
   const isOwner =
@@ -175,12 +175,10 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         {image}
       </Head>
       <div className="col-span-full lg:col-span-8 lg:pr-12 3xl:col-span-12">
-        <div className="flex items-center justify-center p-4 lg:h-vh-minus-6rem">
-          <img
-            alt={token?.token?.name || `#${token?.token?.tokenId}`}
-            className="max-h-full object-cover lg:max-w-xl"
-            src={optimizeImage(token?.token?.image, 533)}
-          />
+        <div className="flex items-center justify-center lg:h-vh-minus-6rem">
+          <div className="max-h-full object-cover lg:max-w-xl">
+            <TokenMedia token={token.token} />
+          </div>
         </div>
       </div>
 
@@ -192,28 +190,30 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
             </div>
 
             <div className="mb-16 flex items-start justify-center space-x-[100px] lg:!justify-start">
-              <ConditionalWrapper
-                condition={!!artistEns.name}
-                wrapper={(children: ReactNode) => (
-                  <a
-                    href={`https://superrare.com/${artistEns.name}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {children}
-                  </a>
-                )}
-              >
-                <EthAccount
-                  side="left"
-                  label="Artist"
-                  ens={artistEns}
-                  address={
-                    srToken?.erc721_token?.erc721_creator.address ||
-                    token?.token?.owner
-                  }
-                />
-              </ConditionalWrapper>
+              {srToken?.erc721_token && (
+                <ConditionalWrapper
+                  condition={!!artistEns.name}
+                  wrapper={(children: ReactNode) => (
+                    <a
+                      href={`https://superrare.com/${artistEns.name}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {children}
+                    </a>
+                  )}
+                >
+                  <EthAccount
+                    side="left"
+                    label="Artist"
+                    ens={artistEns}
+                    address={
+                      srToken?.erc721_token?.erc721_creator.address ||
+                      token?.token?.owner
+                    }
+                  />
+                </ConditionalWrapper>
+              )}
               <EthAccount
                 side="left"
                 label="Owner"

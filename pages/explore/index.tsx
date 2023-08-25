@@ -39,15 +39,15 @@ const Explore: NextPage = () => {
         {image}
       </Head>
 
-      <div className="col-span-full mt-20 mb-20 flex flex-col items-center justify-center">
-        <div className="text-5xl">Buy Now, Use Now, Pay Later</div>
+      <div className="col-span-full mt-20 mb-20 flex flex-col items-center justify-center text-center">
+        <div className="text-5xl">Collect with Financing</div>
         <div className="mt-5 text-xl font-thin text-gray-600">
-          A new primitive enabling easy financing for every NFT.
+          Flexible terms from premium artists.
         </div>
       </div>
 
       <div className="col-span-full mb-20">
-        <div className="flex items-center justify-center px-4">
+        <div className="flex items-center justify-center px-12">
           <FeaturedFinancingOffers />
         </div>
       </div>
