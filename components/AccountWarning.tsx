@@ -37,7 +37,7 @@ function AccountWarning({ id }: { id: string }) {
   if (id !== accountData?.address && !accountData?.address) {
     return (
       <div className="flex w-screen items-center justify-center gap-2 bg-[#FFA500] p-4 text-black">
-        You must connect a wallet to {tabDependentMsgPart}
+        You must connect a wallet {tabDependentMsgPart}
       </div>
     )
   }
@@ -47,7 +47,7 @@ function AccountWarning({ id }: { id: string }) {
     return (
       <div className="flex w-screen items-center justify-center gap-2 bg-[#FFA500] p-4 text-black">
         You are connected with {truncateAddress(accountData.address)}, but need
-        to be connected with {truncateAddress(id)} to access this page
+        to be connected with {truncateAddress(id)} {tabDependentMsgPart}
       </div>
     )
   }
