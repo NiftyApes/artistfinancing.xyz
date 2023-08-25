@@ -1,5 +1,4 @@
 import { Loan, LoanDetails, OfferDetails, useLoans } from '@niftyapes/sdk'
-import { LuCalendarX } from 'react-icons/lu'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import LoadingIcon from 'components/LoadingIcon'
 import MakePaymentModal from 'components/MakePaymentModal'
@@ -10,6 +9,7 @@ import { optimizeImage } from 'lib/optmizeImage'
 import { processLoan } from 'lib/processLoan'
 import Link from 'next/link'
 import { FC } from 'react'
+import { LuCalendarX } from 'react-icons/lu'
 import { useAccount } from 'wagmi'
 import { processOffer } from '../../lib/processOffer'
 import FormatNativeCrypto from '../FormatNativeCrypto'
@@ -148,7 +148,7 @@ const UpcomingPaymentsTableRow = ({
                 src={
                   image
                     ? optimizeImage(image, 64)
-                    : '/niftyapes/placeholder.png'
+                    : '/niftyapes/placeholder-64x64.png'
                 }
                 alt="Bid Image"
                 className="h-16 w-16 object-contain"

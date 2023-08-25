@@ -207,7 +207,7 @@ const ManageListingsTableRow = ({
                 src={
                   image
                     ? optimizeImage(image, 64)
-                    : '/niftyapes/placeholder.png'
+                    : '/niftyapes/placeholder-64x64.png'
                 }
                 alt="Bid Image"
                 className="h-16 w-16 object-contain"
