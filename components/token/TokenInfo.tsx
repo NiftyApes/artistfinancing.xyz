@@ -15,9 +15,14 @@ const TokenInfo: FC<Props> = ({ token, srToken }) => {
   const blockExplorerBaseUrl =
     envChain?.blockExplorers?.default?.url || 'https://etherscan.io'
 
-  const ipfsUrl = srToken?.erc721_token?.nft_image?.image_full || token?.image
+  const ipfsUrl =
+    srToken?.erc721_token?.nft_image?.image_full || token?.media || token?.image
 
   const metadataUrl = srToken?.erc721_token?.erc721_metadata?.metadata_uri || ''
+
+  const srTokenPageUrl = srToken?.erc721_token
+    ? `https://superrare.com/${token?.contract}/${token?.tokenId}`
+    : ''
 
   return (
     <div>
@@ -66,16 +71,18 @@ const TokenInfo: FC<Props> = ({ token, srToken }) => {
           </a>
         </div>
 
-        <div className="float-left ml-4 text-base text-gray-400">
-          <a target="_blank" rel="noopener noreferrer" href={metadataUrl}>
-            <img
-              src="/icons/sru-metadata.svg"
-              alt="IPFS"
-              className="float-left mr-2 h-6 w-6"
-            />
-            Metadata
-          </a>
-        </div>
+        {metadataUrl !== '' && (
+          <div className="float-left ml-4 text-base text-gray-400">
+            <a target="_blank" rel="noopener noreferrer" href={metadataUrl}>
+              <img
+                src="/icons/sru-metadata.svg"
+                alt="IPFS"
+                className="float-left mr-2 h-6 w-6"
+              />
+              Metadata
+            </a>
+          </div>
+        )}
 
         <div className="float-left ml-4 text-base text-gray-400">
           <a target="_blank" rel="noopener noreferrer" href={ipfsUrl}>
@@ -87,6 +94,19 @@ const TokenInfo: FC<Props> = ({ token, srToken }) => {
             IPFS
           </a>
         </div>
+
+        {srTokenPageUrl !== '' && (
+          <div className="float-left ml-4 text-base text-gray-400">
+            <a target="_blank" rel="noopener noreferrer" href={srTokenPageUrl}>
+              <img
+                src="/icons/SuperRare.svg"
+                alt="IPFS"
+                className="float-left mr-2 h-6 w-6"
+              />
+              SuperRare
+            </a>
+          </div>
+        )}
       </div>
 
       <div className="clear-left"></div>
