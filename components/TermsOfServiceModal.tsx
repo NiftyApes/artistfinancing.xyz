@@ -3,7 +3,7 @@ import { useLocalStorage } from 'hooks/useLocalStorage'
 import Modal from 'components/Modal'
 import Button from 'components/Button'
 
-const STORAGE_KEY = 'TOS_SRU'
+const STORAGE_KEY = 'TOS_ARTIST_FINANCING'
 
 const TermsOfServiceModal: React.FC = () => {
   const [open, setOpen] = useState(false)
@@ -25,32 +25,21 @@ const TermsOfServiceModal: React.FC = () => {
   return (
     <Modal open={open} onOpenChange={setOpen} preventCloseOnOutsideClick>
       <div className="flex max-w-2xl flex-col space-y-8 p-4">
-        <h4 className="text-xl font-bold text-black">Terms of Service</h4>
+        <h4 className="text-xl font-bold text-black">Terms of Use</h4>
         <div className="text-black">
           {
-            'Your use of the NiftyApes App is expressly conditioned on your acceptance of the NiftyApes '
+            'Your use of the ArtistFinancing.xyz app is expressly conditioned on your acceptance of the '
           }
           <a
             className="underline"
             target="_blank"
             rel="noreferrer"
-            href="https://blog.niftyapes.money/legal-privacy-tos/"
+            href="https://niftyapes.readme.io/page/artistfinancing-tos"
           >
-            Terms of Service
+            ArtistFinancing Terms of Use
           </a>
-          {' and '}
-          <a
-            className="underline"
-            target="_blank"
-            rel="noreferrer"
-            href="https://blog.niftyapes.money/legal-privacy-tos/"
-          >
-            Privacy Policy
-          </a>
-          . By clicking accept and close, you indicate that you have read and
-          agree to the NiftyApes Terms of Service and Privacy Policy, and that
-          you consent to collection, storage and use of your personal
-          information for the purposes set forth in the Privacy Policy.
+          . By clicking accept, you indicate that you have read and agree to the
+          ArtistFinancing Terms of Use.
         </div>
         <div className="w-64 self-end">
           <Button variant="secondary" onClick={handleAction}>

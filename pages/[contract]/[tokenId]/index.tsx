@@ -175,9 +175,9 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         {image}
       </Head>
       <div className="col-span-full lg:col-span-8 lg:pr-12 3xl:col-span-12">
-        <div className="flex items-center justify-center lg:h-vh-minus-6rem">
-          <div className="max-h-full object-cover lg:max-w-xl">
-            <TokenMedia token={token.token} />
+        <div className="flex items-center justify-center p-4 lg:h-vh-minus-6rem">
+          <div className="max-h-full object-cover lg:max-w-[533px]">
+            <TokenMedia srToken={srToken} token={token.token} />
           </div>
         </div>
       </div>

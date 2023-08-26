@@ -56,12 +56,12 @@ const CAROUSEL = [
     artist: 'miltonsanz',
     buyFinancingPrice: 0.825,
     buyNowPrice: 3.35,
-    contractAddress: '0xb628ae89d192e0bd5f15fddabdd896dfbd42f226',
+    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
     image:
       'https://i.seadn.io/gcs/files/946bc7327d7e91702cb43ae7ae67b354.jpg?w=500&auto=format',
     rarity: '1/1',
     title: 'Anxiety will get the best of you',
-    tokenId: '5',
+    tokenId: '45615',
   },
   {
     artist: 'frenetikvoid',
@@ -100,12 +100,12 @@ const CAROUSEL = [
     artist: 'hiuyo66',
     buyFinancingPrice: 0.13,
     buyNowPrice: 0.55,
-    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
+    contractAddress: '0xb628ae89d192e0bd5f15fddabdd896dfbd42f226',
     image:
       'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
     rarity: '1/1',
     title: '7DS',
-    tokenId: '45615',
+    tokenId: '5',
   },
 ]
 const CAROUSEL_TESTNET = [
@@ -114,7 +114,7 @@ const CAROUSEL_TESTNET = [
     buyFinancingPrice: 0.825,
     buyNowPrice: 3.35,
     contractAddress: '0xa5ae59eee379fc02206d715b9431ffa53507c152',
-    image: 'http://localhost:3000/niftyapes/placeholder.png',
+    image: 'https://sru.niftyapes.money/niftyapes/placeholder.png',
     rarity: '1/1',
     title: 'TEST TEST TEST',
     tokenId: '9',
@@ -125,12 +125,12 @@ const FEATURED = [
     artist: 'miltonsanz',
     buyFinancingPrice: 0.825,
     buyNowPrice: 3.35,
-    contractAddress: '0xb628ae89d192e0bd5f15fddabdd896dfbd42f226',
+    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
     image:
       'https://i.seadn.io/gcs/files/946bc7327d7e91702cb43ae7ae67b354.jpg?w=500&auto=format',
     rarity: '1/1',
     title: 'Anxiety will get the best of you',
-    tokenId: '5',
+    tokenId: '45615',
   },
   {
     artist: 'frenetikvoid',
@@ -169,12 +169,12 @@ const FEATURED = [
     artist: 'hiuyo66',
     buyFinancingPrice: 0.13,
     buyNowPrice: 0.55,
-    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
+    contractAddress: '0xb628ae89d192e0bd5f15fddabdd896dfbd42f226',
     image:
       'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
     rarity: '1/1',
     title: '7DS',
-    tokenId: '45615',
+    tokenId: '5',
   },
 ]
 const FEATURED_TESTNET = [
@@ -183,7 +183,7 @@ const FEATURED_TESTNET = [
     buyFinancingPrice: 0.825,
     buyNowPrice: 3.35,
     contractAddress: '0xa5ae59eee379fc02206d715b9431ffa53507c152',
-    image: 'http://localhost:3000/niftyapes/placeholder.png',
+    image: 'https://sru.niftyapes.money/niftyapes/placeholder.png',
     rarity: '1/1',
     title: 'TEST TEST TEST',
     tokenId: '9',
