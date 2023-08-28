@@ -53,10 +53,13 @@ const metadata = {
 }
 const CAROUSEL = [
   {
-    artist: 'miltonsanz',
-    buyFinancingPrice: 0.825,
-    buyNowPrice: 3.35,
-    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
+    artist: 'YuYu',
+    buyFinancingPrice: 1.34,
+    buyNowPrice: 4.57,
+    contractAddress: '0x9cda2e752281edb225567e11ca4b49f45d0a9b20',
+    image:
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0x9cda2e752281edb225567e11ca4b49f45d0a9b20%252F3%252F516476f2-6d8a-405d-a5fa-e975bb14ada8%252Furi%252Fimage-2023-08-27-09-58-wta38?ixlib=js-3.8.0&h=3000&fit=clip&q=100&auto=format&s=f820a923bce88e895f4765d15ccc7ee3',
+    rarity: '1/1',
     title: 'Play Out the Play',
     tokenId: '3',
   },
