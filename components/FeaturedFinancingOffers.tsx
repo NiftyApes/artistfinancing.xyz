@@ -119,7 +119,7 @@ export default function FeaturedFinancingOffers() {
       </Masonry>
       <button
         className="hover:underline"
-        hidden={numOffers >= Number(fullOffers?.length)}
+        hidden={numOffers >= Number(mostRecentActiveOfferForEachNft?.length)}
         onClick={onShowMore}
       >
         Show more
