@@ -8,10 +8,11 @@ import { useState } from 'react'
 import Masonry from 'react-masonry-css'
 
 export default function FeaturedFinancingOffers() {
-  const [numOffers, setNumOffers] = useState(10) // Show 10 initial offers
-  const onShowMore = () => {
-    setNumOffers(numOffers + 10)
-  }
+  const [numOffers] = useState(10) // Show 10 initial offers
+  // TODO: Add back if needed.
+  // const onShowMore = () => {
+  //   setNumOffers(numOffers + 10)
+  // }
 
   const { address: sellerFinancingContractAddress } =
     useSellerFinancingContract()
@@ -63,7 +64,7 @@ export default function FeaturedFinancingOffers() {
         isEqualAddress(offer.offer.creator, token?.token?.owner) &&
         !isEqualAddress(token.token?.contract, sellerFinancingContractAddress)
     )
-    .slice(0, numOffers) // Only show numOffers
+  // .slice(0, numOffers) // Only show numOffers
 
   const collectionQueries = uniq(
     offersWithTokens?.map(({ offer }) => offer.offer.nftContractAddress)
@@ -117,13 +118,13 @@ export default function FeaturedFinancingOffers() {
               </div>
             ))}
       </Masonry>
-      <button
-        className="hover:underline"
-        hidden={numOffers >= Number(mostRecentActiveOfferForEachNft?.length)}
-        onClick={onShowMore}
-      >
-        Show more
-      </button>
+      {/* <button */}
+      {/*   className="hover:underline" */}
+      {/*   hidden={numOffers >= Number(mostRecentActiveOfferForEachNft?.length)} */}
+      {/*   onClick={onShowMore} */}
+      {/* > */}
+      {/*   Show more */}
+      {/* </button> */}
     </div>
   )
 }
