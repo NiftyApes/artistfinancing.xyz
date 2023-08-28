@@ -21,8 +21,11 @@ const TokenAttributes: FC<Props> = ({ token }) => {
       {token?.attributes
         ?.slice()
         .sort((a, b) => (b?.floorAskPrice || 0) - (a?.floorAskPrice || 0))
-        .map((attribute) => (
-          <TokenAttribute key={attribute.key} attribute={attribute} />
+        .map((attribute, idx) => (
+          <TokenAttribute
+            key={`${attribute.key}-${idx}`}
+            attribute={attribute}
+          />
         ))}
       <div className="clear-left"></div>
     </div>

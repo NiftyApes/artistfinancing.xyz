@@ -7,6 +7,7 @@ export type FinancingTerms = {
   listPrice: number
   apr: number
   loanDurMos: number
+  loanDurDays: number
   payPeriodDays: number
   expirationRelative?: string
   downPaymentAmount: number
@@ -41,10 +42,17 @@ export function processOffer(
 
   const numPayPeriods =
     Math.ceil(remainingPrincipal / minPrincipalPerPeriod) || 0
+
   const loanDurMos = Math.round(
     Duration.fromObject({
       days: payPeriodDays * numPayPeriods,
     }).as('months')
+  )
+
+  const loanDurDays = Math.round(
+    Duration.fromObject({
+      days: payPeriodDays * numPayPeriods,
+    }).as('days')
   )
 
   return {
@@ -58,6 +66,7 @@ export function processOffer(
     minPrincipalPerPeriod,
     payPeriodDays,
     loanDurMos,
+    loanDurDays,
     expirationRelative: DateTime.fromSeconds(
       offerDetails.expiration
     ).toRelative()!,
