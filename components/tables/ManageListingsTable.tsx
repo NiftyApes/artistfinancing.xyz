@@ -152,6 +152,7 @@ const ManageListingsTableRow = ({
     image,
     tokenName,
     collectionName,
+    loanDurDays,
   } = processOffer(offer, token)
 
   const {
@@ -244,7 +245,7 @@ const ManageListingsTableRow = ({
       </td>
 
       {/* PAY PERIOD */}
-      <td className="whitespace-nowrap px-6 py-4">10 days</td>
+      <td className="whitespace-nowrap px-6 py-4">{payPeriodDays} days</td>
 
       {/* APR */}
       <td className="px-6 py-4 font-light text-neutral-600 dark:text-neutral-300">
@@ -252,7 +253,7 @@ const ManageListingsTableRow = ({
       </td>
 
       {/* DURATION */}
-      <td className="whitespace-nowrap px-6 py-4">{payPeriodDays} days</td>
+      <td className="whitespace-nowrap px-6 py-4">{loanDurDays} days</td>
 
       {/* EXPIRES */}
       <td className="whitespace-nowrap px-6 py-4">{expirationRelative}</td>
