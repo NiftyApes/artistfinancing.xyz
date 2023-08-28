@@ -53,15 +53,139 @@ const metadata = {
 }
 const CAROUSEL = [
   {
-    artist: 'miltonsanz',
-    buyFinancingPrice: 0.825,
-    buyNowPrice: 3.35,
-    contractAddress: '0xb628ae89d192e0bd5f15fddabdd896dfbd42f226',
+    artist: 'YuYu',
+    buyFinancingPrice: 1.34,
+    buyNowPrice: 4.57,
+    contractAddress: '0x9cda2e752281edb225567e11ca4b49f45d0a9b20',
     image:
-      'https://i.seadn.io/gcs/files/946bc7327d7e91702cb43ae7ae67b354.jpg?w=500&auto=format',
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0x9cda2e752281edb225567e11ca4b49f45d0a9b20%252F3%252F516476f2-6d8a-405d-a5fa-e975bb14ada8%252Furi%252Fimage-2023-08-27-09-58-wta38?ixlib=js-3.8.0&h=3000&fit=clip&q=100&auto=format&s=f820a923bce88e895f4765d15ccc7ee3',
     rarity: '1/1',
-    title: 'Anxiety will get the best of you',
-    tokenId: '5',
+    title: 'Play Out the Play',
+    tokenId: '3',
+  },
+  {
+    artist: 'Tyler Givens',
+    buyFinancingPrice: 0.5,
+    buyNowPrice: 2,
+    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
+    image:
+      'https://ipfs.pixura.io/ipfs/QmYNMwoTRTW8p3qNABqbFiUPy8T56pFRoioPy9sh6EThJ3/endness_final_SR-thumb_2.gif',
+    rarity: '1/1',
+    title: 'ENDNESS',
+    tokenId: '45859',
+  },
+  {
+    artist: 'Sara Baumann',
+    buyFinancingPrice: 1.1,
+    buyNowPrice: 4.47,
+    contractAddress: '0x625582b27a5346eae862a4c6b199d16a2f0cfe4f',
+    image:
+      'https://i.seadn.io/gcs/files/a08d736ab96d6c3c2d2e16edf0a73b7c.jpg?w=500&auto=format',
+    rarity: '1/1',
+    title: 'Firouzeh',
+    tokenId: '2',
+  },
+  {
+    artist: 'Drømsel',
+    buyFinancingPrice: 2,
+    buyNowPrice: 8,
+    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
+    image:
+      'https://i.seadn.io/gcs/files/46befb795686ae1431d84219cbf92889.jpg?w=500&auto=format',
+    rarity: '1/1',
+    title: 'Pass This On',
+    tokenId: '45881',
+  },
+  {
+    artist: 'Victor Fota',
+    buyFinancingPrice: 2.4,
+    buyNowPrice: 12,
+    contractAddress: '0xeda8063c4e2b705cd94e907c95a354d9896d2cf1',
+    image:
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xeda8063c4e2b705cd94e907c95a354d9896d2cf1%252F2%252F1d1fe1e6-b023-486d-a5ae-94bb1aa6b278%252Furi%252Fimage-2023-08-19-08-59-bgesm?ixlib=js-3.8.0&h=3000&fit=clip&q=100&auto=format&s=1d25a315cb7f05d038dfd8433cc4afcb',
+    rarity: '1/1',
+    title: 'Designoid 2B',
+    tokenId: '2',
+  },
+  {
+    artist: 'Fede',
+    buyFinancingPrice: 1.97,
+    buyNowPrice: 6.7,
+    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
+    image:
+      'https://ipfs.pixura.io/ipfs/Qmauh9dU16G7jqnNe9xLspR7jc2QJHQQi1vDSUeXfsJ2Ey/Loon_Thumbnail.png',
+    rarity: '1/1',
+    title: 'Loon',
+    tokenId: '45873',
+  },
+]
+
+const FEATURED = [
+  {
+    artist: 'YuYu',
+    buyFinancingPrice: 1.34,
+    buyNowPrice: 4.57,
+    contractAddress: '0x9cda2e752281edb225567e11ca4b49f45d0a9b20',
+    image:
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0x9cda2e752281edb225567e11ca4b49f45d0a9b20%252F3%252F516476f2-6d8a-405d-a5fa-e975bb14ada8%252Furi%252Fimage-2023-08-27-09-58-wta38?ixlib=js-3.8.0&h=3000&fit=clip&q=100&auto=format&s=f820a923bce88e895f4765d15ccc7ee3',
+    rarity: '1/1',
+    title: 'Play Out the Play',
+    tokenId: '3',
+  },
+  {
+    artist: 'Tyler Givens',
+    buyFinancingPrice: 0.5,
+    buyNowPrice: 2,
+    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
+    image:
+      'https://ipfs.pixura.io/ipfs/QmYNMwoTRTW8p3qNABqbFiUPy8T56pFRoioPy9sh6EThJ3/endness_final_SR-thumb_2.gif',
+    rarity: '1/1',
+    title: 'ENDNESS',
+    tokenId: '45859',
+  },
+  {
+    artist: 'Sara Baumann',
+    buyFinancingPrice: 1.1,
+    buyNowPrice: 4.47,
+    contractAddress: '0x625582b27a5346eae862a4c6b199d16a2f0cfe4f',
+    image:
+      'https://i.seadn.io/gcs/files/a08d736ab96d6c3c2d2e16edf0a73b7c.jpg?w=500&auto=format',
+    rarity: '1/1',
+    title: 'Firouzeh',
+    tokenId: '2',
+  },
+  {
+    artist: 'Drømsel',
+    buyFinancingPrice: 2,
+    buyNowPrice: 8,
+    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
+    image:
+      'https://i.seadn.io/gcs/files/46befb795686ae1431d84219cbf92889.jpg?w=500&auto=format',
+    rarity: '1/1',
+    title: 'Pass This On',
+    tokenId: '45881',
+  },
+  {
+    artist: 'Victor Fota',
+    buyFinancingPrice: 2.4,
+    buyNowPrice: 12,
+    contractAddress: '0xeda8063c4e2b705cd94e907c95a354d9896d2cf1',
+    image:
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xeda8063c4e2b705cd94e907c95a354d9896d2cf1%252F2%252F1d1fe1e6-b023-486d-a5ae-94bb1aa6b278%252Furi%252Fimage-2023-08-19-08-59-bgesm?ixlib=js-3.8.0&h=3000&fit=clip&q=100&auto=format&s=1d25a315cb7f05d038dfd8433cc4afcb',
+    rarity: '1/1',
+    title: 'Designoid 2B',
+    tokenId: '2',
+  },
+  {
+    artist: 'Fede',
+    buyFinancingPrice: 1.97,
+    buyNowPrice: 6.7,
+    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
+    image:
+      'https://ipfs.pixura.io/ipfs/Qmauh9dU16G7jqnNe9xLspR7jc2QJHQQi1vDSUeXfsJ2Ey/Loon_Thumbnail.png',
+    rarity: '1/1',
+    title: 'Loon',
+    tokenId: '45873',
   },
   {
     artist: 'frenetikvoid',
@@ -69,46 +193,13 @@ const CAROUSEL = [
     buyNowPrice: 10.35,
     contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
     image:
-      'https://i.seadn.io/gae/pws_HlAJEFacExc3bGGqj8V6W1U6J3_MabY5blcnHUtVCZXbHzTt3EKcSIchWs35eNYnPrxpXBdwVA5ffRUsqSZqmLtnraGXwhhB?w=500&auto=format',
+      'https://ipfs.pixura.io/ipfs/QmXKa1VEtbTdCxouxtRxXovvqB5V3ue9CCc75gC2SiVeRu/335PolishedJealousy.png',
     rarity: '1/1',
     title: 'Polished Jealousy',
     tokenId: '30581',
   },
-  {
-    artist: 'der_probst',
-    buyFinancingPrice: 0.759,
-    buyNowPrice: 3.3,
-    contractAddress: '0xb57f9023a8a3fa608ba7a2f4eed9857a7b776e6f',
-    image:
-      'https://i.seadn.io/gae/UwOw0gDpNx04I08uxwGfc9axxdRFGUbKALUBvi3qWWqWylBsfygFa80wtL9KdjKtCJDTd2Q8wTou0zaJcjSvKkCC1cyWSKtoXGlGjA?w=500&auto=format',
-    rarity: '1/1',
-    title: 'Morphē',
-    tokenId: '2',
-  },
-  {
-    artist: 'osiris',
-    buyFinancingPrice: 1.37,
-    buyNowPrice: 5.59,
-    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
-    image:
-      'https://i.seadn.io/gcs/files/e2d72fe99df55b3558576c30a8675e13.jpg?w=500&auto=format',
-    rarity: '1/1',
-    title: 'CryptoArt Vision',
-    tokenId: '45810',
-  },
-  {
-    artist: 'hiuyo66',
-    buyFinancingPrice: 0.13,
-    buyNowPrice: 0.55,
-    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
-    image:
-      'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
-    rarity: '1/1',
-    title: '7DS',
-    tokenId: '45615',
-  },
 ]
-const CAROUSEL_TESTNET = [
+const FEATURED_TESTNET = [
   {
     artist: 'niftyapes',
     buyFinancingPrice: 0.825,
@@ -120,64 +211,8 @@ const CAROUSEL_TESTNET = [
     tokenId: '9',
   },
 ]
-const FEATURED = [
-  {
-    artist: 'miltonsanz',
-    buyFinancingPrice: 0.825,
-    buyNowPrice: 3.35,
-    contractAddress: '0xb628ae89d192e0bd5f15fddabdd896dfbd42f226',
-    image:
-      'https://i.seadn.io/gcs/files/946bc7327d7e91702cb43ae7ae67b354.jpg?w=500&auto=format',
-    rarity: '1/1',
-    title: 'Anxiety will get the best of you',
-    tokenId: '5',
-  },
-  {
-    artist: 'frenetikvoid',
-    buyFinancingPrice: 2,
-    buyNowPrice: 10.35,
-    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
-    image:
-      'https://i.seadn.io/gae/pws_HlAJEFacExc3bGGqj8V6W1U6J3_MabY5blcnHUtVCZXbHzTt3EKcSIchWs35eNYnPrxpXBdwVA5ffRUsqSZqmLtnraGXwhhB?w=500&auto=format',
-    rarity: '1/1',
-    title: 'Polished Jealousy',
-    tokenId: '30581',
-  },
-  {
-    artist: 'der_probst',
-    buyFinancingPrice: 0.759,
-    buyNowPrice: 3.3,
-    contractAddress: '0xb57f9023a8a3fa608ba7a2f4eed9857a7b776e6f',
-    image:
-      'https://i.seadn.io/gae/UwOw0gDpNx04I08uxwGfc9axxdRFGUbKALUBvi3qWWqWylBsfygFa80wtL9KdjKtCJDTd2Q8wTou0zaJcjSvKkCC1cyWSKtoXGlGjA?w=500&auto=format',
-    rarity: '1/1',
-    title: 'Morphē',
-    tokenId: '2',
-  },
-  {
-    artist: 'osiris',
-    buyFinancingPrice: 1.37,
-    buyNowPrice: 5.59,
-    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
-    image:
-      'https://i.seadn.io/gcs/files/e2d72fe99df55b3558576c30a8675e13.jpg?w=500&auto=format',
-    rarity: '1/1',
-    title: 'CryptoArt Vision',
-    tokenId: '45810',
-  },
-  {
-    artist: 'hiuyo66',
-    buyFinancingPrice: 0.13,
-    buyNowPrice: 0.55,
-    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
-    image:
-      'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
-    rarity: '1/1',
-    title: '7DS',
-    tokenId: '45615',
-  },
-]
-const FEATURED_TESTNET = [
+
+const CAROUSEL_TESTNET = [
   {
     artist: 'niftyapes',
     buyFinancingPrice: 0.825,

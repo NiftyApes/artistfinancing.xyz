@@ -65,10 +65,10 @@ const HomeCarousel: FC<Props> = ({ cards }) => {
                   top: `${cardTotal * cardOffset - (idx + 1) * cardOffset}px`,
                   width: `${cardSize}px`,
                   zIndex: cardTotal - idx,
+                  backgroundImage: `url(${item.image})`,
+                  backgroundSize: 'cover',
                 }}
-              >
-                <img src={item.image} alt={item.title} />
-              </div>
+              ></div>
             </Link>
           )
         })}
