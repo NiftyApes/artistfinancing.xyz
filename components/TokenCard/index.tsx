@@ -98,7 +98,7 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
         href={`/${token?.token?.contract}/${token?.token?.tokenId}`}
         legacyBehavior={true}
       >
-        <a className="mb-[130px]">
+        <a>
           {token?.token?.image ? (
             <Image
               loader={({ src }) => src}
@@ -128,7 +128,7 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
         </a>
       </Link>
 
-      <div className="absolute bottom-[0px] w-full dark:bg-black">
+      <div className="bottom-[0px] w-full dark:bg-black">
         <div className="mb-2 ml-4 mr-4 border-b border-gray-500 pb-4">
           <div className="flex items-center justify-between">
             <div
