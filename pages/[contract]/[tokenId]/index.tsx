@@ -231,7 +231,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
                   <div className="reservoir-h3 mb-1 flex font-semibold">
                     Description
                   </div>
-                  <div className="text-md flex text-gray-300">
+                  <div className="text-md flex whitespace-pre-line text-gray-300">
                     {token?.token?.description}
                   </div>
                 </div>
