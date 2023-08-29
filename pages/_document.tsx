@@ -27,7 +27,6 @@ const MyDocument = function () {
 
   return (
     <Html className={DARK_MODE ? 'dark' : ''}>
-      <Head />
       {/* Must  */}
       <meta charSet="utf-8" />
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -45,17 +44,6 @@ const MyDocument = function () {
         data-site={NEXT_PUBLIC_FATHOM}
         defer
       ></script>
-
-      {/* The optimal size is 1200 x 630 (1.91:1 ratio). */}
-      <meta name="twitter:image" content={OG_IMAGE} />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site:domain" content={META_URL} />
-      <meta name="twitter:url" content={META_URL} />
-      {/* should be between 30-60 characters, with a maximum of 70 */}
-      <meta name="twitter:title" content={getSocialMediaPreviewTitle()} />
-      {/* should be between 55 and 200 characters long */}
-      <meta name="twitter:description" content={META_DESCRIPTION} />
-      <meta name="twitter:site" content={META_TWITTER_USERNAME} />
 
       {/* OG - https://ogp.me/ */}
       {/* https://www.opengraph.xyz/ */}
