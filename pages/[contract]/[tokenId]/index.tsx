@@ -180,8 +180,6 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
   }
 
-  console.log()
-
   const image = cachedImagesForSocialMediaUnfurl[`${contract}/${tokenId}`]
     ? cachedImagesForSocialMediaUnfurl[`${contract}/${tokenId}`]
     : token?.token?.image
