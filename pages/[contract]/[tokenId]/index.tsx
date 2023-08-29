@@ -69,6 +69,9 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
   const account = useAccount()
   const router = useRouter()
 
+  const contract = router.query?.contract?.toString()
+  const tokenId = router.query?.tokenId?.toString()
+
   const tokenData = useTokens({
     tokens: [
       `${router.query?.contract?.toString()}:${router.query?.tokenId?.toString()}`,
@@ -146,7 +149,42 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
     ? metadata.description(META_DESCRIPTION)
     : null
 
-  const image = token?.token?.image
+  const cachedImagesForSocialMediaUnfurl: any = {
+    '0x34ac25afb4721cb85b4ff35713e5aa3d9e69432d/2':
+      'https://ipfs.pixura.io/ipfs/QmeZHFoUU4yJGfBpYK3okR3YdC92yTXCvHqkMumF2sP5sh/qVbK-ko3jiQu8Iaxx8G0zZHy_n6it_1BNzhSEY__Ggc.avif',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/36112':
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F36112%252F6d40e1ec-7668-477e-a217-e1e3368a7f29%252Furi%252Fimage-2023-08-10-22-39-ctd2j?ixlib=js-3.8.0&w=3000&fit=clip&q=100&auto=format&s=889dc9911c5aa069b31a46d2a8702e5b',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/42893':
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F42893%252F9833e2bf-55b9-4798-a3d3-a2538ffc1a30%252Furi%252Fimage-2023-08-17-18-58-eeh8f?ixlib=js-3.8.0&w=3000&fit=clip&q=100&auto=format&s=d6acb09e13d06720e0f83a29a11c48eb',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/45501':
+      'https://ipfs.pixura.io/ipfs/QmWJGkDHPgXegySwAs4EcYtu2an5GxHDHPsEJrCWTCK6L7/20230717_013315.avif',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/45488':
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45488%252F52bd63ba-d1e2-4f12-9cf2-95660f9421a6%252Furi%252Fimage-2023-08-17-18-40-exl01?ixlib=js-3.8.0&w=3000&fit=clip&q=100&auto=format&s=08c24413bbe57a221d327f04f8196601',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/45641':
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45641%252F25eaf1fd-c754-474f-b77e-1b7d3b0a17c1%252Furi%252Fimage-2023-08-21-17-29-mfrq4?ixlib=js-3.8.0&w=3000&fit=clip&q=100&auto=format&s=440a13095736939f30679fbad1cc07e6',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/45881':
+      '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/45881',
+    '0x9cda2e752281edb225567e11ca4b49f45d0a9b20/3':
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0x9cda2e752281edb225567e11ca4b49f45d0a9b20%252F3%252F516476f2-6d8a-405d-a5fa-e975bb14ada8%252Furi%252Fimage-2023-08-27-09-58-wta38?ixlib=js-3.8.0&h=3000&fit=clip&q=100&auto=format&s=f820a923bce88e895f4765d15ccc7ee3',
+    '0x625582b27a5346eae862a4c6b199d16a2f0cfe4f/2':
+      'https://i.seadn.io/gcs/files/a08d736ab96d6c3c2d2e16edf0a73b7c.jpg?w=500&auto=format',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/30581':
+      'https://ipfs.pixura.io/ipfs/QmZDt6bP4WgwKCSXNtUbiAnEtkq2GqCyC6QH8wUCuDJvVM/335PolishedJealousy.avif',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/35698':
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F35698%252Fae4f743b-980f-43e1-8200-8a7fd043da78%252Furi%252Fimage-2023-08-10-22-37-7mjru?ixlib=js-3.8.0&h=3000&fit=clip&q=100&auto=format&s=aefd90be198fe3f57c4c9f3c433f2b17',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/42721':
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F42721%252Fcf840102-204a-41ed-af41-d4b78cf60275%252Furi%252Fimage-2023-08-17-18-52-ye1sg?ixlib=js-3.8.0&h=3000&fit=clip&q=100&auto=format&s=d83b57b33de301c6beab2b6a2a93d3c5',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/45615':
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F45615%252F04e71365-27ca-4205-bbe9-3ff1b4da22f5%252Furi%252Fimage-2023-08-21-17-44-0kox6?ixlib=js-3.8.0&w=3000&fit=clip&q=100&auto=format&s=dbb83f933130850e69f2a89c548e7120',
+    '0xb628ae89d192e0bd5f15fddabdd896dfbd42f226/5':
+      'https://i.seadn.io/gcs/files/6bfc31c8988a03c15a8858a94ed4da87.jpg?w=500&auto=format',
+  }
+
+  console.log()
+
+  const image = cachedImagesForSocialMediaUnfurl[`${contract}/${tokenId}`]
+    ? cachedImagesForSocialMediaUnfurl[`${contract}/${tokenId}`]
+    : token?.token?.image
     ? metadata.image(token?.token?.image)
     : META_OG_IMAGE
     ? metadata.image(META_OG_IMAGE)
