@@ -227,28 +227,41 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
             </div>
 
             <div className="mb-16 flex items-start justify-center space-x-[100px] lg:!justify-start">
-              {srToken?.erc721_token && (
+              {(isLaserLewDudeFocus || srToken?.erc721_token) && (
                 <ConditionalWrapper
-                  condition={!!artistEns.name}
-                  wrapper={(children: ReactNode) => (
-                    <a
-                      href={`https://superrare.com/${artistEns.name}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {children}
-                    </a>
-                  )}
+                  condition={isLaserLewDudeFocus || !!artistEns.name}
+                  wrapper={(children: ReactNode) =>
+                    isLaserLewDudeFocus ? (
+                      <>{children}</>
+                    ) : (
+                      <a
+                        href={`https://superrare.com/${artistEns.name}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {children}
+                      </a>
+                    )
+                  }
                 >
-                  <EthAccount
-                    side="left"
-                    label="Artist"
-                    ens={artistEns}
-                    address={
-                      srToken?.erc721_token?.erc721_creator.address ||
-                      token?.token?.owner
-                    }
-                  />
+                  {isLaserLewDudeFocus ? (
+                    <EthAccount
+                      side="left"
+                      label="Artist"
+                      ens={{ name: 'laserlewdude.eth', avatar: null }}
+                      address={'0xd526Ebc929877963eE14e984Fdb1d63B0FC2a096'}
+                    />
+                  ) : (
+                    <EthAccount
+                      side="left"
+                      label="Artist"
+                      ens={artistEns}
+                      address={
+                        srToken?.erc721_token?.erc721_creator.address ||
+                        token?.token?.owner
+                      }
+                    />
+                  )}
                 </ConditionalWrapper>
               )}
               <EthAccount
