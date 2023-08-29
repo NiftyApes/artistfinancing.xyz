@@ -270,9 +270,9 @@ const Home: NextPage<Props> = ({ fallback }) => {
             <br /> payments options.
           </div>
 
-          <div className="flex mt-10">
+          <div className="mt-10 flex">
             <ListArtButton>
-              <div className="flex flex-row py-5 text-center text-black uppercase bg-white rounded-full px-14">
+              <div className="flex flex-row rounded-full bg-white py-5 px-14 text-center uppercase text-black">
                 <span className="mt-0.2 text-lg">list art</span>
                 <div className="mt-[2px] ml-[15px] flex h-[24px] w-[24px] items-center justify-center rounded-full border border-black">
                   <AiOutlinePlus />
@@ -285,7 +285,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
               href="https://niftyapes.readme.io/docs"
               target="_blank"
             >
-              <div className="flex flex-row items-center px-8 py-5 text-center text-white uppercase bg-black rounded-full">
+              <div className="flex flex-row items-center rounded-full bg-black px-8 py-5 text-center uppercase text-white">
                 <span className="text-lg">docs</span>
                 <div className="ml-[15px] h-[24px] w-[24px] rounded-full border border-white bg-[url('/icons/arrow-up-right.svg')] bg-center bg-no-repeat"></div>
               </div>
@@ -301,7 +301,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
       </div>
 
       {/* ------------------ HOW FINANCING WORKS  ------------------ */}
-      <div className="flex flex-col items-center justify-center mt-10 col-span-full">
+      <div className="col-span-full mt-10 flex flex-col items-center justify-center">
         <div className="w-[360px] text-center text-5xl md:w-auto lg:text-6xl">
           How Artist Financing Works
         </div>
@@ -351,7 +351,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
       <div className="col-span-full mt-[90px] mb-[90px] w-full border-t border-gray-700"></div>
 
       {/* ------------------ EVERYONE BENEFITS ------------------ */}
-      <div className="flex flex-col items-center justify-center col-span-full">
+      <div className="col-span-full flex flex-col items-center justify-center">
         <div className="text-5xl lg:text-6xl">Everyone Benefits</div>
 
         <div className="mt-[60px] flex flex-col items-center lg:flex-row">
@@ -385,7 +385,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
           <div className="text-5xl lg:text-6xl">Featured Art</div>
           <div className="ml-auto">
             <Link href="/explore">
-              <div className="flex items-center text-white uppercase">
+              <div className="flex items-center uppercase text-white">
                 <span className="text-lg">explore</span>
                 <div className="ml-[15px] h-[24px] w-[24px] rounded-full border border-white bg-[url('/icons/arrow-up-right.svg')] bg-center bg-no-repeat"></div>
               </div>
@@ -459,7 +459,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
 
       {/* ------------------ SDK ------------------ */}
 
-      <div className="flex flex-col items-center justify-center col-span-full">
+      <div className="col-span-full flex flex-col items-center justify-center">
         <div className="col-span-full flex w-full flex-col items-center bg-[url('/niftyapes/home_holographic_bg.png')] bg-cover bg-no-repeat py-20 text-black">
           <div className="mb-[24px] text-center text-5xl lg:text-6xl">
             Powered by NiftyApes
