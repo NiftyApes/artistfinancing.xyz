@@ -8,7 +8,6 @@ import TokenMedia from 'components/token/TokenMedia'
 import TokenAttributes from 'components/TokenAttributes'
 import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
 import useSuperRareToken from 'hooks/useSuperRareToken'
-import { getSocialMediaPreviewTitle } from 'lib/getSocialMediaPreviewTitle'
 import setParams from 'lib/params'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
@@ -46,8 +45,8 @@ const metadata = {
   title: (title: string) => (
     <>
       <title>{title}</title>
-      <meta property="twitter:title" content={getSocialMediaPreviewTitle()} />
-      <meta property="og:title" content={getSocialMediaPreviewTitle()} />
+      <meta name="twitter:title" content={title} />
+      <meta property="og:title" content={title} />
     </>
   ),
   description: (description: string) => (
@@ -59,8 +58,8 @@ const metadata = {
   ),
   image: (image: string) => (
     <>
-      <meta name="twitter:image" content={image} />
-      <meta property="og:image" content={image} />
+      <meta name="twitter:image" content={image} key="twitter:image" />
+      <meta property="og:image" content={image} key="og:image" />
     </>
   ),
 }
@@ -68,6 +67,14 @@ const metadata = {
 const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
   const account = useAccount()
   const router = useRouter()
+
+  const contract = router.query?.contract?.toString()
+  const tokenId = router.query?.tokenId?.toString()
+
+  const isLaserLewDudeFocus =
+    contract?.toLowerCase() ===
+      '0x69618C8afB41123514216FD7d6A654950D167c90'.toLowerCase() &&
+    tokenId?.toLowerCase() === '2'
 
   const tokenData = useTokens({
     tokens: [
@@ -98,6 +105,7 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
     token.token?.contract!,
     token.token?.tokenId!
   )
+
   const artistEns = {
     name: srToken?.erc721_token?.erc721_creator.creator.username,
     avatar: srToken?.erc721_token?.erc721_creator.creator.avatar,
@@ -146,7 +154,26 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
     ? metadata.description(META_DESCRIPTION)
     : null
 
-  const image = token?.token?.image
+  const cachedImagesForSocialMediaUnfurl: any = {
+    '0x34ac25afb4721cb85b4ff35713e5aa3d9e69432d/2':
+      'https://social-media-previews.s3.us-west-2.amazonaws.com/0x34ac25afb4721cb85b4ff35713e5aa3d9e69432d-2.jpg',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/45501':
+      'https://social-media-previews.s3.us-west-2.amazonaws.com/0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0-45501.jpg',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/45881':
+      'https://social-media-previews.s3.us-west-2.amazonaws.com/0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0-45881.jpg',
+    '0x9cda2e752281edb225567e11ca4b49f45d0a9b20/3':
+      'https://social-media-previews.s3.us-west-2.amazonaws.com/0x9cda2e752281edb225567e11ca4b49f45d0a9b20-3.jpg',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/30581':
+      'https://social-media-previews.s3.us-west-2.amazonaws.com/0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0-30581.jpg',
+    '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0/45615':
+      'https://social-media-previews.s3.us-west-2.amazonaws.com/0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0-45615.jpg',
+    '0xb628ae89d192e0bd5f15fddabdd896dfbd42f226/5':
+      'https://social-media-previews.s3.us-west-2.amazonaws.com/0xb628ae89d192e0bd5f15fddabdd896dfbd42f226-5.jpg',
+  }
+
+  const image = cachedImagesForSocialMediaUnfurl[`${contract}/${tokenId}`]
+    ? metadata.image(cachedImagesForSocialMediaUnfurl[`${contract}/${tokenId}`])
+    : token?.token?.image
     ? metadata.image(token?.token?.image)
     : META_OG_IMAGE
     ? metadata.image(META_OG_IMAGE)
@@ -177,7 +204,11 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
       <div className="col-span-full lg:col-span-8 lg:pr-12 3xl:col-span-12">
         <div className="flex items-center justify-center p-4 lg:h-vh-minus-6rem">
           <div className="max-h-full object-cover lg:max-w-[533px]">
-            <TokenMedia srToken={srToken} token={token.token} />
+            <TokenMedia
+              srToken={srToken}
+              token={token.token}
+              isLaserLewDudeFocus={isLaserLewDudeFocus}
+            />
           </div>
         </div>
       </div>
@@ -186,32 +217,47 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         <div className="grid w-full grid-flow-col gap-4 lg:w-auto">
           <div className="resize-none lg:col-span-3">
             <div className="reservoir-h3 mb-8 text-center font-semibold lg:!text-left">
-              {token?.token?.name || `#${token?.token?.tokenId}`}
+              {isLaserLewDudeFocus
+                ? 'Focus [Interactive + Focusable]'
+                : token?.token?.name || `#${token?.token?.tokenId}`}
             </div>
 
             <div className="mb-16 flex items-start justify-center space-x-[100px] lg:!justify-start">
-              {srToken?.erc721_token && (
+              {(isLaserLewDudeFocus || srToken?.erc721_token) && (
                 <ConditionalWrapper
-                  condition={!!artistEns.name}
-                  wrapper={(children: ReactNode) => (
-                    <a
-                      href={`https://superrare.com/${artistEns.name}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {children}
-                    </a>
-                  )}
+                  condition={isLaserLewDudeFocus || !!artistEns.name}
+                  wrapper={(children: ReactNode) =>
+                    isLaserLewDudeFocus ? (
+                      <>{children}</>
+                    ) : (
+                      <a
+                        href={`https://superrare.com/${artistEns.name}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {children}
+                      </a>
+                    )
+                  }
                 >
-                  <EthAccount
-                    side="left"
-                    label="Artist"
-                    ens={artistEns}
-                    address={
-                      srToken?.erc721_token?.erc721_creator.address ||
-                      token?.token?.owner
-                    }
-                  />
+                  {isLaserLewDudeFocus ? (
+                    <EthAccount
+                      side="left"
+                      label="Artist"
+                      ens={{ name: 'laserlewdude.eth', avatar: null }}
+                      address={'0xd526Ebc929877963eE14e984Fdb1d63B0FC2a096'}
+                    />
+                  ) : (
+                    <EthAccount
+                      side="left"
+                      label="Artist"
+                      ens={artistEns}
+                      address={
+                        srToken?.erc721_token?.erc721_creator.address ||
+                        token?.token?.owner
+                      }
+                    />
+                  )}
                 </ConditionalWrapper>
               )}
               <EthAccount
@@ -232,7 +278,25 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
                     Description
                   </div>
                   <div className="text-md flex whitespace-pre-line text-gray-300">
-                    {token?.token?.description}
+                    {isLaserLewDudeFocus
+                      ? `A set of videos taken of a physical laser install inside of LaserLewDude's closet. The physical setup consists of lasers, glass and mirrors (setup details below). This piece has an selectable focal length that can be changed by clicking on the icon in the bottom right to reveal the focus menu.  Options are then Far / Mid / Near that will reload the piece with the corresponding focal length. 
+
+Not a render.
+This is an interactive video (x3), and it is encouraged to play with the video.
+GO FULL SCREEN - after choosing the focus.
+
+Setup details:
+5 1-watt Laser Cubes were used to make the beams. 2 are making fans of magenta, 2 are beams of  white, the other is making the yellow fan of beams coming toward the camera.
+
+Single Module Lasers (mix of homemade and commercial):
+488nm (pretty blue) x2
+
+All 1st-surface mirrors salvaged from rear-projection TVs.
+Custom air-trap marbles by IG @liquidphoenixglass.
+Other glass used: several different sizes of crystal glass spheres, some vases, K9 glass cubes / triangular prisms.
+
+All mirrors are 1st surface mirrors salvaged from rear projections TVs. Not all from this build can be seen in these vids.`
+                      : token?.token?.description}
                   </div>
                 </div>
 

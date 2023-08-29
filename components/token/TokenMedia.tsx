@@ -7,10 +7,13 @@ import { TokenDetails } from 'types/reservoir'
 type Props = {
   token?: TokenDetails
   srToken?: SuperRareToken
+  isLaserLewDudeFocus?: boolean
 }
 
-const TokenMedia: FC<Props> = ({ token, srToken }) => {
-  let tokenImage = token?.image
+const TokenMedia: FC<Props> = ({ token, srToken, isLaserLewDudeFocus }) => {
+  let tokenImage = isLaserLewDudeFocus
+    ? '/art/Focus.webp'
+    : token?.image
     ? optimizeImage(token?.image, 533)
     : '/niftyapes/placeholder.png'
 

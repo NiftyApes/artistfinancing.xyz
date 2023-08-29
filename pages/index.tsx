@@ -5,13 +5,13 @@ import TermsOfServiceModal from 'components/TermsOfServiceModal'
 import setParams from 'lib/params'
 import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import HomeCarousel from '../components/HomeCarousel'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { BsArrowRight } from 'react-icons/bs'
-import Link from 'next/link'
-import { FeaturedArtworks, FeaturedArtists } from '../components/HomeFeatured'
+import HomeCarousel from '../components/HomeCarousel'
+import { FeaturedArtists, FeaturedArtworks } from '../components/HomeFeatured'
 import ListArtButton from '../components/ListArtButton'
 
 // Environment variables
@@ -43,8 +43,8 @@ const metadata = {
     if (image) {
       return (
         <>
-          <meta name="twitter:image" content={image} />
-          <meta name="og:image" content={image} />
+          <meta name="twitter:image" content={image} key="twitter:image" />
+          <meta property="og:image" content={image} key="og:image" />
         </>
       )
     }
@@ -285,7 +285,7 @@ const Home: NextPage<Props> = ({ fallback }) => {
               href="https://niftyapes.readme.io/docs"
               target="_blank"
             >
-              <div className="flex flex-row items-center rounded-full bg-black py-5 px-8 text-center uppercase text-white">
+              <div className="flex flex-row items-center rounded-full bg-black px-8 py-5 text-center uppercase text-white">
                 <span className="text-lg">docs</span>
                 <div className="ml-[15px] h-[24px] w-[24px] rounded-full border border-white bg-[url('/icons/arrow-up-right.svg')] bg-center bg-no-repeat"></div>
               </div>

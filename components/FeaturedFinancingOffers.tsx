@@ -40,6 +40,7 @@ export default function FeaturedFinancingOffers() {
     isFetchingPage: isFetchingTokens,
   } = useTokens({
     tokens: tokenQueries,
+    limit: 100, // TODO: Max limit. We need to figure out pagination or better loading.
   })
 
   const offersWithTokens = mostRecentActiveOfferForEachNft

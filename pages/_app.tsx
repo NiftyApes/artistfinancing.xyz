@@ -38,16 +38,25 @@ import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import * as allChains from 'wagmi/chains'
 
 import {
-  darkTheme as rainbowKitDarkTheme,
   getDefaultWallets,
+  darkTheme as rainbowKitDarkTheme,
   lightTheme as rainbowKitLightTheme,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit'
 import { useGoogleAnalytics } from 'hooks/useGoogleAnalytics'
+import { getSocialMediaPreviewTitle } from 'lib/getSocialMediaPreviewTitle'
+import Head from 'next/head'
 import ReactGA from 'react-ga4'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 import presetColors from '../colors'
+
+const META_DESCRIPTION = process.env.NEXT_PUBLIC_META_DESCRIPTION
+const OG_IMAGE = process.env.NEXT_PUBLIC_META_OG_IMAGE
+const META_URL = process.env.NEXT_PUBLIC_META_URL
+const SOURCE_ID = process.env.NEXT_PUBLIC_SOURCE_ID
+const SOURCE_NAME = process.env.NEXT_PUBLIC_SOURCE_NAME
+const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
 // API key for Ethereum node
 // Two popular services are Alchemy (alchemy.com) and Infura (infura.io)
@@ -67,8 +76,6 @@ const FEE_BPS = process.env.NEXT_PUBLIC_FEE_BPS
 const FEE_RECIPIENT = process.env.NEXT_PUBLIC_FEE_RECIPIENT
 const SOURCE_DOMAIN = process.env.NEXT_PUBLIC_SOURCE_DOMAIN
 const API_BASE = process.env.NEXT_PUBLIC_RESERVOIR_API_BASE
-const SOURCE_NAME = process.env.NEXT_PUBLIC_SOURCE_NAME
-const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
 const INTEGRATION_CONTRACT_ADDRESS =
   process.env.NEXT_PUBLIC_INTEGRATION_CONTRACT_ADDRESS
@@ -213,6 +220,43 @@ const App: FC<AppProps & { baseUrl: string }> = ({
             theme={rainbowKitTheme}
             modalSize="compact"
           >
+            <Head>
+              {/* OG - https://ogp.me/ */}
+              {/* https://www.opengraph.xyz/ */}
+              {/* should be between 30-60 characters, with a maximum of 90 */}
+              <meta
+                property="og:title"
+                content={getSocialMediaPreviewTitle()}
+              />
+              <meta property="og:type" content="website" />
+              <meta property="og:determiner" content="the" />
+              <meta property="og:locale" content="en" />
+              {/* Make sure the important part of your description is within the first 110 characters, so it doesn't get cut off on mobile. */}
+              <meta property="og:description" content={META_DESCRIPTION} />
+              <meta property="og:site_name" content={SOURCE_ID} />
+              <meta property="og:url" content={META_URL} />
+              {/* The optimal size is 1200 x 630 (1.91:1 ratio). */}
+              <meta property="og:image" content={OG_IMAGE} key="og:image" />
+              <meta
+                property="og:image:type"
+                content="image/png"
+                key="og:image:type"
+              />
+              <meta
+                property="og:image:width"
+                content="1280"
+                key="og:image:width"
+              />
+              <meta
+                property="og:image:height"
+                content="640"
+                key="og:image:height"
+              />
+              <meta
+                property="og:image:alt"
+                content={`${SOURCE_NAME || SOURCE_ID || 'Market'} banner`}
+              />
+            </Head>
             <AnalyticsProvider>
               <Component {...pageProps} />
             </AnalyticsProvider>

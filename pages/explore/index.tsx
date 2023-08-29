@@ -1,8 +1,8 @@
 import Layout from 'components/Layout'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import Footer from '../../components/Footer'
 import FeaturedFinancingOffers from '../../components/FeaturedFinancingOffers'
+import Footer from '../../components/Footer'
 
 const META_TITLE = process.env.NEXT_PUBLIC_META_TITLE
 const META_DESCRIPTION = process.env.NEXT_PUBLIC_META_DESCRIPTION
@@ -17,8 +17,8 @@ const metadata = {
     if (image) {
       return (
         <>
-          <meta name="twitter:image" content={image} />
-          <meta name="og:image" content={image} />
+          <meta name="twitter:image" content={image} key="twitter:image" />
+          <meta property="og:image" content={image} key="og:image" />
         </>
       )
     }
