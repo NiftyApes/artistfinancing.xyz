@@ -25,13 +25,11 @@ const ListArtButton: FC<Props> = ({ children }) => {
 
         return (
           <div>
-            {(!ready || account.isConnected) && (
+            {ready && account.isConnected ? (
               <Link href={`/address/${account.address}?tab=gallery`}>
                 {children}
               </Link>
-            )}
-
-            {(!ready || !account.isConnected) && (
+            ) : (
               <button
                 onClick={() => {
                   setConnectClick(true)
