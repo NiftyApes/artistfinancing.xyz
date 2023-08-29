@@ -57,14 +57,14 @@ const MyDocument = function () {
       <meta property="og:site_name" content={SOURCE_ID} />
       <meta property="og:url" content={META_URL} />
       {/* The optimal size is 1200 x 630 (1.91:1 ratio). */}
-      <meta property="og:image" content={OG_IMAGE} />
+      {/* <meta property="og:image" content={OG_IMAGE} />
       <meta property="og:image:type" content="image/png" />
       <meta property="og:image:width" content="1280" />
       <meta property="og:image:height" content="640" />
       <meta
         property="og:image:alt"
         content={`${SOURCE_NAME || SOURCE_ID || 'Market'} banner`}
-      />
+      /> */}
 
       {/* Reservoir Meta Tags */}
       {SOURCE_NAME ? (

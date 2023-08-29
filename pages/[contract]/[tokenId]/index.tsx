@@ -8,7 +8,6 @@ import TokenMedia from 'components/token/TokenMedia'
 import TokenAttributes from 'components/TokenAttributes'
 import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
 import useSuperRareToken from 'hooks/useSuperRareToken'
-import { getSocialMediaPreviewTitle } from 'lib/getSocialMediaPreviewTitle'
 import setParams from 'lib/params'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
@@ -46,8 +45,8 @@ const metadata = {
   title: (title: string) => (
     <>
       <title>{title}</title>
-      <meta property="twitter:title" content={getSocialMediaPreviewTitle()} />
-      <meta property="og:title" content={getSocialMediaPreviewTitle()} />
+      <meta property="twitter:title" content={title} />
+      <meta property="og:title" content={title} />
     </>
   ),
   description: (description: string) => (
