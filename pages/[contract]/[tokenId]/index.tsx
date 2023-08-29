@@ -85,8 +85,6 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
     includeDynamicPricing: true,
   })
 
-  console.log('tokenData', tokenData)
-
   const tokens = tokenData.data
   const token = tokens?.[0] || { token: tokenDetails }
 
@@ -107,8 +105,6 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
     token.token?.contract!,
     token.token?.tokenId!
   )
-
-  console.log('srToken', srToken)
 
   const artistEns = {
     name: srToken?.erc721_token?.erc721_creator.creator.username,
