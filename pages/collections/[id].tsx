@@ -106,13 +106,13 @@ const Home: NextPage<Props> = ({ fallback, id }) => {
 
   const image = metaImage ? (
     <>
-      <meta name="twitter:image" content={metaImage} />
-      <meta name="og:image" content={metaImage} />
+      <meta name="twitter:image" content={metaImage} key="twitter:image" />
+      <meta property="og:image" content={metaImage} key="og:image" />
     </>
   ) : (
     <>
-      <meta name="twitter:image" content={bannerImage} />
-      <meta property="og:image" content={bannerImage} />
+      <meta name="twitter:image" content={bannerImage} key="twitter:image" />
+      <meta property="og:image" content={bannerImage} key="og:image" />
     </>
   )
 

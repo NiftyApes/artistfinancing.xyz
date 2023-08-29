@@ -45,7 +45,7 @@ const metadata = {
   title: (title: string) => (
     <>
       <title>{title}</title>
-      <meta property="twitter:title" content={title} />
+      <meta name="twitter:title" content={title} />
       <meta property="og:title" content={title} />
     </>
   ),
@@ -58,8 +58,8 @@ const metadata = {
   ),
   image: (image: string) => (
     <>
-      <meta name="twitter:image" content={image} />
-      <meta property="og:image" content={image} />
+      <meta name="twitter:image" content={image} key="twitter:image" />
+      <meta property="og:image" content={image} key="og:image" />
     </>
   ),
 }
