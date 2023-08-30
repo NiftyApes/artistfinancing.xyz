@@ -21,16 +21,22 @@ const NavbarLogo: FC<Props> = ({ className }) => {
   }
 
   return (
-    <Link passHref href={NAVBAR_LOGO_LINK || '/'} legacyBehavior={true}>
-      <div
-        className={`relative inline-flex flex-none cursor-pointer items-center gap-1 ${className}`}
-      >
-        <img src={logo} alt={logoAlt} className="mr-5 block h-6 w-auto" />
+    <div
+      className={`relative inline-flex flex-none items-center gap-5 ${className}`}
+    >
+      <Link passHref href={NAVBAR_LOGO_LINK || '/'}>
+        <img
+          src={logo}
+          alt={logoAlt}
+          className="block h-6 w-auto cursor-pointer"
+        />
+      </Link>
+      <Link passHref href="/explore">
         <span className="text-gray-400 hover:text-white hover:underline">
-          <Link href="/explore">Explore</Link>
+          Explore
         </span>
-      </div>
-    </Link>
+      </Link>
+    </div>
   )
 }
 
