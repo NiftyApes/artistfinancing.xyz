@@ -201,15 +201,13 @@ const Index: NextPage<Props> = ({ collectionId, tokenDetails }) => {
         {description}
         {image}
       </Head>
-      <div className="col-span-full lg:col-span-8 lg:pr-12 3xl:col-span-12">
-        <div className="flex items-center justify-center p-4 lg:h-vh-minus-6rem">
-          <div className="max-h-full object-cover lg:max-w-[533px]">
-            <TokenMedia
-              srToken={srToken}
-              token={token.token}
-              isLaserLewDudeFocus={isLaserLewDudeFocus}
-            />
-          </div>
+      <div className="col-span-full lg:col-span-8 3xl:col-span-12">
+        <div className="flex items-center justify-center p-4 lg:h-vh-minus-6rem lg:px-12 lg:py-4">
+          <TokenMedia
+            srToken={srToken}
+            token={token.token}
+            isLaserLewDudeFocus={isLaserLewDudeFocus}
+          />
         </div>
       </div>
 
