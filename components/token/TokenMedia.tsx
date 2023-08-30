@@ -17,7 +17,10 @@ const TokenMedia: FC<Props> = ({ token, srToken, isLaserLewDudeFocus }) => {
     ? optimizeImage(token?.image, 533)
     : '/niftyapes/placeholder.png'
 
-  if (srToken?.erc721_token?.nft_image.image_artwork_detail) {
+  if (
+    !isLaserLewDudeFocus &&
+    srToken?.erc721_token?.nft_image.image_artwork_detail
+  ) {
     tokenImage = srToken.erc721_token.nft_image.image_artwork_detail
   }
 
