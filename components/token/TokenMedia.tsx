@@ -10,6 +10,8 @@ type Props = {
   isLaserLewDudeFocus?: boolean
 }
 
+const replacedElemClass = 'max-h-full max-w-full object-contain'
+
 const TokenMedia: FC<Props> = ({ token, srToken, isLaserLewDudeFocus }) => {
   let tokenImage = isLaserLewDudeFocus
     ? '/art/Focus.webp'
@@ -36,7 +38,11 @@ const TokenMedia: FC<Props> = ({ token, srToken, isLaserLewDudeFocus }) => {
       />
 
       {token?.media === null || token?.media === undefined ? (
-        <img src={tokenImage} alt={token?.name || `#${token?.tokenId}`} />
+        <img
+          className={replacedElemClass}
+          src={tokenImage}
+          alt={token?.name || `#${token?.tokenId}`}
+        />
       ) : (
         <Media
           media={token?.media as string}
@@ -61,7 +67,15 @@ const Media: FC<{
   // VIDEO
   if (extension === 'mp4') {
     return (
-      <video poster={tokenImage} controls autoPlay loop playsInline muted>
+      <video
+        className={replacedElemClass}
+        poster={tokenImage}
+        controls
+        autoPlay
+        loop
+        playsInline
+        muted
+      >
         <source src={media} type="video/mp4" />
         Your browser does not support the
         <code>video</code> element.
@@ -73,7 +87,7 @@ const Media: FC<{
   if (extension === 'wav' || extension === 'mp3') {
     return (
       <div>
-        <img alt={tokenAlt} src={tokenImage} />
+        <img className={replacedElemClass} alt={tokenAlt} src={tokenImage} />
         <audio controls src={media}>
           Your browser does not support the
           <code>audio</code> element.
@@ -94,6 +108,7 @@ const Media: FC<{
         shadow-intensity="1"
         camera-controls
         enable-pan
+        className={replacedElemClass}
       />
     )
   }
@@ -105,7 +120,7 @@ const Media: FC<{
     extension === 'jpg' ||
     extension === 'gif'
   ) {
-    return <img src={tokenImage} alt={tokenAlt} />
+    return <img className={replacedElemClass} src={tokenImage} alt={tokenAlt} />
   }
 
   // HTML
@@ -115,9 +130,13 @@ const Media: FC<{
     extension === 'other'
   ) {
     return (
-      <iframe height="533" width="533" src={media} sandbox="allow-scripts" />
+      <iframe
+        className={replacedElemClass}
+        src={media}
+        sandbox="allow-scripts"
+      />
     )
   }
 
-  return <img src={tokenImage} alt={tokenAlt} />
+  return <img className={replacedElemClass} src={tokenImage} alt={tokenAlt} />
 }
