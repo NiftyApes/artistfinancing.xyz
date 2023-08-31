@@ -69,6 +69,11 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
     owner: token.token?.owner! as Address,
   }
 
+  const isLaserLewDudeFocus =
+    token.token?.contract!?.toLowerCase() ===
+      '0x69618C8afB41123514216FD7d6A654950D167c90'.toLowerCase() &&
+    token?.token?.tokenId!?.toLowerCase() === '2'
+
   // Filter out offers where creator is not the current NFT owner
   const activeOffers =
     offers.data?.filter(
@@ -83,9 +88,9 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
       key={`${token?.token?.contract}${token?.token?.tokenId}`}
       className="group relative mb-6 grid self-start overflow-hidden border-[#D4D4D4] bg-white hover:scale-[1.01] hover:ease-out dark:border-0 dark:bg-black dark:ring-1 dark:ring-neutral-600"
     >
-      <div className="absolute z-10 ml-2 mt-2 flex grid-flow-row">
+      <div className="absolute z-10 mt-2 ml-2 flex grid-flow-row">
         {hasActiveOffers && isOwner && (
-          <div className="rounded-full bg-black bg-opacity-70 pl-2 pr-2 pt-1 pb-1 text-xs">
+          <div className="rounded-full bg-black bg-opacity-70 pt-1 pb-1 pl-2 pr-2 text-xs">
             {`${activeOffers.length} Listing${
               activeOffers.length === 1 ? '' : 's'
             }`}
@@ -114,7 +119,9 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
             <div className="relative w-full">
               <img
                 src={
-                  collectionImage
+                  isLaserLewDudeFocus
+                    ? '/art/Focus.webp'
+                    : collectionImage
                     ? optimizeImage(collectionImage, imageSize)
                     : '/niftyapes/placeholder.png'
                 }
@@ -133,9 +140,15 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
           <div className="flex items-center justify-between">
             <div
               className="overflow-hidden truncate pt-4 text-[15px] font-semibold text-gray-300 lg:pt-3"
-              title={token?.token?.name || token?.token?.tokenId}
+              title={
+                isLaserLewDudeFocus
+                  ? 'Focus [Interactive + Focusable]'
+                  : token?.token?.name || token?.token?.tokenId
+              }
             >
-              {token?.token?.name || `#${token?.token?.tokenId}`}
+              {isLaserLewDudeFocus
+                ? 'Focus [Interactive + Focusable]'
+                : token?.token?.name || `#${token?.token?.tokenId}`}
             </div>
           </div>
 
