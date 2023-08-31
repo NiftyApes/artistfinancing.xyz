@@ -60,6 +60,7 @@ const metadata = {
     <>
       <meta name="twitter:image" content={image} key="twitter:image" />
       <meta property="og:image" content={image} key="og:image" />
+      <meta name="twitter:card" content="summary_large_image" />
     </>
   ),
 }
