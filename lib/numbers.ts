@@ -30,16 +30,17 @@ const truncateFractionAndFormat = (
     .reduce((string, part) => string + part)
 }
 
-function formatNumber(
+const formatNumber = (
   amount: number | null | undefined,
-  maximumFractionDigits: number = 4
-) {
+  options?: Intl.NumberFormatOptions
+) => {
   if (!amount) {
     return '-'
   }
 
   const { format } = new Intl.NumberFormat('en-US', {
-    maximumFractionDigits: maximumFractionDigits,
+    maximumFractionDigits: 5, // default options
+    ...options,
   })
 
   return format(amount)

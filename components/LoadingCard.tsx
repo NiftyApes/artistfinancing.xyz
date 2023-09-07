@@ -9,7 +9,7 @@ const LoadingCard: FC<Props> = ({ viewRef }) => {
   return (
     <div
       ref={viewRef}
-      className="mb-6 grid min-h-[300px] animate-pulse rounded-b-md border border-neutral-300 bg-white shadow-md dark:border-neutral-600 dark:bg-neutral-900"
+      className="mb-12 grid min-h-[300px] animate-pulse rounded-b-md border border-neutral-300 bg-white shadow-md dark:border-neutral-600 dark:bg-neutral-900"
     >
       <div className="mt-auto p-3">
         <div className="aspect-w-1 aspect-h-1 relative">

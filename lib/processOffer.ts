@@ -1,5 +1,6 @@
 import { Offer } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
+import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils.js'
 import { DateTime, Duration } from 'luxon'
 
@@ -12,6 +13,7 @@ export type FinancingTerms = {
   expirationRelative?: string
   downPaymentAmount: number
   minPrincipalPerPeriod: number
+  intPerPeriod: number
   tokenName?: string
   tokenId?: string
   collectionName?: string
@@ -40,8 +42,13 @@ export function processOffer(
     seconds: offerDetails.periodDuration,
   }).as('days')
 
-  const numPayPeriods =
-    Math.ceil(remainingPrincipal / minPrincipalPerPeriod) || 0
+  const remPrinBN = BigNumber.from(offerDetails.price).sub(
+    BigNumber.from(offerDetails.downPaymentAmount)
+  )
+  const minPrinBN = BigNumber.from(offerDetails.minimumPrincipalPerPeriod)
+  const numPayPeriods = remPrinBN.gt(0)
+    ? remPrinBN.div(minPrinBN).toNumber()
+    : 0
 
   const loanDurMos = Math.round(
     Duration.fromObject({
@@ -55,6 +62,16 @@ export function processOffer(
     }).as('days')
   )
 
+  // Calculate int per period
+  const periodInterestRate = offerDetails.periodInterestRateBps / 100
+  const totalIntEarned = calculateTotalInterest(
+    periodInterestRate,
+    remainingPrincipal,
+    minPrincipalPerPeriod,
+    numPayPeriods
+  )
+  const intPerPeriod = totalIntEarned / numPayPeriods
+
   return {
     image: token?.image,
     tokenId,
@@ -63,6 +80,7 @@ export function processOffer(
     listPrice,
     downPaymentAmount,
     apr,
+    intPerPeriod,
     minPrincipalPerPeriod,
     payPeriodDays,
     loanDurMos,
@@ -79,4 +97,19 @@ function calculateAPR(
 ): number {
   const interestRatePerSecond = periodInterestRateBps / periodDuration / 100
   return Math.round(interestRatePerSecond * (365 * 86400))
+}
+
+export const calculateTotalInterest = (
+  periodInterestRate: number,
+  remainingPrincipal: number,
+  minPrincipalPerPeriod: number,
+  numPayPeriods: number
+) => {
+  let totalIntEarned = 0
+  for (let i = 0; i < numPayPeriods; i++) {
+    totalIntEarned += (periodInterestRate / 100) * remainingPrincipal
+    remainingPrincipal -= minPrincipalPerPeriod
+  }
+
+  return totalIntEarned
 }
