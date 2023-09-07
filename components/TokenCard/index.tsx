@@ -152,7 +152,7 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
             </div>
           </div>
 
-          {hasActiveOffers && <NiftyApesOfferDetails offer={activeOffers[0]} />}
+          {hasActiveOffers && <NiftyApesOfferDetails offers={activeOffers} />}
         </div>
 
         <div className="border-1 group mb-4 ml-4 mr-4 transform-gpu overflow-hidden">
