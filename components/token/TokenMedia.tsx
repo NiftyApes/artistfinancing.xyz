@@ -1,7 +1,7 @@
 import { optimizeImage } from 'lib/optmizeImage'
 import Script from 'next/script'
 import { SuperRareToken } from 'pages/api/superrare/token'
-import { FC } from 'react'
+import { FC, MouseEvent } from 'react'
 import { TokenDetails } from 'types/reservoir'
 
 type Props = {
@@ -9,8 +9,6 @@ type Props = {
   srToken?: SuperRareToken
   isLaserLewDudeFocus?: boolean
 }
-
-const replacedElemClass = 'max-h-full max-w-full object-contain'
 
 const TokenMedia: FC<Props> = ({ token, srToken, isLaserLewDudeFocus }) => {
   let tokenImage = isLaserLewDudeFocus
@@ -37,19 +35,11 @@ const TokenMedia: FC<Props> = ({ token, srToken, isLaserLewDudeFocus }) => {
         src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"
       />
 
-      {token?.media === null || token?.media === undefined ? (
-        <img
-          className={replacedElemClass}
-          src={tokenImage}
-          alt={token?.name || `#${token?.tokenId}`}
-        />
-      ) : (
-        <Media
-          media={token?.media as string}
-          tokenImage={tokenImage}
-          tokenAlt={token?.name || `#${token?.tokenId}`}
-        />
-      )}
+      <Media
+        media={token?.media}
+        tokenImage={tokenImage}
+        tokenAlt={token?.name || `#${token?.tokenId}`}
+      />
     </>
   )
 }
@@ -57,12 +47,53 @@ const TokenMedia: FC<Props> = ({ token, srToken, isLaserLewDudeFocus }) => {
 export default TokenMedia
 
 const Media: FC<{
-  media: string
+  media?: string | null
   tokenImage: string
   tokenAlt: string
 }> = ({ media, tokenImage, tokenAlt }) => {
-  const matches = media.match('(\\.[^.]+)$')
+  const replacedElemClass =
+    'max-h-full max-w-full object-contain cursor-pointer'
+
+  const openFullscreen = (elem: HTMLImageElement) => {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen()
+    }
+  }
+  const handleImageClick = (event: MouseEvent<HTMLImageElement>) => {
+    openFullscreen(event.target as HTMLImageElement)
+  }
+
+  // Media not present, use image provided
+  if (media === null || media === undefined) {
+    return (
+      <img
+        onClick={handleImageClick}
+        className={replacedElemClass}
+        src={tokenImage}
+        alt={tokenAlt}
+      />
+    )
+  }
+
+  const matches = media?.match('(\\.[^.]+)$')
   const extension = matches ? matches[0].replace('.', '') : null
+
+  //Image
+  if (
+    extension === 'png' ||
+    extension === 'jpeg' ||
+    extension === 'jpg' ||
+    extension === 'gif'
+  ) {
+    return (
+      <img
+        onClick={handleImageClick}
+        className={replacedElemClass}
+        src={tokenImage}
+        alt={tokenAlt}
+      />
+    )
+  }
 
   // VIDEO
   if (extension === 'mp4') {
@@ -113,16 +144,6 @@ const Media: FC<{
     )
   }
 
-  //Image
-  if (
-    extension === 'png' ||
-    extension === 'jpeg' ||
-    extension === 'jpg' ||
-    extension === 'gif'
-  ) {
-    return <img className={replacedElemClass} src={tokenImage} alt={tokenAlt} />
-  }
-
   // HTML
   if (
     extension === 'html' ||
@@ -138,5 +159,12 @@ const Media: FC<{
     )
   }
 
-  return <img className={replacedElemClass} src={tokenImage} alt={tokenAlt} />
+  return (
+    <img
+      onClick={handleImageClick}
+      className={replacedElemClass}
+      src={tokenImage}
+      alt={tokenAlt}
+    />
+  )
 }
