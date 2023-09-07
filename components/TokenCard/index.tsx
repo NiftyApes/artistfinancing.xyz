@@ -86,7 +86,7 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
   return (
     <div
       key={`${token?.token?.contract}${token?.token?.tokenId}`}
-      className="group relative mb-6 grid self-start overflow-hidden border-[#D4D4D4] bg-white hover:scale-[1.01] hover:ease-out dark:border-0 dark:bg-black dark:ring-1 dark:ring-neutral-600"
+      className="group relative grid self-start overflow-hidden border-[#D4D4D4] bg-white hover:scale-[1.01] hover:ease-out dark:border-0 dark:bg-black dark:ring-1 dark:ring-neutral-600"
     >
       <div className="absolute z-10 mt-2 ml-2 flex grid-flow-row">
         {hasActiveOffers && isOwner && (
@@ -135,11 +135,11 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
         </a>
       </Link>
 
-      <div className="bottom-[0px] w-full dark:bg-black">
-        <div className="mb-2 ml-4 mr-4 border-b border-gray-500 pb-4">
+      <div className="w-full dark:bg-black">
+        <div className="mb-4 ml-4 mr-4 border-b border-gray-500 pb-4">
           <div className="flex items-center justify-between">
             <div
-              className="overflow-hidden truncate pt-4 text-[15px] font-semibold text-gray-300 lg:pt-3"
+              className="overflow-hidden truncate pt-4 text-[15px] font-semibold text-gray-300"
               title={
                 isLaserLewDudeFocus
                   ? 'Focus [Interactive + Focusable]'
@@ -169,7 +169,7 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
           {hasActiveOffers && !isOwner && !isLoanTicket && (
             <div
               className={
-                'absolute -bottom-[40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
+                'absolute -bottom-[40px] w-full opacity-0 transition-all group-hover:bottom-[0px] group-hover:opacity-100 group-hover:ease-out'
               }
             >
               <BuyWithFinancingModal
