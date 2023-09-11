@@ -53,15 +53,15 @@ const metadata = {
 }
 const CAROUSEL = [
   {
-    artist: 'YuYu',
-    buyFinancingPrice: 1.34,
-    buyNowPrice: 4.57,
-    contractAddress: '0x9cda2e752281edb225567e11ca4b49f45d0a9b20',
+    artist: 'kireevart',
+    buyFinancingPrice: 1.69,
+    buyNowPrice: 5.14,
+    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
     image:
-      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0x9cda2e752281edb225567e11ca4b49f45d0a9b20%252F3%252F516476f2-6d8a-405d-a5fa-e975bb14ada8%252Furi%252Fimage-2023-08-27-09-58-wta38?ixlib=js-3.8.0&h=3000&fit=clip&q=100&auto=format&s=f820a923bce88e895f4765d15ccc7ee3',
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F37933%252F9c1631e6-9e0c-4430-bb73-5fa3a6ca6a77%252Furi%252Fimage-2023-08-10-22-30-eurtd?ixlib=js-3.8.0&h=3000&fit=clip&q=100&auto=format&s=367ab07cd96baec1c6ba3c999c3c54c9',
     rarity: '1/1',
-    title: 'Play Out the Play',
-    tokenId: '3',
+    title: 'Dark Knight',
+    tokenId: '37933',
   },
   {
     artist: 'Tyler Givens',
@@ -122,15 +122,15 @@ const CAROUSEL = [
 
 const FEATURED = [
   {
-    artist: 'YuYu',
-    buyFinancingPrice: 1.34,
-    buyNowPrice: 4.57,
-    contractAddress: '0x9cda2e752281edb225567e11ca4b49f45d0a9b20',
+    artist: 'kireevart',
+    buyFinancingPrice: 1.69,
+    buyNowPrice: 5.14,
+    contractAddress: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
     image:
-      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0x9cda2e752281edb225567e11ca4b49f45d0a9b20%252F3%252F516476f2-6d8a-405d-a5fa-e975bb14ada8%252Furi%252Fimage-2023-08-27-09-58-wta38?ixlib=js-3.8.0&h=3000&fit=clip&q=100&auto=format&s=f820a923bce88e895f4765d15ccc7ee3',
+      'https://pixura.imgix.net/https%3A%2F%2Fstorage.googleapis.com%2Fsr_prod_artworks_bucket%2F0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0%252F37933%252F9c1631e6-9e0c-4430-bb73-5fa3a6ca6a77%252Furi%252Fimage-2023-08-10-22-30-eurtd?ixlib=js-3.8.0&h=3000&fit=clip&q=100&auto=format&s=367ab07cd96baec1c6ba3c999c3c54c9',
     rarity: '1/1',
-    title: 'Play Out the Play',
-    tokenId: '3',
+    title: 'Dark Knight',
+    tokenId: '37933',
   },
   {
     artist: 'Tyler Givens',
