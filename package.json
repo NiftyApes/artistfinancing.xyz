@@ -32,6 +32,7 @@
     "@reservoir0x/reservoir-kit-ui": "0.8.2",
     "@reservoir0x/sdk": "^0.0.123",
     "@stitches/react": "^1.2.8",
+    "@wagmi/core": "^0.8.6",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
     "detective": "^5.2.1",
