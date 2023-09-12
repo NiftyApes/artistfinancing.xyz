@@ -2,6 +2,7 @@ import {
   Address,
   BuyWithFinancingModal,
   CreateOfferModal,
+  MakePaymentModal,
   useOffers,
   useSellerFinancingContract,
   useUnderlyingNFTOwner,
@@ -19,7 +20,6 @@ import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
 import { LuCalendarX } from 'react-icons/lu'
 import { ClipLoader } from 'react-spinners'
 import { useAccount } from 'wagmi'
-import MakePaymentModal from './MakePaymentModal'
 import { PaymentCalendarReminderFromToken } from './PaymentCalendarReminder'
 
 type Props = {
@@ -38,10 +38,10 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
   const {
     isEntitledToNft,
     isLoadingLoans: isLoadingOwnershipCheck,
-    activeLoanforNft,
+    activeLoanForNft,
   } = useUnderlyingNFTOwner()
 
-  const activeLoan = activeLoanforNft(
+  const activeLoan = activeLoanForNft(
     token?.token?.contract as Address,
     token?.token?.tokenId
   )
@@ -88,8 +88,8 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
    */
   const renderActiveListingsHeader = () => {
     return (
-      <div className="flex h-full items-center">
-        <div className="reservoir-h3 mb-1 mr-5 flex font-semibold">
+      <div className="flex items-center h-full">
+        <div className="flex mb-1 mr-5 font-semibold reservoir-h3">
           Listings
         </div>
         <AiFillTags className="mr-2 text-xs text-gray-500" />
@@ -114,7 +114,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
               href={`/address/${account?.address}?tab=manage_listings`}
               key={`offer-${idx}`}
             >
-              <div className="mb-4 mt-2 flex h-full items-center">
+              <div className="flex items-center h-full mt-2 mb-4">
                 <AiOutlineRightCircle className="mr-3 text-xl text-gray-600" />
                 <div>
                   {`${
@@ -133,7 +133,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
           )
         })}
         {activeOffers.length > 3 && (
-          <div className="mt-10 flex items-center justify-center border-b border-gray-600 border-opacity-50">
+          <div className="flex items-center justify-center mt-10 border-b border-gray-600 border-opacity-50">
             <Link
               href={`/address/${account?.address}?tab=manage_listings`}
               className="my-[-16px] inline-block cursor-pointer rounded-2xl border border-gray-600 border-opacity-50 bg-black px-4 py-2 hover:bg-gray-800 hover:text-gray-200"
@@ -161,9 +161,9 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
           <div className="flex flex-col">
             <h3 className="reservoir-h3">Purchased with Financing</h3>
             <div className="flex space-x-2">
-              <p className="text-md text-gray-300">on Artist Financing</p>
+              <p className="text-gray-300 text-md">on Artist Financing</p>
               <img
-                className="h-6 w-6"
+                className="w-6 h-6"
                 src="/niftyapes/af+dot-white.svg"
                 alt="NiftyApes banana logo"
               />

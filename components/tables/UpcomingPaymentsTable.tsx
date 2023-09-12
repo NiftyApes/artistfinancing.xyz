@@ -1,7 +1,6 @@
-import { Loan, LoanDetails, OfferDetails, useLoans } from '@niftyapes/sdk'
+import { Loan, LoanDetails, MakePaymentModal, OfferDetails, useLoans } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import LoadingIcon from 'components/LoadingIcon'
-import MakePaymentModal from 'components/MakePaymentModal'
 import { PaymentCalendarReminderFromToken } from 'components/PaymentCalendarReminder'
 import { format } from 'date-fns'
 import isEqualAddress from 'lib/isEqualAddress'

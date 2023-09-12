@@ -6,6 +6,7 @@ import { LuCalendarPlus } from 'react-icons/lu'
 type Token = ReturnType<typeof useTokens>['data'][0]
 
 export function PaymentCalendarReminderFromToken({ token }: { token: Token }) {
+  console.log(token)
   if (!token) {
     return null
   }
@@ -21,15 +22,17 @@ function _PaymentCalendarReminderFromToken({
   const collection: `0x${string}` = token?.token?.collection
     ?.id as `0x${string}`
 
-  const { data } = useLoans({ collection, onlyActive: true })
+  const tokenId: string = token?.token?.tokenId as string
 
-  if (!data) {
+  const { data } = useLoans({ collection, nftId: tokenId, onlyActive: true })
+
+  if (!data || data.length === 0) {
     return null
   }
 
-  const tokenId: string = token?.token?.tokenId as string
+  console.log(data)
 
-  const loan = data.find((loan) => loan.offer.offer.nftId === tokenId)
+  const loan = data[0]
 
   if (!loan) {
     return null
