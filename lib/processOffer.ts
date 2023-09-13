@@ -1,10 +1,12 @@
-import { Offer } from '@niftyapes/sdk'
+import { Address, Offer } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils.js'
 import { DateTime, Duration } from 'luxon'
 
 export type FinancingTerms = {
+  tokenId: string
+  collection: Address
   listPrice: number
   apr: number
   loanDurMos: number
@@ -15,7 +17,6 @@ export type FinancingTerms = {
   minPrincipalPerPeriod: number
   intPerPeriod: number
   tokenName?: string
-  tokenId?: string
   collectionName?: string
   image?: string
 }
@@ -25,7 +26,8 @@ export function processOffer(
   tokenContainer?: ReturnType<typeof useTokens>['data'][0]
 ): FinancingTerms {
   const token: Record<string, any> = tokenContainer?.token || {}
-  const tokenId: any = offerDetails.nftId
+  const tokenId = offerDetails.nftId
+  const collection = offerDetails.nftContractAddress
 
   const listPrice = Number(formatEther(offerDetails.price))
   const downPaymentAmount = Number(formatEther(offerDetails.downPaymentAmount))
@@ -75,6 +77,7 @@ export function processOffer(
   return {
     image: token?.image,
     tokenId,
+    collection,
     tokenName: token?.name || `#${tokenId}`,
     collectionName: token?.collection?.name || '',
     listPrice,

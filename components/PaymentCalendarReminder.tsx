@@ -21,15 +21,15 @@ function _PaymentCalendarReminderFromToken({
   const collection: `0x${string}` = token?.token?.collection
     ?.id as `0x${string}`
 
-  const { data } = useLoans({ collection, onlyActive: true })
+  const tokenId: string = token?.token?.tokenId as string
 
-  if (!data) {
+  const { data } = useLoans({ collection, nftId: tokenId, onlyActive: true })
+
+  if (!data || data.length === 0) {
     return null
   }
 
-  const tokenId: string = token?.token?.tokenId as string
-
-  const loan = data.find((loan) => loan.offer.offer.nftId === tokenId)
+  const loan = data[0]
 
   if (!loan) {
     return null

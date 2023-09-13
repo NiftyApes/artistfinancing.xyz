@@ -187,7 +187,7 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
           {isOwner && !isLoanTicket && (
             <div
               className={
-                'absolute -bottom-[40px] w-full opacity-0 transition-all group-hover:bottom-[4px] group-hover:opacity-100 group-hover:ease-out'
+                'absolute -bottom-[40px] w-full opacity-0 transition-all group-hover:bottom-[0px] group-hover:opacity-100 group-hover:ease-out'
               }
             >
               <CreateOfferModal token={formattedToken} />
