@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@adraffy/ens-normalize@1.9.4":
+  version "1.9.4"
+  resolved "https://registry.yarnpkg.com/@adraffy/ens-normalize/-/ens-normalize-1.9.4.tgz#aae21cb858bbb0411949d5b7b3051f4209043f62"
+  integrity sha512-UK0bHA7hh9cR39V+4gl2/NnBBjoXIxkuWAPCaY4X7fbH4L/azIi7ilWOCjMUYfpJgraLUAqkRi2BqrjME8Rynw==
+
 "@babel/code-frame@^7.0.0":
   version "7.21.4"
   resolved "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.21.4.tgz"
@@ -951,10 +956,10 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-13.1.2.tgz#c7e75033e8b8f497768c7b462ac642830141bb00"
   integrity sha512-avsyveEvcvH42PvKjR4Pb8JlLttuGURr2H3ZhS2b85pHOiZ7yjH3rMUoGnNzuLMApyxYaCvd4MedPrLhnNhkog==
 
-"@niftyapes/sdk@1.0.49":
-  version "1.0.49"
-  resolved "https://registry.yarnpkg.com/@niftyapes/sdk/-/sdk-1.0.49.tgz#f49c522e61ddf63808157fdb2e16302a22dc25f7"
-  integrity sha512-z7VVlPinpd07FqB+K9UxPoOKmfTcB7rgko9cF2n5BtFOY6i3CPYuy4G/zyt2fPWkAGBQ/9bFiI8MKhStmKbd8w==
+"@niftyapes/sdk@1.0.52":
+  version "1.0.52"
+  resolved "https://registry.yarnpkg.com/@niftyapes/sdk/-/sdk-1.0.52.tgz#4008efbd40497d63e10342aeef0ed7a9fe8400b7"
+  integrity sha512-lYPRiWj3htP6p5ZoJPJFf4bsPhedrWs+hIYCWCBBMCSrR77oqrBy3N3rzs1jo1Xf6bY6FIw0s/JzOkSsdvLNoA==
   dependencies:
     "@radix-ui/react-accordion" "^1.1.1"
     "@radix-ui/react-checkbox" "^1.0.3"
@@ -971,9 +976,18 @@
     lodash "^4.17.21"
     luxon "^3.3.0"
     query-string "^8.1.0"
-    react-icons "4.10.1"
+    react-icons "^4.10.1"
     react-query "^3.39.3"
     react-spinners "^0.13.8"
+    tailwind-merge "^1.14.0"
+    viem "^1.10.9"
+
+"@noble/curves@1.2.0", "@noble/curves@~1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.2.0.tgz#92d7e12e4e49b23105a2555c6984d41733d65c35"
+  integrity sha512-oYclrNgRaM9SsBUBVbb8M6DTV7ZHRTKugureoYEncY5c65HOmRzvSiTE3y5CYaPYJA/GVkrhXEoF0M3Ya9PMnw==
+  dependencies:
+    "@noble/hashes" "1.3.2"
 
 "@noble/curves@^1.0.0":
   version "1.0.0"
@@ -986,6 +1000,11 @@
   version "1.3.0"
   resolved "https://registry.npmjs.org/@noble/hashes/-/hashes-1.3.0.tgz"
   integrity sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==
+
+"@noble/hashes@1.3.2", "@noble/hashes@~1.3.0", "@noble/hashes@~1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.3.2.tgz#6f26dbc8fbc7205873ce3cee2f690eba0d421b39"
+  integrity sha512-MVC8EAQp7MvEcm30KWENFjgR+Mkmf+D189XJTkFIlwohU5hcBbn1ZkKq7KVTi2Hme3PMGF390DaL52beVrIihQ==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -2020,6 +2039,28 @@
   resolved "https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.2.0.tgz"
   integrity sha512-sXo/qW2/pAcmT43VoRKOJbDOfV3cYpq3szSVfIThQXNt+E4DfKj361vaAt3c88U5tPUxzEswam7GW48PJqtKAg==
 
+"@scure/base@~1.1.0", "@scure/base@~1.1.2":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@scure/base/-/base-1.1.3.tgz#8584115565228290a6c6c4961973e0903bb3df2f"
+  integrity sha512-/+SgoRjLq7Xlf0CWuLHq2LUZeL/w65kfzAPG5NH9pcmBhs+nunQTn4gvdwgMTIXnt9b2C/1SeL2XiysZEyIC9Q==
+
+"@scure/bip32@1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@scure/bip32/-/bip32-1.3.2.tgz#90e78c027d5e30f0b22c1f8d50ff12f3fb7559f8"
+  integrity sha512-N1ZhksgwD3OBlwTv3R6KFEcPojl/W4ElJOeCZdi+vuI5QmTFwLq3OFf2zd2ROpKvxFdgZ6hUpb0dx9bVNEwYCA==
+  dependencies:
+    "@noble/curves" "~1.2.0"
+    "@noble/hashes" "~1.3.2"
+    "@scure/base" "~1.1.2"
+
+"@scure/bip39@1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@scure/bip39/-/bip39-1.2.1.tgz#5cee8978656b272a917b7871c981e0541ad6ac2a"
+  integrity sha512-Z3/Fsz1yr904dduJD0NpiyRHhRYHdcnyh73FZWiV+/qhWi83wNJ3NWolYqCEN+ZWsUz2TWwajJggcRE9r1zUYg==
+  dependencies:
+    "@noble/hashes" "~1.3.0"
+    "@scure/base" "~1.1.0"
+
 "@solana/buffer-layout@^4.0.0":
   version "4.0.1"
   resolved "https://registry.npmjs.org/@solana/buffer-layout/-/buffer-layout-4.0.1.tgz"
@@ -2369,6 +2410,13 @@
   version "7.4.7"
   resolved "https://registry.npmjs.org/@types/ws/-/ws-7.4.7.tgz"
   integrity sha512-JQbbmxZTZehdc2iszGKs5oC3NFnjeay7mtAWrdt7qNtAVK0g19muApzAy4bm9byz79xa2ZnO/BOBC2R8RC5Lww==
+  dependencies:
+    "@types/node" "*"
+
+"@types/ws@^8.5.5":
+  version "8.5.5"
+  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.5.5.tgz#af587964aa06682702ee6dcbc7be41a80e4b28eb"
+  integrity sha512-lwhs8hktwxSjf9UaZ9tG5M03PGogvFaH8gUgLNbN9HKIg0dvv6q+gkSuJ8HN4/VbyxkuLzCjlN7GquQ0gUJfIg==
   dependencies:
     "@types/node" "*"
 
@@ -2913,6 +2961,11 @@ JSONStream@^1.3.5:
   dependencies:
     jsonparse "^1.2.0"
     through ">=2.2.7 <3"
+
+abitype@0.9.8:
+  version "0.9.8"
+  resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.9.8.tgz#1f120b6b717459deafd213dfbf3a3dd1bf10ae8c"
+  integrity sha512-puLifILdm+8sjyss4S+fsUN09obiT1g2YW6CtcQF+QDzxR0euzgEB29MZujC6zMk2a6SVmtttq1fc6+YFA7WYQ==
 
 abitype@^0.2.5:
   version "0.2.5"
@@ -5006,6 +5059,11 @@ isexe@^2.0.0:
   resolved "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
+isomorphic-ws@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/isomorphic-ws/-/isomorphic-ws-5.0.0.tgz#e5529148912ecb9b451b46ed44d53dae1ce04bbf"
+  integrity sha512-muId7Zzn9ywDsyXgTIafTry2sV3nySZeUDe6YedVd1Hvuuep5AsIlqK+XefWpYTyJG5e503F2xIuT2lcU6rCSw==
+
 isomorphic-ws@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npmjs.org/isomorphic-ws/-/isomorphic-ws-4.0.1.tgz"
@@ -6215,6 +6273,11 @@ react-icons@4.10.1:
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.10.1.tgz#3f3b5eec1f63c1796f6a26174a1091ca6437a500"
   integrity sha512-/ngzDP/77tlCfqthiiGNZeYFACw85fUjZtLbedmJ5DTlNDIwETxhwBzdOJ21zj4iJdvc0J3y7yOsX3PpxAJzrw==
 
+react-icons@^4.10.1:
+  version "4.11.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.11.0.tgz#4b0e31c9bfc919608095cc429c4f1846f4d66c65"
+  integrity sha512-V+4khzYcE5EBk/BvcuYRq6V/osf11ODUM2J8hg2FDSswRrGvqiYUYPRy4OdrWaQOBj4NcpJfmHZLNaD+VH0TyA==
+
 react-intersection-observer@^8.33.1:
   version "8.34.0"
   resolved "https://registry.npmjs.org/react-intersection-observer/-/react-intersection-observer-8.34.0.tgz"
@@ -6814,6 +6877,11 @@ tailwind-merge@^1.12.0:
   resolved "https://registry.yarnpkg.com/tailwind-merge/-/tailwind-merge-1.12.0.tgz#747d09d64a25a4864150e8930f8e436866066cc8"
   integrity sha512-Y17eDp7FtN1+JJ4OY0Bqv9OA41O+MS8c1Iyr3T6JFLnOgLg3EvcyMKZAnQ8AGyvB5Nxm3t9Xb5Mhe139m8QT/g==
 
+tailwind-merge@^1.14.0:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/tailwind-merge/-/tailwind-merge-1.14.0.tgz#e677f55d864edc6794562c63f5001f45093cdb8b"
+  integrity sha512-3mFKyCo/MBcgyOTlrY8T7odzZFx+w+qKSMAmdFzRvqBfLlSigU6TZnlFHK0lkMwj9Bj8OYU+9yW9lmGuS0QEnQ==
+
 tailwindcss-radix@^1.6.0:
   version "1.6.0"
   resolved "https://registry.npmjs.org/tailwindcss-radix/-/tailwindcss-radix-1.6.0.tgz"
@@ -7178,6 +7246,21 @@ vfile@^5.0.0:
     unist-util-stringify-position "^3.0.0"
     vfile-message "^3.0.0"
 
+viem@^1.10.9:
+  version "1.10.9"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-1.10.9.tgz#9b16ade429b234f7b33a79544badddbb5498b13c"
+  integrity sha512-fhQxnMBFwGbyE/VOfcvcavxAPyqIHSgOB793gQcMPH1B9ahQvjMe3C3icqypC01ACaqpDPgYWGfvF/ExTeIPuA==
+  dependencies:
+    "@adraffy/ens-normalize" "1.9.4"
+    "@noble/curves" "1.2.0"
+    "@noble/hashes" "1.3.2"
+    "@scure/bip32" "1.3.2"
+    "@scure/bip39" "1.2.1"
+    "@types/ws" "^8.5.5"
+    abitype "0.9.8"
+    isomorphic-ws "5.0.0"
+    ws "8.13.0"
+
 wagmi@^0.9:
   version "0.9.2"
   resolved "https://registry.npmjs.org/wagmi/-/wagmi-0.9.2.tgz"
@@ -7291,15 +7374,15 @@ ws@7.5.3:
   resolved "https://registry.npmjs.org/ws/-/ws-7.5.3.tgz"
   integrity sha512-kQ/dHIzuLrS6Je9+uv81ueZomEwH0qVYstcAQ4/Z93K8zeko9gtAbttJWzoC5ukqXY1PpoouV3+VSOqEAFt5wg==
 
+ws@8.13.0, ws@^8.5.0:
+  version "8.13.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.13.0.tgz#9a9fb92f93cf41512a0735c8f4dd09b8a1211cd0"
+  integrity sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==
+
 ws@^7.5.1:
   version "7.5.9"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.9.tgz#54fa7db29f4c7cec68b1ddd3a89de099942bb591"
   integrity sha512-F+P9Jil7UiSKSkppIiD94dN07AwvFixvLIj1Og1Rl9GGMuNipJnV9JzjD6XuqmAeiswGvUmNLjr5cFuXwNS77Q==
-
-ws@^8.5.0:
-  version "8.13.0"
-  resolved "https://registry.npmjs.org/ws/-/ws-8.13.0.tgz"
-  integrity sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==
 
 xtend@^4.0.1, xtend@^4.0.2:
   version "4.0.2"
