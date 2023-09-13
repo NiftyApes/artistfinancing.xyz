@@ -2,6 +2,8 @@ import {
   Address,
   BuyWithFinancingModal,
   CreateOfferModal,
+  Loan,
+  MakePaymentModal,
   useOffers,
   useSellerFinancingContract,
   useUnderlyingNFTOwner,
@@ -19,7 +21,6 @@ import { AiFillTags, AiOutlineRightCircle } from 'react-icons/ai'
 import { LuCalendarX } from 'react-icons/lu'
 import { ClipLoader } from 'react-spinners'
 import { useAccount } from 'wagmi'
-import MakePaymentModal from './MakePaymentModal'
 import { PaymentCalendarReminderFromToken } from './PaymentCalendarReminder'
 
 type Props = {
@@ -38,10 +39,10 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
   const {
     isEntitledToNft,
     isLoadingLoans: isLoadingOwnershipCheck,
-    activeLoanforNft,
+    activeLoanForNft,
   } = useUnderlyingNFTOwner()
 
-  const activeLoan = activeLoanforNft(
+  const activeLoan: Loan = activeLoanForNft(
     token?.token?.contract as Address,
     token?.token?.tokenId
   )
@@ -111,6 +112,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
         {subset.map((offer, idx) => {
           return (
             <Link
+              passHref
               href={`/address/${account?.address}?tab=manage_listings`}
               key={`offer-${idx}`}
             >
@@ -189,13 +191,11 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
               activeLoan.defaultStatus !== 'IN_DEFAULT_AND_NOT_REPAYABLE' && (
                 <div className="flex-grow">
                   <MakePaymentModal
-                    offer={activeLoan?.offer?.offer}
-                    loan={activeLoan?.loan}
                     image={token.token?.image}
-                    tokenId={token.token?.tokenId}
+                    nftId={token.token?.tokenId!}
+                    collection={token.token?.contract! as Address}
                     tokenName={token.token?.name}
                     collectionName={token.token?.collection?.name}
-                    refetchLoans={() => {}}
                   />
                 </div>
               )}

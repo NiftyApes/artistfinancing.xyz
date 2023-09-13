@@ -1,7 +1,12 @@
-import { Loan, LoanDetails, OfferDetails, useLoans } from '@niftyapes/sdk'
+import {
+  Loan,
+  LoanDetails,
+  MakePaymentModal,
+  OfferDetails,
+  useLoans,
+} from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import LoadingIcon from 'components/LoadingIcon'
-import MakePaymentModal from 'components/MakePaymentModal'
 import { PaymentCalendarReminderFromToken } from 'components/PaymentCalendarReminder'
 import { format } from 'date-fns'
 import isEqualAddress from 'lib/isEqualAddress'
@@ -128,8 +133,15 @@ const UpcomingPaymentsTableRow = ({
   defaultStatus,
   refetchLoans,
 }: UpcomingPaymentsRowProps) => {
-  const { apr, listPrice, image, collectionName, tokenName, tokenId } =
-    processOffer(offer, token)
+  const {
+    apr,
+    listPrice,
+    image,
+    collectionName,
+    tokenName,
+    tokenId,
+    collection,
+  } = processOffer(offer, token)
 
   const { periodEndTimestamp, remainingPrincipal, minimumPayment } =
     processLoan(loan)
@@ -219,13 +231,12 @@ const UpcomingPaymentsTableRow = ({
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         {defaultStatus !== 'IN_DEFAULT_AND_NOT_REPAYABLE' ? (
           <MakePaymentModal
-            offer={offer}
-            loan={loan}
+            collection={collection}
+            nftId={tokenId}
             image={image}
-            tokenId={tokenId}
             tokenName={tokenName}
             collectionName={collectionName}
-            refetchLoans={refetchLoans}
+            onSuccess={() => setTimeout(refetchLoans, 1000)}
           />
         ) : (
           'In default, not repayable'
