@@ -90,8 +90,10 @@ const { chains, provider } = configureChains(
   [alchemyProvider({ apiKey: alchemyId }), publicProvider()]
 )
 
+// NOTE: See https://www.rainbowkit.com/docs/migration-guide#2-supply-a-walletconnect-cloud-projectid
 const { connectors } = getDefaultWallets({
-  appName: SOURCE_NAME || 'Reservoir Market',
+  appName: SOURCE_NAME || 'ArtistFinancing.xyz',
+  projectId: 'd84237a865cc3b20b1574c38459ffaad', // Required after version 0.12
   chains,
 })
 
