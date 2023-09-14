@@ -12,12 +12,12 @@ export const FeaturedArtists: FC<Props> = ({ cards }) => {
       <div className="mt-[24px] flex flex-wrap items-center text-gray-600">
         {cards.map((item, idx) => {
           return (
-            <>
+            <div key={idx}>
               <div className="">{item.artist}</div>
               {idx < cards.length - 1 && (
                 <div className="ml-[15px] mr-[15px] h-[6px] w-[6px] rounded-full bg-gray-700"></div>
               )}
-            </>
+            </div>
           )
         })}
       </div>
