@@ -10,7 +10,6 @@ export default function isEqualAddress(
   try {
     return getAddress(addr1 || '') === getAddress(addr2 || '')
   } catch (err) {
-    console.warn('Invalid address for compare', err)
     return false
   }
 }
