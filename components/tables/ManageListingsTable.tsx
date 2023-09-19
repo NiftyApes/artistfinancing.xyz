@@ -112,8 +112,7 @@ const ManageListingsTable: FC = () => {
               return (
                 <ManageListingsTableRow
                   key={`${signature}-${index}`}
-                  signature={signature}
-                  offer={offer}
+                  offer={listing}
                   status={status}
                   token={token}
                   refetchOffers={refetchOffers}
@@ -128,8 +127,7 @@ const ManageListingsTable: FC = () => {
 }
 
 type ManageListingsRowProps = {
-  offer: Offer['offer']
-  signature: `0x${string}`
+  offer: Offer
   status: Offer['status']
   token: ReturnType<typeof useTokens>['data'][0]
   refetchOffers: () => void
@@ -138,7 +136,6 @@ type ManageListingsRowProps = {
 const ManageListingsTableRow = ({
   offer,
   status,
-  signature,
   token,
   refetchOffers,
 }: ManageListingsRowProps) => {
@@ -153,17 +150,13 @@ const ManageListingsTableRow = ({
     tokenName,
     collectionName,
     loanDurDays,
-  } = processOffer(offer, token)
+  } = processOffer(offer.offer, token)
 
   const {
     data,
     isLoading: isWriteLoading,
     write,
-  } = useCancelOffer({
-    offer,
-    signature,
-    enabled: status === 'ACTIVE',
-  })
+  } = useCancelOffer({ offer, enabled: status === 'ACTIVE' })
 
   const {
     isLoading: isTxLoading,

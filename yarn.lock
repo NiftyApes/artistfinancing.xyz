@@ -908,10 +908,10 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-13.1.2.tgz#c7e75033e8b8f497768c7b462ac642830141bb00"
   integrity sha512-avsyveEvcvH42PvKjR4Pb8JlLttuGURr2H3ZhS2b85pHOiZ7yjH3rMUoGnNzuLMApyxYaCvd4MedPrLhnNhkog==
 
-"@niftyapes/sdk@1.0.53":
-  version "1.0.53"
-  resolved "https://registry.yarnpkg.com/@niftyapes/sdk/-/sdk-1.0.53.tgz#d40e077c9d257c66ef1aa8221b40cbc3c88c7828"
-  integrity sha512-M65qTFKyhWT2cOgWvURPFQm8iNrN2q6S4o/VsHC/T9WS9u0dfF10hK5J7QhoImhNuS14UEQWf3LT4i9elRfbCw==
+"@niftyapes/sdk@1.0.58":
+  version "1.0.58"
+  resolved "https://registry.yarnpkg.com/@niftyapes/sdk/-/sdk-1.0.58.tgz#b259ca68bd57725fcf2f19a991d9e5dc13c82f18"
+  integrity sha512-5nx4fVzXcuh3dIWVxdp1zPQp4c+bDpCMyzwMLu/HxtiCGiNRLi0v84Jsk8EGTNrZpopIAQmsyulapVkFxVcB7A==
   dependencies:
     "@radix-ui/react-accordion" "^1.1.1"
     "@radix-ui/react-checkbox" "^1.0.3"
