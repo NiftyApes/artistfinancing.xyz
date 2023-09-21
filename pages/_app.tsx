@@ -77,6 +77,8 @@ const FEE_RECIPIENT = process.env.NEXT_PUBLIC_FEE_RECIPIENT
 const SOURCE_DOMAIN = process.env.NEXT_PUBLIC_SOURCE_DOMAIN
 const API_BASE = process.env.NEXT_PUBLIC_RESERVOIR_API_BASE
 
+const NIFTY_APES_API_KEY = process.env.NEXT_PUBLIC_NIFTY_APES_API_KEY
+
 const INTEGRATION_CONTRACT_ADDRESS =
   process.env.NEXT_PUBLIC_INTEGRATION_CONTRACT_ADDRESS
 ReactGA.initialize('G-WSYXEQ3MFP')
@@ -212,6 +214,7 @@ const App: FC<AppProps & { baseUrl: string }> = ({
       config={{
         chainId: envChain?.id || allChains.mainnet.id,
         integrationContractAddress: INTEGRATION_CONTRACT_ADDRESS as Address,
+        apiKey: NIFTY_APES_API_KEY,
         theme: defaultTheme,
       }}
     >
