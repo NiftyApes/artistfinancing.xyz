@@ -1,5 +1,4 @@
-import { utils } from 'ethers'
-import { BigNumberish } from '@ethersproject/bignumber'
+import { formatUnits } from 'viem'
 import { isSafariBrowser } from 'lib/browser'
 
 const truncateFractionAndFormat = (
@@ -44,16 +43,14 @@ const formatNumber = (
  * @returns returns the ETH value as a `string` or `-` if the amount is `null` or `undefined`
  */
 function formatBN(
-  amount: BigNumberish | null | undefined,
+  amount: bigint | null | undefined,
   maximumFractionDigits: number,
   decimals?: number
 ) {
   if (typeof amount === 'undefined' || amount === null) return '-'
 
   const amountToFormat =
-    typeof amount === 'number'
-      ? amount
-      : +utils.formatUnits(amount, decimals || 18)
+    typeof amount === 'number' ? amount : +formatUnits(amount, decimals || 18)
 
   if (amountToFormat === 0) {
     return amountToFormat
