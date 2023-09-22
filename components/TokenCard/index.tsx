@@ -8,7 +8,7 @@ import {
 } from '@niftyapes/sdk'
 import { useMediaQuery } from '@react-hookz/web'
 import { useFinancingTicketImages } from 'hooks/useFinancingTicketImages'
-import useTokens from 'hooks/useTokens'
+import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import isEqualAddress from 'lib/isEqualAddress'
 import { optimizeImage } from 'lib/optmizeImage'
 import Image from 'next/legacy/image'
@@ -24,7 +24,7 @@ import TokenCardOwner from './TokenCardOwner'
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
 type Props = {
-  token?: ReturnType<typeof useTokens>['tokens']['data'][0]
+  token?: ReturnType<typeof useTokens>['data'][0]
   collection?: Collection
   collectionImage: string | undefined
   collectionSize?: number | undefined
