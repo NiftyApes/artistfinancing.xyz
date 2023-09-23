@@ -76,8 +76,8 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
     id: token?.token?.tokenId!,
     name: token.token?.name!,
     imageSrc: token.token?.image!,
-    lastSellValue: token.token?.lastSell?.value
-      ? String(token.token.lastSell.value)
+    lastSellValue: token.token?.lastSale?.amount
+      ? String(token.token.lastSale.amount)
       : '',
     contractAddress: token.token?.contract! as Address,
     collectionName: token.token?.collection?.name!,
@@ -120,7 +120,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
                 <AiOutlineRightCircle className="mr-3 text-xl text-gray-600" />
                 <div>
                   {`${
-                    formatBN(offer.offer.price, 2) as any
+                    formatBN(BigInt(offer.offer.price), 2) as any
                   } ETH over ${Duration.fromObject({
                     seconds: offer.offer.periodDuration,
                   }).as('days')} days`}
@@ -193,7 +193,7 @@ const OfferSection: FC<Props> = ({ token, isOwner }) => {
                   <MakePaymentModal
                     image={token.token?.image}
                     nftId={token.token?.tokenId!}
-                    collection={token.token?.contract! as Address}
+                    contractAddress={token.token?.contract! as Address}
                     tokenName={token.token?.name}
                     collectionName={token.token?.collection?.name}
                   />

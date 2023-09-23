@@ -24,8 +24,7 @@ import TokenCardOwner from './TokenCardOwner'
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID
 
 type Props = {
-  token?: ReturnType<typeof useTokens>['data'][0]
-  collection?: Collection
+  token: ReturnType<typeof useTokens>['data'][0]
   collectionImage: string | undefined
   collectionSize?: number | undefined
   collectionAttributes?: Collection['attributes']
@@ -63,7 +62,7 @@ const TokenCard: FC<Props> = ({ token, collectionImage }) => {
     id: token?.token?.tokenId!,
     name: token.token?.name!,
     imageSrc: token.token?.image!,
-    lastSellValue: String(token.token?.lastSell?.value!),
+    lastSellValue: String(token.token?.lastSale?.amount!),
     contractAddress: token.token?.contract! as Address,
     collectionName: token.token?.collection?.name!,
     owner: token.token?.owner! as Address,

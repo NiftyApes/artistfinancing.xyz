@@ -129,7 +129,7 @@ const ManageListingsTable: FC = () => {
 type ManageListingsRowProps = {
   offer: Offer
   status: Offer['status']
-  token: ReturnType<typeof useTokens>['data'][0]
+  token?: ReturnType<typeof useTokens>['data'][0]
   refetchOffers: () => void
 }
 

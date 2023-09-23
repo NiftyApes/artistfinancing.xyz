@@ -5,7 +5,7 @@ import { LuCalendarPlus } from 'react-icons/lu'
 
 type Token = ReturnType<typeof useTokens>['data'][0]
 
-export function PaymentCalendarReminderFromToken({ token }: { token: Token }) {
+export function PaymentCalendarReminderFromToken({ token }: { token?: Token }) {
   if (!token) {
     return null
   }

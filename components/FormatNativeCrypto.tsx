@@ -1,6 +1,5 @@
 import FormatCrypto from 'components/FormatCrypto'
-import { constants } from 'ethers'
-import { FC, ComponentProps } from 'react'
+import { ComponentProps, FC } from 'react'
 
 type Props = ComponentProps<typeof FormatCrypto>
 
@@ -10,7 +9,7 @@ const FormatNativeCrypto: FC<Props> = ({
   logoWidth,
   fontSize,
 }) => {
-  const address = constants.AddressZero
+  const address = '0x0000000000000000000000000000000000000000'
   const decimals = 18
 
   return (

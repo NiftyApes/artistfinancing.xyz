@@ -1,5 +1,5 @@
 {
-  "name": "sru-marketplace",
+  "name": "artistfinancing.xyz",
   "scripts": {
     "dev": "next dev",
     "prettier": "prettier --write .",
@@ -41,7 +41,7 @@
     "lodash.debounce": "^4.0.8",
     "luxon": "^3.2.1",
     "match-sorter": "^6.3.1",
-    "next": "^13.5.2",
+    "next": "13.1.2",
     "next-themes": "^0.2.0",
     "react": "^18.0",
     "react-debounce-input": "^3.2.5",

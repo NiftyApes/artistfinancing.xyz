@@ -111,8 +111,7 @@ export default function FeaturedFinancingOffers() {
           : fullOffers?.map(({ token, collection }, idx) => (
               <div className="mb-12" key={idx}>
                 <TokenCard
-                  token={token}
-                  collection={collection}
+                  token={token!}
                   collectionImage={collection?.image}
                   mutate={tokensMutate}
                 />

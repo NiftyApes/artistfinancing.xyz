@@ -1,4 +1,4 @@
-import { getAddress } from 'ethers/lib/utils.js'
+import { getAddress } from 'viem'
 import { Address } from 'wagmi'
 
 type MaybeAddress = Address | string | undefined

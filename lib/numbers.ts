@@ -43,14 +43,16 @@ const formatNumber = (
  * @returns returns the ETH value as a `string` or `-` if the amount is `null` or `undefined`
  */
 function formatBN(
-  amount: bigint | null | undefined,
+  amount: string | number | bigint | null | undefined,
   maximumFractionDigits: number,
   decimals?: number
 ) {
   if (typeof amount === 'undefined' || amount === null) return '-'
 
   const amountToFormat =
-    typeof amount === 'number' ? amount : +formatUnits(amount, decimals || 18)
+    typeof amount === 'number'
+      ? amount
+      : +formatUnits(BigInt(amount), decimals || 18)
 
   if (amountToFormat === 0) {
     return amountToFormat
