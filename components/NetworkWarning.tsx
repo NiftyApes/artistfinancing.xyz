@@ -1,12 +1,12 @@
 import useEnvChain from 'hooks/useEnvChain'
 import React from 'react'
-import { useNetwork, useSigner, useSwitchNetwork } from 'wagmi'
+import { useNetwork, useWalletClient, useSwitchNetwork } from 'wagmi'
 
 const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
 
 function NetworkWarning() {
   const { chain: activeChain } = useNetwork()
-  const { data: signer } = useSigner()
+  const { data: signer } = useWalletClient()
   const chain = useEnvChain()
   const { switchNetworkAsync } = useSwitchNetwork({
     chainId: chainId ? +chainId : undefined,

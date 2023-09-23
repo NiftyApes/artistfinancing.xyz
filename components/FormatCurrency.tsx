@@ -1,9 +1,8 @@
-import { BigNumberish } from 'ethers'
 import { formatBN } from 'lib/numbers'
 import { FC } from 'react'
 
 type Props = {
-  amount: BigNumberish | null | undefined
+  amount: string | number | bigint | null | undefined
   maximumFractionDigits?: number
   children?: React.ReactNode
   decimals?: number

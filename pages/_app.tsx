@@ -7,7 +7,6 @@ import {
   darkTheme,
   lightTheme,
   ReservoirKitProvider,
-  ReservoirKitProviderProps,
   ReservoirKitTheme,
 } from '@reservoir0x/reservoir-kit-ui'
 import AnalyticsProvider from 'components/AnalyticsProvider'
@@ -34,8 +33,8 @@ import 'styles/roboto.css'
 import 'styles/rodger.css'
 import 'styles/roobert.css'
 import 'styles/styreneb.css'
-import { configureChains, createClient, WagmiConfig } from 'wagmi'
-import * as allChains from 'wagmi/chains'
+import { configureChains, createConfig, WagmiConfig } from 'wagmi'
+import { goerli, mainnet } from 'wagmi/chains'
 
 import {
   getDefaultWallets,
@@ -69,11 +68,7 @@ const RESERVOIR_API_KEY = process.env.NEXT_PUBLIC_RESERVOIR_API_KEY
 const BODY_FONT_FAMILY = process.env.NEXT_PUBLIC_BODY_FONT_FAMILY || 'Mulish'
 const FONT_FAMILY = process.env.NEXT_PUBLIC_FONT_FAMILY || 'Work Sans'
 const PRIMARY_COLOR = process.env.NEXT_PUBLIC_PRIMARY_COLOR || 'default'
-const DISABLE_POWERED_BY_RESERVOIR =
-  process.env.NEXT_PUBLIC_DISABLE_POWERED_BY_RESERVOIR
 
-const FEE_BPS = process.env.NEXT_PUBLIC_FEE_BPS
-const FEE_RECIPIENT = process.env.NEXT_PUBLIC_FEE_RECIPIENT
 const SOURCE_DOMAIN = process.env.NEXT_PUBLIC_SOURCE_DOMAIN
 const API_BASE = process.env.NEXT_PUBLIC_RESERVOIR_API_BASE
 
@@ -83,12 +78,12 @@ const INTEGRATION_CONTRACT_ADDRESS =
   process.env.NEXT_PUBLIC_INTEGRATION_CONTRACT_ADDRESS
 ReactGA.initialize('G-WSYXEQ3MFP')
 
-const envChain = Object.values(allChains).find(
-  (chain) => chain.id === +(CHAIN_ID || allChains.mainnet)
+const envChain = [goerli, mainnet].find(
+  (chain) => chain.id === +(CHAIN_ID || mainnet)
 )
 
-const { chains, provider } = configureChains(
-  envChain ? [envChain] : [allChains.mainnet],
+const { chains, publicClient } = configureChains(
+  envChain ? [envChain] : [mainnet],
   [alchemyProvider({ apiKey: alchemyId }), publicProvider()]
 )
 
@@ -99,10 +94,10 @@ const { connectors } = getDefaultWallets({
   chains,
 })
 
-const wagmiClient = createClient({
+const wagmiConfig = createConfig({
   autoConnect: true,
   connectors,
-  provider,
+  publicClient,
 })
 
 function AppWrapper(props: AppProps & { baseUrl: string }) {
@@ -188,38 +183,44 @@ const App: FC<AppProps & { baseUrl: string }> = ({
     }
   }, [defaultTheme, theme])
 
-  let options: ReservoirKitProviderProps['options'] = {
-    apiKey: RESERVOIR_API_KEY,
-    apiBase:
-      typeof window !== 'undefined'
-        ? `${window.location.origin}${PROXY_API_BASE}`
-        : `${baseUrl}${PROXY_API_BASE}`,
-    disablePoweredByReservoir:
-      DISABLE_POWERED_BY_RESERVOIR != undefined &&
-      DISABLE_POWERED_BY_RESERVOIR != null,
-    source: SOURCE_DOMAIN,
-    normalizeRoyalties: true,
-  }
-
-  if (FEE_BPS && FEE_RECIPIENT) {
-    options = {
-      ...options,
-      marketplaceFee: +FEE_BPS,
-      marketplaceFeeRecipient: FEE_RECIPIENT,
-    }
-  }
-
   return (
     <NiftyApesProvider
       config={{
-        chainId: envChain?.id || allChains.mainnet.id,
+        chainId: envChain?.id || mainnet.id,
         integrationContractAddress: INTEGRATION_CONTRACT_ADDRESS as Address,
         apiKey: NIFTY_APES_API_KEY,
         theme: defaultTheme,
       }}
     >
-      <ReservoirKitProvider options={options} theme={reservoirKitTheme}>
-        <WagmiConfig client={wagmiClient}>
+      <ReservoirKitProvider
+        options={{
+          chains: [
+            {
+              id: goerli.id,
+              baseApiUrl:
+                typeof window !== 'undefined'
+                  ? `${window.location.origin}${PROXY_API_BASE}`
+                  : `${baseUrl}${PROXY_API_BASE}`,
+              active: envChain?.id === goerli.id,
+              apiKey: RESERVOIR_API_KEY,
+            },
+            {
+              id: mainnet.id,
+              baseApiUrl:
+                typeof window !== 'undefined'
+                  ? `${window.location.origin}${PROXY_API_BASE}`
+                  : `${baseUrl}${PROXY_API_BASE}`,
+              active: envChain?.id === mainnet.id,
+              apiKey: RESERVOIR_API_KEY,
+            },
+          ],
+          disablePoweredByReservoir: true,
+          source: SOURCE_DOMAIN,
+          normalizeRoyalties: true,
+        }}
+        theme={reservoirKitTheme}
+      >
+        <WagmiConfig config={wagmiConfig}>
           <RainbowKitProvider
             chains={chains}
             theme={rainbowKitTheme}

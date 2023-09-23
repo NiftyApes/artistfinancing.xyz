@@ -122,7 +122,7 @@ type UpcomingPaymentsRowProps = {
   loan: LoanDetails
   offer: OfferDetails
   defaultStatus: Loan['defaultStatus']
-  token: ReturnType<typeof useTokens>['data'][0]
+  token?: ReturnType<typeof useTokens>['data'][0]
   refetchLoans: () => void
 }
 
@@ -231,7 +231,7 @@ const UpcomingPaymentsTableRow = ({
       <td className="whitespace-nowrap px-6 py-4 dark:text-white">
         {defaultStatus !== 'IN_DEFAULT_AND_NOT_REPAYABLE' ? (
           <MakePaymentModal
-            collection={collection}
+            contractAddress={collection}
             nftId={tokenId}
             image={image}
             tokenName={tokenName}

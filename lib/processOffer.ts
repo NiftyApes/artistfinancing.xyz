@@ -1,8 +1,7 @@
 import { Address, Offer } from '@niftyapes/sdk'
 import { useTokens } from '@reservoir0x/reservoir-kit-ui'
-import { BigNumber } from 'ethers'
-import { formatEther } from 'ethers/lib/utils.js'
 import { DateTime, Duration } from 'luxon'
+import { formatEther } from 'viem'
 
 export type FinancingTerms = {
   tokenId: string
@@ -29,8 +28,10 @@ export function processOffer(
   const tokenId = offerDetails.nftId
   const collection = offerDetails.nftContractAddress
 
-  const listPrice = Number(formatEther(offerDetails.price))
-  const downPaymentAmount = Number(formatEther(offerDetails.downPaymentAmount))
+  const listPrice = Number(formatEther(BigInt(offerDetails.price)))
+  const downPaymentAmount = Number(
+    formatEther(BigInt(offerDetails.downPaymentAmount))
+  )
   const remainingPrincipal = listPrice - downPaymentAmount
   const apr = calculateAPR(
     offerDetails.periodInterestRateBps,
@@ -38,19 +39,17 @@ export function processOffer(
   )
 
   const minPrincipalPerPeriod = Number(
-    formatEther(offerDetails.minimumPrincipalPerPeriod)
+    formatEther(BigInt(offerDetails.minimumPrincipalPerPeriod))
   )
   const payPeriodDays = Duration.fromObject({
     seconds: offerDetails.periodDuration,
   }).as('days')
 
-  const remPrinBN = BigNumber.from(offerDetails.price).sub(
-    BigNumber.from(offerDetails.downPaymentAmount)
-  )
-  const minPrinBN = BigNumber.from(offerDetails.minimumPrincipalPerPeriod)
-  const numPayPeriods = remPrinBN.gt(0)
-    ? remPrinBN.div(minPrinBN).toNumber()
-    : 0
+  const remPrinBN =
+    BigInt(offerDetails.price) - BigInt(offerDetails.downPaymentAmount)
+  const minPrinBN = BigInt(offerDetails.minimumPrincipalPerPeriod)
+  const numPayPeriods =
+    remPrinBN > BigInt(0) ? Number(remPrinBN / minPrinBN) : 0
 
   const loanDurMos = Math.round(
     Duration.fromObject({

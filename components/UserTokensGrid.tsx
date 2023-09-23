@@ -118,7 +118,6 @@ const UserTokensGrid: FC<Props> = ({ fallback, owner }) => {
                   key={`${token?.token?.contract}${token?.token?.tokenId}`}
                   mutate={mutate}
                   collectionImage={token?.token?.collection?.imageUrl}
-                  collection={token?.token?.collection}
                 />
               )
             })}

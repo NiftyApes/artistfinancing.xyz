@@ -19,8 +19,8 @@ import { truncateAddress, truncateEns } from 'lib/truncateText'
 
 const ConnectWallet: FC = () => {
   const account = useAccount()
-  const { data: ensAvatar } = useEnsAvatar({ address: account?.address })
   const { data: ensName } = useEnsName({ address: account?.address })
+  const { data: ensAvatar } = useEnsAvatar({ name: ensName })
   const { connectors } = useConnect()
   const { disconnect } = useDisconnect()
   const wallet = connectors[0]

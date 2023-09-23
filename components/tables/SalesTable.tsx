@@ -3,7 +3,6 @@ import { useTokens } from '@reservoir0x/reservoir-kit-ui'
 import FormatNativeCrypto from 'components/FormatNativeCrypto'
 import LoadingIcon from 'components/LoadingIcon'
 import { format } from 'date-fns'
-import { BigNumber } from 'ethers'
 import { useEtherscanUri } from 'hooks/useEtherscan'
 import isEqualAddress from 'lib/isEqualAddress'
 import { optimizeImage } from 'lib/optmizeImage'
@@ -126,7 +125,7 @@ const SalesTable: FC = () => {
 
 type SalesRowProps = {
   loan: Loan
-  token: ReturnType<typeof useTokens>['data'][0]
+  token?: ReturnType<typeof useTokens>['data'][0]
   refetchLoans: () => void
 }
 
@@ -146,7 +145,7 @@ const SalesRow: FC<SalesRowProps> = ({ loan, token, refetchLoans }) => {
     write,
   } = useSeizeAsset({
     nftContractAddress: loan.offer.offer.nftContractAddress,
-    nftId: BigNumber.from(loan.offer.offer.nftId),
+    nftId: BigInt(loan.offer.offer.nftId),
     enabled: inDefault && loan.status === 'ACTIVE',
   })
 

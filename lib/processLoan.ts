@@ -1,6 +1,6 @@
-import { isAfter } from 'date-fns'
-import { formatEther } from 'ethers/lib/utils.js'
 import { LoanDetails } from '@niftyapes/sdk'
+import { isAfter } from 'date-fns'
+import { formatEther } from 'viem'
 
 export type ProcessedLoan = LoanDetails & {
   minimumPayment: number
@@ -10,9 +10,11 @@ export type ProcessedLoan = LoanDetails & {
 
 export function processLoan(loan: LoanDetails): ProcessedLoan {
   const minPrincipalPerPeriod = Number(
-    formatEther(loan.minimumPrincipalPerPeriod)
+    formatEther(BigInt(loan.minimumPrincipalPerPeriod))
   )
-  const remainingPrincipal = Number(formatEther(loan.remainingPrincipal))
+  const remainingPrincipal = Number(
+    formatEther(BigInt(loan.remainingPrincipal))
+  )
   const periodInterestRate = loan.periodInterestRateBps / 100
   const interestToBePaid = (periodInterestRate / 100) * remainingPrincipal
   const inDefault = isAfter(
